@@ -20,6 +20,7 @@ Every participant must read this file before starting work and leave it safe for
 - **CONFIRMED — Product state:** Reusable Agent-Native Engineering Protocol v1, the owner-authorized continuity clarification, and MIT licensing are implemented, validated, committed, and published. The isolated pilot completed at target review-record commit `3a8f3922f47dec16144493482bd2b7a150ef5b0a`; its implementation issue is `CLOSED` after independent disposition `APPROVED`.
 - **CONFIRMED — Version control:** This directory is an independent Git repository on branch `main`, tracking `origin/main`. The immutable protocol release commit is `a6270ebeb02f936184895dcad32269d8a16a0da5` (`feat: publish agentic engineering protocol v1`).
 - **CONFIRMED — Pilot checkpoint:** Recovered pilot records are committed and published at `087c665e3eb50bfff56f74bb9b32c6280e0423ee` (`docs: record isolated protocol pilot`).
+- **CONFIRMED — Migration review target:** Owner-approved migration implementation is commit `98fe67c8cf99f53157f3273cc1defdfb81c46773` (`docs: define established-repository migration`), protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`. The issue remains in `REVIEW` pending a different participant's disposition.
 - **CONFIRMED — Remote:** Public repository `MattSureham/agentic-engineering-protocol` at `https://github.com/MattSureham/agentic-engineering-protocol`, authenticated account `MattSureham`, default branch `main`, remote name `origin`.
 - **CONFIRMED — Handoff commit identity:** The remote-aware release HANDOFF is contained by follow-up commit `99ed41874157b0da537b1399bef907c82454fb1e` (`docs: finalize release handoff`). Takeover checks directly verified that local HEAD, `origin/main`, and GitHub `refs/heads/main` matched before pilot edits; the earlier chat-response reference is non-durable and is not relied on.
 - **CONFIRMED — Governing documents:** Root `BOOTSTRAP.md` is the collaboration mechanism for developing this repository; root `PROJECT_SPEC.md` is the authoritative product specification.
@@ -83,6 +84,7 @@ Every participant must read this file before starting work and leave it safe for
 - Migration validation at `2026-08-05T08:00:05Z` passed the exact 10-file package inventory, zero symlinks, Markdown final-newline/whitespace/fence integrity, both ordered HANDOFF schemas, all seven precedence tiers, retained authority/lifecycle/failure rules, root governing hashes, portability scans, and `git diff --check`.
 - A fresh-repository copy at `/tmp/aep-new-copy.ZGB3L8` contained exactly 10 files. An established-repository copy at `/tmp/aep-established-copy.xbT9kd` preserved the application README, installed the current guide byte-for-byte as `PROTOCOL_GUIDE.md`, retained both navigation links, and contained the expected 11 files. A fence-aware check evaluated 48 relative links across both copies with zero missing.
 - Reviewed migration content is reproducibly identified before commit by SHA-256 `5ce51973d0ce619d1f4eaf383674cadc832052c5ea55ca1949ae385fc447bbe5` for `protocol/README.md` and `359bb5e2fe4a1ed27989d12c06af4c02f8bee182ded72e8f24e4e5bd7fcac1df` for `protocol/BOOTSTRAP.md`. The BOOTSTRAP diff is exactly one artifact-ownership line. A dedicated Markdown linter remained `NOT AVAILABLE` and was not counted as passed.
+- Commit-ranged `git diff --check 087c665e3eb50bfff56f74bb9b32c6280e0423ee..98fe67c8cf99f53157f3273cc1defdfb81c46773` exited `0`; the range modifies only `HANDOFF.md`, `protocol/BOOTSTRAP.md`, and `protocol/README.md`.
 
 ### Background tasks
 
@@ -176,6 +178,7 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 - **Review:** `INDEPENDENT` — the change alters the documented adoption contract and normative artifact naming while preserving truth, authority, lifecycle, and evidence semantics; the implementor cannot supply final approval.
 - **Problem:** The quick start correctly prohibits overwriting existing protocol files but copies package `README.md` to the conventional application `README.md` path and supplies no canonical merge or alternate-name procedure for established repositories.
 - **Evidence:** Pilot preflight found the collision before copy. Safe continuation required a coordinator-invented migration: preserve application `README.md`, copy the byte-identical guide as `PROTOCOL_GUIDE.md`, and add navigation links. See `PILOT_EVIDENCE.md`.
+- **Implementation target:** Commit `98fe67c8cf99f53157f3273cc1defdfb81c46773`, parent checkpoint `087c665e3eb50bfff56f74bb9b32c6280e0423ee`, protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`.
 - **Resolution state:** The approved design is implemented and the complete scoped validation suite passed. The issue remains open because a fresh independent participant has not yet reviewed the exact implementation target or returned a disposition.
 
 ### AEP-20260805T035052Z-real-repository-pilot
@@ -211,9 +214,21 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Next Action
 
-Independently review the exact `AEP-20260805T041340Z-readme-migration-gap` implementation target recorded by the immediately following review-handoff commit against checkpoint `087c665e3eb50bfff56f74bb9b32c6280e0423ee`, then record `APPROVED`, `CHANGES_REQUIRED`, or `BLOCKED`; do not close the issue without approval.
+A fresh independent participant must review migration target `98fe67c8cf99f53157f3273cc1defdfb81c46773` against checkpoint `087c665e3eb50bfff56f74bb9b32c6280e0423ee`, then record `APPROVED`, `CHANGES_REQUIRED`, or `BLOCKED`; do not close `AEP-20260805T041340Z-readme-migration-gap` without approval.
 
 ## Recent Activity
+
+### 2026-08-05T08:02:09Z — Codex/root — Review Handoff Preparer
+
+- **Task:** Freeze the exact migration implementation target and make the independent-review boundary unambiguous.
+- **Context inspected:** Committed migration diff, parent checkpoint, protocol tree, commit-ranged whitespace result, current issue state, and required review independence.
+- **Actions performed:** Committed the validated implementation as `98fe67c8cf99f53157f3273cc1defdfb81c46773`; captured protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`; recorded the exact parent-to-target range and replaced the prospective review instruction with one immutable target.
+- **Files modified:** This HANDOFF only after the implementation commit.
+- **Findings:** `CONFIRMED` — the implementation commit contains exactly the intended HANDOFF, README, and BOOTSTRAP changes relative to checkpoint `087c665e3eb50bfff56f74bb9b32c6280e0423ee`. `UNKNOWN` — independent disposition.
+- **Verification performed:** Target/parent/tree identities resolved; commit-ranged `git diff --check` exited `0`; range inventory is exactly the three intended files.
+- **Issues created or updated:** Kept `AEP-20260805T041340Z-readme-migration-gap` in `REVIEW`; no closure claim was made.
+- **Remaining uncertainty:** A different participant has not yet reviewed the exact target.
+- **Recommended next action:** Perform the exact independent review stated under Next Action and persist its disposition.
 
 ### 2026-08-05T08:00:05Z — Codex/root — Implementor and Verification Agent
 
