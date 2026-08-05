@@ -17,15 +17,15 @@ Every participant must read this file before starting work and leave it safe for
 ### Repository snapshot
 
 - **CONFIRMED — Source material:** Root `BOOTSTRAP.md` and root `PROJECT_SPEC.md` remain the unchanged governing inputs; this handoff records development state.
-- **CONFIRMED — Product state:** Reusable Agent-Native Engineering Protocol v1, the owner-authorized continuity clarification, and MIT licensing are implemented, validated, committed, and published. The real-repository pilot has not begun.
+- **CONFIRMED — Product state:** Reusable Agent-Native Engineering Protocol v1, the owner-authorized continuity clarification, and MIT licensing are implemented, validated, committed, and published. The isolated pilot completed at target review-record commit `3a8f3922f47dec16144493482bd2b7a150ef5b0a`; its implementation issue is `CLOSED` after independent disposition `APPROVED`.
 - **CONFIRMED — Version control:** This directory is an independent Git repository on branch `main`, tracking `origin/main`. The immutable protocol release commit is `a6270ebeb02f936184895dcad32269d8a16a0da5` (`feat: publish agentic engineering protocol v1`).
 - **CONFIRMED — Remote:** Public repository `MattSureham/agentic-engineering-protocol` at `https://github.com/MattSureham/agentic-engineering-protocol`, authenticated account `MattSureham`, default branch `main`, remote name `origin`.
-- **CONFIRMED — Handoff commit identity:** This remote-aware HANDOFF is contained by the follow-up `docs: finalize release handoff` commit. A commit cannot embed its own SHA; obtain and verify that commit with `git rev-parse HEAD` and `git ls-remote origin refs/heads/main`. The final SHA is also reported in the release-preparation response.
+- **CONFIRMED — Handoff commit identity:** The remote-aware release HANDOFF is contained by follow-up commit `99ed41874157b0da537b1399bef907c82454fb1e` (`docs: finalize release handoff`). Takeover checks directly verified that local HEAD, `origin/main`, and GitHub `refs/heads/main` matched before pilot edits; the earlier chat-response reference is non-durable and is not relied on.
 - **CONFIRMED — Governing documents:** Root `BOOTSTRAP.md` is the collaboration mechanism for developing this repository; root `PROJECT_SPEC.md` is the authoritative product specification.
 - **CONFIRMED — Approved architecture:** Keep the root governing documents unchanged and build a copy-ready package under `protocol/` using risk-tiered review and hybrid issue/evidence records.
 - **CONFIRMED — Review requirement:** The first complete protocol draft must receive a read-only independent-agent review before the implementation issue closes.
-- **UNKNOWN — Real-repository validation:** The protocol has not yet been piloted in an external software repository.
-- **CONFIRMED — Unresolved design questions:** None remain after three independent review rounds. Real-repository usability remains a validation question, not an unresolved architecture decision.
+- **CONFIRMED — Real-repository validation:** One bounded local Python 3.9 pilot exercised quick-start migration, context-free implementation, evidence, HANDOFF, and independent review successfully. This establishes only that no material defect was observed within that target and scope; broader portability remains `UNKNOWN`.
+- **CONFIRMED — Unresolved design questions:** No architecture question remains. Pilot issue `AEP-20260805T041340Z-readme-migration-gap` records one `LOW` reusable-package usability defect; target-specific review limitations and one reconciled participant-lifecycle omission do not imply protocol defects.
 
 ### Prior-art disposition
 
@@ -38,7 +38,7 @@ Every participant must read this file before starting work and leave it safe for
 
 - Preserve the existing root `BOOTSTRAP.md` and `PROJECT_SPEC.md` byte-for-byte.
 - Keep the deliverable Markdown- and filesystem-based, language-, framework-, vendor-, CI-, and model-neutral.
-- Do not add a CLI, daemon, database, or orchestrator. Git initialization and public publication of this directory are explicitly authorized for this release-preparation issue; no parent directory or unrelated repository is in scope.
+- Do not add a CLI, daemon, database, or orchestrator. The only external-repository scope currently authorized is the local-only, non-production fixture at `/Users/matthew/Projects/aep-protocol-pilot`; it has no remote and must not be pushed. No other parent directory or unrelated repository is in scope.
 - Do not claim successful verification without recording the command, result, and limitations.
 
 ### Verification performed
@@ -51,7 +51,7 @@ Every participant must read this file before starting work and leave it safe for
 - `rg --files protocol | sort` confirmed the six expected core files.
 - `wc -l` reported 652 total lines across the six core files.
 - `rg -n '^#|^## '` confirmed the expected primary sections, including all five HANDOFF sections.
-- `rg --files | sort` confirmed all 14 approved repository files are present.
+- Before the later license and release-metadata additions, `rg --files | sort` confirmed the then-approved 14-file state; the published release subsequently contained 16 files as recorded below.
 - `wc -l README.md protocol/*.md protocol/*/TEMPLATE.md` reported 1,041 lines across the root README and reusable package.
 - Targeted `rg` checks confirmed all five reusable prompt headings and all required human-checkpoint sections.
 - A Markdown validator checked 11 deliverable Markdown files, 28 relative links with zero missing targets, final newlines, trailing whitespace, and balanced code fences.
@@ -61,20 +61,69 @@ Every participant must read this file before starting work and leave it safe for
 - Independent reviewer `/root/independent_review` read all 10 package files and the full authoritative specification, checked links/fences/file types/coupling, and returned five findings with disposition `CHANGES REQUIRED`.
 - Post-review assertions passed 18/18 targeted checks covering all five findings plus precedence, lifecycle, drift, prompts, failure handling, portability, and unfinished markers.
 - Revised-package validation checked the exact 10-file inventory, 23 package-relative links with zero missing, balanced fences, whitespace, five-section HANDOFF order, dependency names, and a clean copy at `/tmp/aep-protocol-rereview.5BZvqz`.
-- Follow-up reviewer confirmed all five original findings resolved, inventoried 10 regular files/no symlinks, rechecked links/fences/lifecycles, and recorded aggregate reviewed-state SHA-256 `ecad67529678284dff4ec4121ab5264cd668446f3d15a4066af3fbe2d389c2ec`; disposition remained `CHANGES_REQUIRED` for one new review-policy inconsistency.
+- Follow-up reviewer confirmed all five original findings resolved, inventoried 10 regular files/no symlinks, rechecked links/fences/lifecycles, and recorded aggregate reviewed-state SHA-256 `ecad67529678284dff4ec4121ab5264cd668446f3d15a4066af3fbe2d389c2ec`; disposition remained `CHANGES_REQUIRED` for one new review-policy inconsistency. The aggregation command was not preserved, so the digest is attributed reviewer evidence rather than independently reproducible evidence.
 - Final-candidate assertions passed 11/11 checks for risk-tiered README language, `SELF` eligibility/evidence/closure semantics, retained independent-review categories, and preservation of every prior fix; all 23 package-relative links still resolve.
-- Final reviewer re-read the authoritative specification and all 10 protocol files/1,059 lines, verified inventory/no symlinks/links/fences/rule consistency, recorded aggregate SHA-256 `60e4ee3261d40bcc71f84101c09a11db3515cdd2be4dd32cbcdfaa9fe3f989ed`, and returned `APPROVED` with no material findings.
+- Final reviewer re-read the authoritative specification and all 10 protocol files/1,059 lines, verified inventory/no symlinks/links/fences/rule consistency, recorded aggregate SHA-256 `60e4ee3261d40bcc71f84101c09a11db3515cdd2be4dd32cbcdfaa9fe3f989ed`, and returned `APPROVED` with no material findings. The unrecorded aggregation procedure prevents independent reproduction; current package state is instead identified reproducibly by Git tree `935cdb22f4472daa61b91d64f26f8893c4046fbf`.
 - Final local validation passed 23/23 semantic requirements/consistency assertions; exact 10-file inventory; zero symlinks; 23 relative links with zero missing; Markdown final-newline/whitespace/fence checks; both five-section/one-action HANDOFF schemas; dependency-name scan; UTF-8/ASCII file checks; and an isolated copy at `/tmp/aep-protocol-final.8OU7vo`.
-- A dedicated Markdown linter was `NOT AVAILABLE`; this was not treated as a pass. The repository still has no Git metadata, so history/commit verification was not possible.
+- At the pre-Git final-validation checkpoint, a dedicated Markdown linter was `NOT AVAILABLE` and history/commit verification was not possible because Git metadata did not yet exist. Later release-preparation and takeover checks below supersede only the Git limitation; a dedicated Markdown linter remains unavailable and is not counted as passed.
 - Release-preparation validation passed 19/19 continuity/compatibility assertions, including unchanged seven-level precedence, HANDOFF semantics, Human Authority Boundary, review policy, issue lifecycle, evidence, complexity, failure, and prompt rules.
 - The updated package retained exactly 10 files, zero symlinks, 23 resolvable relative links, valid Markdown newline/whitespace/fence structure, no named implementation dependency, and an isolated copy at `/tmp/aep-release-prep.gncUzQ`.
 - Root governing files remained distinct and byte-stable at their recorded hashes. The MIT license and minimal release `.gitignore` passed structural checks. A dedicated Markdown linter remained `NOT AVAILABLE` and was not counted as passed.
 - Git was initialized explicitly with `git init -b main`. The staged release inventory matched all 16 intended files exactly; ignore probes covered OS/editor/cache/temp paths without ignoring `EVIDENCE/result.log`; credential-pattern scanning found no matches.
 - `git diff --cached --check` initially identified extra EOF blank lines in root `README.md` and `protocol/EVIDENCE/TEMPLATE.md`; both were removed and the rerun passed with no whitespace errors.
-- Immediate pre-creation checks confirmed `gh api user` returned `MattSureham`, no local remote existed, and GitHub explicitly reported `MattSureham/agentic-engineering-protocol` absent.
+- At the pre-creation checkpoint, `gh api user` returned `MattSureham`, no local remote existed, and GitHub reported `MattSureham/agentic-engineering-protocol` absent. Target absence and race-safety are attributed historical observations that cannot be reconstructed after creation; current remote identity/state was independently reverified during takeover.
 - `gh repo create` created `https://github.com/MattSureham/agentic-engineering-protocol` as `PUBLIC` without auto-push and installed the exact HTTPS `origin` URL. The first push created `main`, set upstream tracking, and verified local and remote release SHA equality at `a6270ebeb02f936184895dcad32269d8a16a0da5`.
+- Takeover release verification at `2026-08-05T03:50:52Z` confirmed a clean root worktree, local and remote `main` at `99ed41874157b0da537b1399bef907c82454fb1e`, and unchanged protocol Git tree `935cdb22f4472daa61b91d64f26f8893c4046fbf`.
+- Pilot initialization created local-only target commits `0491081c7d700ac354b3031342308d6b29d12aca` (seed) and `abb8ce26e31dc90d676ec9df9c7fb69003e68e7a` (protocol initialization), with no remote. Preflight found only the expected `README.md` collision; the application README was preserved and the unmodified protocol guide was copied to `PROTOCOL_GUIDE.md`.
+- The target baseline command `python3 -m unittest discover -s tests -v` ran five tests and exited `1` with exactly one failure: encounter order was sorted as `['alpha', 'beta', 'gamma']` instead of `['beta', 'alpha', 'gamma']`.
+- Coordinator verification at target HEAD `6a2c0e5d6f3959de7e0648d5ee8494626fff12f0` independently confirmed a clean worktree, the one-expression review diff, five passing tests, `git diff --check`, 52 Markdown links with zero missing, balanced fences/final newlines/whitespace, no symlinks/dependency manifests/remotes, ordered HANDOFF sections, and exactly one independent-review Next Action.
+- Final coordinator verification at target HEAD `3a8f3922f47dec16144493482bd2b7a150ef5b0a` confirmed a clean local worktree, no remote, issue `CLOSED`, independent disposition `APPROVED`, five passing tests, commit-ranged `git diff --check`, 56 Markdown links with zero missing, no Markdown integrity findings, no symlinks or dependency manifests, the five ordered HANDOFF sections, and exactly one terminal target action. Root `protocol/` remained byte-unchanged at Git tree `935cdb22f4472daa61b91d64f26f8893c4046fbf`.
 
 ### Background tasks
+
+### TASK-20260805T040313Z-pilot-implementation-edges
+
+- **Purpose:** Independently probe target correctness, edge cases, mutation sensitivity, and post-target drift for the parent reviewer.
+- **Owner:** `/root/pilot_reviewer`; reviewer child `/root/pilot_reviewer/implementation_edges`.
+- **Start time:** `UNKNOWN` exact UTC; spawned after `2026-08-05T04:03:13Z` and completed before `2026-08-05T04:07:54Z`.
+- **Process or remote reference:** Collaboration task `/root/pilot_reviewer/implementation_edges`.
+- **Query/recovery:** Query the child reference with collaboration agent-status; terminal result is also synthesized in the parent review round.
+- **Last observation:** `2026-08-05T04:17:16Z` — coordinator re-queried the terminal collaboration tree.
+- **State:** `SUCCEEDED`
+- **Terminal evidence:** Child reported no high/medium finding, one low test-sensitivity limitation, 5,253 randomized/edge cases, direct identity/equality checks, and clean target scope; parent expanded and persisted the accepted review round.
+
+### TASK-20260805T040313Z-pilot-authority-contracts
+
+- **Purpose:** Independently audit target authority, contract coverage, evidence precision, and closure eligibility for the parent reviewer.
+- **Owner:** `/root/pilot_reviewer`; reviewer child `/root/pilot_reviewer/authority_contracts`.
+- **Start time:** `UNKNOWN` exact UTC; spawned after `2026-08-05T04:03:13Z` and completed before `2026-08-05T04:07:54Z`.
+- **Process or remote reference:** Collaboration task `/root/pilot_reviewer/authority_contracts`.
+- **Query/recovery:** Query the child reference with collaboration agent-status; terminal result is also synthesized in the parent review round.
+- **Last observation:** `2026-08-05T04:17:16Z` — coordinator re-queried the terminal collaboration tree.
+- **State:** `SUCCEEDED`
+- **Terminal evidence:** Child reported no high/medium finding, low fresh-result test coverage and historical diff-scope limitations, direct adversarial checks, and no authority/architecture contradiction; parent persisted both limitations.
+
+### TASK-20260805T040210Z-pilot-independent-review
+
+- **Purpose:** Independently review accepted REQ-ORDER-001, exact target commit `0606979a57d821e3777d1b81e0834512d9a184d0`, tests, evidence, and protocol records.
+- **Owner:** `Codex/root`; reviewer `/root/pilot_reviewer`.
+- **Start time:** `2026-08-05T04:02:10Z`.
+- **Process or remote reference:** Collaboration task `/root/pilot_reviewer`.
+- **Query/recovery:** Query `/root/pilot_reviewer` with the collaboration agent-status or wait mechanism; durable review is appended in the target issue.
+- **Last observation:** `2026-08-05T04:07:54Z` — review and terminal target HANDOFF committed; terminal report subsequently received.
+- **State:** `SUCCEEDED`
+- **Terminal evidence:** Target review-record commit `3a8f3922f47dec16144493482bd2b7a150ef5b0a`; complete issue review round with disposition `APPROVED`; terminal target HANDOFF; coordinator rerun recorded above.
+
+### TASK-20260805T035313Z-fresh-pilot-implementor
+
+- **Purpose:** Initialize live protocol records and implement accepted `REQ-ORDER-001` in the isolated pilot fixture.
+- **Owner:** `Codex/root`; implementor `/root/pilot_implementor`.
+- **Start time:** `2026-08-05T03:53:13Z`.
+- **Process or remote reference:** Collaboration task `/root/pilot_implementor`.
+- **Query/recovery:** Query `/root/pilot_implementor` with the collaboration agent-status or wait mechanism; all durable work belongs in `/Users/matthew/Projects/aep-protocol-pilot`.
+- **Last observation:** `2026-08-05T03:59:52Z` — target review handoff committed; terminal report subsequently received.
+- **State:** `SUCCEEDED`
+- **Terminal evidence:** Target commits `0606979a57d821e3777d1b81e0834512d9a184d0` and `6a2c0e5d6f3959de7e0648d5ee8494626fff12f0`; target issue, two evidence records, and HANDOFF; coordinator rerun recorded above.
 
 ### TASK-20260805T021914Z-independent-review
 
@@ -113,6 +162,28 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Active Issues
 
+### AEP-20260805T041340Z-readme-migration-gap
+
+- **Status:** `OPEN`
+- **Severity:** `LOW`
+- **Owner:** `UNASSIGNED`
+- **Authority:** `HUMAN` — any protocol-evolution change must be proposed with motivation and compatibility notes and explicitly approved before adoption.
+- **Review:** `SELF` for investigation/proposal only; reclassify if the eventual change alters protocol semantics or gates.
+- **Problem:** The quick start correctly prohibits overwriting existing protocol files but copies package `README.md` to the conventional application `README.md` path and supplies no canonical merge or alternate-name procedure for established repositories.
+- **Evidence:** Pilot preflight found the collision before copy. Safe continuation required a coordinator-invented migration: preserve application `README.md`, copy the byte-identical guide as `PROTOCOL_GUIDE.md`, and add navigation links. See `PILOT_EVIDENCE.md`.
+- **Resolution state:** Unresolved usability friction. No reusable source was changed during the pilot.
+
+### AEP-20260805T035052Z-real-repository-pilot
+
+- **Status:** `CLOSED`
+- **Severity:** `MEDIUM`
+- **Owner:** `Codex/root`
+- **Authority:** `HUMAN` — the technical owner authorized the isolated target and accepted `REQ-ORDER-001` at `2026-08-05T03:48:23Z`.
+- **Review:** `INDEPENDENT` — the seeded public behavior change requires a different participant to approve the reviewed target state.
+- **Problem:** Validate quick-start migration, fresh-agent continuity, implementation, evidence, handoff, and independent review in one bounded non-production software repository.
+- **Evidence:** Complete target revision chain, commands, results, task references, findings, and limitations are consolidated in root `PILOT_EVIDENCE.md`; target issue and evidence remain inspectable at the authorized local path.
+- **Resolution state:** Complete. Context-free implementation and coordinator checks passed; a different fresh reviewer returned `APPROVED`, closed the target issue, and recorded two low non-blocking limitations. Final coordinator verification passed without changing the target.
+
 ### AEP-20260805T020501Z-protocol-v1
 
 - **Status:** `CLOSED`
@@ -130,14 +201,50 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 - **Authority:** `HUMAN` — explicitly approved by the technical owner in the release-preparation request and approved plan.
 - **Review:** `SELF` — the continuity wording clarifies existing behavior and does not change source precedence, authority boundaries, review gates, lifecycle, or evidence semantics.
 - **Problem:** Add the agent-identity-independent continuity principle, license and validate the release, initialize this directory as its own Git repository, publish a new public GitHub remote safely, and leave the pilot as the sole next action.
-- **Evidence:** User-approved release-preparation plan; preflight inspection at `2026-08-05T03:12:47Z`; authenticated GitHub account and remote-absence evidence will be rechecked immediately before creation.
-- **Resolution state:** Complete. Documentation and semantic validation pass; the intended release was committed; the guarded public remote was created without overwrite; release commit and remote branch matched; final handoff commit/push is verified by the release preparer before reporting success.
+- **Evidence:** User-approved release-preparation plan; preflight inspection at `2026-08-05T03:12:47Z`; attributed pre-creation account/target-absence checks; published commits and current remote state recorded above. The historical target-absence observation cannot be reconstructed after creation.
+- **Resolution state:** Complete. Documentation and semantic validation passed; the intended release and follow-up handoff were committed and pushed. Takeover checks independently verified current local/remote equality at `99ed41874157b0da537b1399bef907c82454fb1e`; this replaces reliance on the non-durable release response.
 
 ## Next Action
 
-Pilot `protocol/` in one clean, non-production software repository using the documented quick start and Fresh implementor prompt with an independent new agent instance, then record any portability or usability defects as new issues and update this HANDOFF.
+Investigate `AEP-20260805T041340Z-readme-migration-gap` and prepare a protocol-evolution proposal with compatibility and migration consequences; do not edit reusable `protocol/` source before explicit owner approval.
 
 ## Recent Activity
+
+### 2026-08-05T04:17:16Z — Codex/root — Pilot Coordinator and Verification Agent
+
+- **Task:** Reconcile independent approval, run terminal verification, classify pilot findings, and close the bounded pilot without modifying reusable source.
+- **Context inspected:** Independent reviewer report and subreview findings; target review-record commit, issue, HANDOFF, implementation, tests, evidence, Git history/status/remotes; root governing hashes, protocol tree, current HANDOFF, and pilot evidence.
+- **Actions performed:** Terminalized the independent-review task; reran final target and root checks; closed `AEP-20260805T035052Z-real-repository-pilot`; created the sole reusable-package defect issue for README migration friction; distinguished target test/evidence limitations from protocol defects; reconciled stale root Current State claims; finalized `PILOT_EVIDENCE.md`.
+- **Files modified:** Root `HANDOFF.md` and `PILOT_EVIDENCE.md` only during final reconciliation. Target state was inspected but not changed; root `protocol/` remained unchanged.
+- **Findings:** `CONFIRMED` — independent disposition `APPROVED`, no material target finding, no prohibited complexity, and no post-review product drift. `LOW` protocol usability defect — established-repository README adoption needs an undocumented migration. `LOW` target-only limitations — accepted tests do not explicitly lock equality-vs-identity or fresh-result identity, and implementor diff wording overstated its historical command scope; reviewer directly verified current behavior and commit-range whitespace. `LOW` participant-lifecycle omission — the reviewer used two terminal child review tasks while target HANDOFF claimed no background work; the coordinator recovered and recorded both terminal references above, so no live task remains. `UNKNOWN` — generalization beyond this fixture.
+- **Verification performed:** Clean target `3a8f3922f47dec16144493482bd2b7a150ef5b0a`; five-test pass; issue `CLOSED`/review `APPROVED`; commit-ranged whitespace pass; 56 links/zero missing; Markdown integrity, HANDOFF order/one terminal action, remotes/dependencies/symlinks; unchanged root protocol Git tree and governing hashes; root `git diff --check`.
+- **Issues created or updated:** Closed `AEP-20260805T035052Z-real-repository-pilot`; created `AEP-20260805T041340Z-readme-migration-gap`; terminalized `TASK-20260805T040210Z-pilot-independent-review` as `SUCCEEDED`.
+- **Remaining uncertainty:** Broader language/repository portability and whether the owner wants the LOW README migration gap addressed.
+- **Recommended next action:** Prepare the bounded protocol-evolution proposal named under Next Action without changing reusable source.
+
+### 2026-08-05T04:02:10Z — Codex/root — Pilot Coordinator and Verification Agent
+
+- **Task:** Reconcile the context-free implementor and gate the exact state for independent review.
+- **Context inspected:** Implementor report; target Git history/status/remotes; accepted specification; exact parent-to-target diff; live issue, evidence, and HANDOFF records; tests; Markdown structure and links; dependency and symlink inventory.
+- **Actions performed:** Marked the implementor task `SUCCEEDED`; reran its critical claims directly; confirmed the issue remains `REVIEW`; queued a different context-free reviewer for target commit `0606979a57d821e3777d1b81e0834512d9a184d0`.
+- **Files modified:** Root `HANDOFF.md` and `PILOT_EVIDENCE.md`; no target or reusable protocol file changed during coordinator verification.
+- **Findings:** `CONFIRMED` — the implementation change is exactly `sorted(set(values))` to `list(dict.fromkeys(values))`; tests/specification are unchanged. `CONFIRMED` — all five accepted tests pass, target records are structurally complete, and prohibited complexity/remotes are absent. `UNKNOWN` — independent-review disposition remains pending.
+- **Verification performed:** Clean target HEAD `6a2c0e5d6f3959de7e0648d5ee8494626fff12f0`; scoped Git diff; five-test pass; `git diff --check`; 52 Markdown links/zero missing; final-newline/whitespace/fence checks; HANDOFF order/one action; empty remote, dependency-manifest, and symlink scans.
+- **Issues created or updated:** Advanced `AEP-20260805T035052Z-real-repository-pilot` to `REVIEW`; terminalized implementor task and queued `TASK-20260805T040210Z-pilot-independent-review`.
+- **Remaining uncertainty:** Independent reviewer findings, final closure consistency, and terminal pilot defect set.
+- **Recommended next action:** Run and receive the context-free independent reviewer.
+
+### 2026-08-05T03:53:13Z — Codex/root — Pilot Coordinator
+
+- **Task:** Initialize the owner-authorized isolated pilot and make the fresh implementor resumable before spawn.
+- **Context inspected:** Root governing files and HANDOFF; clean local/remote release state; protocol tree and copied-file hashes; target-path absence; Python/Git availability; target copy collisions; seed tests and local Git state.
+- **Actions performed:** Created `/Users/matthew/Projects/aep-protocol-pilot` as a local `main` repository with no remote; committed the non-production Python fixture; preflighted all ten package paths; preserved the application README, migrated the package guide to `PROTOCOL_GUIDE.md`, copied the other protocol artifacts, persisted the accepted target specification, committed initialization, and recorded the implementor task.
+- **Files modified:** Root `HANDOFF.md`; isolated target source, tests, README, and adopted protocol files. No reusable source under root `protocol/` changed.
+- **Findings:** `CONFIRMED` — the raw quick-start copy would collide with a conventional application `README.md`; deliberate migration required an undocumented alternate filename. `CONFIRMED` — the seeded implementation violates accepted encounter order in exactly one of five tests. `CONFIRMED` — the earlier unnamed-target/scope ambiguity is resolved by the owner's explicit isolated-fixture authorization.
+- **Verification performed:** Root release/tree checks; exact destination preflight; byte comparison for the nine unmodified copied artifacts; 25 target Markdown links with zero missing; `git diff --check`; target baseline test command exited `1` with one expected failure; target remote list empty and both initialization commits captured.
+- **Issues created or updated:** Created `AEP-20260805T035052Z-real-repository-pilot`; queued `TASK-20260805T035313Z-fresh-pilot-implementor`.
+- **Remaining uncertainty:** Fresh-agent protocol compliance, minimal fix, target evidence quality, independent review disposition, and terminal portability/usability findings.
+- **Recommended next action:** Run and receive the context-free implementor, then inspect its durable target state directly.
 
 ### 2026-08-05T03:17:25Z — Codex/root — Release Preparer
 
