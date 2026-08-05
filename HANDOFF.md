@@ -17,8 +17,10 @@ Every participant must read this file before starting work and leave it safe for
 ### Repository snapshot
 
 - **CONFIRMED — Source material:** Root `BOOTSTRAP.md` and root `PROJECT_SPEC.md` remain the unchanged governing inputs; this handoff records development state.
-- **CONFIRMED — Product state:** The owner-authorized continuity clarification and MIT licensing are implemented and pass semantic/copy-ready validation. Git initialization and GitHub publication remain in progress; the real-repository pilot remains deferred.
-- **CONFIRMED — Version control:** This directory is now an independent Git repository on branch `main` with no parent repository. The intended 16-file initial release is staged; no commit or remote exists yet.
+- **CONFIRMED — Product state:** Reusable Agent-Native Engineering Protocol v1, the owner-authorized continuity clarification, and MIT licensing are implemented, validated, committed, and published. The real-repository pilot has not begun.
+- **CONFIRMED — Version control:** This directory is an independent Git repository on branch `main`, tracking `origin/main`. The immutable protocol release commit is `a6270ebeb02f936184895dcad32269d8a16a0da5` (`feat: publish agentic engineering protocol v1`).
+- **CONFIRMED — Remote:** Public repository `MattSureham/agentic-engineering-protocol` at `https://github.com/MattSureham/agentic-engineering-protocol`, authenticated account `MattSureham`, default branch `main`, remote name `origin`.
+- **CONFIRMED — Handoff commit identity:** This remote-aware HANDOFF is contained by the follow-up `docs: finalize release handoff` commit. A commit cannot embed its own SHA; obtain and verify that commit with `git rev-parse HEAD` and `git ls-remote origin refs/heads/main`. The final SHA is also reported in the release-preparation response.
 - **CONFIRMED — Governing documents:** Root `BOOTSTRAP.md` is the collaboration mechanism for developing this repository; root `PROJECT_SPEC.md` is the authoritative product specification.
 - **CONFIRMED — Approved architecture:** Keep the root governing documents unchanged and build a copy-ready package under `protocol/` using risk-tiered review and hybrid issue/evidence records.
 - **CONFIRMED — Review requirement:** The first complete protocol draft must receive a read-only independent-agent review before the implementation issue closes.
@@ -69,6 +71,8 @@ Every participant must read this file before starting work and leave it safe for
 - Root governing files remained distinct and byte-stable at their recorded hashes. The MIT license and minimal release `.gitignore` passed structural checks. A dedicated Markdown linter remained `NOT AVAILABLE` and was not counted as passed.
 - Git was initialized explicitly with `git init -b main`. The staged release inventory matched all 16 intended files exactly; ignore probes covered OS/editor/cache/temp paths without ignoring `EVIDENCE/result.log`; credential-pattern scanning found no matches.
 - `git diff --cached --check` initially identified extra EOF blank lines in root `README.md` and `protocol/EVIDENCE/TEMPLATE.md`; both were removed and the rerun passed with no whitespace errors.
+- Immediate pre-creation checks confirmed `gh api user` returned `MattSureham`, no local remote existed, and GitHub explicitly reported `MattSureham/agentic-engineering-protocol` absent.
+- `gh repo create` created `https://github.com/MattSureham/agentic-engineering-protocol` as `PUBLIC` without auto-push and installed the exact HTTPS `origin` URL. The first push created `main`, set upstream tracking, and verified local and remote release SHA equality at `a6270ebeb02f936184895dcad32269d8a16a0da5`.
 
 ### Background tasks
 
@@ -120,20 +124,32 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ### AEP-20260805T031247Z-release-preparation
 
-- **Status:** `IMPLEMENTING`
+- **Status:** `CLOSED`
 - **Severity:** `MEDIUM`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN` — explicitly approved by the technical owner in the release-preparation request and approved plan.
 - **Review:** `SELF` — the continuity wording clarifies existing behavior and does not change source precedence, authority boundaries, review gates, lifecycle, or evidence semantics.
 - **Problem:** Add the agent-identity-independent continuity principle, license and validate the release, initialize this directory as its own Git repository, publish a new public GitHub remote safely, and leave the pilot as the sole next action.
 - **Evidence:** User-approved release-preparation plan; preflight inspection at `2026-08-05T03:12:47Z`; authenticated GitHub account and remote-absence evidence will be rechecked immediately before creation.
-- **Resolution state:** Documentation, semantic validation, Git initialization, staged inventory, ignore behavior, credential scan, and whitespace checks pass. Initial commit, GitHub pre-creation recheck, remote creation/push, and final handoff remain outstanding.
+- **Resolution state:** Complete. Documentation and semantic validation pass; the intended release was committed; the guarded public remote was created without overwrite; release commit and remote branch matched; final handoff commit/push is verified by the release preparer before reporting success.
 
 ## Next Action
 
-Create the clean initial commit `feat: publish agentic engineering protocol v1`, then reverify authenticated GitHub identity and explicit target-repository absence before any remote creation.
+Pilot `protocol/` in one clean, non-production software repository using the documented quick start and Fresh implementor prompt with an independent new agent instance, then record any portability or usability defects as new issues and update this HANDOFF.
 
 ## Recent Activity
+
+### 2026-08-05T03:17:25Z — Codex/root — Release Preparer
+
+- **Task:** Create the guarded public GitHub release and leave a remote-complete handoff without starting the pilot.
+- **Context inspected:** Clean initial commit, authenticated GitHub identity, explicit target absence, local remotes, intended remote URL, public visibility, default branch, local/remote branch SHAs, and user-authorized release metadata.
+- **Actions performed:** Created initial commit `a6270ebeb02f936184895dcad32269d8a16a0da5`; reverified account `MattSureham` and target absence; created public `MattSureham/agentic-engineering-protocol` without auto-push; verified `origin`; pushed `main`; composed this remote-aware final handoff for the follow-up metadata commit and push.
+- **Files modified:** This HANDOFF only after the immutable protocol release commit; remote GitHub repository and `origin` created as explicitly authorized.
+- **Findings:** Remote creation was race-safe and did not overwrite an existing repository. GitHub reports the expected identity, public visibility, URL, and `main` default branch.
+- **Verification performed:** Initial tree clean; release commit hash captured; `gh api user` identity; explicit pre-create absence; post-create `nameWithOwner`, `PUBLIC`, URL, and `defaultBranch=main`; exact HTTPS origin; upstream tracking; `git rev-parse HEAD` equaled `git ls-remote origin refs/heads/main` at the release commit. Final handoff-commit equality is verified after this file is committed and pushed.
+- **Issues created or updated:** Closed `AEP-20260805T031247Z-release-preparation` contingent on the immediately following final handoff commit/push verification; any failure must supersede this entry with a blocker.
+- **Remaining uncertainty:** The deliberately deferred real-repository pilot; dedicated Markdown linter remains unavailable; Markdown/Git cannot authenticate human or agent identities by themselves.
+- **Recommended next action:** Run the bounded independent fresh-agent pilot stated under Next Action; do not begin another implementation/review cycle before that pilot.
 
 ### 2026-08-05T03:15:58Z — Codex/root — Release Preparer
 
