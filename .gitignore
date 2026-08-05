@@ -1,0 +1,15 @@
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Editor-local state
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Local caches and temporary directories
+.cache/
+.tmp/
+tmp/
