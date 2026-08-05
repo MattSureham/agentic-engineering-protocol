@@ -111,6 +111,23 @@ Label each statement `CONFIRMED`, `INFERRED`, or `UNKNOWN`. An unresolved item t
 |---|---|---|---|
 | `UNKNOWN` | `[open assumption or decision]` | `[what resolves it]` | `[owner]` |
 
+## Specification evolution
+
+`PROJECT_SPEC.md` is authoritative but not immutable.
+
+A specification change MAY be proposed when evidence demonstrates that:
+
+- an existing requirement is ambiguous, incomplete, or internally inconsistent;
+- real-world usage exposes a requirement that was not previously represented;
+- an existing requirement no longer serves the project's stated goals; or
+- a new capability has been explicitly accepted into project scope.
+
+Evidence supports a proposal; it does not by itself authorize a change to an `ACCEPTED` specification. `PROJECT_SPEC.md` MUST evolve through evidence-backed requirement change, not implementation drift. Existing implementation is not, by itself, sufficient evidence that the specification should change to match it. When implementation conflicts with an `ACCEPTED` `PROJECT_SPEC.md`, the default is to correct the implementation and preserve the conflict record until any specification change is approved.
+
+Every material requirement change requires explicit human technical-owner approval. This includes changes that materially alter product scope, compatibility, core invariants, authorized architectural constraints, or the product/architecture authority boundary. A change affecting both product requirements and architecture requires both an accepted specification update and a compatible accepted ADR. If they conflict, `PROJECT_SPEC.md` remains authoritative and the conflict remains unresolved.
+
+Relevant evidence, issue records, and ADRs SHOULD be referenced where appropriate so that the reason for the specification change remains auditable.
+
 ## Specification change record
 
 Material requirement changes require human-owner authority. Keep exact proposed wording in an issue or decision request until approved; do not edit an accepted requirement into an unapproved state that appears authoritative. After approval, update the affected requirement and append its change record together. An ADR may explain compatible architecture but cannot override, delete, or fill an unknown requirement. Do not use this log as a substitute for updating the affected requirement.
