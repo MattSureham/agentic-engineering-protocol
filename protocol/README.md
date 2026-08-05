@@ -44,15 +44,35 @@ The exact operational rules and truth hierarchy live in [`BOOTSTRAP.md`](BOOTSTR
 | [`PROMPTS.md`](PROMPTS.md) | Fresh, resume, review, drift, and checkpoint prompts. |
 | [`EXAMPLE.md`](EXAMPLE.md) | A synthetic minimal initialization walkthrough. |
 
-## Quick start in a new repository
+## Quick start
 
-1. Confirm the destination has no conflicting protocol files. For a new or deliberately prepared repository, copy the package contents into its root:
+1. Preflight every package path and choose the applicable migration path.
+
+   For a new or deliberately prepared repository with no conflicts, copy the package contents into its root:
 
    ```sh
    cp -R /path/to/agentic-engineering-protocol/protocol/. /path/to/your-repository/
    ```
 
-   Do not use that command to overwrite existing `BOOTSTRAP.md`, `PROJECT_SPEC.md`, HANDOFF history, ADRs, issues, or evidence. For an established repository, review and migrate conflicts deliberately.
+   For an established repository, do not use that bulk-copy command. Instead:
+
+   1. Inventory existing specifications, architecture records, agent instructions, handoff history, issues, evidence, and application documentation.
+   2. Preserve the application `README.md`. When that path already exists, copy this package guide under the canonical migration name `PROTOCOL_GUIDE.md`:
+
+      ```sh
+      cp /path/to/agentic-engineering-protocol/protocol/README.md /path/to/your-repository/PROTOCOL_GUIDE.md
+      ```
+
+   3. Add a short navigation section to the application README without removing its existing content:
+
+      ```markdown
+      ## Agent-Native Engineering Protocol
+
+      Participants must read [BOOTSTRAP.md](BOOTSTRAP.md) before working in this repository. Adoption guidance is in [PROTOCOL_GUIDE.md](PROTOCOL_GUIDE.md).
+      ```
+
+   4. Copy only non-conflicting protocol artifacts. Deliberately merge or map every collision, preserving existing authority, authorship, HANDOFF history, ADRs, issues, and evidence. Never overwrite them merely to complete installation.
+   5. Keep `PROTOCOL_GUIDE.md` at the repository root and verify that the application README links to both it and `BOOTSTRAP.md`; the guide's package-relative links must also resolve there.
 
 2. Replace the placeholders in `PROJECT_SPEC.md`. The human technical owner records acceptance before agents implement affected product behavior.
 3. Give a fresh participant the **Fresh implementor or onboarding** prompt from `PROMPTS.md`.
@@ -87,6 +107,7 @@ Independent reviewers should challenge the premise of a change, not just its mec
 
 ## Adopting in an existing repository
 
+- Use the established-repository migration path in Quick start. Keep the application README, the canonical `PROTOCOL_GUIDE.md` alias, and links to both the guide and normative `BOOTSTRAP.md`.
 - Inventory current specifications, architecture records, issue trackers, agent instructions, and handoff documents before copying anything.
 - Preserve authorship and useful history. Map existing authoritative requirements into `PROJECT_SPEC.md` and durable accepted decisions into ADRs.
 - Record unresolved contradictions instead of choosing a source silently.
