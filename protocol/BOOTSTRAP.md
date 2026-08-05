@@ -36,7 +36,7 @@ Use these certainty labels for material claims:
 - `ISSUES/` owns detailed lifecycle records for meaningful work, contradictions, defects, risks, and residual uncertainty.
 - `HANDOFF.md` owns the current operational snapshot, compact active-issue index, background-task state, recent activity, and exactly one next action.
 - `HUMAN_CHECKPOINT.md` gives the technical owner a low-bandwidth mental-model update and decision queue. Final product decisions belong in `PROJECT_SPEC.md`, final architecture decisions belong in an ADR, and mixed decisions require both.
-- The adoption guide explains installation and navigation. It is `README.md` in the source package; when an established repository already owns that path, preserve the application README and use `PROTOCOL_GUIDE.md` as the canonical guide alias, with application-README links to this file and the guide. `PROMPTS.md` provides entry prompts. These navigation aids neither restate nor replace this protocol.
+- The adoption guide explains installation and navigation. It is `README.md` in the source package; when an established repository's application README is the sole destination collision, preserve it and use `PROTOCOL_GUIDE.md` as the canonical guide alias, with application-README links to the byte-verified canonical `BOOTSTRAP.md` and guide. An occupied alias or any other destination collision blocks automatic installation: preserve the target's files and obtain its human technical owner's accepted merge or mapping before modifying records or references. `PROMPTS.md` provides entry prompts. These navigation aids neither restate nor replace this protocol.
 
 ## Participant identity and records
 

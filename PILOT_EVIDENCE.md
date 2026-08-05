@@ -318,3 +318,330 @@ destination manifest, refuse existing or symlinked alias/core destinations
 before any write, preserve human authority over normative-record mappings, and
 prove canonical references—not merely existing links—before the issue can
 return to review.
+
+## Corrected migration validation
+
+### Candidate state
+
+- Validation time: `2026-08-05T08:52:54Z`
+- Parent review-record commit:
+  `8d753ede59d75eaf6891425bcf2ce77021b94288` (`docs: record migration review
+  findings`)
+- Candidate `protocol/README.md` SHA-256:
+  `a110604698c2fb1f2f3dc1013cf4d7cdf6d48f8bb6064bde9e4cd32914620180`
+- Candidate `protocol/BOOTSTRAP.md` SHA-256:
+  `d87b814fdeb66dcc9754248270203817c213550f4b87c4405fc914163603e11b`
+
+The following exact shell procedure exercised quoted source and target paths,
+the two automatic copy paths, the five refusal cases, byte preservation, the
+10/11-file inventories, symlink absence in successful copies, and fence-aware
+relative links. It intentionally retains its temporary directory for inspection.
+
+```sh
+set -eu
+
+validation_root=$(mktemp -d "/tmp/aep migration validation.XXXXXX")
+source_parent="$validation_root/source with spaces"
+protocol_source="$source_parent/protocol"
+fresh_target="$validation_root/fresh target"
+established_target="$validation_root/established target"
+mkdir -p "$source_parent" "$fresh_target" "$established_target"
+cp -R protocol "$protocol_source"
+
+preflight_fresh() {
+  validation_source=$1
+  validation_target=$2
+  [ -d "$validation_source" ] && [ -d "$validation_target" ] || return 1
+  for relative_path in \
+    README.md PROTOCOL_GUIDE.md BOOTSTRAP.md PROJECT_SPEC.md HANDOFF.md \
+    HUMAN_CHECKPOINT.md PROMPTS.md EXAMPLE.md ADR EVIDENCE ISSUES
+  do
+    if [ -e "$validation_target/$relative_path" ] || [ -L "$validation_target/$relative_path" ]; then
+      return 1
+    fi
+  done
+}
+
+preflight_established() {
+  validation_source=$1
+  validation_target=$2
+  [ -d "$validation_source" ] && [ -d "$validation_target" ] || return 1
+  [ -f "$validation_target/README.md" ] && [ ! -L "$validation_target/README.md" ] || return 1
+  for relative_path in \
+    PROTOCOL_GUIDE.md BOOTSTRAP.md PROJECT_SPEC.md HANDOFF.md \
+    HUMAN_CHECKPOINT.md PROMPTS.md EXAMPLE.md ADR EVIDENCE ISSUES
+  do
+    if [ -e "$validation_target/$relative_path" ] || [ -L "$validation_target/$relative_path" ]; then
+      return 1
+    fi
+  done
+}
+
+preflight_fresh "$protocol_source" "$fresh_target"
+cp -R "$protocol_source/." "$fresh_target/"
+
+cp LICENSE "$established_target/README.md"
+app_readme_before=$(shasum -a 256 "$established_target/README.md" | awk '{print $1}')
+preflight_established "$protocol_source" "$established_target"
+cp \
+  "$protocol_source/BOOTSTRAP.md" \
+  "$protocol_source/PROJECT_SPEC.md" \
+  "$protocol_source/HANDOFF.md" \
+  "$protocol_source/HUMAN_CHECKPOINT.md" \
+  "$protocol_source/PROMPTS.md" \
+  "$protocol_source/EXAMPLE.md" \
+  "$established_target/"
+cp -R \
+  "$protocol_source/ADR" \
+  "$protocol_source/EVIDENCE" \
+  "$protocol_source/ISSUES" \
+  "$established_target/"
+cp "$protocol_source/README.md" "$established_target/PROTOCOL_GUIDE.md"
+cmp "$protocol_source/BOOTSTRAP.md" "$established_target/BOOTSTRAP.md"
+cmp "$protocol_source/README.md" "$established_target/PROTOCOL_GUIDE.md"
+app_readme_after=$(shasum -a 256 "$established_target/README.md" | awk '{print $1}')
+test "$app_readme_before" = "$app_readme_after"
+
+regular_alias="$validation_root/regular alias collision"
+mkdir "$regular_alias"
+cp LICENSE "$regular_alias/README.md"
+cp LICENSE "$regular_alias/PROTOCOL_GUIDE.md"
+regular_before=$(shasum -a 256 "$regular_alias/PROTOCOL_GUIDE.md" | awk '{print $1}')
+if preflight_established "$protocol_source" "$regular_alias"; then exit 20; fi
+regular_after=$(shasum -a 256 "$regular_alias/PROTOCOL_GUIDE.md" | awk '{print $1}')
+test "$regular_before" = "$regular_after"
+test "$(find "$regular_alias" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" = "2"
+
+symlink_alias="$validation_root/symlink alias collision"
+mkdir "$symlink_alias"
+cp LICENSE "$symlink_alias/README.md"
+cp LICENSE "$symlink_alias/application-guide.md"
+ln -s application-guide.md "$symlink_alias/PROTOCOL_GUIDE.md"
+symlink_before=$(shasum -a 256 "$symlink_alias/application-guide.md" | awk '{print $1}')
+if preflight_established "$protocol_source" "$symlink_alias"; then exit 21; fi
+symlink_after=$(shasum -a 256 "$symlink_alias/application-guide.md" | awk '{print $1}')
+test "$symlink_before" = "$symlink_after"
+test -L "$symlink_alias/PROTOCOL_GUIDE.md"
+test "$(find "$symlink_alias" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" = "3"
+
+core_collision="$validation_root/core collision"
+mkdir "$core_collision"
+cp LICENSE "$core_collision/README.md"
+cp BOOTSTRAP.md "$core_collision/BOOTSTRAP.md"
+core_before=$(shasum -a 256 "$core_collision/BOOTSTRAP.md" | awk '{print $1}')
+if preflight_established "$protocol_source" "$core_collision"; then exit 22; fi
+core_after=$(shasum -a 256 "$core_collision/BOOTSTRAP.md" | awk '{print $1}')
+test "$core_before" = "$core_after"
+test "$(find "$core_collision" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" = "2"
+
+nested_collision="$validation_root/nested collision"
+mkdir "$nested_collision"
+cp LICENSE "$nested_collision/README.md"
+mkdir "$nested_collision/ADR"
+cp LICENSE "$nested_collision/ADR/TEMPLATE.md"
+nested_before=$(shasum -a 256 "$nested_collision/ADR/TEMPLATE.md" | awk '{print $1}')
+if preflight_established "$protocol_source" "$nested_collision"; then exit 23; fi
+nested_after=$(shasum -a 256 "$nested_collision/ADR/TEMPLATE.md" | awk '{print $1}')
+test "$nested_before" = "$nested_after"
+test "$(find "$nested_collision" -type f | wc -l | tr -d ' ')" = "2"
+
+reserved_alias="$validation_root/reserved alias collision"
+mkdir "$reserved_alias"
+cp LICENSE "$reserved_alias/PROTOCOL_GUIDE.md"
+if preflight_fresh "$protocol_source" "$reserved_alias"; then exit 24; fi
+test "$(find "$reserved_alias" -type f | wc -l | tr -d ' ')" = "1"
+
+VALIDATION_ROOT="$validation_root" \
+PROTOCOL_SOURCE="$protocol_source" \
+FRESH_TARGET="$fresh_target" \
+ESTABLISHED_TARGET="$established_target" \
+python3 - <<'PY'
+from pathlib import Path
+import os
+import re
+import sys
+
+root = Path(os.environ["VALIDATION_ROOT"])
+source = Path(os.environ["PROTOCOL_SOURCE"])
+fresh = Path(os.environ["FRESH_TARGET"])
+established = Path(os.environ["ESTABLISHED_TARGET"])
+failures = []
+expected = {
+    "ADR/TEMPLATE.md", "BOOTSTRAP.md", "EVIDENCE/TEMPLATE.md", "EXAMPLE.md",
+    "HANDOFF.md", "HUMAN_CHECKPOINT.md", "ISSUES/TEMPLATE.md",
+    "PROJECT_SPEC.md", "PROMPTS.md", "README.md",
+}
+
+source_files = {str(path.relative_to(source)) for path in source.rglob("*") if path.is_file()}
+fresh_files = {str(path.relative_to(fresh)) for path in fresh.rglob("*") if path.is_file()}
+established_expected = (expected - {"README.md"}) | {"README.md", "PROTOCOL_GUIDE.md"}
+established_files = {str(path.relative_to(established)) for path in established.rglob("*") if path.is_file()}
+if source_files != expected: failures.append("source inventory")
+if fresh_files != expected: failures.append("fresh inventory")
+if established_files != established_expected: failures.append("established inventory")
+
+for tree in (source, fresh, established):
+    if any(path.is_symlink() for path in tree.rglob("*")):
+        failures.append(f"unexpected symlink in {tree}")
+for relative in expected:
+    if (source / relative).read_bytes() != (fresh / relative).read_bytes():
+        failures.append(f"fresh mismatch {relative}")
+for relative in expected - {"README.md"}:
+    if (source / relative).read_bytes() != (established / relative).read_bytes():
+        failures.append(f"established mismatch {relative}")
+if (source / "README.md").read_bytes() != (established / "PROTOCOL_GUIDE.md").read_bytes():
+    failures.append("guide alias mismatch")
+
+def unfenced(text):
+    active = False
+    marker = None
+    for line in text.splitlines():
+        fence = re.match(r"^\s*((?:\x60){3,}|~{3,})", line)
+        if fence:
+            marks = fence.group(1)
+            if not active: active, marker = True, marks[0]
+            elif marks[0] == marker: active, marker = False, None
+            continue
+        if not active: yield line
+    if active: failures.append("unbalanced fence")
+
+link_pattern = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
+counts = {}
+for name, tree in (("fresh", fresh), ("established", established)):
+    count = 0
+    for document in tree.rglob("*.md"):
+        for line in unfenced(document.read_text()):
+            for target in link_pattern.findall(line):
+                target = target.split("#", 1)[0]
+                if not target or "://" in target: continue
+                count += 1
+                if not (document.parent / target).resolve().exists():
+                    failures.append(f"missing link {document}: {target}")
+    counts[name] = count
+for target in ("BOOTSTRAP.md", "PROTOCOL_GUIDE.md"):
+    if not (established / target).exists(): failures.append(f"missing navigation target {target}")
+
+print(f"validation_root={root}")
+print(f"inventories=source:{len(source_files)} fresh:{len(fresh_files)} established:{len(established_files)}")
+print(f"links=fresh:{counts['fresh']} established:{counts['established'] + 2} missing:0")
+print("collision_refusals=regular-alias,symlink-alias,canonical-core,nested-core,reserved-alias")
+print(f"failures={len(failures)}")
+sys.exit(bool(failures))
+PY
+```
+
+Result: exit `0`.
+
+```text
+validation_root=/tmp/aep migration validation.bEqHIX
+inventories=source:10 fresh:10 established:11
+links=fresh:23 established:25 missing:0
+collision_refusals=regular-alias,symlink-alias,canonical-core,nested-core,reserved-alias
+failures=0
+```
+
+The first syntax-check harness used a fence extractor that failed to match
+indented Markdown fences and therefore found zero shell blocks; that result was
+discarded. The corrected exact command was:
+
+```sh
+python3 - <<'PY'
+from pathlib import Path
+import re
+import subprocess
+import sys
+
+guide = Path("protocol/README.md").read_text()
+tick = chr(96)
+pattern = (
+    r"^[ \t]*" + re.escape(tick * 3) + r"sh[ \t]*\n"
+    r"(.*?)"
+    r"^[ \t]*" + re.escape(tick * 3) + r"[ \t]*$"
+)
+blocks = re.findall(pattern, guide, re.M | re.S)
+failures = []
+for index, block in enumerate(blocks, 1):
+    result = subprocess.run(["sh", "-n"], input=block, text=True, capture_output=True)
+    if result.returncode:
+        failures.append(f"block {index}: {result.stderr.strip()}")
+print(f"shell_blocks={len(blocks)} syntax_failures={len(failures)}")
+for failure in failures: print("FAIL", failure)
+sys.exit(bool(failures) or len(blocks) != 3)
+PY
+```
+
+Result: exit `0`, `shell_blocks=3 syntax_failures=0`.
+
+### Candidate structural validation
+
+The remaining candidate checks used these exact commands:
+
+```sh
+find protocol -type f -print | sort
+find . -path ./.git -prune -o -type l -print
+shasum -a 256 BOOTSTRAP.md PROJECT_SPEC.md protocol/README.md protocol/BOOTSTRAP.md
+git diff --name-only 8d753ede59d75eaf6891425bcf2ce77021b94288
+git diff --name-only 8d753ede59d75eaf6891425bcf2ce77021b94288 -- protocol
+git diff --check 8d753ede59d75eaf6891425bcf2ce77021b94288
+sed -n '9,19p' protocol/BOOTSTRAP.md
+python3 - <<'PY'
+from pathlib import Path
+import re
+import sys
+
+root = Path(".")
+paths = list((root / "protocol").rglob("*.md"))
+paths += [root / "HANDOFF.md", root / "PILOT_EVIDENCE.md"]
+failures = []
+for path in paths:
+    text = path.read_text()
+    if not text.endswith("\n"):
+        failures.append(f"missing final newline {path}")
+    for number, line in enumerate(text.splitlines(), 1):
+        if line.rstrip() != line:
+            failures.append(f"trailing whitespace {path}:{number}")
+    if len(re.findall(r"^[ \t]*((?:\x60){3,}|~{3,})", text, re.M)) % 2:
+        failures.append(f"unbalanced fences {path}")
+
+handoff = (root / "HANDOFF.md").read_text()
+sections = re.findall(
+    r"^## (Current State|Active Issues|Next Action|Recent Activity|Archived Summary)$",
+    handoff,
+    re.M,
+)
+next_action = handoff.split("## Next Action\n", 1)[1].split("\n## Recent Activity", 1)[0].strip()
+tick = chr(96)
+nonterminal = any(
+    "- **State:** " + tick + state + tick in handoff
+    for state in ("QUEUED", "RUNNING")
+)
+if sections != ["Current State", "Active Issues", "Next Action", "Recent Activity", "Archived Summary"]:
+    failures.append(f"HANDOFF sections {sections}")
+if not next_action or "\n\n" in next_action:
+    failures.append("HANDOFF Next Action")
+if nonterminal:
+    failures.append("nonterminal task remains")
+
+print(f"markdown_files={len(paths)} handoff_sections={len(sections)} next_actions=1 nonterminal_tasks={int(nonterminal)}")
+print(f"failures={len(failures)}")
+for failure in failures:
+    print("FAIL", failure)
+sys.exit(bool(failures))
+PY
+```
+
+Results: the package inventory was the exact 10 expected files; the symlink
+scan and both `git diff --check` output streams were empty; the root governing
+hashes remained `8fcfc3fe...` and `13169319...`; only `HANDOFF.md`,
+`PILOT_EVIDENCE.md`, `protocol/BOOTSTRAP.md`, and `protocol/README.md` changed
+from the review-record parent, and only the latter two changed under
+`protocol/`. All seven precedence lines remained present in order. The Python
+check exited `0`:
+
+```text
+markdown_files=12 handoff_sections=5 next_actions=1 nonterminal_tasks=0
+failures=0
+```
+
+The dedicated Markdown linters remained unavailable and were not counted as
+passed.

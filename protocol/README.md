@@ -46,38 +46,116 @@ The exact operational rules and truth hierarchy live in [`BOOTSTRAP.md`](BOOTSTR
 
 ## Quick start
 
-1. Preflight every package path and choose the applicable migration path.
+1. Inventory existing specifications, architecture records, agent instructions, handoff history, issues, evidence, and application documentation. Do not migrate concurrently with another writer.
+2. Resolve the complete destination manifest before writing anything:
 
-   For a new or deliberately prepared repository with no conflicts, copy the package contents into its root:
+   | Source package path | Collision-free destination | Sole-README-collision destination |
+   |---|---|---|
+   | `README.md` | `README.md` | `PROTOCOL_GUIDE.md` |
+   | `BOOTSTRAP.md` | `BOOTSTRAP.md` | `BOOTSTRAP.md` |
+   | `PROJECT_SPEC.md` | `PROJECT_SPEC.md` | `PROJECT_SPEC.md` |
+   | `HANDOFF.md` | `HANDOFF.md` | `HANDOFF.md` |
+   | `HUMAN_CHECKPOINT.md` | `HUMAN_CHECKPOINT.md` | `HUMAN_CHECKPOINT.md` |
+   | `ADR/TEMPLATE.md` | `ADR/TEMPLATE.md` | `ADR/TEMPLATE.md` |
+   | `EVIDENCE/TEMPLATE.md` | `EVIDENCE/TEMPLATE.md` | `EVIDENCE/TEMPLATE.md` |
+   | `ISSUES/TEMPLATE.md` | `ISSUES/TEMPLATE.md` | `ISSUES/TEMPLATE.md` |
+   | `PROMPTS.md` | `PROMPTS.md` | `PROMPTS.md` |
+   | `EXAMPLE.md` | `EXAMPLE.md` | `EXAMPLE.md` |
+
+   Treat every existing filesystem entry, including a dangling symlink, as a collision. `PROTOCOL_GUIDE.md` is a reserved destination even though it is not a source-package path.
+3. Choose exactly one automatic path:
+
+   **Collision-free target.** This includes an established repository with no application README and none of the resolved destinations above. Confirm that both conventional guide names and every other destination are absent, then use the quoted bulk-copy command:
 
    ```sh
-   cp -R /path/to/agentic-engineering-protocol/protocol/. /path/to/your-repository/
+   protocol_source="/path/to/agentic-engineering-protocol/protocol"
+   repository_target="/path/to/your-repository"
+
+   if [ ! -d "$protocol_source" ] || [ ! -d "$repository_target" ]; then
+     printf 'source or target directory is absent\n' >&2
+     exit 1
+   fi
+
+   for relative_path in \
+     README.md PROTOCOL_GUIDE.md BOOTSTRAP.md PROJECT_SPEC.md HANDOFF.md \
+     HUMAN_CHECKPOINT.md PROMPTS.md EXAMPLE.md ADR EVIDENCE ISSUES
+   do
+     if [ -e "$repository_target/$relative_path" ] || [ -L "$repository_target/$relative_path" ]; then
+       printf 'collision: %s\n' "$repository_target/$relative_path" >&2
+       exit 1
+     fi
+   done
+
+   cp -R "$protocol_source/." "$repository_target/"
    ```
 
-   For an established repository, do not use that bulk-copy command. Instead:
+   **Application README as the sole collision.** Use this path only when the repository's `README.md` is an existing regular file, is not a symlink, and every other resolved destination is absent. Run this complete preflight before any copy:
 
-   1. Inventory existing specifications, architecture records, agent instructions, handoff history, issues, evidence, and application documentation.
-   2. Preserve the application `README.md`. When that path already exists, copy this package guide under the canonical migration name `PROTOCOL_GUIDE.md`:
+   ```sh
+   protocol_source="/path/to/agentic-engineering-protocol/protocol"
+   repository_target="/path/to/your-repository"
 
-      ```sh
-      cp /path/to/agentic-engineering-protocol/protocol/README.md /path/to/your-repository/PROTOCOL_GUIDE.md
-      ```
+   if [ ! -d "$protocol_source" ] || [ ! -d "$repository_target" ]; then
+     printf 'source or target directory is absent\n' >&2
+     exit 1
+   fi
 
-   3. Add a short navigation section to the application README without removing its existing content:
+   if [ ! -f "$repository_target/README.md" ] || [ -L "$repository_target/README.md" ]; then
+     printf 'application README is absent, non-regular, or a symlink\n' >&2
+     exit 1
+   fi
 
-      ```markdown
-      ## Agent-Native Engineering Protocol
+   for relative_path in \
+     PROTOCOL_GUIDE.md BOOTSTRAP.md PROJECT_SPEC.md HANDOFF.md \
+     HUMAN_CHECKPOINT.md PROMPTS.md EXAMPLE.md ADR EVIDENCE ISSUES
+   do
+     if [ -e "$repository_target/$relative_path" ] || [ -L "$repository_target/$relative_path" ]; then
+       printf 'collision: %s\n' "$repository_target/$relative_path" >&2
+       exit 1
+     fi
+   done
+   ```
 
-      Participants must read [BOOTSTRAP.md](BOOTSTRAP.md) before working in this repository. Adoption guidance is in [PROTOCOL_GUIDE.md](PROTOCOL_GUIDE.md).
-      ```
+   After the preflight exits successfully, install every canonical artifact with quoted operands:
 
-   4. Copy only non-conflicting protocol artifacts. Deliberately merge or map every collision, preserving existing authority, authorship, HANDOFF history, ADRs, issues, and evidence. Never overwrite them merely to complete installation.
-   5. Keep `PROTOCOL_GUIDE.md` at the repository root and verify that the application README links to both it and `BOOTSTRAP.md`; the guide's package-relative links must also resolve there.
+   ```sh
+   protocol_source="/path/to/agentic-engineering-protocol/protocol"
+   repository_target="/path/to/your-repository"
 
-2. Replace the placeholders in `PROJECT_SPEC.md`. The human technical owner records acceptance before agents implement affected product behavior.
-3. Give a fresh participant the **Fresh implementor or onboarding** prompt from `PROMPTS.md`.
-4. The participant inspects the repository, replaces the template HANDOFF snapshot with evidence-backed state, identifies active work, and begins from one bounded safe action.
-5. Keep the protocol files in version control when available. Git is useful but not required; record hashes or other durable file state when commits are unavailable.
+   cp \
+     "$protocol_source/BOOTSTRAP.md" \
+     "$protocol_source/PROJECT_SPEC.md" \
+     "$protocol_source/HANDOFF.md" \
+     "$protocol_source/HUMAN_CHECKPOINT.md" \
+     "$protocol_source/PROMPTS.md" \
+     "$protocol_source/EXAMPLE.md" \
+     "$repository_target/"
+   cp -R \
+     "$protocol_source/ADR" \
+     "$protocol_source/EVIDENCE" \
+     "$protocol_source/ISSUES" \
+     "$repository_target/"
+   cp "$protocol_source/README.md" "$repository_target/PROTOCOL_GUIDE.md"
+
+   cmp "$protocol_source/BOOTSTRAP.md" "$repository_target/BOOTSTRAP.md"
+   cmp "$protocol_source/README.md" "$repository_target/PROTOCOL_GUIDE.md"
+   ```
+
+   Only after both comparisons succeed, append this navigation section to the application README without removing its existing content:
+
+   ```markdown
+   ## Agent-Native Engineering Protocol
+
+   Participants must read [BOOTSTRAP.md](BOOTSTRAP.md) before working in this repository. Adoption guidance is in [PROTOCOL_GUIDE.md](PROTOCOL_GUIDE.md).
+   ```
+
+   Verify the complete installed manifest against the source, confirm that the application README still contains its prior content plus both navigation links, and resolve every guide-relative link from the repository root.
+
+4. If any destination other than the application `README.md` exists, stop before copying or editing anything. Do not install a non-conflicting subset. Preserve the existing files, authorship, and history; record the collision and contradiction under the target repository's current process; and obtain its human technical owner's accepted mapping or merge decision. A non-canonical mapping is not valid merely because links resolve: update every affected guide, prompt, template, and entry-point reference, and verify that each canonical role points to the owner-approved content before resuming installation.
+5. Replace the placeholders in `PROJECT_SPEC.md`. The human technical owner records acceptance before agents implement affected product behavior.
+6. Give a fresh participant the **Fresh implementor or onboarding** prompt from `PROMPTS.md`.
+7. The participant inspects the repository, replaces the template HANDOFF snapshot with evidence-backed state, identifies active work, and begins from one bounded safe action.
+8. Keep the protocol files in version control when available. Git is useful but not required; record hashes or other durable file state when commits are unavailable.
 
 See [`EXAMPLE.md`](EXAMPLE.md) for a small filled-in illustration.
 
@@ -107,7 +185,8 @@ Independent reviewers should challenge the premise of a change, not just its mec
 
 ## Adopting in an existing repository
 
-- Use the established-repository migration path in Quick start. Keep the application README, the canonical `PROTOCOL_GUIDE.md` alias, and links to both the guide and normative `BOOTSTRAP.md`.
+- Use the automatic established-repository path in Quick start only when the application README is the sole collision. Keep that README, the canonical `PROTOCOL_GUIDE.md` alias, and links to both the guide and byte-verified normative `BOOTSTRAP.md`.
+- Stop before any write when another destination exists. Resolve normative-record collisions through the target repository's human authority; do not assume that an alternate filename or a resolving link preserves protocol meaning.
 - Inventory current specifications, architecture records, issue trackers, agent instructions, and handoff documents before copying anything.
 - Preserve authorship and useful history. Map existing authoritative requirements into `PROJECT_SPEC.md` and durable accepted decisions into ADRs.
 - Record unresolved contradictions instead of choosing a source silently.
