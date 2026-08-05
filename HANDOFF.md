@@ -30,7 +30,7 @@ Every participant must read this file before starting work and leave it safe for
 - **CONFIRMED — Review requirement:** The first complete protocol draft must receive a read-only independent-agent review before the implementation issue closes.
 - **CONFIRMED — Real-repository validation:** One bounded local Python 3.9 pilot exercised quick-start migration, context-free implementation, evidence, HANDOFF, and independent review successfully. This establishes only that no material defect was observed within that target and scope; broader portability remains `UNKNOWN`.
 - **CONFIRMED — Migration state:** The reworked automatic paths preflight a complete 10-row destination manifest, reserve the alias, reject regular/symlink/core/nested collisions before writes, quote copy operands, cover no-README targets, install all artifacts, and byte-check canonical BOOTSTRAP and guide before application navigation. Issue `AEP-20260805T041340Z-readme-migration-gap` is `CLOSED` after exact-target independent disposition `APPROVED` and coordinator verification.
-- **CONFIRMED — Specification-evolution state:** The human technical owner explicitly approved the exact `Specification evolution` policy recorded in issue `AEP-20260805T095724Z-specification-evolution`. The bounded change targets only `protocol/PROJECT_SPEC.md`; implementation and independent review remain unfinished, and the reusable source is unchanged at this authorization boundary.
+- **CONFIRMED — Specification-evolution state:** The human technical owner explicitly approved the exact `Specification evolution` policy recorded in issue `AEP-20260805T095724Z-specification-evolution`. The bounded source change is immutable at commit `3341c53eb94723e2092bc44a321b111e376d8bef`, parent authorization boundary `428836422d20c2910e790b036e8f3802c53af18c`, protocol tree `8676b85d292676b7e198d10414961bf3657bf578`, and template SHA-256 `6c7401d9ed598908225f3eb6a3bb8299cfa01a350b1853df98c7bc386eddf976`. Coordinator verification passed; fresh independent review remains pending.
 - **CONFIRMED — Unresolved design questions:** No architecture decision or active defect remains. Broader OS/filesystem/repository portability, concurrent external mutation, and cryptographic attribution remain `UNKNOWN`; they do not invalidate the bounded approved result.
 
 ### Prior-art disposition
@@ -100,8 +100,21 @@ Every participant must read this file before starting work and leave it safe for
 - Coordinator verification confirmed review commit `52044a2322c0f295739f6e694b67db18d6b7ee8e` changes only `HANDOFF.md`; target and review protocol trees both equal `f332761a54a3e8bf3f2bcbe5d231f1795e999377`; package inventory/links/symlinks are 10/23/0; root governing hashes match; both critical ranges pass `git diff --check`; and every background task is terminal.
 - The coordinator applied the real navigation block to retained established fixture `/tmp/aep migration validation.bEqHIX/established target` and independently obtained inventory 11, 25 actual links/zero missing, preserved application-README prefix, exactly two navigation links, five unchanged collision sentinels, and zero failures. Exact procedure, correction, result, and limitations are appended in `PILOT_EVIDENCE.md`.
 - Publication command `git push origin main` advanced remote `main` from `a3cd51fd5285384f70a97c8790f96d4c2fbebd1c` to closure commit `31f22985d2bfae918284f833f501743ba6e5d03e`; `git rev-parse HEAD`, `git rev-parse origin/main`, and direct `git ls-remote --heads origin refs/heads/main` returned the same closure hash.
+- Specification-evolution validation at `2026-08-05T10:01:04Z` confirmed exact target/parent `3341c53eb94723e2092bc44a321b111e376d8bef`/`428836422d20c2910e790b036e8f3802c53af18c`, a one-file 17-line insertion, protocol tree `8676b85d292676b7e198d10414961bf3657bf578`, exact 10-file regular inventory, zero symlinks, 28 checked relative links with zero missing, final-newline/trailing-whitespace/fence integrity across the package plus live README/HANDOFF, seven ordered truth tiers, five HANDOFF sections, one Next Action, unchanged non-target package files, unchanged root governing hashes, and `git diff --check` success.
+- Two preliminary validator failures were discarded without repository mutation: the first hard-coded non-current wording for the seven existing precedence labels; the second incorrectly applied the package final-newline rule to protected root input `BOOTSTRAP.md`, whose pre-existing 6,235-byte content has no final newline and must remain byte-identical at SHA-256 `8fcfc3fe...`. The corrected scope passed. `markdownlint` and `markdownlint-cli2` remain `NOT AVAILABLE` and are not counted as passed.
 
 ### Background tasks
+
+### TASK-20260805T100104Z-specification-evolution-review
+
+- **Purpose:** Fresh context-free independent review of the exact specification-evolution target, owner authority, source precedence, product/architecture boundary, package integrity, evidence, and regression scope.
+- **Owner:** `Codex/root`; intended reviewer `/root/specification_evolution_reviewer`.
+- **Start time:** Not started; queued at `2026-08-05T10:01:04Z` before participant creation.
+- **Process or remote reference:** Intended collaboration task `/root/specification_evolution_reviewer`.
+- **Query/recovery:** Query `/root/specification_evolution_reviewer` with collaboration agent status or wait; persist its complete disposition in this HANDOFF before closure.
+- **Last observation:** `2026-08-05T10:01:04Z` — durable review task queued against immutable target `3341c53eb94723e2092bc44a321b111e376d8bef`.
+- **State:** `QUEUED`
+- **Terminal evidence:** `NONE` — participant has not been spawned.
 
 ### TASK-20260805T085840Z-migration-final-review
 
@@ -230,7 +243,7 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ### AEP-20260805T095724Z-specification-evolution
 
-- **Status:** `IMPLEMENTING`
+- **Status:** `REVIEW`
 - **Severity:** `MEDIUM`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN` — at `2026-08-05T09:57:24Z`, the human technical owner explicitly approved the decision-complete plan and exact English policy below for adoption in the reusable specification template.
@@ -259,7 +272,9 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
   Relevant evidence, issue records, and ADRs SHOULD be referenced where appropriate so that the reason for the specification change remains auditable.
   ```
 - **Evidence:** Owner-approved plan received before this record; clean synchronized baseline `08a61ee54faedf057a24f1ea1ee970cb21341a79`; root governing hashes `8fcfc3fe52608a1b42305bb12696d3f151be468bbbf638918cf93b651414dfe6` and `13169319e2be028c470ca96925002b25c000c58ba3a4c5420e652d291df139dd`; reusable template pre-change SHA-256 `3bbd5db9c804855848fb66ca7cb68241ce38e717ce0481faa09575e808cf2566`.
-- **Resolution state:** Owner authorization is durable. Apply only the approved template section, verify the complete package and governance invariants, freeze an immutable implementation target, and obtain a fresh independent disposition before closure.
+- **Implementation target:** Commit `3341c53eb94723e2092bc44a321b111e376d8bef`, parent `428836422d20c2910e790b036e8f3802c53af18c`, full tree `e5291e1ec5a8498f7b677923ca48fcdb2ab00b91`, protocol tree `8676b85d292676b7e198d10414961bf3657bf578`, template blob `de44b6d89f11c695fdfd6f33bb9a8943f78bfba3`, and template SHA-256 `6c7401d9ed598908225f3eb6a3bb8299cfa01a350b1853df98c7bc386eddf976`.
+- **Implementation verification:** `git diff --check 428836422d20c2910e790b036e8f3802c53af18c..3341c53eb94723e2092bc44a321b111e376d8bef` exited `0`; `git diff --name-status` reported only `M protocol/PROJECT_SPEC.md`; the semantic/Markdown checker reported `package_inventory=10 symlinks=0 checked_markdown=12 relative_links=28 missing_links=0` and `semantic_assertions=PASS precedence_tiers=7 handoff_sections=5 next_actions=1`; `git diff --quiet` confirmed all non-target package files unchanged; governing hashes matched. Dedicated Markdown linters were unavailable.
+- **Resolution state:** Exact approved wording is implemented and coordinator-verified. Closure is blocked only on a fresh independent `APPROVED` disposition and final coordinator rerun; no review finding exists yet.
 
 ### AEP-20260805T041340Z-readme-migration-gap
 
@@ -329,9 +344,21 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Next Action
 
-Apply the exact owner-approved `Specification evolution` section to `protocol/PROJECT_SPEC.md`, run the bounded semantic and structural verification, and freeze the implementation as an immutable review target without changing any other reusable artifact.
+Spawn the queued context-free reviewer for exact target `3341c53eb94723e2092bc44a321b111e376d8bef` versus parent `428836422d20c2910e790b036e8f3802c53af18c`, then persist its complete disposition and reconcile task `TASK-20260805T100104Z-specification-evolution-review` before any closure.
 
 ## Recent Activity
+
+### 2026-08-05T10:01:04Z — Codex/root — Specification-Evolution Implementor and Verification Agent
+
+- **Task:** Apply the exact owner-approved specification-evolution policy, verify its semantics and package scope, freeze an immutable implementation target, and queue independent review.
+- **Context inspected:** Authorization commit `428836422d20c2910e790b036e8f3802c53af18c`; approved issue wording; reusable specification and BOOTSTRAP; package inventory and links; root governing hashes; current Git history and HANDOFF structure.
+- **Actions performed:** Inserted the approved 17-line section immediately before `Specification change record`; ran semantic, precedence, Markdown, inventory, symlink, hash, scope, and whitespace checks; committed the sole source change as `3341c53eb94723e2092bc44a321b111e376d8bef`; queued a different context-free reviewer.
+- **Files modified:** `protocol/PROJECT_SPEC.md`; this HANDOFF after the immutable source commit.
+- **Findings:** `CONFIRMED` — evidence is explicitly a proposal basis rather than autonomous authority; accepted-spec conflicts default to implementation correction; every material requirement change remains owner-gated; mixed changes still require specification plus compatible ADR. `CONFIRMED` — no other reusable artifact or governing input changed. `UNKNOWN` — independent disposition. The two discarded validator assumptions and protected-root newline limitation are recorded above.
+- **Verification performed:** `git diff --check` passed; exact target range changes one file by 17 insertions; corrected standard-library validator returned package inventory 10, symlinks 0, checked Markdown files 12, relative links 28/missing 0, semantic assertions pass, seven precedence tiers, five HANDOFF sections, and one Next Action; non-target files were unchanged; governing hashes matched; dedicated Markdown linters were `NOT AVAILABLE`.
+- **Issues created or updated:** Advanced `AEP-20260805T095724Z-specification-evolution` from `IMPLEMENTING` to `REVIEW`; created queued task `TASK-20260805T100104Z-specification-evolution-review`.
+- **Remaining uncertainty:** Fresh review findings and disposition; post-review coordinator verification; final publication equality.
+- **Recommended next action:** Commit this review boundary, spawn the exact queued task, and reconcile its observed state before relying on it.
 
 ### 2026-08-05T09:57:24Z — Codex/root — Specification-Evolution Coordinator
 
