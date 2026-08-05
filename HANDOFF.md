@@ -21,14 +21,14 @@ Every participant must read this file before starting work and leave it safe for
 - **CONFIRMED — Version control:** This directory is an independent Git repository on branch `main`, tracking `origin/main`. The immutable protocol release commit is `a6270ebeb02f936184895dcad32269d8a16a0da5` (`feat: publish agentic engineering protocol v1`).
 - **CONFIRMED — Pilot checkpoint:** Recovered pilot records are committed and published at `087c665e3eb50bfff56f74bb9b32c6280e0423ee` (`docs: record isolated protocol pilot`).
 - **CONFIRMED — Prior migration review target:** Owner-approved migration implementation `98fe67c8cf99f53157f3273cc1defdfb81c46773` (`docs: define established-repository migration`), protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`, received fresh independent disposition `CHANGES_REQUIRED` and is not an approvable target. Its findings and evidence remain preserved below.
-- **CONFIRMED — Rework candidate:** The bounded safety correction is implemented and self-verified on review-record parent `8d753ede59d75eaf6891425bcf2ce77021b94288`. Candidate hashes are `a110604698c2fb1f2f3dc1013cf4d7cdf6d48f8bb6064bde9e4cd32914620180` for `protocol/README.md` and `d87b814fdeb66dcc9754248270203817c213550f4b87c4405fc914163603e11b` for `protocol/BOOTSTRAP.md`; an immutable target commit remains to be recorded before review starts.
+- **CONFIRMED — Rework review target:** The bounded safety correction is immutable at commit `f70a8ace435dd32a00f81390f82184b963bb0c0b` (`docs: harden established-repository migration`), parent `8d753ede59d75eaf6891425bcf2ce77021b94288`, protocol tree `f332761a54a3e8bf3f2bcbe5d231f1795e999377`. Content hashes are `a110604698c2fb1f2f3dc1013cf4d7cdf6d48f8bb6064bde9e4cd32914620180` for `protocol/README.md` and `d87b814fdeb66dcc9754248270203817c213550f4b87c4405fc914163603e11b` for `protocol/BOOTSTRAP.md`.
 - **CONFIRMED — Remote:** Public repository `MattSureham/agentic-engineering-protocol` at `https://github.com/MattSureham/agentic-engineering-protocol`, authenticated account `MattSureham`, default branch `main`, remote name `origin`.
 - **CONFIRMED — Handoff commit identity:** The remote-aware release HANDOFF is contained by follow-up commit `99ed41874157b0da537b1399bef907c82454fb1e` (`docs: finalize release handoff`). Takeover checks directly verified that local HEAD, `origin/main`, and GitHub `refs/heads/main` matched before pilot edits; the earlier chat-response reference is non-durable and is not relied on.
 - **CONFIRMED — Governing documents:** Root `BOOTSTRAP.md` is the collaboration mechanism for developing this repository; root `PROJECT_SPEC.md` is the authoritative product specification.
 - **CONFIRMED — Approved architecture:** Keep the root governing documents unchanged and build a copy-ready package under `protocol/` using risk-tiered review and hybrid issue/evidence records.
 - **CONFIRMED — Review requirement:** The first complete protocol draft must receive a read-only independent-agent review before the implementation issue closes.
 - **CONFIRMED — Real-repository validation:** One bounded local Python 3.9 pilot exercised quick-start migration, context-free implementation, evidence, HANDOFF, and independent review successfully. This establishes only that no material defect was observed within that target and scope; broader portability remains `UNKNOWN`.
-- **CONFIRMED — Migration state:** The reworked automatic paths now preflight a complete 10-row destination manifest, reserve the alias, reject regular/symlink/core/nested collisions before writes, quote copy operands, cover no-README targets, install all artifacts, and byte-check canonical BOOTSTRAP and guide before application navigation. Issue `AEP-20260805T041340Z-readme-migration-gap` is in `VERIFYING` pending immutable-target capture and fresh independent review.
+- **CONFIRMED — Migration state:** The reworked automatic paths now preflight a complete 10-row destination manifest, reserve the alias, reject regular/symlink/core/nested collisions before writes, quote copy operands, cover no-README targets, install all artifacts, and byte-check canonical BOOTSTRAP and guide before application navigation. Issue `AEP-20260805T041340Z-readme-migration-gap` is in `REVIEW`; closure still requires a different participant's approval of the exact target above.
 - **CONFIRMED — Unresolved design questions:** No new repository-level architecture decision is required for the approved rework: automatic migration will stop on every collision beyond the application README, preserving the target owner's authority over any later mapping. Broader portability remains `UNKNOWN`.
 
 ### Prior-art disposition
@@ -92,8 +92,20 @@ Every participant must read this file before starting work and leave it safe for
 - The historical aggregate migration-suite claim has no durable exact harness command or output and is not independently reproducible as one run. Its component claims were reimplemented, but the earlier aggregate execution is retained only as attributed evidence. Dedicated Markdown linters remain unavailable.
 - Corrected migration validation at `2026-08-05T08:52:54Z` exited `0`: source/fresh/established inventories were 10/10/11; paths containing whitespace succeeded; fresh/established relative links were 23/25 with zero missing; application README bytes were preserved; regular alias, symlink alias, canonical core, nested core, and reserved alias cases all refused before writes; three documented shell blocks passed `sh -n`.
 - Scoped structural validation reported package inventory 10, zero worktree symlinks, 23 package-relative links/zero missing, three shell blocks/zero syntax failures, all seven precedence tiers, eight unchanged protocol files, matching root governing hashes, three intended pre-handoff changed files, zero live unfinished markers, and `git diff --check` exit `0`. The first marker assertion matched a historical sentence describing a clean marker scan; that false harness result was discarded and the corrected exclusion-based rerun passed.
+- Implementation target capture resolved exact commit `f70a8ace435dd32a00f81390f82184b963bb0c0b`, parent `8d753ede59d75eaf6891425bcf2ce77021b94288`, and protocol tree `f332761a54a3e8bf3f2bcbe5d231f1795e999377`; `git diff --check 8d753ede59d75eaf6891425bcf2ce77021b94288..f70a8ace435dd32a00f81390f82184b963bb0c0b` exited `0`.
 
 ### Background tasks
+
+### TASK-20260805T085840Z-migration-final-review
+
+- **Purpose:** Fresh context-free independent review of the exact corrected migration target, prior findings, authority, copy safety, validation evidence, and regression scope.
+- **Owner:** `Codex/root`; reviewer `/root/migration_final_review`.
+- **Start time:** `2026-08-05T08:58:40Z` recorded immediately before spawning.
+- **Process or remote reference:** Planned collaboration task `/root/migration_final_review`.
+- **Query/recovery:** Query `/root/migration_final_review` with collaboration agent status or wait; persist its complete disposition in this HANDOFF before closure.
+- **Last observation:** `2026-08-05T08:58:40Z` — queued in durable state; not yet spawned.
+- **State:** `QUEUED`
+- **Terminal evidence:** Not terminal; no review claim exists yet.
 
 ### TASK-20260805T084341Z-migration-semantics-review
 
@@ -211,7 +223,7 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ### AEP-20260805T041340Z-readme-migration-gap
 
-- **Status:** `VERIFYING`
+- **Status:** `REVIEW`
 - **Severity:** `HIGH`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN` — at `2026-08-05T07:53:57Z`, the technical owner selected and approved the canonical `PROTOCOL_GUIDE.md` alias plan: preserve the application README, add navigation links, preflight every other collision, and retain the source bundle's 10-file inventory.
@@ -219,7 +231,8 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 - **Problem:** The quick start correctly prohibits overwriting existing protocol files but copies package `README.md` to the conventional application `README.md` path and supplies no canonical merge or alternate-name procedure for established repositories.
 - **Evidence:** Pilot preflight found the collision before copy. Safe continuation required a coordinator-invented migration: preserve application `README.md`, copy the byte-identical guide as `PROTOCOL_GUIDE.md`, and add navigation links. See `PILOT_EVIDENCE.md`.
 - **Implementation target:** Commit `98fe67c8cf99f53157f3273cc1defdfb81c46773`, parent checkpoint `087c665e3eb50bfff56f74bb9b32c6280e0423ee`, protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`.
-- **Resolution state:** First independent review returned `CHANGES_REQUIRED`; the bounded correction is now implemented and self-verified. Closure remains prohibited until the candidate is committed, a different participant reviews that immutable state, and the latest disposition is `APPROVED`.
+- **Rework target:** Commit `f70a8ace435dd32a00f81390f82184b963bb0c0b`, parent `8d753ede59d75eaf6891425bcf2ce77021b94288`, protocol tree `f332761a54a3e8bf3f2bcbe5d231f1795e999377`.
+- **Resolution state:** First independent review returned `CHANGES_REQUIRED`; the bounded correction is implemented, self-verified, and committed. Closure remains prohibited until a different participant reviews the exact rework target and the latest disposition is `APPROVED`.
 - **Independent review — `2026-08-05T08:43:41Z` — `agent:codex-fresh-recovery-reviewer`:**
   - **Reviewed repository state:** Target `98fe67c8cf99f53157f3273cc1defdfb81c46773`, parent `087c665e3eb50bfff56f74bb9b32c6280e0423ee`, protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`, and unchanged protocol tree at review-handoff HEAD `a3cd51fd5285384f70a97c8790f96d4c2fbebd1c`.
   - **Scope:** Root specification and protocol-evolution authority; package BOOTSTRAP and adoption guide; exact diff, hashes, inventories, recorded copy fixtures, link behavior, and evidence provenance.
@@ -263,9 +276,21 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Next Action
 
-Commit the validated migration correction as one immutable implementation target, then record that exact target and a queryable fresh-review task in a separate HANDOFF boundary commit before spawning the reviewer.
+After committing this HANDOFF review boundary, spawn context-free task `/root/migration_final_review` to review exact target `f70a8ace435dd32a00f81390f82184b963bb0c0b` against parent `8d753ede59d75eaf6891425bcf2ce77021b94288`; do not close the issue without its persisted disposition.
 
 ## Recent Activity
+
+### 2026-08-05T08:58:40Z — Codex/root — Corrected-Target Handoff Preparer
+
+- **Task:** Freeze the validated correction, capture its immutable identities, and create the reviewer lifecycle record before spawning any participant.
+- **Context inspected:** Candidate diff and evidence; exact implementation commit and parent; protocol tree and content hashes; commit-ranged whitespace; issue gate and background-task requirements.
+- **Actions performed:** Committed the correction as `f70a8ace435dd32a00f81390f82184b963bb0c0b`; recorded its parent, protocol tree, hashes, issue review state, one exact reviewer task, query mechanism, and bounded spawn action.
+- **Files modified:** This HANDOFF only after the implementation commit.
+- **Findings:** `CONFIRMED` — the immutable target contains only the intended HANDOFF/evidence and two protocol-document changes relative to the review-record parent. `UNKNOWN` — fresh independent disposition.
+- **Verification performed:** Commit, parent, and protocol tree resolved exactly; content hashes matched precommit evidence; `git diff --check 8d753ede59d75eaf6891425bcf2ce77021b94288..f70a8ace435dd32a00f81390f82184b963bb0c0b` exited `0`; local branch was two commits ahead of unchanged `origin/main` before this boundary commit.
+- **Issues created or updated:** Advanced `AEP-20260805T041340Z-readme-migration-gap` from `VERIFYING` to `REVIEW`; retained prior findings and prohibited closure without approval.
+- **Remaining uncertainty:** The queued reviewer has not yet inspected or challenged the exact target.
+- **Recommended next action:** Commit this HANDOFF boundary, then perform the exact spawn under Next Action and immediately record the observed task state.
 
 ### 2026-08-05T08:52:54Z — Codex/root — Rework Implementor and Verification Agent
 
