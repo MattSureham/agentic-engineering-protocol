@@ -30,6 +30,7 @@ Every participant must read this file before starting work and leave it safe for
 - **CONFIRMED — Review requirement:** The first complete protocol draft must receive a read-only independent-agent review before the implementation issue closes.
 - **CONFIRMED — Real-repository validation:** One bounded local Python 3.9 pilot exercised quick-start migration, context-free implementation, evidence, HANDOFF, and independent review successfully. This establishes only that no material defect was observed within that target and scope; broader portability remains `UNKNOWN`.
 - **CONFIRMED — Migration state:** The reworked automatic paths preflight a complete 10-row destination manifest, reserve the alias, reject regular/symlink/core/nested collisions before writes, quote copy operands, cover no-README targets, install all artifacts, and byte-check canonical BOOTSTRAP and guide before application navigation. Issue `AEP-20260805T041340Z-readme-migration-gap` is `CLOSED` after exact-target independent disposition `APPROVED` and coordinator verification.
+- **CONFIRMED — Specification-evolution state:** The human technical owner explicitly approved the exact `Specification evolution` policy recorded in issue `AEP-20260805T095724Z-specification-evolution`. The bounded change targets only `protocol/PROJECT_SPEC.md`; implementation and independent review remain unfinished, and the reusable source is unchanged at this authorization boundary.
 - **CONFIRMED — Unresolved design questions:** No architecture decision or active defect remains. Broader OS/filesystem/repository portability, concurrent external mutation, and cryptographic attribution remain `UNKNOWN`; they do not invalidate the bounded approved result.
 
 ### Prior-art disposition
@@ -227,6 +228,39 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Active Issues
 
+### AEP-20260805T095724Z-specification-evolution
+
+- **Status:** `IMPLEMENTING`
+- **Severity:** `MEDIUM`
+- **Owner:** `Codex/root`
+- **Authority:** `HUMAN` — at `2026-08-05T09:57:24Z`, the human technical owner explicitly approved the decision-complete plan and exact English policy below for adoption in the reusable specification template.
+- **Review:** `INDEPENDENT` — this clarifies the normative evolution contract for the highest-precedence project-truth artifact; a different context-free participant must approve the immutable target before closure.
+- **Problem:** The reusable template defines acceptance and change-record mechanics but does not state when specification evolution may be proposed, distinguish evidence from authorization, or explicitly reject implementation drift as a reason to rewrite accepted requirements.
+- **Motivation:** Make specification evolution evidence-backed and auditable while retaining human authority, source precedence, implementation-correction defaults, and the existing division between product requirements and architectural decisions.
+- **Compatibility:** The proposal adds no truth tier, workflow owner, runtime behavior, dependency, or architecture. It is consistent with the existing `DRAFT`/`ACCEPTED` gate, the seven-level precedence order, the Human Authority Boundary, the rule that mixed product/architecture decisions require both an accepted specification update and accepted ADR, and the existing atomic specification-change record. Root `BOOTSTRAP.md` and root `PROJECT_SPEC.md` remain byte-identical; no ADR is required because no architecture decision changes.
+- **Approved proposal:** Add the following section between `Assumptions and open decisions` and `Specification change record`, retaining the existing change-record text and table:
+
+  ```markdown
+  ## Specification evolution
+
+  `PROJECT_SPEC.md` is authoritative but not immutable.
+
+  A specification change MAY be proposed when evidence demonstrates that:
+
+  - an existing requirement is ambiguous, incomplete, or internally inconsistent;
+  - real-world usage exposes a requirement that was not previously represented;
+  - an existing requirement no longer serves the project's stated goals; or
+  - a new capability has been explicitly accepted into project scope.
+
+  Evidence supports a proposal; it does not by itself authorize a change to an `ACCEPTED` specification. `PROJECT_SPEC.md` MUST evolve through evidence-backed requirement change, not implementation drift. Existing implementation is not, by itself, sufficient evidence that the specification should change to match it. When implementation conflicts with an `ACCEPTED` `PROJECT_SPEC.md`, the default is to correct the implementation and preserve the conflict record until any specification change is approved.
+
+  Every material requirement change requires explicit human technical-owner approval. This includes changes that materially alter product scope, compatibility, core invariants, authorized architectural constraints, or the product/architecture authority boundary. A change affecting both product requirements and architecture requires both an accepted specification update and a compatible accepted ADR. If they conflict, `PROJECT_SPEC.md` remains authoritative and the conflict remains unresolved.
+
+  Relevant evidence, issue records, and ADRs SHOULD be referenced where appropriate so that the reason for the specification change remains auditable.
+  ```
+- **Evidence:** Owner-approved plan received before this record; clean synchronized baseline `08a61ee54faedf057a24f1ea1ee970cb21341a79`; root governing hashes `8fcfc3fe52608a1b42305bb12696d3f151be468bbbf638918cf93b651414dfe6` and `13169319e2be028c470ca96925002b25c000c58ba3a4c5420e652d291df139dd`; reusable template pre-change SHA-256 `3bbd5db9c804855848fb66ca7cb68241ce38e717ce0481faa09575e808cf2566`.
+- **Resolution state:** Owner authorization is durable. Apply only the approved template section, verify the complete package and governance invariants, freeze an immutable implementation target, and obtain a fresh independent disposition before closure.
+
 ### AEP-20260805T041340Z-readme-migration-gap
 
 - **Status:** `CLOSED`
@@ -295,9 +329,21 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Next Action
 
-Await explicit human technical-owner authorization before beginning broader portability validation or any further protocol evolution; preserve the approved migration target and evidence unchanged meanwhile.
+Apply the exact owner-approved `Specification evolution` section to `protocol/PROJECT_SPEC.md`, run the bounded semantic and structural verification, and freeze the implementation as an immutable review target without changing any other reusable artifact.
 
 ## Recent Activity
+
+### 2026-08-05T09:57:24Z — Codex/root — Specification-Evolution Coordinator
+
+- **Task:** Persist the approved specification-evolution proposal, its authority, motivation, compatibility, and required review boundary before changing reusable source.
+- **Context inspected:** Complete root collaboration protocol; root product specification; reusable specification and normative BOOTSTRAP; current HANDOFF snapshot, issues, background tasks, Next Action, and recent history; clean branch/remote state; governing hashes and prior migration closure.
+- **Actions performed:** Opened `AEP-20260805T095724Z-specification-evolution` with the exact approved English text; classified it `Authority: HUMAN` and `Review: INDEPENDENT`; replaced the terminal wait with one bounded implementation action. No reusable source was changed.
+- **Files modified:** This HANDOFF only.
+- **Findings:** `CONFIRMED` — the approved policy fills a real template gap without changing existing precedence or authority. `CONFIRMED` — changing `MAY evolve` to `MAY be proposed` prevents evidence from being misread as autonomous authorization. `CONFIRMED` — explicit mixed-decision wording preserves the existing specification/ADR boundary. `UNKNOWN` — implementation verification and fresh independent disposition.
+- **Verification performed:** Baseline worktree was clean on `main`; local HEAD and cached `origin/main` both equaled `08a61ee54faedf057a24f1ea1ee970cb21341a79`; root governing SHA-256 values matched the long-standing recorded identities; `protocol/PROJECT_SPEC.md` SHA-256 was `3bbd5db9c804855848fb66ca7cb68241ce38e717ce0481faa09575e808cf2566`.
+- **Issues created or updated:** Created `AEP-20260805T095724Z-specification-evolution` in `IMPLEMENTING` state.
+- **Remaining uncertainty:** Exact post-edit diff, package integrity, semantic consistency, immutable target identity, and independent review disposition.
+- **Recommended next action:** Perform exactly the source edit and verification stated under Next Action after committing this authorization boundary.
 
 ### 2026-08-05T09:20:08Z — Codex/root — Migration Publication Verifier
 
