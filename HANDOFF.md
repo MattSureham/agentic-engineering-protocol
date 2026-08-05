@@ -17,11 +17,12 @@ Every participant must read this file before starting work and leave it safe for
 ### Repository snapshot
 
 - **CONFIRMED — Source material:** Root `BOOTSTRAP.md` and root `PROJECT_SPEC.md` remain the unchanged governing inputs; this handoff records development state.
-- **CONFIRMED — Product state:** Reusable Agent-Native Engineering Protocol v1, the owner-authorized continuity clarification, MIT licensing, and the established-repository migration correction are implemented, validated, committed, and independently approved. The isolated pilot completed at target review-record commit `3a8f3922f47dec16144493482bd2b7a150ef5b0a`; its implementation issue is `CLOSED` after independent disposition `APPROVED`. The reviewed migration chain is local pending the bounded publication action below.
+- **CONFIRMED — Product state:** Reusable Agent-Native Engineering Protocol v1, the owner-authorized continuity clarification, MIT licensing, and the established-repository migration correction are implemented, validated, independently approved, committed, and published. The isolated pilot completed at target review-record commit `3a8f3922f47dec16144493482bd2b7a150ef5b0a`; its implementation issue is `CLOSED` after independent disposition `APPROVED`.
 - **CONFIRMED — Version control:** This directory is an independent Git repository on branch `main`, tracking `origin/main`. The immutable protocol release commit is `a6270ebeb02f936184895dcad32269d8a16a0da5` (`feat: publish agentic engineering protocol v1`).
 - **CONFIRMED — Pilot checkpoint:** Recovered pilot records are committed and published at `087c665e3eb50bfff56f74bb9b32c6280e0423ee` (`docs: record isolated protocol pilot`).
 - **CONFIRMED — Prior migration review target:** Owner-approved migration implementation `98fe67c8cf99f53157f3273cc1defdfb81c46773` (`docs: define established-repository migration`), protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`, received fresh independent disposition `CHANGES_REQUIRED` and is not an approvable target. Its findings and evidence remain preserved below.
 - **CONFIRMED — Rework review target:** The bounded safety correction is immutable at commit `f70a8ace435dd32a00f81390f82184b963bb0c0b` (`docs: harden established-repository migration`), parent `8d753ede59d75eaf6891425bcf2ce77021b94288`, protocol tree `f332761a54a3e8bf3f2bcbe5d231f1795e999377`. Content hashes are `a110604698c2fb1f2f3dc1013cf4d7cdf6d48f8bb6064bde9e4cd32914620180` for `protocol/README.md` and `d87b814fdeb66dcc9754248270203817c213550f4b87c4405fc914163603e11b` for `protocol/BOOTSTRAP.md`.
+- **CONFIRMED — Migration publication checkpoint:** Closure and coordinator evidence are published at `31f22985d2bfae918284f833f501743ba6e5d03e` (`docs: close established migration issue`). Immediately after push, local `HEAD`, cached `origin/main`, and direct remote `refs/heads/main` all matched that commit.
 - **CONFIRMED — Remote:** Public repository `MattSureham/agentic-engineering-protocol` at `https://github.com/MattSureham/agentic-engineering-protocol`, authenticated account `MattSureham`, default branch `main`, remote name `origin`.
 - **CONFIRMED — Handoff commit identity:** The remote-aware release HANDOFF is contained by follow-up commit `99ed41874157b0da537b1399bef907c82454fb1e` (`docs: finalize release handoff`). Takeover checks directly verified that local HEAD, `origin/main`, and GitHub `refs/heads/main` matched before pilot edits; the earlier chat-response reference is non-durable and is not relied on.
 - **CONFIRMED — Governing documents:** Root `BOOTSTRAP.md` is the collaboration mechanism for developing this repository; root `PROJECT_SPEC.md` is the authoritative product specification.
@@ -97,6 +98,7 @@ Every participant must read this file before starting work and leave it safe for
 - The reviewer separately performed the real documented append and confirmed prior application-README bytes remained an exact prefix, both navigation links existed once, and all 25 actual relative links resolved with zero missing. An expanded exact-block matrix exercised a nonempty no-README repository plus every fresh/established reserved destination as a regular entry and dangling symlink, live symlink alias/core cases, and invalid README types: 47 refusals, zero target mutations, complete 10-file package-byte coverage, and successful paths containing spaces.
 - Coordinator verification confirmed review commit `52044a2322c0f295739f6e694b67db18d6b7ee8e` changes only `HANDOFF.md`; target and review protocol trees both equal `f332761a54a3e8bf3f2bcbe5d231f1795e999377`; package inventory/links/symlinks are 10/23/0; root governing hashes match; both critical ranges pass `git diff --check`; and every background task is terminal.
 - The coordinator applied the real navigation block to retained established fixture `/tmp/aep migration validation.bEqHIX/established target` and independently obtained inventory 11, 25 actual links/zero missing, preserved application-README prefix, exactly two navigation links, five unchanged collision sentinels, and zero failures. Exact procedure, correction, result, and limitations are appended in `PILOT_EVIDENCE.md`.
+- Publication command `git push origin main` advanced remote `main` from `a3cd51fd5285384f70a97c8790f96d4c2fbebd1c` to closure commit `31f22985d2bfae918284f833f501743ba6e5d03e`; `git rev-parse HEAD`, `git rev-parse origin/main`, and direct `git ls-remote --heads origin refs/heads/main` returned the same closure hash.
 
 ### Background tasks
 
@@ -236,7 +238,7 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 - **Evidence:** Pilot preflight found the collision before copy. Safe continuation required a coordinator-invented migration: preserve application `README.md`, copy the byte-identical guide as `PROTOCOL_GUIDE.md`, and add navigation links. See `PILOT_EVIDENCE.md`.
 - **Implementation target:** Commit `98fe67c8cf99f53157f3273cc1defdfb81c46773`, parent checkpoint `087c665e3eb50bfff56f74bb9b32c6280e0423ee`, protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`.
 - **Rework target:** Commit `f70a8ace435dd32a00f81390f82184b963bb0c0b`, parent `8d753ede59d75eaf6891425bcf2ce77021b94288`, protocol tree `f332761a54a3e8bf3f2bcbe5d231f1795e999377`.
-- **Resolution state:** Complete. First-round findings remain preserved; exact rework target `f70a8ace435dd32a00f81390f82184b963bb0c0b` is self-verified and independently `APPROVED`; review-record commit `52044a2322c0f295739f6e694b67db18d6b7ee8e` changes only HANDOFF; coordinator identity, structural, actual-navigation, sentinel, and whitespace checks passed. Publication of this closure record is the sole remaining operational action, not a review or product gate.
+- **Resolution state:** Complete and published. First-round findings remain preserved; exact rework target `f70a8ace435dd32a00f81390f82184b963bb0c0b` is self-verified and independently `APPROVED`; review-record commit `52044a2322c0f295739f6e694b67db18d6b7ee8e` changes only HANDOFF; coordinator identity, structural, actual-navigation, sentinel, and whitespace checks passed; closure record `31f22985d2bfae918284f833f501743ba6e5d03e` was pushed and matched direct remote `main`.
 - **Independent review — `2026-08-05T08:43:41Z` — `agent:codex-fresh-recovery-reviewer`:**
   - **Reviewed repository state:** Target `98fe67c8cf99f53157f3273cc1defdfb81c46773`, parent `087c665e3eb50bfff56f74bb9b32c6280e0423ee`, protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`, and unchanged protocol tree at review-handoff HEAD `a3cd51fd5285384f70a97c8790f96d4c2fbebd1c`.
   - **Scope:** Root specification and protocol-evolution authority; package BOOTSTRAP and adoption guide; exact diff, hashes, inventories, recorded copy fixtures, link behavior, and evidence provenance.
@@ -293,9 +295,21 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Next Action
 
-Publish the complete reviewed local chain through this closure record, verify local and remote `main` equality, then leave one terminal HANDOFF instruction to await human technical-owner authorization for any broader portability validation or protocol evolution.
+Await explicit human technical-owner authorization before beginning broader portability validation or any further protocol evolution; preserve the approved migration target and evidence unchanged meanwhile.
 
 ## Recent Activity
+
+### 2026-08-05T09:20:08Z — Codex/root — Migration Publication Verifier
+
+- **Task:** Publish the complete approved migration chain, verify remote equality, and leave a terminal resumable handoff without inventing new work.
+- **Context inspected:** Clean local closure commit `31f22985d2bfae918284f833f501743ba6e5d03e`; upstream configuration; closure issue/review/evidence; required terminal Next Action.
+- **Actions performed:** Pushed local `main` through the closure commit; compared local HEAD, cached `origin/main`, and direct remote `refs/heads/main`; replaced the transient publication action with one owner-authorization wait instruction.
+- **Files modified:** This HANDOFF only after the published closure checkpoint.
+- **Findings:** `CONFIRMED` — publication succeeded and the independently approved protocol tree is remote-durable. `CONFIRMED` — no active issue, nonterminal task, or authorized implementation action remains. `UNKNOWN` — broader portability only, explicitly outside the completed scope.
+- **Verification performed:** `git push origin main` advanced `a3cd51f..31f2298`; local, cached-origin, and direct-remote hashes all equaled `31f22985d2bfae918284f833f501743ba6e5d03e`; the worktree was clean immediately before this final HANDOFF edit.
+- **Issues created or updated:** Kept `AEP-20260805T041340Z-readme-migration-gap` `CLOSED`; no new issue was created from unexercised broader portability.
+- **Remaining uncertainty:** This final HANDOFF-only follow-up still requires its own commit and push; any failure must supersede this entry rather than leave a false terminal state.
+- **Recommended next action:** Commit and publish this final HANDOFF follow-up, verify final local/remote equality, then obey the terminal instruction under Next Action.
 
 ### 2026-08-05T09:17:02Z — Codex/root — Final Migration Verification and Closure Coordinator
 
