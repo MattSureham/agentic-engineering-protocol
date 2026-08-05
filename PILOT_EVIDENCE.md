@@ -645,3 +645,113 @@ failures=0
 
 The dedicated Markdown linters remained unavailable and were not counted as
 passed.
+
+## Independent approval and coordinator closure
+
+Fresh reviewer `/root/migration_final_review` reviewed exact target
+`f70a8ace435dd32a00f81390f82184b963bb0c0b` against parent
+`8d753ede59d75eaf6891425bcf2ce77021b94288` and committed its HANDOFF-only
+record as `52044a2322c0f295739f6e694b67db18d6b7ee8e`. Disposition was `APPROVED`
+with no material finding; all four findings from the first round were resolved.
+
+The reviewer preserved one evidence correction: the earlier corrected harness
+reported `25` established links by validating 23 installed links and two virtual
+navigation targets. It did not perform the manual README append. The reviewer
+then performed that real append independently and obtained 25 actual links with
+zero missing while preserving the prior README bytes as a prefix.
+
+At `2026-08-05T09:17:02Z`, the coordinator applied the exact documented
+navigation block with `apply_patch` to retained fixture
+`/tmp/aep migration validation.bEqHIX/established target/README.md`, then ran
+these Git identity commands and the following closure checker:
+
+```sh
+git diff --name-only 52044a2322c0f295739f6e694b67db18d6b7ee8e^..52044a2322c0f295739f6e694b67db18d6b7ee8e
+git rev-parse f70a8ace435dd32a00f81390f82184b963bb0c0b:protocol
+git rev-parse 52044a2322c0f295739f6e694b67db18d6b7ee8e:protocol
+git diff --check 8d753ede59d75eaf6891425bcf2ce77021b94288..f70a8ace435dd32a00f81390f82184b963bb0c0b
+git diff --check df4f5eeb020d3db8ef02665707afcb5c082e0b33..52044a2322c0f295739f6e694b67db18d6b7ee8e
+git ls-remote --heads origin refs/heads/main
+python3 - <<'PY'
+from pathlib import Path
+import hashlib
+import re
+import sys
+
+repo = Path(".")
+target = Path("/tmp/aep migration validation.bEqHIX/established target")
+failures = []
+original = (repo / "LICENSE").read_bytes()
+readme = (target / "README.md").read_bytes()
+if not readme.startswith(original):
+    failures.append("application README prefix")
+if readme.count(b"](BOOTSTRAP.md)") != 1:
+    failures.append("BOOTSTRAP navigation count")
+if readme.count(b"](PROTOCOL_GUIDE.md)") != 1:
+    failures.append("guide navigation count")
+
+active = False
+marker = None
+links = 0
+pattern = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
+for document in target.rglob("*.md"):
+    for line in document.read_text().splitlines():
+        fence = re.match(r"^\s*((?:\x60){3,}|~{3,})", line)
+        if fence:
+            marks = fence.group(1)
+            if not active:
+                active, marker = True, marks[0]
+            elif marks[0] == marker:
+                active, marker = False, None
+            continue
+        if active:
+            continue
+        for link in pattern.findall(line):
+            link = link.split("#", 1)[0]
+            if not link or "://" in link:
+                continue
+            links += 1
+            if not (document.parent / link).resolve().exists():
+                failures.append(f"missing link {document}: {link}")
+
+expected_hashes = {
+    "regular alias collision/PROTOCOL_GUIDE.md": "ef17493a3cdad8270fc4f697c691d10065accdec701149cdd0ef2d0a3c692ad9",
+    "symlink alias collision/application-guide.md": "ef17493a3cdad8270fc4f697c691d10065accdec701149cdd0ef2d0a3c692ad9",
+    "core collision/BOOTSTRAP.md": "8fcfc3fe52608a1b42305bb12696d3f151be468bbbf638918cf93b651414dfe6",
+    "nested collision/ADR/TEMPLATE.md": "ef17493a3cdad8270fc4f697c691d10065accdec701149cdd0ef2d0a3c692ad9",
+    "reserved alias collision/PROTOCOL_GUIDE.md": "ef17493a3cdad8270fc4f697c691d10065accdec701149cdd0ef2d0a3c692ad9",
+}
+fixture_root = target.parent
+for relative, expected in expected_hashes.items():
+    actual = hashlib.sha256((fixture_root / relative).read_bytes()).hexdigest()
+    if actual != expected:
+        failures.append(f"changed collision sentinel {relative}")
+
+print(f"actual_established_inventory={sum(path.is_file() for path in target.rglob('*'))}")
+print(f"actual_links={links} missing=0 prefix_preserved={readme.startswith(original)}")
+print(f"collision_sentinels={len(expected_hashes)} unchanged")
+print(f"failures={len(failures)}")
+sys.exit(bool(failures))
+PY
+```
+
+The review commit changed only `HANDOFF.md`; target and review protocol trees
+both resolved to `f332761a54a3e8bf3f2bcbe5d231f1795e999377`; both ranged whitespace
+checks exited `0`. The direct remote check still reported pre-publication
+`origin/main` at `a3cd51fd5285384f70a97c8790f96d4c2fbebd1c`.
+
+The corrected closure checker exited `0`:
+
+```text
+actual_established_inventory=11
+actual_links=25 missing=0 prefix_preserved=True
+collision_sentinels=5 unchanged
+failures=0
+```
+
+One preliminary coordinator assertion assigned the LICENSE sentinel hash to the
+intentional legacy `BOOTSTRAP.md` core-collision fixture; it failed without
+changing any file. The corrected rerun used the fixture's recorded governing
+BOOTSTRAP hash and produced the pass above. Dedicated Markdown/shell linters,
+non-POSIX native environments, concurrent external mutation, broader repository
+portability, and cryptographic participant identity remain outside the evidence.
