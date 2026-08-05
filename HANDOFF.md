@@ -109,12 +109,12 @@ Every participant must read this file before starting work and leave it safe for
 
 - **Purpose:** Fresh context-free independent review of the exact specification-evolution target, owner authority, source precedence, product/architecture boundary, package integrity, evidence, and regression scope.
 - **Owner:** `Codex/root`; intended reviewer `/root/specification_evolution_reviewer`.
-- **Start time:** Not started; queued at `2026-08-05T10:01:04Z` before participant creation.
-- **Process or remote reference:** Intended collaboration task `/root/specification_evolution_reviewer`.
+- **Start time:** `2026-08-05T10:02:46Z`; queued durably at `2026-08-05T10:01:04Z` before participant creation.
+- **Process or remote reference:** Collaboration task `/root/specification_evolution_reviewer`.
 - **Query/recovery:** Query `/root/specification_evolution_reviewer` with collaboration agent status or wait; persist its complete disposition in this HANDOFF before closure.
-- **Last observation:** `2026-08-05T10:01:04Z` — durable review task queued against immutable target `3341c53eb94723e2092bc44a321b111e376d8bef`.
-- **State:** `QUEUED`
-- **Terminal evidence:** `NONE` — participant has not been spawned.
+- **Last observation:** `2026-08-05T10:02:46Z` — fresh participant spawned with no inherited conversation and instructed to derive the review from repository state and exact commits.
+- **State:** `RUNNING`
+- **Terminal evidence:** `NONE` — independent disposition pending.
 
 ### TASK-20260805T085840Z-migration-final-review
 
@@ -344,9 +344,21 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Next Action
 
-Spawn the queued context-free reviewer for exact target `3341c53eb94723e2092bc44a321b111e376d8bef` versus parent `428836422d20c2910e790b036e8f3802c53af18c`, then persist its complete disposition and reconcile task `TASK-20260805T100104Z-specification-evolution-review` before any closure.
+Query context-free reviewer `/root/specification_evolution_reviewer`, persist its complete exact-target disposition, and reconcile task `TASK-20260805T100104Z-specification-evolution-review`; do not close the issue unless the disposition is `APPROVED` and coordinator verification subsequently passes.
 
 ## Recent Activity
+
+### 2026-08-05T10:02:46Z — Codex/root — Independent-Review Launcher
+
+- **Task:** Start the durably queued independent specification-evolution review without leaking implementation conversation into the reviewer context.
+- **Context inspected:** Review-boundary commit `abf77d2f9067f7488ff6aac76438b7ef6ccf0995`; exact target/parent; queued lifecycle record; required reviewer independence and write coordination.
+- **Actions performed:** Spawned `/root/specification_evolution_reviewer` with no inherited turns; constrained it to direct repository and immutable-commit inspection; required a complete persisted review round and prohibited protocol-source edits.
+- **Files modified:** This HANDOFF only after the task became observable.
+- **Findings:** `CONFIRMED` — the reviewer is a different fresh participant and the exact target remains immutable. `UNKNOWN` — review disposition and any findings.
+- **Verification performed:** Collaboration spawn returned canonical task reference `/root/specification_evolution_reviewer`; Git HEAD before this state update was review boundary `abf77d2f9067f7488ff6aac76438b7ef6ccf0995`; worktree was otherwise clean.
+- **Issues created or updated:** Advanced `TASK-20260805T100104Z-specification-evolution-review` from `QUEUED` to `RUNNING`; issue remains `REVIEW`.
+- **Remaining uncertainty:** Complete independent results and terminal review commit.
+- **Recommended next action:** Perform exactly the query-and-reconcile action under Next Action.
 
 ### 2026-08-05T10:01:04Z — Codex/root — Specification-Evolution Implementor and Verification Agent
 
