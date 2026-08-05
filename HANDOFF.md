@@ -101,10 +101,10 @@ Every participant must read this file before starting work and leave it safe for
 - **Purpose:** Fresh context-free independent review of the exact corrected migration target, prior findings, authority, copy safety, validation evidence, and regression scope.
 - **Owner:** `Codex/root`; reviewer `/root/migration_final_review`.
 - **Start time:** `2026-08-05T08:58:40Z` recorded immediately before spawning.
-- **Process or remote reference:** Planned collaboration task `/root/migration_final_review`.
+- **Process or remote reference:** Collaboration task `/root/migration_final_review`.
 - **Query/recovery:** Query `/root/migration_final_review` with collaboration agent status or wait; persist its complete disposition in this HANDOFF before closure.
-- **Last observation:** `2026-08-05T08:58:40Z` — queued in durable state; not yet spawned.
-- **State:** `QUEUED`
+- **Last observation:** `2026-08-05T09:00:29Z` — spawned context-free and running read-only inspection.
+- **State:** `RUNNING`
 - **Terminal evidence:** Not terminal; no review claim exists yet.
 
 ### TASK-20260805T084341Z-migration-semantics-review
@@ -276,9 +276,21 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Next Action
 
-After committing this HANDOFF review boundary, spawn context-free task `/root/migration_final_review` to review exact target `f70a8ace435dd32a00f81390f82184b963bb0c0b` against parent `8d753ede59d75eaf6891425bcf2ce77021b94288`; do not close the issue without its persisted disposition.
+Query running context-free task `/root/migration_final_review`, then persist its exact-target disposition and terminal evidence; do not close `AEP-20260805T041340Z-readme-migration-gap` without `APPROVED` and coordinator verification.
 
 ## Recent Activity
+
+### 2026-08-05T09:00:29Z — Codex/root — Independent-Review Spawn Coordinator
+
+- **Task:** Start the already-recorded exact-target review without transferring implementation context or allowing untracked participant lifecycle state.
+- **Context inspected:** Review-boundary commit `fa6ac613c8851b545fb0033eb2484fe8cc5f0f5a`; queued task record; immutable target/parent; required reviewer independence and terminal reconciliation.
+- **Actions performed:** Spawned `/root/migration_final_review` with no inherited turns and a repository-only review contract; prohibited source/evidence edits, pushes, and unrecorded child tasks; advanced its durable state from `QUEUED` to `RUNNING`.
+- **Files modified:** This HANDOFF only.
+- **Findings:** `CONFIRMED` — the reviewer is a different context-free participant and has the exact target, parent, task ID, persistence rules, and query path. No disposition exists yet.
+- **Verification performed:** Collaboration spawn returned canonical task reference `/root/migration_final_review`; root worktree was clean at boundary HEAD `fa6ac613c8851b545fb0033eb2484fe8cc5f0f5a` before this state update.
+- **Issues created or updated:** Kept `AEP-20260805T041340Z-readme-migration-gap` in `REVIEW`; updated only `TASK-20260805T085840Z-migration-final-review` lifecycle state.
+- **Remaining uncertainty:** Review outcome and any fresh finding remain unknown until the task completes and its committed record is inspected.
+- **Recommended next action:** Perform the exact query-and-persist action under Next Action.
 
 ### 2026-08-05T08:58:40Z — Codex/root — Corrected-Target Handoff Preparer
 
