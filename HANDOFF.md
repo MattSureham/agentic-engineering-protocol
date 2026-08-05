@@ -20,15 +20,15 @@ Every participant must read this file before starting work and leave it safe for
 - **CONFIRMED — Product state:** Reusable Agent-Native Engineering Protocol v1, the owner-authorized continuity clarification, and MIT licensing are implemented, validated, committed, and published. The isolated pilot completed at target review-record commit `3a8f3922f47dec16144493482bd2b7a150ef5b0a`; its implementation issue is `CLOSED` after independent disposition `APPROVED`.
 - **CONFIRMED — Version control:** This directory is an independent Git repository on branch `main`, tracking `origin/main`. The immutable protocol release commit is `a6270ebeb02f936184895dcad32269d8a16a0da5` (`feat: publish agentic engineering protocol v1`).
 - **CONFIRMED — Pilot checkpoint:** Recovered pilot records are committed and published at `087c665e3eb50bfff56f74bb9b32c6280e0423ee` (`docs: record isolated protocol pilot`).
-- **CONFIRMED — Migration review target:** Owner-approved migration implementation is commit `98fe67c8cf99f53157f3273cc1defdfb81c46773` (`docs: define established-repository migration`), protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`. The issue remains in `REVIEW` pending a different participant's disposition.
+- **CONFIRMED — Migration review target:** Owner-approved migration implementation is commit `98fe67c8cf99f53157f3273cc1defdfb81c46773` (`docs: define established-repository migration`), protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`. Fresh independent review returned `CHANGES_REQUIRED`; the issue is back in `IMPLEMENTING` for bounded safety rework.
 - **CONFIRMED — Remote:** Public repository `MattSureham/agentic-engineering-protocol` at `https://github.com/MattSureham/agentic-engineering-protocol`, authenticated account `MattSureham`, default branch `main`, remote name `origin`.
 - **CONFIRMED — Handoff commit identity:** The remote-aware release HANDOFF is contained by follow-up commit `99ed41874157b0da537b1399bef907c82454fb1e` (`docs: finalize release handoff`). Takeover checks directly verified that local HEAD, `origin/main`, and GitHub `refs/heads/main` matched before pilot edits; the earlier chat-response reference is non-durable and is not relied on.
 - **CONFIRMED — Governing documents:** Root `BOOTSTRAP.md` is the collaboration mechanism for developing this repository; root `PROJECT_SPEC.md` is the authoritative product specification.
 - **CONFIRMED — Approved architecture:** Keep the root governing documents unchanged and build a copy-ready package under `protocol/` using risk-tiered review and hybrid issue/evidence records.
 - **CONFIRMED — Review requirement:** The first complete protocol draft must receive a read-only independent-agent review before the implementation issue closes.
 - **CONFIRMED — Real-repository validation:** One bounded local Python 3.9 pilot exercised quick-start migration, context-free implementation, evidence, HANDOFF, and independent review successfully. This establishes only that no material defect was observed within that target and scope; broader portability remains `UNKNOWN`.
-- **CONFIRMED — Migration state:** The owner-approved `PROTOCOL_GUIDE.md` compatibility change is implemented and self-verified. Issue `AEP-20260805T041340Z-readme-migration-gap` is in `REVIEW`; it is not complete without fresh independent approval.
-- **CONFIRMED — Unresolved design questions:** No architecture question remains. Target-specific review limitations and one reconciled participant-lifecycle omission do not imply protocol defects. Broader portability and the migration review disposition remain `UNKNOWN`.
+- **CONFIRMED — Migration state:** The canonical `PROTOCOL_GUIDE.md` alias works when the application README is the only collision, but the general migration wording can overwrite an existing or symlinked alias and can leave canonical references pointing at incompatible files after a mapping. Issue `AEP-20260805T041340Z-readme-migration-gap` is in `IMPLEMENTING` after independent disposition `CHANGES_REQUIRED`.
+- **CONFIRMED — Unresolved design questions:** No new repository-level architecture decision is required for the approved rework: automatic migration will stop on every collision beyond the application README, preserving the target owner's authority over any later mapping. Broader portability remains `UNKNOWN`.
 
 ### Prior-art disposition
 
@@ -85,8 +85,45 @@ Every participant must read this file before starting work and leave it safe for
 - A fresh-repository copy at `/tmp/aep-new-copy.ZGB3L8` contained exactly 10 files. An established-repository copy at `/tmp/aep-established-copy.xbT9kd` preserved the application README, installed the current guide byte-for-byte as `PROTOCOL_GUIDE.md`, retained both navigation links, and contained the expected 11 files. A fence-aware check evaluated 48 relative links across both copies with zero missing.
 - Reviewed migration content is reproducibly identified before commit by SHA-256 `5ce51973d0ce619d1f4eaf383674cadc832052c5ea55ca1949ae385fc447bbe5` for `protocol/README.md` and `359bb5e2fe4a1ed27989d12c06af4c02f8bee182ded72e8f24e4e5bd7fcac1df` for `protocol/BOOTSTRAP.md`. The BOOTSTRAP diff is exactly one artifact-ownership line. A dedicated Markdown linter remained `NOT AVAILABLE` and was not counted as passed.
 - Commit-ranged `git diff --check 087c665e3eb50bfff56f74bb9b32c6280e0423ee..98fe67c8cf99f53157f3273cc1defdfb81c46773` exited `0`; the range modifies only `HANDOFF.md`, `protocol/BOOTSTRAP.md`, and `protocol/README.md`.
+- Fresh recovery review independently confirmed a clean worktree and exact linear chain `087c665e3eb50bfff56f74bb9b32c6280e0423ee` → `98fe67c8cf99f53157f3273cc1defdfb81c46773` → `a3cd51fd5285384f70a97c8790f96d4c2fbebd1c`; local, cached remote, and direct remote `main` all matched `a3cd51fd5285384f70a97c8790f96d4c2fbebd1c` before review-record edits.
+- Review reproduced that the documented guide-copy command changes an existing regular alias and follows an alias symlink, replacing each sentinel hash `ef17493a...` with source-guide hash `5ce51973...`.
+- A mapped-BOOTSTRAP fixture resolved 23 relative links with zero missing while canonical `BOOTSTRAP.md` had incompatible hash `8fcfc3fe...` and the mapped protocol file had intended hash `359bb5e2...`; link existence did not prove a working installation. Exact commands and limitations are preserved in `PILOT_EVIDENCE.md`.
+- The historical aggregate migration-suite claim has no durable exact harness command or output and is not independently reproducible as one run. Its component claims were reimplemented, but the earlier aggregate execution is retained only as attributed evidence. Dedicated Markdown linters remain unavailable.
 
 ### Background tasks
+
+### TASK-20260805T084341Z-migration-semantics-review
+
+- **Purpose:** Independently review migration authority, source precedence, artifact ownership, and specification compatibility.
+- **Owner:** `Codex/root`; reviewer `/root/migration_semantics_review`.
+- **Start time:** `UNKNOWN` exact UTC; spawned during fresh recovery before `2026-08-05T08:33:04Z`.
+- **Process or remote reference:** Collaboration task `/root/migration_semantics_review`.
+- **Query/recovery:** Query the collaboration task reference; durable findings are also recorded in the active issue and `PILOT_EVIDENCE.md`.
+- **Last observation:** `2026-08-05T08:43:41Z` — terminal report reconciled.
+- **State:** `SUCCEEDED`
+- **Terminal evidence:** Returned `CHANGES_REQUIRED`: core-record mappings can preserve valid links while directing participants to incompatible authority; the automatic path must stop or obtain owner-approved canonical mappings.
+
+### TASK-20260805T084342Z-migration-paths-review
+
+- **Purpose:** Independently exercise fresh and established copy paths, destination collisions, symlinks, links, and path portability.
+- **Owner:** `Codex/root`; reviewer `/root/migration_paths_review`.
+- **Start time:** `UNKNOWN` exact UTC; spawned during fresh recovery before `2026-08-05T08:33:04Z`.
+- **Process or remote reference:** Collaboration task `/root/migration_paths_review`.
+- **Query/recovery:** Query the collaboration task reference; durable findings are also recorded in the active issue and `PILOT_EVIDENCE.md`.
+- **Last observation:** `2026-08-05T08:43:41Z` — terminal report reconciled.
+- **State:** `SUCCEEDED`
+- **Terminal evidence:** Returned `CHANGES_REQUIRED`: reproduced regular-file and symlink alias overwrites, a link-clean but incorrect BOOTSTRAP mapping, incomplete established-copy commands, and unquoted-path failure.
+
+### TASK-20260805T084343Z-migration-evidence-audit
+
+- **Purpose:** Independently audit immutable revisions, inventories, hashes, structural checks, remote state, and evidence reproducibility.
+- **Owner:** `Codex/root`; reviewer `/root/migration_evidence_audit`.
+- **Start time:** `UNKNOWN` exact UTC; spawned during fresh recovery before `2026-08-05T08:33:04Z`.
+- **Process or remote reference:** Collaboration task `/root/migration_evidence_audit`.
+- **Query/recovery:** Query the collaboration task reference; durable findings are also recorded in the active issue and `PILOT_EVIDENCE.md`.
+- **Last observation:** `2026-08-05T08:43:41Z` — terminal report reconciled.
+- **State:** `SUCCEEDED`
+- **Terminal evidence:** Confirmed commit/tree/inventory/hash/copy evidence and found no content contradiction in that scope; identified the missing historical aggregate command, unavailable Markdown lint, and initially unrecorded review-task lifecycles as process limitations.
 
 ### TASK-20260805T040313Z-pilot-implementation-edges
 
@@ -171,15 +208,24 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ### AEP-20260805T041340Z-readme-migration-gap
 
-- **Status:** `REVIEW`
-- **Severity:** `LOW`
+- **Status:** `IMPLEMENTING`
+- **Severity:** `HIGH`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN` — at `2026-08-05T07:53:57Z`, the technical owner selected and approved the canonical `PROTOCOL_GUIDE.md` alias plan: preserve the application README, add navigation links, preflight every other collision, and retain the source bundle's 10-file inventory.
 - **Review:** `INDEPENDENT` — the change alters the documented adoption contract and normative artifact naming while preserving truth, authority, lifecycle, and evidence semantics; the implementor cannot supply final approval.
 - **Problem:** The quick start correctly prohibits overwriting existing protocol files but copies package `README.md` to the conventional application `README.md` path and supplies no canonical merge or alternate-name procedure for established repositories.
 - **Evidence:** Pilot preflight found the collision before copy. Safe continuation required a coordinator-invented migration: preserve application `README.md`, copy the byte-identical guide as `PROTOCOL_GUIDE.md`, and add navigation links. See `PILOT_EVIDENCE.md`.
 - **Implementation target:** Commit `98fe67c8cf99f53157f3273cc1defdfb81c46773`, parent checkpoint `087c665e3eb50bfff56f74bb9b32c6280e0423ee`, protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`.
-- **Resolution state:** The approved design is implemented and the complete scoped validation suite passed. The issue remains open because a fresh independent participant has not yet reviewed the exact implementation target or returned a disposition.
+- **Resolution state:** First independent review returned `CHANGES_REQUIRED`. The approved README-only alias remains sound, but automatic installation must refuse every additional destination collision before writing and must verify canonical meaning rather than link existence.
+- **Independent review — `2026-08-05T08:43:41Z` — `agent:codex-fresh-recovery-reviewer`:**
+  - **Reviewed repository state:** Target `98fe67c8cf99f53157f3273cc1defdfb81c46773`, parent `087c665e3eb50bfff56f74bb9b32c6280e0423ee`, protocol tree `68a0204766a90ec9d9cb4e8e39cb988f10708677`, and unchanged protocol tree at review-handoff HEAD `a3cd51fd5285384f70a97c8790f96d4c2fbebd1c`.
+  - **Scope:** Root specification and protocol-evolution authority; package BOOTSTRAP and adoption guide; exact diff, hashes, inventories, recorded copy fixtures, link behavior, and evidence provenance.
+  - **Checks and evidence:** Ranged Git inspection and whitespace check; governing/source hashes; 10/11-file copy reconciliation; 48-link structural rerun; regular alias, symlink alias, and mapped-BOOTSTRAP reproductions. Exact reproduction commands and outputs are in `PILOT_EVIDENCE.md`.
+  - **Material findings:** `HIGH` — unguarded `cp` can overwrite an existing alias or follow its symlink. `HIGH` — “merge or map” can change normative authority while all links still resolve. `LOW` — the remaining established-copy procedure is incomplete and does not define the no-README case. `LOW` — unquoted copy operands fail for paths containing whitespace.
+  - **Architecture and complexity:** The seven-tier truth order and non-authoritative guide classification are unchanged. No dependency or implementation complexity was added. The safe resolution is to limit automatic migration to the sole README collision and stop for every other collision under the target owner's authority.
+  - **Limitations:** No dedicated Markdown linter; broader platform/repository portability remains unknown; historical aggregate validation command unavailable; owner identity is repository-attributed rather than cryptographically authenticated.
+  - **Disposition:** `CHANGES_REQUIRED`.
+  - **Prior-round resolution:** First round.
 
 ### AEP-20260805T035052Z-real-repository-pilot
 
@@ -214,9 +260,21 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Next Action
 
-A fresh independent participant must review migration target `98fe67c8cf99f53157f3273cc1defdfb81c46773` against checkpoint `087c665e3eb50bfff56f74bb9b32c6280e0423ee`, then record `APPROVED`, `CHANGES_REQUIRED`, or `BLOCKED`; do not close `AEP-20260805T041340Z-readme-migration-gap` without approval.
+Rework the established-repository migration guidance to refuse every collision beyond the sole application-README alias case before writing, then record exact verification and prepare one immutable target for fresh independent review.
 
 ## Recent Activity
+
+### 2026-08-05T08:43:41Z — Codex/root — Fresh Recovery and Independent Review Coordinator
+
+- **Task:** Recover repository state independently, review migration target `98fe67c8cf99f53157f3273cc1defdfb81c46773`, challenge its safety and authority assumptions, and persist the disposition before rework.
+- **Context inspected:** Root BOOTSTRAP and PROJECT_SPEC; complete HANDOFF and pilot evidence; protocol guide and BOOTSTRAP; exact `087c665..98fe67c` diff; current Git history/status/remote; recorded copy fixtures; source-package inventory, links, and hashes.
+- **Actions performed:** Reproduced the existing-alias overwrite, symlink-target overwrite, and link-clean wrong-BOOTSTRAP mapping; coordinated three context-free read-only subreviews; reconciled their terminal results; appended exact durable reproduction commands and an attributable correction for the missing historical aggregate harness.
+- **Files modified:** `HANDOFF.md` and `PILOT_EVIDENCE.md` only; reusable protocol source remained unchanged during this review round.
+- **Findings:** `HIGH` destructive overwrite risk at the derived alias destination; `HIGH` authority/canonical-reference risk when normative files are mapped; `LOW` incomplete established-copy/no-README guidance; `LOW` unquoted-path failure. The narrow sole-README-collision path, immutable identities, and structural checks otherwise matched prior evidence.
+- **Verification performed:** `git diff --check 087c665e3eb50bfff56f74bb9b32c6280e0423ee..98fe67c8cf99f53157f3273cc1defdfb81c46773` exited `0`; root/source hashes and tree identities matched; fresh/established fixtures contained 10/11 files and 48 links with zero missing; exact adversarial commands and concise hash outputs are recorded in `PILOT_EVIDENCE.md`; direct remote `main` matched local HEAD before edits. Dedicated Markdown lint remained unavailable and was not counted as passed.
+- **Issues created or updated:** Returned `AEP-20260805T041340Z-readme-migration-gap` from `REVIEW` to `IMPLEMENTING`, raised severity from `LOW` to `HIGH`, and appended independent disposition `CHANGES_REQUIRED`. Reconciled three review tasks as `SUCCEEDED` after noting they were not recorded before spawn.
+- **Remaining uncertainty:** Correctness of the bounded rework and portability beyond the exercised environment remain unknown until implementation, exact validation, and a different participant's approval.
+- **Recommended next action:** Perform exactly the bounded rework under Next Action; do not close the issue or treat the reviewed target as approved.
 
 ### 2026-08-05T08:02:09Z — Codex/root — Review Handoff Preparer
 

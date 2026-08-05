@@ -189,3 +189,132 @@ evolution proposal.
   human identity cryptographically.
 - The target path is an additional inspection aid; this root record must remain
   sufficient to understand the result if that sibling directory is absent.
+
+## Migration follow-up review
+
+### Reviewed state
+
+- Parent checkpoint: `087c665e3eb50bfff56f74bb9b32c6280e0423ee`
+- Migration implementation: `98fe67c8cf99f53157f3273cc1defdfb81c46773`
+- Review-handoff HEAD: `a3cd51fd5285384f70a97c8790f96d4c2fbebd1c`
+- Migration protocol tree: `68a0204766a90ec9d9cb4e8e39cb988f10708677`
+- Review time: `2026-08-05T08:43:41Z`
+
+The narrow README-only case remained valid: the recorded fresh and established
+copies contained 10 and 11 files, the guide alias was byte-identical, and a
+fence-aware check resolved 48 relative links with zero missing. The independent
+review nevertheless returned `CHANGES_REQUIRED` because the general migration
+instructions did not preserve the same safety outside that narrow fixture.
+
+### Existing alias overwrite reproduction
+
+Command, run from the repository root:
+
+```sh
+alias_case=$(mktemp -d /tmp/aep-alias-review.XXXXXX)
+cp LICENSE "$alias_case/PROTOCOL_GUIDE.md"
+shasum -a 256 "$alias_case/PROTOCOL_GUIDE.md"
+cp protocol/README.md "$alias_case/PROTOCOL_GUIDE.md"
+shasum -a 256 "$alias_case/PROTOCOL_GUIDE.md" protocol/README.md
+```
+
+Concise result: the destination changed from
+`ef17493a3cdad8270fc4f697c691d10065accdec701149cdd0ef2d0a3c692ad9` to
+`5ce51973d0ce619d1f4eaf383674cadc832052c5ea55ca1949ae385fc447bbe5`,
+the source-guide hash. The documented `cp` therefore overwrote the existing
+alias.
+
+### Alias symlink overwrite reproduction
+
+Command, run from the repository root:
+
+```sh
+symlink_case=$(mktemp -d /tmp/aep-alias-symlink-review.XXXXXX)
+cp LICENSE "$symlink_case/application-guide.md"
+ln -s application-guide.md "$symlink_case/PROTOCOL_GUIDE.md"
+shasum -a 256 "$symlink_case/application-guide.md"
+cp protocol/README.md "$symlink_case/PROTOCOL_GUIDE.md"
+shasum -a 256 "$symlink_case/application-guide.md" protocol/README.md
+```
+
+Concise result: the symlink target changed from the same `ef17493a...` sentinel
+hash to the source-guide hash `5ce51973...`. The command followed the destination
+symlink and modified its target.
+
+### Link-clean but incorrect mapping reproduction
+
+Command, run from the repository root:
+
+```sh
+mapping_case=$(mktemp -d /tmp/aep-map-review.XXXXXX)
+cp -R protocol/. "$mapping_case/"
+mv "$mapping_case/BOOTSTRAP.md" "$mapping_case/AEP_BOOTSTRAP.md"
+mv "$mapping_case/README.md" "$mapping_case/PROTOCOL_GUIDE.md"
+cp BOOTSTRAP.md "$mapping_case/BOOTSTRAP.md"
+shasum -a 256 \
+  "$mapping_case/BOOTSTRAP.md" \
+  "$mapping_case/AEP_BOOTSTRAP.md" \
+  protocol/BOOTSTRAP.md
+MAPPING_CASE="$mapping_case" python3 - <<'PY'
+from pathlib import Path
+import os
+import re
+
+root = Path(os.environ["MAPPING_CASE"])
+links = 0
+missing = []
+for document in root.rglob("*.md"):
+    in_fence = False
+    marker = None
+    for line in document.read_text().splitlines():
+        fence = re.match(r"^\s*((?:\x60){3,}|~{3,})", line)
+        if fence:
+            marks = fence.group(1)
+            if not in_fence:
+                in_fence, marker = True, marks[0]
+            elif marks[0] == marker:
+                in_fence, marker = False, None
+            continue
+        if in_fence:
+            continue
+        for target in re.findall(r"(?<!!)\[[^\]]*\]\(([^)]+)\)", line):
+            target = target.split("#", 1)[0]
+            if not target or "://" in target:
+                continue
+            links += 1
+            if not (document.parent / target).resolve().exists():
+                missing.append(f"{document.relative_to(root)} -> {target}")
+print(f"links={links} missing={len(missing)}")
+raise SystemExit(bool(missing))
+PY
+```
+
+A fence-aware relative-link procedure checked every unfenced Markdown link in
+the fixture and reported `23` links with `0` missing. Despite that structural
+pass, canonical `BOOTSTRAP.md` had root-governing hash `8fcfc3fe...`, while both
+`AEP_BOOTSTRAP.md` and the intended reusable protocol had hash `359bb5e2...`.
+The guide therefore linked to the wrong normative entry point. Link existence
+alone cannot validate an alternate artifact mapping.
+
+### Evidence limitations and process finding
+
+- The earlier implementation entry reports a corrected aggregate suite but
+  preserves no exact harness command, script, or complete output. Its individual
+  claims were independently reimplemented, but the historical aggregate run and
+  its preliminary failures are not reproducible from durable state. This is a
+  participant evidence-recording failure against root HANDOFF's command-recording
+  constraint, not a demonstrated package-content regression.
+- `markdownlint` and `markdownlint-cli2` remained unavailable. Fence, link,
+  whitespace, and newline checks are structural checks, not full CommonMark lint.
+- Root governing `BOOTSTRAP.md` has no final newline in every audited revision.
+  Its unchanged recorded hash proves that condition predates this migration; no
+  repository-wide final-newline pass is claimed.
+- Broader portability remains unverified.
+
+### Review disposition
+
+`CHANGES_REQUIRED`. Automatic migration must preflight the complete resolved
+destination manifest, refuse existing or symlinked alias/core destinations
+before any write, preserve human authority over normative-record mappings, and
+prove canonical references—not merely existing links—before the issue can
+return to review.
