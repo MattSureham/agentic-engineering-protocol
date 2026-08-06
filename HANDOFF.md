@@ -16,6 +16,9 @@ Every participant must read this file before starting work and leave it safe for
 
 ### Repository snapshot
 
+- **CONFIRMED — Current objective:** Perform the human-approved post-pilot hardening phase at baseline `e6beeb2cb730183ca2ac13795ad367ad9d9e1099`: make the root repository dogfood the reusable protocol, separate operational continuity from durable decisions/evidence/history, add the approved specification-evolution policy to the root specification, and improve HANDOFF snapshot reliability without expanding into runtime tooling.
+- **CONFIRMED — Verified hardening findings:** Root `BOOTSTRAP.md` and root `README.md` currently describe HANDOFF as canonical project truth, while root HANDOFF and the reusable protocol describe it as lower-precedence operational continuity. Root HANDOFF is 764 lines and contains closed issue bodies, terminal task history, extensive evidence narrative, and a chronological diary. The isolated pilot's original commits are absent from this repository's Git object database and its recorded absolute sibling/temp paths are not durable clone-based evidence.
+- **CONFIRMED — Finding classification:** Source-of-truth inconsistency, live-HANDOFF overload, and nonportable pilot claims are must-fix items before any maturity claim. Root specification evolution, reusable snapshot/staleness rules, and consistent root ADR/issue/evidence organization should improve in this version. Concurrent-writer guarantees, authenticated identity/approval, runtime automation, large-scale coordination, and external tracker integration require separate future human-approved scope and remain explicitly deferred.
 - **CONFIRMED — Source material:** Root `BOOTSTRAP.md` and root `PROJECT_SPEC.md` remain the unchanged governing inputs; this handoff records development state.
 - **CONFIRMED — Product state:** Reusable Agent-Native Engineering Protocol v1, the owner-authorized continuity clarification, MIT licensing, the established-repository migration correction, and the owner-approved specification-evolution clarification are implemented, validated, independently approved where required, committed, and published. The isolated pilot completed at target review-record commit `3a8f3922f47dec16144493482bd2b7a150ef5b0a`; its implementation issue is `CLOSED` after independent disposition `APPROVED`.
 - **CONFIRMED — Version control:** This directory is an independent Git repository on branch `main`, tracking `origin/main`. The immutable protocol release commit is `a6270ebeb02f936184895dcad32269d8a16a0da5` (`feat: publish agentic engineering protocol v1`).
@@ -42,7 +45,7 @@ Every participant must read this file before starting work and leave it safe for
 
 ### Constraints
 
-- Preserve the existing root `BOOTSTRAP.md` and `PROJECT_SPEC.md` byte-for-byte.
+- The human-approved post-pilot hardening plan supersedes the prior byte-preservation constraint for root `BOOTSTRAP.md` and root `PROJECT_SPEC.md`. Preserve their pre-hardening identities (`8fcfc3fe52608a1b42305bb12696d3f151be468bbbf638918cf93b651414dfe6` and `13169319e2be028c470ca96925002b25c000c58ba3a4c5420e652d291df139dd`) in durable evidence and Git history; change only the approved governance/specification scope.
 - Keep the deliverable Markdown- and filesystem-based, language-, framework-, vendor-, CI-, and model-neutral.
 - Do not add a CLI, daemon, database, or orchestrator. The only external-repository scope currently authorized is the local-only, non-production fixture at `/Users/matthew/Projects/aep-protocol-pilot`; it has no remote and must not be pushed. No other parent directory or unrelated repository is in scope.
 - Do not claim successful verification without recording the command, result, and limitations.
@@ -243,6 +246,26 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Active Issues
 
+### ISSUE-20260806T013907Z-post-pilot-hardening
+
+- **Status:** `IMPLEMENTING`
+- **Severity:** `HIGH`
+- **Owner:** `Codex/root`
+- **Authority:** `HUMAN` — the technical owner approved the complete Post-Pilot Hardening: Root Dogfooding and Record Separation plan before implementation.
+- **Review:** `INDEPENDENT` — this changes the root governance contract and must not support a maturity claim or closure until a fresh participant approves the immutable target.
+- **Problem:** Root governance contradicts the product protocol's source hierarchy; live HANDOFF mixes operational state with durable decisions, evidence, closed lifecycle records, terminal jobs, and diary history; pilot portability claims exceed what a clone can reproduce.
+- **Evidence:** Clean synchronized baseline `e6beeb2cb730183ca2ac13795ad367ad9d9e1099`; repository reads and Git-object checks summarized in Current State; pre-hardening HANDOFF SHA-256 `e42e9605653c568e737fe371dd54db48f1c2eab49111be6370f53205ecefbe63`.
+- **Durable record:** [`ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md); accepted architecture in [`ADR/ADR-20260806T013907Z-root-protocol-adoption.md`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md); repository audit in [`EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md`](EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md).
+- **Exit condition:** Accepted root adoption ADR; root-specific protocol and specification changes; durable issue/evidence separation; compact reliable HANDOFF; explicit deferrals; complete validation; immutable review target; fresh independent disposition `APPROVED` before closure.
+
+The following future issues are intentionally `BLOCKED`, not implementation tasks for this phase:
+
+- [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md)
+- [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md)
+- [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md)
+- [`ISSUE-20260806T013907Z-large-scale-coordination`](ISSUES/ISSUE-20260806T013907Z-large-scale-coordination.md)
+- [`ISSUE-20260806T013907Z-external-tracker-integration`](ISSUES/ISSUE-20260806T013907Z-external-tracker-integration.md)
+
 ### AEP-20260805T095724Z-specification-evolution
 
 - **Status:** `CLOSED`
@@ -359,9 +382,33 @@ When a task is started, record: stable ID, purpose, owner, start time, process o
 
 ## Next Action
 
-Preserve the approved specification-evolution target and evidence unchanged; await explicit human technical-owner authorization before any further protocol evolution or broader portability validation.
+Commit the recorded owner authority, accepted root-adoption ADR, hardening issue, repository audit, and five explicit future-scope deferrals before rewriting root governance.
 
 ## Recent Activity
+
+### 2026-08-06T01:46:29Z — Codex/root — Authority-Boundary Recorder
+
+- **Task:** Persist the owner-approved architecture and verified finding set before modifying root governance or product artifacts.
+- **Context inspected:** Reusable ADR/issue/evidence schemas; direct baseline commands; owner-approved hardening architecture and deferral boundaries.
+- **Actions performed:** Created one accepted root-adoption ADR, the implementing hardening issue, a repository-derived audit, and five separate blocked future-scope issues; linked them from the live issue snapshot.
+- **Files modified:** `ADR/ADR-20260806T013907Z-root-protocol-adoption.md`; six files in `ISSUES/`; `EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md`; this HANDOFF.
+- **Findings:** `CONFIRMED` — the accepted decision defines separate root/product governance and the seven-tier truth order. `CONFIRMED` — each deferred capability has an observable human-specification unblock condition. No runtime or product implementation was introduced.
+- **Verification performed:** `git diff --check` exited `0`; `git status --short` listed only the intended HANDOFF edit and new durable record directories.
+- **Issues created or updated:** Main hardening issue remains `IMPLEMENTING`; five future issues transitioned `OPEN` → `BLOCKED` with prior state, blocker, owner, and unblock condition recorded.
+- **Remaining uncertainty:** The authority boundary is not yet committed; root document edits, migration, validation, immutable target, and independent review remain pending.
+- **Recommended next action:** Commit exactly this authority boundary before governed-file changes.
+
+### 2026-08-06T01:39:07Z — Codex/root — Post-Pilot Hardening Coordinator
+
+- **Task:** Recover the synchronized baseline, independently verify the review themes available from repository evidence, classify the findings, and open the authorized hardening work before changing governed artifacts.
+- **Context inspected:** Complete root `BOOTSTRAP.md`, root `PROJECT_SPEC.md`, reusable protocol specification and BOOTSTRAP, full HANDOFF, root README, pilot evidence, Git status/history/objects/remotes, package inventory, and available validation tools.
+- **Actions performed:** Confirmed clean `main`/`origin/main` baseline `e6beeb2cb730183ca2ac13795ad367ad9d9e1099`; recorded the owner-approved objective, superseded constraint, verified finding classification, independent-review gate, and one bounded next action. No governance or product artifact was changed before this HANDOFF update.
+- **Files modified:** This HANDOFF only.
+- **Findings:** `CONFIRMED` — root documents split truth ownership and the live HANDOFF is overloaded. `CONFIRMED` — original pilot commits `3a8f3922f47dec16144493482bd2b7a150ef5b0a` and `0606979` are absent from the root object database; the local sibling pilot has no remote. `UNKNOWN` — broader portability and any claim of protocol maturity.
+- **Verification performed:** `git status --short --branch`; `git rev-parse HEAD origin/main`; `git log`; `git cat-file -e` for recorded pilot commits; file/line inventories; SHA-256 of root governing files, root HANDOFF, pilot evidence, and reusable specification; availability checks for dedicated Markdown/shell linters.
+- **Issues created or updated:** Opened `ISSUE-20260806T013907Z-post-pilot-hardening` in `IMPLEMENTING`; classified five future capabilities for separate blocked issue records.
+- **Remaining uncertainty:** Exact hardening diff, validation results, immutable target identity, and independent review disposition.
+- **Recommended next action:** Perform exactly the durable authority-boundary action under Next Action.
 
 ### 2026-08-05T10:14:57Z — Codex/root — Specification-Evolution Publication Verifier
 
