@@ -73,7 +73,7 @@ Direct document observations:
 ## Integrity and provenance
 
 - **Artifact location:** `EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md`
-- **Artifact digest:** To be recorded after the authority-boundary commit; pre-hardening source digests are listed above.
+- **Artifact digest:** The authority-boundary version is Git blob `615c790050b8abb99d0c29399e28193bb8db3dd8`, SHA-256 `af011e0bdf961920362b9d18ca925e2be6a71fef4740f5480e2eef1f79d9ffc0`, at commit `7dea5457828b6590f9ab2a643b58047b032e53d1`. This later integrity note is identified by its containing implementation revision rather than a self-referential digest.
 - **External retention risk:** Local sibling and temporary paths are non-durable; GitHub root remote is durable only for objects actually pushed to it.
 - **Supersedes / superseded by:** `NONE`
 

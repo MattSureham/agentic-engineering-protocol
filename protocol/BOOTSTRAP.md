@@ -55,13 +55,14 @@ Before implementation, perform this sequence:
 1. Read this file completely.
 2. Inspect the repository structure, version-control or working-tree state if available, local execution instructions, build/test entry points, and relevant subsystem boundaries.
 3. Read `PROJECT_SPEC.md`, relevant accepted ADRs, relevant executable contracts/tests, referenced evidence, and then `HANDOFF.md`, in truth-precedence order.
-4. Reconcile every `QUEUED` or `RUNNING` background task in HANDOFF. Query its durable reference. Mark a missing process or remote reference `ORPHANED`; do not assume it is alive.
-5. Independently inspect the code and files relevant to the proposed work. Verify important HANDOFF claims where feasible instead of inheriting them.
-6. Identify contradictions, unsupported assumptions, uncommitted or partial work, unavailable tools, and dirty files that may belong to another participant.
-7. Confirm that `PROJECT_SPEC.md` is sufficiently complete and accepted for the proposed behavior. If it is draft or ambiguous, limit work to investigation, specification, evidence gathering, or a reversible proposal.
-8. Select the highest-priority safe action. Treat HANDOFF's Next Action as a continuity pointer, not an instruction that outranks current evidence.
-9. Classify authority and review requirements before changing implementation.
-10. Update the active issue or create one when the work is meaningful, will span a run, is blocked, or carries uncertainty.
+4. Inspect HANDOFF snapshot metadata and apply every recorded staleness trigger. If the revision/branch differs, dirty files are not represented, newer evidence changes a claim, an external reference changed or exceeded its refresh condition, a live task is unreconciled, or higher authority conflicts with the snapshot, mark affected claims `UNKNOWN` until reconciled. Do not refresh only the timestamp.
+5. Reconcile every `QUEUED` or `RUNNING` background task in HANDOFF. Query its durable reference. Mark a missing process or remote reference `ORPHANED`; do not assume it is alive.
+6. Independently inspect the code and files relevant to the proposed work. Verify important HANDOFF claims where feasible instead of inheriting them.
+7. Identify contradictions, unsupported assumptions, uncommitted or partial work, unavailable tools, and dirty files that may belong to another participant.
+8. Confirm that `PROJECT_SPEC.md` is sufficiently complete and accepted for the proposed behavior. If it is draft or ambiguous, limit work to investigation, specification, evidence gathering, or a reversible proposal.
+9. Select the highest-priority safe action. Treat HANDOFF's Next Action as a continuity pointer, not an instruction that outranks current evidence.
+10. Classify authority and review requirements before changing implementation.
+11. Update the active issue or create one when the work is meaningful, will span a run, is blocked, or carries uncertainty.
 
 Never discard, overwrite, or reformat unrelated user or participant changes merely to obtain a clean working tree.
 
@@ -207,11 +208,11 @@ Keep the five top-level operational sections in [`HANDOFF.md`](HANDOFF.md):
 4. Recent Activity
 5. Archived Summary
 
-Current State is a concise present-tense snapshot with evidence references, verification actually performed, unverified complexity, constraints, and background tasks. Active Issues is a compact index; meaningful detail belongs in `ISSUES/`. Next Action contains exactly one bounded action. If work is terminal or waiting, use one explicit terminal or unblock instruction instead of inventing work. Recent Activity is newest first and attributable.
+Current State is a concise present-tense snapshot with evidence references, verification actually performed, unverified complexity, constraints, and non-terminal background tasks. Start it with the snapshot's updated UTC, repository revision/branch/upstream and dirty state when available, evidence cutoff, timestamped external checks that affect current claims, and explicit staleness triggers. Active Issues is a compact index of unresolved records only; meaningful detail and closed history belong in `ISSUES/`. Next Action contains exactly one bounded action. If work is terminal or waiting, use one explicit terminal or unblock instruction instead of inventing work. Recent Activity is newest first and attributable.
 
 Participants may reconcile shared Current State and the active index when new evidence changes reality, but must add their own activity entry and must not rewrite another participant's activity or evidence. Disagreement is a new record, not an erasure.
 
-When HANDOFF approaches 1,000 lines or becomes hard to scan, compact the oldest closed activity into Archived Summary. Retain at least the ten newest detailed entries plus every entry needed by open issues, disputes, unverified claims, or non-terminal background tasks. Preserve links to ADRs, issues, evidence, rejected approaches, and major reasoning. Log the compaction as new activity.
+When HANDOFF approaches 1,000 lines or becomes hard to scan, compact it. Retain at least the ten newest detailed entries plus every entry needed by unresolved issues, disputes, unverified claims, or non-terminal background tasks. Move closed issue bodies, long evidence narratives, and terminal-task ledgers to their owning durable records or immutable version-control history. Preserve links to ADRs, issues, evidence, rejected approaches, major reasoning, and the pre-compaction revision/digest in Archived Summary. Log the compaction as new activity.
 
 ## Before stopping
 

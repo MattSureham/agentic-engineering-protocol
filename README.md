@@ -6,11 +6,12 @@ This repository develops a standalone, copy-ready protocol for software projects
 
 The root files govern development of this repository and are distinct from the reusable product:
 
-1. Read [`BOOTSTRAP.md`](BOOTSTRAP.md), the current collaboration mechanism for this repository.
-2. Read [`HANDOFF.md`](HANDOFF.md), the canonical live development state and single next action.
-3. Read [`PROJECT_SPEC.md`](PROJECT_SPEC.md), the authoritative product specification.
+1. Read [`BOOTSTRAP.md`](BOOTSTRAP.md), the normative root collaboration protocol and truth hierarchy.
+2. Read [`PROJECT_SPEC.md`](PROJECT_SPEC.md), the authoritative product specification.
+3. Read relevant accepted records in [`ADR/`](ADR/), executable contracts/tests, and [`EVIDENCE/`](EVIDENCE/) before relying on lower-precedence state.
+4. Read [`HANDOFF.md`](HANDOFF.md), the compact operational snapshot, unresolved-work index, and single next action; reconcile it against higher-precedence sources and the actual repository.
 
-Do not treat the root BOOTSTRAP as the reusable deliverable or silently replace it while evaluating its design.
+Root truth precedence is `PROJECT_SPEC → accepted ADRs → contracts/tests → evidence → HANDOFF → implementation → inference`. README is navigation only. Do not treat the root BOOTSTRAP as the reusable deliverable or assume a change to either BOOTSTRAP automatically changes the other; material semantic divergence is reviewed explicitly.
 
 ## Reusable package
 

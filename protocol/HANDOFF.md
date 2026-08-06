@@ -11,10 +11,17 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is operational 
 
 ### Snapshot
 
+- **Snapshot updated UTC:** `[timestamp or NOT YET RECONCILED]`
+- **Repository state:** `[revision/branch/upstream when available, plus exact dirty-state summary]`
+- **Evidence cutoff:** `[latest evidence UTC/revision inspected for this snapshot]`
+- **External checks:** `[reference, checked UTC, result, and declared refresh condition; or NONE]`
+- **Stale when:** `[revision/branch differs; dirty files are not represented; newer evidence changes a claim; an external reference changes/expires; a non-terminal task is not reconciled; or higher authority conflicts with this snapshot]`
 - **UNKNOWN — Product state:** The adopting repository has not yet been inspected through this template.
 - **UNKNOWN — Specification status:** Read `PROJECT_SPEC.md` and record whether it is accepted and sufficient for the next action.
 - **UNKNOWN — Working state:** Inspect version-control state when available and preserve unrelated changes.
 - **UNKNOWN — Verification state:** No repository-specific commands have been recorded in this template.
+
+Do not refresh only the timestamp. When a staleness trigger fires, mark affected claims `UNKNOWN`, reconcile them from higher-precedence artifacts and actual repository state, and record the reconciliation as new activity.
 
 ### Constraints
 
@@ -35,7 +42,7 @@ For each task, record:
 |---|---|---|---|---|---|---|---|---|
 | `[TASK-id]` | `[purpose]` | `[participant]` | `[time]` | `[durable reference]` | `[exact command/procedure]` | `[time]` | `[QUEUED/RUNNING/SUCCEEDED/FAILED/CANCELLED/ORPHANED]` | `[link or pending]` |
 
-Remove the placeholder row when recording the first real task. Preserve terminal results until their relevant activity is safely archived.
+Remove the placeholder row when recording the first real task. Keep only non-terminal tasks in this live table. When a task becomes terminal, move its durable result to the owning issue/evidence record and retain a concise Recent Activity or Archived Summary link.
 
 ## Active Issues
 
@@ -75,4 +82,4 @@ Delete only these instructional placeholder lines after the first real entry. Ne
 
 No activity has been archived.
 
-When this file approaches 1,000 lines or becomes hard to scan, preserve at least the ten newest entries and every entry required by unresolved work. Summarize older closed activity here with links to retained ADRs, issues, evidence, rejected approaches, disputes, and major reasoning. Record the compaction as new Recent Activity.
+When this file approaches 1,000 lines or becomes hard to scan, preserve at least the ten newest entries and every entry required by unresolved work. Move closed issue bodies, long evidence narratives, terminal-task ledgers, and older diary entries to their owning durable records or immutable version-control history. Summarize them here with links to retained ADRs, issues, evidence, rejected approaches, disputes, major reasoning, and the pre-compaction revision/digest. Record the compaction as new Recent Activity.

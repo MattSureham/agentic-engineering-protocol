@@ -6,6 +6,13 @@ Do NOT modify or depend on any existing project such as PCB, CAD, memory systems
 
 The output should be a self-contained template/protocol that can later be copied or initialized inside an arbitrary software repository with minimal adaptation.
 
+# Specification status
+
+- **Status:** `ACCEPTED`
+- **Human technical owner:** `MattSureham`
+- **Current accepted change:** Post-pilot hardening requirements and specification-evolution policy approved before implementation on `2026-08-06`
+- **Authority record:** [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md) and [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
+
 # Goal
 
 Create a reusable "agent-native software engineering protocol" that makes development by multiple independent coding-agent instances:
@@ -455,3 +462,70 @@ At completion:
 * verify that a fresh agent could realistically use it without this prompt
 * identify any unresolved design questions
 * leave a concise final implementation report
+
+# Post-pilot hardening requirements
+
+The repository that develops this protocol MUST be a proof of the protocol's record architecture, not an exception to it.
+
+## Accepted requirements
+
+- **HARDEN-001 — Root adoption:** The root repository MUST use a root-specific adopted protocol instance with the source precedence and artifact ownership defined in accepted root ADR [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md).
+- **HARDEN-002 — Separate governance:** Root `BOOTSTRAP.md` and reusable `protocol/BOOTSTRAP.md` MUST remain separately governed. A change to one MUST NOT silently change the other. Material semantic divergence MUST be reviewed as an issue against the authority that governs each instance.
+- **HARDEN-003 — Operational HANDOFF:** Root `HANDOFF.md` MUST remain a compact operational index with explicit snapshot metadata and staleness triggers, unresolved issues only, non-terminal background work only, exactly one next action, recent activity, and a durable archive index. It MUST NOT own requirements, architecture decisions, closed issue history, or evidence archives.
+- **HARDEN-004 — Durable records:** Root architecture decisions, meaningful issue lifecycle, and substantial/review-critical evidence MUST live in root `ADR/`, `ISSUES/`, and `EVIDENCE/` records. `HUMAN_CHECKPOINT.md` MUST remain a non-authoritative owner summary and decision queue.
+- **HARDEN-005 — Portable evidence claims:** Evidence MUST distinguish observations preserved in this repository from claims that depend on unavailable Git objects, external repositories, absolute local paths, or temporary artifacts. Missing external evidence MUST NOT be fabricated or described as reproducible. Production-grade, universal, or broader-portability validation MUST NOT be claimed without corresponding reproducible evidence.
+- **HARDEN-006 — Package stability:** The reusable `protocol/` source bundle MUST retain its exact ten-file inventory and its Markdown-first, runtime-, language-, framework-, vendor-, CI-, and version-control-agnostic product boundary during this phase.
+- **HARDEN-007 — Review gate:** The hardening implementation MUST remain in `REVIEW` and MUST NOT support a protocol-maturity claim until a fresh independent participant approves the immutable implementation target.
+- **HARDEN-008 — Historical preservation:** Compaction MUST preserve prior findings, authorship, issue IDs, accepted decisions, evidence limitations, and an immutable pre-compaction revision/digest reference. Correction MUST be additive and attributable rather than silently rewriting historical evidence.
+
+## Explicit non-goals and deferred scope
+
+This phase MUST NOT implement or claim:
+
+- guarantees for non-cooperating concurrent writers;
+- cryptographically authenticated participant identity or approval;
+- runtime automation, an orchestrator, daemon, service, database, or complex CLI;
+- large-scale coordination fitness;
+- external issue-tracker integration.
+
+Each topic requires a separate issue and a new human-approved specification before investigation can adopt a solution. Recording a limitation does not authorize implementation.
+
+## Hardening acceptance criteria
+
+The hardening target is ready for independent review only when:
+
+1. Root precedence, artifact ownership, Human Authority Boundary, issue lifecycle, evidence rules, and review rules are internally consistent.
+2. Root HANDOFF satisfies its compact snapshot/index contract and links migrated durable records.
+3. The reusable HANDOFF template and BOOTSTRAP contain compatible snapshot-metadata and staleness rules without changing the ten-file package inventory.
+4. The isolated pilot evidence is preserved byte-for-byte in its durable evidence record, a root compatibility pointer resolves, and limitations match a Git-object audit.
+5. Root and reusable relative links, Markdown integrity, package inventory, symlink absence, and isolated copy readiness are actually checked and recorded.
+6. Unavailable tools and unperformed broader validation remain explicit.
+7. An immutable target commit is supplied to a fresh independent reviewer; only a recorded `APPROVED` disposition can satisfy the maturity gate.
+
+# Specification governance
+
+## Specification evolution
+
+`PROJECT_SPEC.md` is authoritative but not immutable.
+
+A specification change MAY be proposed when evidence demonstrates that:
+
+- an existing requirement is ambiguous, incomplete, or internally inconsistent;
+- real-world usage exposes a requirement that was not previously represented;
+- an existing requirement no longer serves the project's stated goals; or
+- a new capability has been explicitly accepted into project scope.
+
+Evidence supports a proposal; it does not by itself authorize a change to an `ACCEPTED` specification. `PROJECT_SPEC.md` MUST evolve through evidence-backed requirement change, not implementation drift. Existing implementation is not, by itself, sufficient evidence that the specification should change to match it. When implementation conflicts with an `ACCEPTED` `PROJECT_SPEC.md`, the default is to correct the implementation and preserve the conflict record until any specification change is approved.
+
+Every material requirement change requires explicit human technical-owner approval. This includes changes that materially alter product scope, compatibility, core invariants, authorized architectural constraints, or the product/architecture authority boundary. A change affecting both product requirements and architecture requires both an accepted specification update and a compatible accepted ADR. If they conflict, `PROJECT_SPEC.md` remains authoritative and the conflict remains unresolved.
+
+Relevant evidence, issue records, and ADRs SHOULD be referenced where appropriate so that the reason for the specification change remains auditable.
+
+## Specification change record
+
+Material requirement changes require human-owner authority. Keep exact proposed wording in an issue or decision request until approved; do not edit an accepted requirement into an unapproved state that appears authoritative. After approval, update the affected requirement and append its change record together. An ADR may explain compatible architecture but cannot override, delete, or fill an unknown requirement. Do not use this log as a substitute for updating the affected requirement.
+
+| UTC time | Change | Reason | Approved by | References |
+|---|---|---|---|---|
+| `2026-08-05` | Accepted the initial standalone reusable protocol requirements | Establish the product contract | Human technical owner (`MattSureham`) | Pre-hardening specification at Git revision `e6beeb2cb730183ca2ac13795ad367ad9d9e1099`, SHA-256 `13169319e2be028c470ca96925002b25c000c58ba3a4c5420e652d291df139dd` |
+| `2026-08-06T01:39:07Z` | Added accepted post-pilot hardening requirements, deferrals, acceptance criteria, and the approved specification-evolution policy | Resolve repository-verified dogfooding, record-separation, HANDOFF reliability, and evidence-portability gaps without expanding product runtime scope | Human technical owner (`MattSureham`) | [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md), [`EVIDENCE-20260806T013907Z-post-pilot-audit`](EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md), authority boundary `7dea545` |
