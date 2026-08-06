@@ -6,10 +6,10 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-06T02:09:38Z`
-- **Repository state:** Local `main` is at immutable implementation target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`; cached `origin/main` remains `e6beeb2cb730183ca2ac13795ad367ad9d9e1099`. The working tree contains only this review handoff and the matching main-issue transition; no implementation/product file differs from the target.
-- **Evidence cutoff:** Repository audit captured `2026-08-06T01:39:07Z`; authority boundary committed at `7dea5457828b6590f9ab2a643b58047b032e53d1`; exact target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` passed corrected immutable-target validation at `2026-08-06T02:09:38Z`.
-- **External checks:** Cached upstream equality was checked at the clean baseline. Direct GitHub state has not been refreshed after local commits and MUST be checked before push.
+- **Snapshot updated UTC:** `2026-08-06T02:12:23Z`
+- **Repository state:** Immutable implementation target is `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`; published review boundary is `fad48a1a7c35a1aba4f2943430603d92df628cd0`. The commit containing this publication record MUST be a direct HANDOFF-only child of that boundary; resolve its self-referential identity with `git rev-parse HEAD`, require `git diff --name-only fad48a1a7c35a1aba4f2943430603d92df628cd0..HEAD` to report only `HANDOFF.md`, and require a clean worktree before relying on this snapshot.
+- **Evidence cutoff:** Repository audit captured `2026-08-06T01:39:07Z`; authority boundary committed at `7dea5457828b6590f9ab2a643b58047b032e53d1`; exact target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` passed corrected immutable-target validation at `2026-08-06T02:09:38Z`; review boundary publication equality was observed at `2026-08-06T02:12:23Z`.
+- **External checks:** `git fetch origin main`, ancestry, `git ls-remote`, `gh api user`, and repository metadata checks confirmed authenticated account `MattSureham`, public `MattSureham/agentic-engineering-protocol`, default branch `main`, and no divergence. After pushing the review boundary, local HEAD, cached `origin/main`, and direct `refs/heads/main` all equaled `fad48a1a7c35a1aba4f2943430603d92df628cd0`. The containing HANDOFF-only commit must be rechecked on resumption because a commit cannot record its own hash.
 - **Stale when:** Checked-out revision/branch changes; dirty paths differ from the described hardening set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
@@ -56,6 +56,18 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 A fresh independent participant reviews immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` against parent `7dea5457828b6590f9ab2a643b58047b032e53d1`, root specification, accepted ADR, and evidence, then appends one disposition without closing the issue unless it is `APPROVED`.
 
 ## Recent Activity
+
+### 2026-08-06T02:12:23Z — Codex/root — Review Publication Verifier
+
+- **Task:** Publish the authorized hardening chain safely, verify the public review boundary, and leave a remote-resumable independent-review action.
+- **Context inspected:** Clean local review boundary `fad48a1a7c35a1aba4f2943430603d92df628cd0`; upstream ancestry; direct remote ref; authenticated GitHub account/repository visibility/default branch; exact review target and issue state.
+- **Actions performed:** Fetched `origin/main`; confirmed remote `e6beeb2` was an ancestor of local HEAD; verified account `MattSureham` and public target repository; pushed authority, implementation, and review-boundary commits; compared local, cached-origin, and direct-remote hashes; prepared this final HANDOFF-only publication record.
+- **Files modified:** This HANDOFF only after the published review boundary.
+- **Findings:** `CONFIRMED` — the immutable target and exact review instructions are public and remote-durable through boundary `fad48a1a7c35a1aba4f2943430603d92df628cd0`. `UNKNOWN` — independent review disposition and the self-referential final HANDOFF commit hash.
+- **Verification performed:** Pre-push fetch/ancestry/direct-ref checks passed; `gh api user` returned `MattSureham`; repository metadata returned `MattSureham/agentic-engineering-protocol`, `public`, `main`; push advanced `e6beeb2..fad48a1`; local/cached/direct hashes all equaled `fad48a1a7c35a1aba4f2943430603d92df628cd0` immediately afterward.
+- **Issues created or updated:** Main hardening issue remains `REVIEW`; five deferred issues remain `BLOCKED`; none was implemented or closed.
+- **Remaining uncertainty:** This HANDOFF-only publication record still requires its containing commit and push; a fresh participant must verify current remote HEAD before review.
+- **Recommended next action:** After this record is published, perform only the independent review stated under Next Action.
 
 ### 2026-08-06T02:09:38Z — Codex/root — Exact Review Handoff Preparer
 
