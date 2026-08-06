@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260806T013907Z-post-pilot-hardening`
 - **Title:** Separate root governance, operational continuity, and durable records
-- **Status:** `VERIFYING`
+- **Status:** `REVIEW`
 - **Severity:** `HIGH`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-06T01:39:07Z`
-- **Updated UTC:** `2026-08-06T02:05:56Z`
+- **Updated UTC:** `2026-08-06T02:09:38Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), including the owner-approved post-pilot hardening requirements to be recorded
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
 - **Evidence:** [`EVIDENCE-20260806T013907Z-post-pilot-audit`](../EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md); [`EVIDENCE-20260806T020056Z-hardening-validation`](../EVIDENCE/EVIDENCE-20260806T020056Z-hardening-validation.md)
@@ -55,9 +55,10 @@ The accepted ADR owns the root-adoption architecture. This issue owns implementa
 ## Change
 
 - **Files or components:** Root `BOOTSTRAP.md`, `PROJECT_SPEC.md`, `README.md`, `HANDOFF.md`, `HUMAN_CHECKPOINT.md`, `PILOT_EVIDENCE.md`, and templates/records under `ADR/`, `ISSUES/`, and `EVIDENCE/`; reusable `protocol/BOOTSTRAP.md` and `protocol/HANDOFF.md`.
-- **Behavior changed:** Root governance now uses the accepted seven-tier hierarchy and separate root/product instances. Root HANDOFF is a 222-line operational index with metadata/staleness rules, unresolved issues only, no terminal task ledger, one next action, 13 recent entries, and a nonempty archive. Durable decision/lifecycle/evidence history lives in owning records. The reusable HANDOFF contract now requires the same snapshot reliability behavior.
+- **Behavior changed:** Root governance now uses the accepted seven-tier hierarchy and separate root/product instances. At the immutable target, root HANDOFF is a 248-line operational index with metadata/staleness rules, unresolved issues only, no terminal task ledger, one next action, 15 recent entries, and a nonempty archive. Durable decision/lifecycle/evidence history lives in owning records. The reusable HANDOFF contract now requires the same snapshot reliability behavior.
 - **Out-of-scope work deliberately excluded:** Runtime/orchestrator, daemon/service, database, complex CLI, external issue tracker, concurrent-writer guarantee, cryptographic authentication, large-scale coordination.
 - **Rollback or recovery:** Inspect or restore the pre-hardening state from Git revision `e6beeb2cb730183ca2ac13795ad367ad9d9e1099`; do not erase the issue/ADR/evidence trail.
+- **Immutable implementation target:** Commit `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`; parent/authority boundary `7dea5457828b6590f9ab2a643b58047b032e53d1`; full tree `3d718626b361535a7086a45fae868e69a7da9196`; protocol tree `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb` (parent protocol tree `8676b85d292676b7e198d10414961bf3657bf578`).
 
 ## Unverified complexity
 
@@ -74,6 +75,7 @@ The accepted ADR owns the root-adoption architecture. This issue owns implementa
 | `2026-08-06T02:00:56Z` | `Codex/root` | Isolated `protocol/` copy, `diff -qr`, manifest/link/entrypoint checks | `PASS`, exit `0`: 10 files, 23 links/zero missing | [Validation evidence](../EVIDENCE/EVIDENCE-20260806T020056Z-hardening-validation.md) | One Darwin/filesystem run; fixture not durable |
 | `2026-08-06T02:00:56Z` | `Codex/root` | `command -v` availability query | `markdownlint`, `markdownlint-cli2`, and `shellcheck` `NOT_AVAILABLE` | [Validation evidence](../EVIDENCE/EVIDENCE-20260806T020056Z-hardening-validation.md) | Not counted as passed checks |
 | `2026-08-06T02:05:56Z` | `Codex/root` | Complete post-record semantic/Markdown suite plus `git diff --check` | `PASS`, exit `0`: 34 Markdown files/105 links, ten package files/zero symlinks, HANDOFF contract, exact policy, seven tiers, pilot and five legacy bodies | [Validation evidence](../EVIDENCE/EVIDENCE-20260806T020056Z-hardening-validation.md) | One syntax-error harness attempt produced no result and is explicitly discarded; independent review still pending |
+| `2026-08-06T02:09:38Z` | `Codex/root` | Exact-target checker at `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` plus `git diff --check 7dea545..5eceae0` | `IMMUTABLE_TARGET_PASS`, exit `0`: clean checkout equals target; 34 Markdown files/106 links/zero missing; ten package files/zero symlinks; five-section/one-action HANDOFF; exact policy; pilot/five legacy bodies | This issue row and review HANDOFF preserve the post-target observation | First checker invocation stopped at the same reporting f-string syntax error and supplied no result; corrected full rerun passed; independent review still pending |
 
 ## Self-review
 
@@ -111,6 +113,7 @@ No round has been recorded.
 | `2026-08-06T01:39:07Z` | `Codex/root` | `NONE` | `INVESTIGATING` | Recovered clean synchronized baseline and verified findings from repository evidence |
 | `2026-08-06T01:39:07Z` | `Codex/root` | `INVESTIGATING` | `IMPLEMENTING` | Human-approved architecture and accepted ADR authorize bounded hardening |
 | `2026-08-06T02:00:56Z` | `Codex/root` | `IMPLEMENTING` | `VERIFYING` | Root/product governance, durable migration, and reusable snapshot changes are implemented; initial corrected validation passed |
+| `2026-08-06T02:09:38Z` | `Codex/root` | `VERIFYING` | `REVIEW` | Immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` passed implementor verification; fresh independent approval is the remaining closure gate |
 
 ## Closure checklist
 
@@ -121,4 +124,4 @@ No round has been recorded.
 - [x] Human authority is recorded in the accepted ADR and HANDOFF authorization boundary.
 - [x] New complexity is covered, removed, or linked to accepted open debt.
 - [x] Residual uncertainty is explicitly owned.
-- [ ] HANDOFF reflects the final immutable target and exactly one independent-review action.
+- [x] HANDOFF reflects the immutable target and exactly one independent-review action.

@@ -6,22 +6,22 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-06T02:05:56Z`
-- **Repository state:** Local `main` at authority-boundary commit `7dea5457828b6590f9ab2a643b58047b032e53d1`; cached `origin/main` remains `e6beeb2cb730183ca2ac13795ad367ad9d9e1099`. The working tree contains only the intended uncommitted hardening implementation: root governance/specification/navigation/checkpoint/templates and legacy records, pilot evidence move plus pointer, and reusable BOOTSTRAP/HANDOFF edits.
-- **Evidence cutoff:** Repository audit captured `2026-08-06T01:39:07Z`; authority boundary committed at `7dea5457828b6590f9ab2a643b58047b032e53d1`; complete post-record implementor validation reran at `2026-08-06T02:05:56Z` in [`EVIDENCE-20260806T020056Z-hardening-validation`](EVIDENCE/EVIDENCE-20260806T020056Z-hardening-validation.md).
+- **Snapshot updated UTC:** `2026-08-06T02:09:38Z`
+- **Repository state:** Local `main` is at immutable implementation target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`; cached `origin/main` remains `e6beeb2cb730183ca2ac13795ad367ad9d9e1099`. The working tree contains only this review handoff and the matching main-issue transition; no implementation/product file differs from the target.
+- **Evidence cutoff:** Repository audit captured `2026-08-06T01:39:07Z`; authority boundary committed at `7dea5457828b6590f9ab2a643b58047b032e53d1`; exact target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` passed corrected immutable-target validation at `2026-08-06T02:09:38Z`.
 - **External checks:** Cached upstream equality was checked at the clean baseline. Direct GitHub state has not been refreshed after local commits and MUST be checked before push.
 - **Stale when:** Checked-out revision/branch changes; dirty paths differ from the described hardening set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
 
-- **CONFIRMED — Objective:** Implement the owner-approved post-pilot hardening requirements without starting the independent review or any deferred capability.
+- **CONFIRMED — Objective:** Publish an exact review handoff for the owner-approved hardening target without beginning the independent review or any deferred capability.
 - **CONFIRMED — Authority:** Root [`PROJECT_SPEC.md`](PROJECT_SPEC.md) is `ACCEPTED`; [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md) is accepted at the prior authority boundary.
-- **CONFIRMED — Root adoption:** The worktree now defines the root as a separately governed protocol instance with the required seven-tier precedence. This candidate is not yet verified or independently reviewed.
+- **CONFIRMED — Root adoption:** Immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` defines the root as a separately governed protocol instance with the required seven-tier precedence and passed implementor verification.
 - **CONFIRMED — Record separation:** Durable root ADR, issue, evidence, template, and checkpoint artifacts exist. Five legacy closed issue IDs have migrated records; the full pre-compaction HANDOFF is preserved by immutable Git identity below.
 - **CONFIRMED — Pilot preservation:** Historical pilot content is byte-preserved at [`EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md`](EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md), with compatibility pointer [`PILOT_EVIDENCE.md`](PILOT_EVIDENCE.md). Original pilot commits/tests remain absent from root Git and are not clone-reproducible.
 - **CONFIRMED — Reusable product scope:** Only `protocol/BOOTSTRAP.md` and `protocol/HANDOFF.md` are intentionally edited; the package must remain exactly ten files and separately governed.
 - **CONFIRMED — Implementor validation:** Corrected semantic/Markdown validation, historical byte comparisons, isolated copy checks, and `git diff --check` passed within recorded limits. Dedicated Markdown/shell linters were unavailable.
-- **UNKNOWN — Hardening disposition:** Complete implementor validation passed, but immutable target capture and fresh independent review have not occurred. No protocol-maturity claim is authorized.
+- **UNKNOWN — Hardening disposition:** Fresh independent review has not occurred. The main issue is `REVIEW`, not `CLOSED`, and no protocol-maturity claim is authorized.
 
 ### Constraints and uncertainty
 
@@ -44,7 +44,7 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
-| [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md) | `VERIFYING` | `HIGH` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Separate root governance and durable records; harden HANDOFF and evidence portability | Accepted ADR, [audit](EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md), and [implementor validation](EVIDENCE/EVIDENCE-20260806T020056Z-hardening-validation.md); review still pending |
+| [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md) | `REVIEW` | `HIGH` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Separate root governance and durable records; harden HANDOFF and evidence portability | Review exact target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` against accepted ADR, [audit](EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md), and [validation](EVIDENCE/EVIDENCE-20260806T020056Z-hardening-validation.md) |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define non-cooperating concurrent-writer guarantees | New owner-approved failure model and specification |
 | [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define authenticated identity and approval | New owner-approved trust model, specification, and ADR |
 | [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `BLOCKED` | `LOW` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Evaluate optional runtime automation | New owner-approved capability specification and ADR |
@@ -53,9 +53,21 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 ## Next Action
 
-Stage only the intended hardening files, review the complete staged diff, and commit the coherent implementation milestone.
+A fresh independent participant reviews immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` against parent `7dea5457828b6590f9ab2a643b58047b032e53d1`, root specification, accepted ADR, and evidence, then appends one disposition without closing the issue unless it is `APPROVED`.
 
 ## Recent Activity
+
+### 2026-08-06T02:09:38Z — Codex/root — Exact Review Handoff Preparer
+
+- **Task:** Freeze the verified implementation, validate the exact Git object, and prepare the independently reviewable boundary.
+- **Context inspected:** Implementation commit/parent/tree identities; complete target checkout; ranged diff; root/product semantics; historical preservation; main issue gate.
+- **Actions performed:** Committed implementation as `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`; captured full tree `3d718626b361535a7086a45fae868e69a7da9196` and protocol tree `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb`; corrected a reporting-only checker syntax error; reran the full immutable-target suite; advanced the issue to `REVIEW` and replaced the implementation action with one exact independent-review action.
+- **Files modified:** Main hardening issue and this HANDOFF only after the immutable target.
+- **Findings:** `CONFIRMED` — the checked-out files matched the target and all implementor checks passed within disclosed limits. `UNKNOWN` — independent disposition; no maturity claim or closure follows from self-verification.
+- **Verification performed:** `IMMUTABLE_TARGET_PASS`: 34 Markdown files/106 links/zero missing, zero structure findings, ten package files/zero symlinks, exactly two package changes, HANDOFF 248 lines/five sections/one action/15 recent entries/six active records, exact policy, preserved pilot bytes, and five preserved legacy bodies; ranged `git diff --check` exit `0`.
+- **Issues created or updated:** Advanced `ISSUE-20260806T013907Z-post-pilot-hardening` from `VERIFYING` to `REVIEW`; five future issues remain `BLOCKED`.
+- **Remaining uncertainty:** Review-record commit identity, remote publication equality, and fresh independent findings.
+- **Recommended next action:** Commit and publish this exact review handoff, then perform only the independent review stated under Next Action.
 
 ### 2026-08-06T02:05:56Z — Codex/root — Final Candidate Verification Agent
 
