@@ -4,12 +4,12 @@ This is a low-bandwidth synchronization point for the human technical owner. It 
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-06T02:00:56Z`
-- **Prepared by:** `Codex/root`
-- **Period covered:** Published baseline `e6beeb2cb730183ca2ac13795ad367ad9d9e1099` through the post-pilot hardening implementation worktree
-- **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`; owner-approved hardening requirements are being persisted
-- **Implementation/reference state:** Authority boundary commit `7dea545`; implementor-validated candidate remains uncommitted and is not yet an immutable review target
-- **Prior checkpoint:** `NONE`
+- **Generated UTC:** `2026-08-06T03:02:04Z`
+- **Prepared by:** `ClaudeCode/hardening-review`
+- **Period covered:** Published baseline `e6beeb2cb730183ca2ac13795ad367ad9d9e1099` through closure of the post-pilot hardening issue
+- **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved hardening requirements and specification-evolution policy
+- **Implementation/reference state:** Immutable hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` is independently `APPROVED`; the closure record is the containing commit of this checkpoint revision
+- **Prior checkpoint:** `2026-08-06T02:00:56Z` by `Codex/root` (pre-target; superseded by this entry)
 
 ## System mental model
 
@@ -21,8 +21,8 @@ Agents are replaceable participants. HANDOFF is a compact continuity index, not 
 
 | Change | Why | Product/architecture effect | Evidence and review |
 |---|---|---|---|
-| Accepted root-specific protocol adoption | Resolve verified split truth ownership and dogfood the product | Seven-tier root precedence; separate root/product governance | [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md); independent review pending |
-| Separate operational and durable records | Keep HANDOFF resumable rather than archival | ADRs/issues/evidence own durable detail; HANDOFF will index unresolved state | [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md) |
+| Accepted root-specific protocol adoption | Resolve verified split truth ownership and dogfood the product | Seven-tier root precedence; separate root/product governance | [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md); independently `APPROVED` |
+| Separate operational and durable records | Keep HANDOFF resumable rather than archival | ADRs/issues/evidence own durable detail; HANDOFF indexes unresolved state only | [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), `CLOSED` |
 | Qualify pilot portability | Avoid claims unsupported by clone-contained artifacts | Historical record preserved; original pilot remains externally dependent | [`EVIDENCE-20260806T013907Z-post-pilot-audit`](EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md) |
 
 ## Architecture decisions
@@ -43,14 +43,14 @@ No architecture proposal is awaiting owner decision.
 
 | Cost | Why introduced/removed | Coverage | Residual debt |
 |---|---|---|---|
-| Separate root/product protocol governance | Prevent silent authority coupling | Accepted ADR, semantic/link validation planned | Future divergence still requires judgment and review |
-| Live HANDOFF archival burden retired | Restore compact operational continuity | Migrated issue/evidence records and immutable Git provenance | Independent review pending |
+| Separate root/product protocol governance | Prevent silent authority coupling | Accepted ADR, semantic/link validation, independent review | Future divergence still requires judgment and review |
+| Live HANDOFF archival burden retired | Restore compact operational continuity | Migrated issue/evidence records and immutable Git provenance | None; independently verified |
 
 ### Drift assessment
 
-- **Last independent drift review:** `NOT PERFORMED` for this hardening target
-- **Classification:** `UNKNOWN` until the immutable target receives fresh independent review
-- **Owner-relevant differences:** The verified legacy split is being corrected under the accepted ADR; no maturity claim is authorized yet.
+- **Last independent drift review:** Fresh independent review of the hardening target completed `2026-08-06T03:02:04Z` with disposition `APPROVED` and no material findings.
+- **Classification:** The legacy split-truth drift is resolved as `ALIGNED` at the approved target; future root/product semantic divergence remains review-dependent by design.
+- **Owner-relevant differences:** None outstanding. No maturity claim beyond the recorded evidence is made.
 
 ## Assumptions and uncertainty that changed
 
@@ -62,20 +62,20 @@ No architecture proposal is awaiting owner decision.
 
 ## Confidence and verification
 
-- **What is directly verified:** Clean synchronized baseline; conflicting root role statements; pre-hardening digests/line counts; absent pilot Git objects; sibling repository without a remote; exact ten-file package inventory; 94 repository-relative links with zero missing; exact policy match; byte-preserved pilot and legacy issue bodies; isolated copy readiness.
-- **What was independently reviewed:** Prior protocol and migration/specification-evolution targets only; not the current hardening target.
-- **What was not run or remains unverified:** Final hardening validation, dedicated Markdown linting, broader portability, concurrency guarantees, authenticated identity, large-scale coordination.
-- **Known regressions or unresolved risks:** No regression is yet established; implementation remains unreviewed and the main issue stays open.
+- **What is directly verified:** Conflicting legacy role statements resolved at the target; pre-hardening digests/line counts; absent pilot Git objects (re-verified by the independent reviewer); exact ten-file package inventory with zero symlinks; byte-preserved pilot and five legacy issue bodies; exact root/package policy match; link integrity; isolated copy readiness; implementor validation and one fresh independent `APPROVED` round.
+- **What was independently reviewed:** The hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` (round 1, `APPROVED`), plus the earlier protocol, migration, and specification-evolution targets.
+- **What was not run or remains unverified:** Dedicated Markdown linting (unavailable to implementor and reviewer alike), broader platform portability, concurrency guarantees, authenticated identity, large-scale coordination.
+- **Known regressions or unresolved risks:** None established. The five deferred capability areas remain `BLOCKED` pending owner-approved specifications.
 
 ## Human attention required
 
-No decision is currently required. The owner already approved the bounded architecture and explicit deferrals. Any independent material finding or proposal to unblock a deferred issue must return here.
+No decision is currently required. The hardening gate is satisfied and closed. Unblocking any deferred capability (concurrency, authenticated identity, runtime automation, scale, tracker integration) requires a new owner-approved specification; none is requested here.
 
 ## No human attention required
 
-- Complete the bounded documentation/record migration, verification, immutable target capture, and fresh independent review handoff without expanding scope.
+- Routine record-keeping, compaction, and evidence preservation continue under the adopted root protocol without owner involvement.
 
 ## Next checkpoint trigger
 
-- **Trigger:** Fresh independent disposition on the immutable post-pilot hardening target
+- **Trigger:** Any owner decision on deferred scope, any material root/product semantic divergence, or the next meaningful milestone
 - **Expected owner action before then:** `NONE`

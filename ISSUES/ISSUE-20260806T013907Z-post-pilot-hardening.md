@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260806T013907Z-post-pilot-hardening`
 - **Title:** Separate root governance, operational continuity, and durable records
-- **Status:** `REVIEW`
+- **Status:** `CLOSED`
 - **Severity:** `HIGH`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-06T01:39:07Z`
-- **Updated UTC:** `2026-08-06T02:09:38Z`
+- **Updated UTC:** `2026-08-06T03:02:04Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), including the owner-approved post-pilot hardening requirements to be recorded
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
 - **Evidence:** [`EVIDENCE-20260806T013907Z-post-pilot-audit`](../EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md); [`EVIDENCE-20260806T020056Z-hardening-validation`](../EVIDENCE/EVIDENCE-20260806T020056Z-hardening-validation.md)
@@ -93,7 +93,20 @@ The accepted ADR owns the root-adoption architecture. This issue owns implementa
 
 - **Required:** `YES` — root governance and the reusable HANDOFF contract change.
 
-No round has been recorded.
+### 2026-08-06T03:02:04Z — ClaudeCode/hardening-review
+
+- **Reviewed repository state:** Immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` (tree `3d718626b361535a7086a45fae868e69a7da9196`, protocol tree `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb`), parent/authority boundary `7dea5457828b6590f9ab2a643b58047b032e53d1`, plus post-target record-keeping commits `fad48a1a7c35a1aba4f2943430603d92df628cd0` (HANDOFF + this issue only) and `bee42f788c77c51fea62e7e74f4fbdd7f5b3084f` (HANDOFF only), clean worktree on `main`.
+- **Scope:** Root `BOOTSTRAP.md`, `PROJECT_SPEC.md`, `README.md`, `HANDOFF.md` (target revision), `HUMAN_CHECKPOINT.md`, `PILOT_EVIDENCE.md`, accepted ADR, all root templates, the five migrated legacy issue files, one blocked deferral issue, both evidence records, the complete ranged diff, and both reusable package diffs. This reviewer is a fresh participant instance with no implementation involvement; all checks below were executed independently rather than inherited from the implementor's narrative.
+- **Commands or procedures:** `git rev-parse` target/tree/parent/protocol-tree identity; `git diff --stat`/`--name-only`/`--check` over `7dea545..5eceae0` and both post-target ranges; `git show e6beeb2:PILOT_EVIDENCE.md | shasum -a 256` against the migrated evidence file; awk-based byte extraction of all five legacy issue bodies from `git show 7dea545:HANDOFF.md` compared to the migrated files; `sed`/`diff` exact comparison of the specification-evolution policy between root and reusable specifications; a standard-library relative-link scan over every Markdown file outside `.git`; `find` package inventory and symlink count; isolated `cp -R protocol/` copy with `diff -qr`; `git cat-file -e` for both recorded pilot commits; `shasum -a 256` of `git show 7dea545:HANDOFF.md` and `git show 7dea545:EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md`; `git rev-parse 7dea545:...audit.md` blob identity; target HANDOFF heading/line/entry counts.
+- **Specification compliance:** `HARDEN-001` root adoption verified — the root BOOTSTRAP seven-tier precedence matches ADR decision 2 exactly. `HARDEN-002` separate governance verified — root and reusable BOOTSTRAP differ intentionally and cross-reference the divergence rule. `HARDEN-003` verified — target HANDOFF has exactly the five ordered sections, snapshot metadata with staleness triggers, six unresolved-only issue rows, no terminal task ledger, one Next Action, 248 lines, and a nonempty archive. `HARDEN-004` verified — durable records exist in owning directories; checkpoint declares itself non-authoritative. `HARDEN-005` verified — pilot bytes SHA-256 `dab1274cb74d62ec263fdb0acb86591d74f3d79efd4891e2140c08f9e314651f` match the pre-hardening blob; the compatibility pointer resolves; both recorded pilot commits return exit `128` from `git cat-file -e`, matching the audit's absence claim; no reproducibility claim exceeds this. `HARDEN-006` verified — ten regular package files, zero symlinks, isolated copy byte-identical, exactly two package paths changed with snapshot/staleness semantics compatible with the root rules. `HARDEN-007` — this round is the required fresh independent disposition. `HARDEN-008` verified — all five legacy bodies byte-match their `7dea545` extractions (8/10/10/34/47 lines, matching the validation evidence); the pre-compaction HANDOFF digest `884a69a2fc99ceddd7840be87135ef2ee5ed5ad4647d9566a2d90c81020c6a4e` and the audit blob `615c790050b8abb99d0c29399e28193bb8db3dd8`/SHA-256 `af011e0bdf961920362b9d18ca925e2be6a71fef4740f5480e2eef1f79d9ffc0` both reproduce. Acceptance criteria 1–7 are each satisfied by directly reproduced observations.
+- **Correctness and regression findings:** No content loss detected in any migration. The ranged diff touches exactly the declared change set (20 paths). `git diff --check` exits `0`. The one edit to a pre-existing evidence file completes that file's own forward-declared digest placeholder and preserves the superseded version immutably at the authority boundary; this is additive provenance, not a silent rewrite. The reusable diffs add snapshot/staleness rules without altering existing authority, lifecycle, or review semantics.
+- **Architecture and complexity findings:** The only new architectural cost is separate root/product governance, covered by the accepted ADR with its residual-drift gap explicitly owned. No runtime, dependency, or new abstraction was introduced; all five deferred capabilities remain `BLOCKED` with observable owner-gated unblock conditions.
+- **Material findings and resolution conditions:** `NONE`. One non-material observation: root `HUMAN_CHECKPOINT.md` (generated `2026-08-06T02:00:56Z`) still describes the candidate as uncommitted even though the target was committed at `2026-08-06T02:09:38Z`; the checkpoint is explicitly non-authoritative and names this independent disposition as its own regeneration trigger, so this is a bounded staleness note, not a defect. A separate apparent missing link (`PROTOCOL_GUIDE.md` from `protocol/README.md`) was traced to an indented fenced snippet illustrating a target repository's navigation block, where that file exists by construction; it is not a package link defect.
+- **Limitations:** No dedicated Markdown linter (`markdownlint`, `markdownlint-cli2`) or `shellcheck` is installed in this environment; structural checks are fence-aware but not a CommonMark renderer. Reviewer environment is the same Darwin host class as the implementor's, so platform-portability claims remain unexamined by this round. Repository-recorded identities are not cryptographically authenticated. Semantic judgments (e.g., what counts as material divergence) cannot be mechanically proven.
+- **Residual risks:** Future root/product semantic drift remains review-dependent; participant compliance with the compact-HANDOFF contract is a behavioral risk no document can eliminate; broader portability, concurrency, identity, and scale remain correctly unclaimed.
+- **Evidence:** This round's commands and outputs; [`EVIDENCE-20260806T013907Z-post-pilot-audit`](../EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md); [`EVIDENCE-20260806T020056Z-hardening-validation`](../EVIDENCE/EVIDENCE-20260806T020056Z-hardening-validation.md); Git objects cited above.
+- **Disposition:** `APPROVED`
+- **Prior-round resolution:** `FIRST ROUND` — no earlier independent round exists; the implementor's self-review is preparatory only and was not relied upon.
 
 ## Blocker
 
@@ -104,7 +117,7 @@ No round has been recorded.
 
 ## Residual uncertainty
 
-- Independent disposition, broader portability, and participant compliance remain unknown.
+- Broader portability beyond the tested Darwin/POSIX environment and future participant compliance remain unknown; both are explicitly unclaimed. The independent review gate is satisfied as of `2026-08-06T03:02:04Z`.
 
 ## Activity history
 
@@ -114,13 +127,14 @@ No round has been recorded.
 | `2026-08-06T01:39:07Z` | `Codex/root` | `INVESTIGATING` | `IMPLEMENTING` | Human-approved architecture and accepted ADR authorize bounded hardening |
 | `2026-08-06T02:00:56Z` | `Codex/root` | `IMPLEMENTING` | `VERIFYING` | Root/product governance, durable migration, and reusable snapshot changes are implemented; initial corrected validation passed |
 | `2026-08-06T02:09:38Z` | `Codex/root` | `VERIFYING` | `REVIEW` | Immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` passed implementor verification; fresh independent approval is the remaining closure gate |
+| `2026-08-06T03:02:04Z` | `ClaudeCode/hardening-review` | `REVIEW` | `CLOSED` | Fresh independent review round 1 returned `APPROVED` with no material findings; every closure-checklist item is satisfied and recorded verification plus required review exist |
 
 ## Closure checklist
 
 - [x] Expected behavior is tied to owner-approved requirements and an accepted ADR.
 - [x] The change or resolution is recorded.
 - [x] Required implementor verification ran and evidence is linked; unavailable checks remain explicit.
-- [ ] The latest independent review round is `APPROVED` and prior material findings are resolved.
+- [x] The latest independent review round is `APPROVED` and prior material findings are resolved.
 - [x] Human authority is recorded in the accepted ADR and HANDOFF authorization boundary.
 - [x] New complexity is covered, removed, or linked to accepted open debt.
 - [x] Residual uncertainty is explicitly owned.
