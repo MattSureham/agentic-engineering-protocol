@@ -6,11 +6,11 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-06T03:02:04Z`
-- **Repository state:** The approved immutable implementation target is `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`; the last published review handoff is `bee42f788c77c51fea62e7e74f4fbdd7f5b3084f`. The commit containing this closure record MUST be a direct child of `bee42f788c77c51fea62e7e74f4fbdd7f5b3084f` changing only `HANDOFF.md`, `ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md`, and `HUMAN_CHECKPOINT.md`; resolve its self-referential identity with `git rev-parse HEAD`, verify the path set with `git diff --name-only bee42f788c77c51fea62e7e74f4fbdd7f5b3084f..HEAD`, and require a clean worktree before relying on this snapshot.
-- **Evidence cutoff:** Repository audit captured `2026-08-06T01:39:07Z`; implementor validation through `2026-08-06T02:09:38Z`; independent review round 1 completed and appended at `2026-08-06T03:02:04Z`.
-- **External checks:** Prior publication checks confirmed authenticated account `MattSureham`, public `MattSureham/agentic-engineering-protocol`, default branch `main`, and local/remote equality at `bee42f788c77c51fea62e7e74f4fbdd7f5b3084f`. The closure commit and its push must be rechecked on resumption because a commit cannot record its own hash.
-- **Stale when:** Checked-out revision/branch changes; dirty paths differ from the three-file closure set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
+- **Snapshot updated UTC:** `2026-08-07T02:25:23Z`
+- **Repository state:** The approved immutable implementation target is `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`; the verified closure commit is `774b2e0237c6814cc7b4b491f495ba7965e8e0e4`. The commit containing this pilot-resumption record MUST be a direct child of `774b2e0237c6814cc7b4b491f495ba7965e8e0e4` changing only `HANDOFF.md`, `HUMAN_CHECKPOINT.md`, and `ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md`; resolve its self-referential identity with `git rev-parse HEAD`, verify the path set with `git diff --name-only 774b2e0237c6814cc7b4b491f495ba7965e8e0e4..HEAD`, and require a clean worktree before relying on this snapshot.
+- **Evidence cutoff:** Repository audit captured `2026-08-06T01:39:07Z`; implementor validation through `2026-08-06T02:09:38Z`; independent review round 1 completed `2026-08-06T03:02:04Z`; fresh-participant pilot resumption verification completed `2026-08-07T02:25:23Z`.
+- **External checks:** On `2026-08-07T02:25:23Z` a fresh participant rechecked the closure chain the closing participant could not self-verify: `774b2e0` is a direct clean child of `bee42f7` changing exactly the declared three files, and direct remote `refs/heads/main` equals local HEAD `774b2e0237c6814cc7b4b491f495ba7965e8e0e4`. The pilot-resumption record commit and its push must be rechecked on resumption because a commit cannot record its own hash.
+- **Stale when:** Checked-out revision/branch changes; dirty paths differ from the three-file pilot-record set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
 
@@ -21,6 +21,7 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 - **CONFIRMED — Pilot preservation:** Historical pilot content is byte-preserved at [`EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md`](EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md), with compatibility pointer [`PILOT_EVIDENCE.md`](PILOT_EVIDENCE.md). Original pilot commits/tests remain absent from root Git and are not clone-reproducible.
 - **CONFIRMED — Reusable product scope:** Only `protocol/BOOTSTRAP.md` and `protocol/HANDOFF.md` were intentionally edited; the package remains exactly ten files and separately governed.
 - **CONFIRMED — Review gate:** Independent review round 1 by `ClaudeCode/hardening-review` returned `APPROVED` on the immutable target with no material findings; [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md) is `CLOSED`. This satisfies the `HARDEN-007` gate; it is not a production-grade, universal-portability, concurrency, identity, or scale claim.
+- **CONFIRMED — Pilot resumption:** On `2026-08-07T02:25:23Z` a fresh participant (`ClaudeCode/pilot-1`) resumed from repository state only, verified every snapshot staleness trigger including the previously unverified closure commit/push, and opened one `LOW` record-only finding, [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md), awaiting an owner decision. No implementation was or is authorized.
 
 ### Constraints and uncertainty
 
@@ -43,6 +44,7 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
+| [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `OPEN` | `LOW` | `UNASSIGNED` | `HUMAN` | `SELF` | External task pressure versus terminal owner-wait state in fresh-participant onboarding | Recorded owner decision on the three options in the issue |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define non-cooperating concurrent-writer guarantees | New owner-approved failure model and specification |
 | [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define authenticated identity and approval | New owner-approved trust model, specification, and ADR |
 | [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `BLOCKED` | `LOW` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Evaluate optional runtime automation | New owner-approved capability specification and ADR |
@@ -51,9 +53,21 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 ## Next Action
 
-Wait for the human technical owner. The hardening issue is `CLOSED` with independent `APPROVED`; all five remaining issues are `BLOCKED` on new owner-approved specifications, so no implementation work is authorized. A fresh participant must first verify the closure commit, its push, and remote HEAD per the snapshot metadata before doing anything else.
+Wait for the human technical owner. The hardening issue is `CLOSED` with independent `APPROVED`; the five deferred issues remain `BLOCKED` on new owner-approved specifications; the only new item is an owner decision on `LOW` finding [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md). No implementation work is authorized. A fresh participant must first verify this record's containing commit, its push, and remote HEAD per the snapshot metadata before doing anything else.
 
 ## Recent Activity
+
+### 2026-08-07T02:25:23Z — ClaudeCode/pilot-1 — Fresh-Participant Pilot Resumption Verifier
+
+- **Task:** Apply the reusable protocol as the first pilot participant from repository state only; verify the closure chain the closing participant could not self-verify; identify the highest-priority safe action; record any protocol friction as a finding rather than bypassing it.
+- **Context inspected:** Complete root `BOOTSTRAP.md`, `PROJECT_SPEC.md`, `HANDOFF.md`, `HUMAN_CHECKPOINT.md`, `ISSUES/TEMPLATE.md`; Git HEAD/parent/status/log; direct remote ref; protocol package inventory; every issue status; HANDOFF structure.
+- **Actions performed:** Applied every snapshot staleness trigger; verified the closure commit `774b2e0` is a clean direct child of review handoff `bee42f7` changing exactly the declared three files; confirmed local/remote equality at `774b2e0237c6814cc7b4b491f495ba7965e8e0e4`; confirmed the ten-file/zero-symlink package, issue states, and HANDOFF contract; determined that no implementation is authorized and limited work to verification and record-keeping; opened one record-only finding; updated the snapshot, issue index, next action, and owner checkpoint.
+- **Files modified:** Created `ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md`; updated this HANDOFF and `HUMAN_CHECKPOINT.md`. No protocol source, specification, ADR, or evidence body was changed.
+- **Findings:** `CONFIRMED` — every claim in the `2026-08-06T03:02:04Z` snapshot, including the closure commit and push the closing participant flagged as unverifiable from within its own commit. `CONFIRMED` — the snapshot's self-referential closure-verification procedure executed exactly as written (positive protocol finding). `INFERRED` — external delivery pressure against a terminal owner-wait state is a generalizable onboarding hazard; recorded as an issue with three owner options rather than silently resolved.
+- **Verification performed:** `git rev-parse HEAD`/`HEAD^`; `git status --short --branch` (clean, `main...origin/main`); `git diff --name-only bee42f7..HEAD` (exactly the declared closure set); `git ls-remote origin refs/heads/main` (equals local HEAD); `find protocol -type f` (ten regular files) and symlink scan (zero); issue status scan (five `BLOCKED`, six `CLOSED`); HANDOFF five ordered sections, 283 lines, one Next Action. All exit `0`. Dedicated Markdown linters were `NOT RUN` (known unavailable per prior records).
+- **Issues created or updated:** Created [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) as `OPEN` (`Authority: HUMAN`, `Review: SELF`, self-review `COMPLETE`); the five deferred issues remain `BLOCKED` and untouched.
+- **Remaining uncertainty:** This pilot-resumption record still requires its containing commit and push; a fresh participant must verify current remote HEAD before relying on publication.
+- **Recommended next action:** Commit and publish this record, verify local/remote equality, then obey the instruction under Next Action.
 
 ### 2026-08-06T03:02:04Z — ClaudeCode/hardening-review — Fresh Independent Reviewer
 

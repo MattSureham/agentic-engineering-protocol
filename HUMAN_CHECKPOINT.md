@@ -4,12 +4,12 @@ This is a low-bandwidth synchronization point for the human technical owner. It 
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-06T03:02:04Z`
-- **Prepared by:** `ClaudeCode/hardening-review`
-- **Period covered:** Published baseline `e6beeb2cb730183ca2ac13795ad367ad9d9e1099` through closure of the post-pilot hardening issue
+- **Generated UTC:** `2026-08-07T02:25:23Z`
+- **Prepared by:** `ClaudeCode/pilot-1`
+- **Period covered:** Verified hardening closure `774b2e0237c6814cc7b4b491f495ba7965e8e0e4` through the first fresh-participant pilot resumption
 - **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved hardening requirements and specification-evolution policy
-- **Implementation/reference state:** Immutable hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` is independently `APPROVED`; the closure record is the containing commit of this checkpoint revision
-- **Prior checkpoint:** `2026-08-06T02:00:56Z` by `Codex/root` (pre-target; superseded by this entry)
+- **Implementation/reference state:** Immutable hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` is independently `APPROVED`; closure commit `774b2e0` and its push were verified by a fresh participant on `2026-08-07T02:25:23Z`; the pilot-resumption record is the containing commit of this checkpoint revision
+- **Prior checkpoint:** `2026-08-06T03:02:04Z` by `ClaudeCode/hardening-review` (superseded by this entry; one new optional decision added below)
 
 ## System mental model
 
@@ -69,7 +69,9 @@ No architecture proposal is awaiting owner decision.
 
 ## Human attention required
 
-No decision is currently required. The hardening gate is satisfied and closed. Unblocking any deferred capability (concurrency, authenticated identity, runtime automation, scale, tracker integration) requires a new owner-approved specification; none is requested here.
+One optional `LOW` decision: [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) asks whether the reusable and/or root BOOTSTRAP should explicitly state that external prompts do not grant authority and that a terminal owner-wait state is valid to preserve. The issue records three options (accept implicit coverage; change the reusable BOOTSTRAP via the specification-evolution policy; change the root BOOTSTRAP only). No implementation follows unless you approve option 2 or 3.
+
+Unblocking any deferred capability (concurrency, authenticated identity, runtime automation, scale, tracker integration) still requires a new owner-approved specification; none is requested here.
 
 ## No human attention required
 
