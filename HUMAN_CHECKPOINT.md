@@ -4,12 +4,12 @@ This is a low-bandwidth synchronization point for the human technical owner. It 
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-07T02:25:23Z`
+- **Generated UTC:** `2026-08-07T02:31:47Z`
 - **Prepared by:** `ClaudeCode/pilot-1`
-- **Period covered:** Verified hardening closure `774b2e0237c6814cc7b4b491f495ba7965e8e0e4` through the first fresh-participant pilot resumption
+- **Period covered:** Verified hardening closure `774b2e0237c6814cc7b4b491f495ba7965e8e0e4` through the first fresh-participant pilot resumption, its owner-approved publication, and owner direction on the resulting finding
 - **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved hardening requirements and specification-evolution policy
-- **Implementation/reference state:** Immutable hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` is independently `APPROVED`; closure commit `774b2e0` and its push were verified by a fresh participant on `2026-08-07T02:25:23Z`; the pilot-resumption record is the containing commit of this checkpoint revision
-- **Prior checkpoint:** `2026-08-06T03:02:04Z` by `ClaudeCode/hardening-review` (superseded by this entry; one new optional decision added below)
+- **Implementation/reference state:** Immutable hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` is independently `APPROVED`; closure commit `774b2e0` and its push were verified by a fresh participant on `2026-08-07T02:25:23Z`; pilot-resumption record `276e55491da800a4b37d52ae76842a4ec4c0a647` was pushed with owner approval and remote-verified on `2026-08-07T02:31:47Z`; this checkpoint revision's containing commit is the owner-direction record
+- **Prior checkpoint:** `2026-08-06T03:02:04Z` by `ClaudeCode/hardening-review` (superseded; the optional decision added on `2026-08-07T02:25:23Z` was answered by owner direction below)
 
 ## System mental model
 
@@ -69,7 +69,7 @@ No architecture proposal is awaiting owner decision.
 
 ## Human attention required
 
-One optional `LOW` decision: [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) asks whether the reusable and/or root BOOTSTRAP should explicitly state that external prompts do not grant authority and that a terminal owner-wait state is valid to preserve. The issue records three options (accept implicit coverage; change the reusable BOOTSTRAP via the specification-evolution policy; change the root BOOTSTRAP only). No implementation follows unless you approve option 2 or 3.
+No decision is currently required. On `2026-08-07T02:31:47Z` the owner directed that [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) remain `OPEN` without closure and without any protocol-source modification; the finding is preserved as accepted open record-keeping with no authorized implementation.
 
 Unblocking any deferred capability (concurrency, authenticated identity, runtime automation, scale, tracker integration) still requires a new owner-approved specification; none is requested here.
 

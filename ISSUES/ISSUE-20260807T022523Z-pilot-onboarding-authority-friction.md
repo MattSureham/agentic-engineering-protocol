@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `SELF`
 - **Created UTC:** `2026-08-07T02:25:23Z`
-- **Updated UTC:** `2026-08-07T02:25:23Z`
+- **Updated UTC:** `2026-08-07T02:31:47Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) post-pilot hardening requirements and specification-evolution policy; reusable protocol freshness/onboarding requirements
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md) (governance context only)
 - **Evidence:** Inline verification record below; no separate evidence file
@@ -100,6 +100,10 @@ No implementation is proposed by this issue. Candidate owner options, recorded f
 - **Unblock owner:** Human technical owner (`MattSureham`)
 - **Unblock condition:** Recorded owner decision selecting option 1, 2, or 3 (or rejecting the finding with rationale)
 
+## Owner direction
+
+`2026-08-07T02:31:47Z` — Human technical owner (`MattSureham`) directed: retain this finding `OPEN`; do not close it; do not modify the reusable `protocol/` package or root BOOTSTRAP at this time. This selects none of the three recorded options now; it preserves the finding as accepted open record-keeping with no authorized implementation. The decision queue in `HUMAN_CHECKPOINT.md` was updated accordingly.
+
 ## Residual uncertainty
 
 - Whether implicit protocol coverage of terminal owner-wait states is sufficient; owned by the human technical owner via the decision above.
@@ -109,6 +113,7 @@ No implementation is proposed by this issue. Candidate owner options, recorded f
 | UTC time | Participant | From | To | Action, evidence, and reason |
 |---|---|---|---|---|
 | `2026-08-07T02:25:23Z` | `ClaudeCode/pilot-1` | `NONE` | `OPEN` | Created from the first fresh-participant pilot session after verifying all snapshot staleness triggers; records the external-pressure/terminal-state tension and a positive finding on the self-referential closure-verification procedure |
+| `2026-08-07T02:31:47Z` | `ClaudeCode/pilot-1` | `OPEN` | `OPEN` | Recorded owner direction: keep the finding open, do not close, do not modify protocol source; approved push of the pilot-resumption record `276e55491da800a4b37d52ae76842a4ec4c0a647` was completed and remote-verified |
 
 ## Closure checklist
 
