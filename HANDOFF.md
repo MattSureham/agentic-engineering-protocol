@@ -6,21 +6,22 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-07T02:31:47Z`
-- **Repository state:** The approved immutable implementation target is `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`; the published pilot-resumption record is `276e55491da800a4b37d52ae76842a4ec4c0a647`. The commit containing this owner-direction record MUST be a direct child of `276e55491da800a4b37d52ae76842a4ec4c0a647` changing only `HANDOFF.md`, `HUMAN_CHECKPOINT.md`, and `ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md`; resolve its self-referential identity with `git rev-parse HEAD`, verify the path set with `git diff --name-only 276e55491da800a4b37d52ae76842a4ec4c0a647..HEAD`, and require a clean worktree before relying on this snapshot.
-- **Evidence cutoff:** Repository audit captured `2026-08-06T01:39:07Z`; implementor validation through `2026-08-06T02:09:38Z`; independent review round 1 completed `2026-08-06T03:02:04Z`; fresh-participant pilot resumption verification completed `2026-08-07T02:25:23Z`; owner-approved publication and owner direction recorded `2026-08-07T02:31:47Z`.
-- **External checks:** On `2026-08-07T02:31:47Z` the owner-approved push of `276e55491da800a4b37d52ae76842a4ec4c0a647` completed; local HEAD, cached `origin/main`, and direct remote `refs/heads/main` all equal `276e55491da800a4b37d52ae76842a4ec4c0a647`. The owner-direction record commit and its push must be rechecked on resumption because a commit cannot record its own hash.
-- **Stale when:** Checked-out revision/branch changes; dirty paths differ from the three-file owner-direction record set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
+- **Snapshot updated UTC:** `2026-08-10T06:07:54Z`
+- **Repository state:** Published baseline `9f4bd8f529b5b250b20e8142bb9d9321f5cbc13d` is clean and synchronized on `main` before this record-only change. The commit containing [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md) MUST be a direct child of that baseline changing only `HANDOFF.md`, `HUMAN_CHECKPOINT.md`, and the new issue; resolve its self-referential identity with `git rev-parse HEAD`, verify the path set with `git diff --name-only 9f4bd8f529b5b250b20e8142bb9d9321f5cbc13d..HEAD`, and require a clean worktree before relying on this snapshot.
+- **Evidence cutoff:** Repository audit captured `2026-08-06T01:39:07Z`; immutable hardening target validation through `2026-08-06T03:02:04Z`; pilot resumption and owner direction through `2026-08-07T02:31:47Z`; ADR review-record mismatch reproduced and indexed through `2026-08-10T06:07:54Z`.
+- **External checks:** On `2026-08-10T06:07:54Z`, local HEAD, cached `origin/main`, and direct remote `refs/heads/main` all equaled `9f4bd8f529b5b250b20e8142bb9d9321f5cbc13d`. The mismatch-record commit and its push must be rechecked on resumption because a commit cannot record its own hash.
+- **Stale when:** Checked-out revision/branch changes; dirty paths differ from the approved three-file mismatch-record set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
 
-- **CONFIRMED — Objective:** Complete. The owner-approved hardening target received a fresh independent `APPROVED` disposition and the main issue is `CLOSED`; no authorized implementation work remains.
+- **CONFIRMED — Objective:** Preserve the accepted ADR review-state inconsistency without resolving it and wait for the human technical owner's disposition. No source or implementation change is authorized.
 - **CONFIRMED — Authority:** Root [`PROJECT_SPEC.md`](PROJECT_SPEC.md) is `ACCEPTED`; [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md) is accepted at authority boundary `7dea5457828b6590f9ab2a643b58047b032e53d1`.
 - **CONFIRMED — Root adoption:** Immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` defines the root as a separately governed protocol instance with the required seven-tier precedence and passed both implementor verification and fresh independent review.
 - **CONFIRMED — Record separation:** Durable root ADR, issue, evidence, template, and checkpoint artifacts exist. Five legacy closed issue IDs have migrated records; the full pre-compaction HANDOFF is preserved by immutable Git identity below.
 - **CONFIRMED — Pilot preservation:** Historical pilot content is byte-preserved at [`EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md`](EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md), with compatibility pointer [`PILOT_EVIDENCE.md`](PILOT_EVIDENCE.md). Original pilot commits/tests remain absent from root Git and are not clone-reproducible.
 - **CONFIRMED — Reusable product scope:** Only `protocol/BOOTSTRAP.md` and `protocol/HANDOFF.md` were intentionally edited; the package remains exactly ten files and separately governed.
-- **CONFIRMED — Review gate:** Independent review round 1 by `ClaudeCode/hardening-review` returned `APPROVED` on the immutable target with no material findings; [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md) is `CLOSED`. This satisfies the `HARDEN-007` gate; it is not a production-grade, universal-portability, concurrency, identity, or scale claim.
+- **CONFIRMED — Hardening review:** Independent review round 1 by `ClaudeCode/hardening-review` returned `APPROVED` on the immutable target with no material findings, and [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md) is `CLOSED`.
+- **UNKNOWN — ADR review-gate interpretation:** The accepted root-adoption ADR still says no review round is recorded, while the closed hardening issue's approved round includes that ADR in scope and lower-precedence records describe the adoption as independently approved. [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md) owns the conflict; only the human technical owner may decide whether the existing round satisfies the ADR gate.
 - **CONFIRMED — Pilot resumption:** On `2026-08-07T02:25:23Z` a fresh participant (`ClaudeCode/pilot-1`) resumed from repository state only, verified every snapshot staleness trigger including the previously unverified closure commit/push, and opened one `LOW` record-only finding, [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md). On `2026-08-07T02:31:47Z` the owner approved publishing the resumption record (remote-verified) and directed that the finding remain `OPEN` with no protocol-source modification. No implementation was or is authorized.
 
 ### Constraints and uncertainty
@@ -29,6 +30,7 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 - Do not add a runtime, orchestrator, daemon/service, database, complex CLI, external tracker integration, concurrent-writer guarantee, authenticated-identity claim, or large-scale coordination claim.
 - Do not claim production-grade or universal portability from the isolated pilot.
 - Keep root and reusable BOOTSTRAP files separately governed; semantic alignment is reviewed, not assumed from byte identity.
+- Do not modify or reinterpret the accepted root-adoption ADR until the human technical owner selects a disposition for the recorded mismatch.
 - Dedicated Markdown linting remains unavailable unless a later check proves otherwise; unavailable checks are not passes.
 
 ### Unverified complexity
@@ -44,6 +46,7 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
+| [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `SELF` | Accepted ADR says no review round is recorded while the closed hardening issue contains an independent `APPROVED` round | Owner decides whether the existing round satisfies the ADR gate, a fresh ADR-specific review is required, or the mismatch remains accepted open debt |
 | [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `OPEN` | `LOW` | `UNASSIGNED` | `HUMAN` | `SELF` | External task pressure versus terminal owner-wait state in fresh-participant onboarding | Owner directed `2026-08-07T02:31:47Z`: keep open, no protocol change; any future action needs a new owner decision |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define non-cooperating concurrent-writer guarantees | New owner-approved failure model and specification |
 | [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define authenticated identity and approval | New owner-approved trust model, specification, and ADR |
@@ -53,9 +56,21 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 ## Next Action
 
-Wait for the human technical owner. The hardening issue is `CLOSED` with independent `APPROVED`; the five deferred issues remain `BLOCKED` on new owner-approved specifications; the `LOW` pilot-onboarding finding stays `OPEN` per owner direction with no protocol change. No implementation work is authorized. A fresh participant must first verify this record's containing commit, its push, and remote HEAD per the snapshot metadata before doing anything else.
+Human technical owner: decide whether the existing hardening review satisfies the accepted root-adoption ADR's review gate, requires a fresh ADR-specific independent review, or should remain accepted open debt with rationale. Until that decision is durably recorded, leave the ADR unchanged, keep the mismatch issue `BLOCKED`, and make no maturity claim or corrective implementation.
 
 ## Recent Activity
+
+### 2026-08-10T06:07:54Z — Codex/root — ADR Review-State Conflict Recorder
+
+- **Task:** Determine whether an issue already covered the accepted ADR/hardening-closure inconsistency; if not, record it without resolving or modifying the ADR.
+- **Context inspected:** Root BOOTSTRAP, PROJECT_SPEC, accepted root-adoption ADR, closed hardening issue, all issue statuses, HANDOFF, HUMAN_CHECKPOINT, Git history, local/cached/direct-remote baseline, and repository-wide conflict search.
+- **Actions performed:** Confirmed no existing issue owns the exact mismatch; created one `BLOCKED`, owner-gated issue; updated only the operational index and owner decision queue. The ADR, specification, product package, evidence, implementation, and every existing issue state remain untouched.
+- **Files modified:** Created `ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md`; updated this HANDOFF and `HUMAN_CHECKPOINT.md` only.
+- **Findings:** `CONFIRMED` — the ADR requires review and says none is recorded. `CONFIRMED` — the closed hardening issue contains an independent `APPROVED` round whose scope includes the ADR. `UNKNOWN` — whether that round satisfies the ADR's own gate; owner decision required.
+- **Verification performed:** Baseline was clean and synchronized at `9f4bd8f529b5b250b20e8142bb9d9321f5cbc13d`. Post-edit validation at `2026-08-10T06:12:48Z` passed: exactly the three approved paths; ADR/root-spec/root-BOOTSTRAP identities and protocol tree unchanged; 36 Markdown files with resolved relative links, balanced fences, and final newlines; HANDOFF five sections, one Next Action, seven unresolved rows, and 21 recent entries; `git diff --check` exit `0`. Dedicated `markdownlint` is `NOT AVAILABLE`, so it is not claimed as passed.
+- **Issues created or updated:** Created the mismatch issue as `OPEN` then `BLOCKED`; all six prior unresolved issue states remain unchanged.
+- **Remaining uncertainty:** The authorized interpretation and any later reconciliation mechanism.
+- **Recommended next action:** Obtain exactly the owner disposition stated under Next Action; do not modify the ADR in this change.
 
 ### 2026-08-07T02:31:47Z — ClaudeCode/pilot-1 — Publication Verifier and Owner-Direction Recorder
 
