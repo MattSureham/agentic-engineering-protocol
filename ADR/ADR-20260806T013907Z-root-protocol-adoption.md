@@ -103,8 +103,15 @@ The root must dogfood the protocol without allowing edits to the reusable produc
 
 No review round has been recorded. Review the immutable hardening target rather than this mutable implementation state.
 
+### 2026-08-10T07:25:05Z — Owner status clarification
+
+The sentence immediately above is retained unchanged as a historical statement that was true when this ADR was accepted. The independent review was subsequently completed on `2026-08-06T03:02:04Z` by `ClaudeCode/hardening-review` against immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`; its complete round and `APPROVED` disposition are recorded in [`ISSUE-20260806T013907Z-post-pilot-hardening`](../ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), supported by [`EVIDENCE-20260806T020056Z-hardening-validation`](../EVIDENCE/EVIDENCE-20260806T020056Z-hardening-validation.md) and [`EVIDENCE-20260806T013907Z-post-pilot-audit`](../EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md).
+
+Human technical owner `MattSureham` determined on `2026-08-10T07:25:05Z` that this completed review satisfies the substantive independent-review intent of this ADR. This attributable status clarification changes neither the architectural decision nor its rationale or `ACCEPTED` status. No fresh ADR-specific review is required for this clarification; any later change to the architectural decision remains subject to the repository's authority and review rules. Recorded by `Codex/root` from the owner's explicit direction.
+
 ## Status history
 
 | UTC time | From | To | Actor | Reason and authority evidence |
 |---|---|---|---|---|
 | `2026-08-06T01:39:07Z` | `NONE` | `ACCEPTED` | `Codex/root` | Human technical owner approved the complete adoption architecture before implementation |
+| `2026-08-10T07:25:05Z` | `ACCEPTED` | `ACCEPTED` | Human technical owner `MattSureham`, recorded by `Codex/root` | Clarified that the subsequent independent hardening review satisfies this ADR's review intent; original acceptance-time statement and architectural decision remain unchanged; see [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](../ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md) |
