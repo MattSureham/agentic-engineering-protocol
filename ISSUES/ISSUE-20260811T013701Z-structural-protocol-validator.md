@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260811T013701Z-structural-protocol-validator`
 - **Title:** Codify stable structural protocol invariants
-- **Status:** `INVESTIGATING`
+- **Status:** `VERIFYING`
 - **Severity:** `MEDIUM`
 - **Owner:** `Codex/root`
 - **Authority:** `AGENT`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-11T01:37:01Z`
-- **Updated UTC:** `2026-08-11T01:37:01Z`
+- **Updated UTC:** `2026-08-11T02:03:55Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), especially Scope constraints, Quality bar, `HARDEN-003`, `HARDEN-006`, and hardening acceptance criterion 5
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
 - **Evidence:** [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](../EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md)
@@ -42,8 +42,8 @@ No specification or ADR change is proposed. The checker stays outside `protocol/
 
 ## Change
 
-- **Files or components:** Planned root-only `scripts/validate_protocol.py`, `tests/test_validate_protocol.py`, concise root README navigation, this issue, evidence, HANDOFF, and HUMAN_CHECKPOINT
-- **Behavior changed:** Repository participants gain an optional repeatable structural check; reusable package behavior and adoption remain unchanged
+- **Files or components:** Root-only `scripts/validate_protocol.py`, `tests/test_validate_protocol.py`, Python cache exclusions in `.gitignore`, concise root README navigation, this issue, evidence, HANDOFF, and HUMAN_CHECKPOINT
+- **Behavior changed:** Repository participants gain an optional repeatable structural check with stable diagnostics and exits `0`/`1`/`2`; reusable package behavior and adoption remain unchanged
 - **Out-of-scope work deliberately excluded:** Product-shipped tooling, issue closure automation, authority/review/evidence judgments, orchestration, scheduling, concurrent-writer guarantees, authenticated identity, daemon/service/database, complex CLI, CI integration, large-scale coordination, and external trackers
 - **Rollback or recovery:** Revert the root-only checker, tests, and navigation while retaining this issue and evidence as historical records
 
@@ -59,16 +59,23 @@ No specification or ADR change is proposed. The checker stays outside `protocol/
 | UTC time | Participant | Command or procedure | Result and exit status | Evidence | Limitations |
 |---|---|---|---|---|---|
 | `2026-08-11T01:37:01Z` | `Codex/root` | Baseline Git/fetch/ancestry, tree inventory, governing-source hashes, package tree identity, Python/linter availability | Clean synchronized baseline `3dc8902`; exact ten-file/no-symlink package; Python `3.9.6`; dedicated Markdown linters unavailable | [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](../EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md) | No implementation existed or ran at this point |
+| `2026-08-11T01:58:37Z` | `Codex/root` | `python3 scripts/validate_protocol.py`; `python3 -m unittest discover -s tests -v`; `python3 -m py_compile ...`; `git diff --check` | Corrected implementation passes: validator exit `0`; 20 tests exit `0`; compilation and whitespace checks exit `0` | Inline output; durable exact-target evidence will follow the implementation commit | Current Darwin/Python `3.9.6` only; no CommonMark claim |
+| `2026-08-11T01:58:37Z` | `Codex/validator_audit` | Read-only adversarial pre-review of the uncommitted checker and tests | Found two HIGH, three MEDIUM, and one LOW implementation/harness gaps: fenced HANDOFF false structure, indented-list false pass, nested-code false violations, local-absolute link skip, traversal error classification, and missing CLI summary | Attributable agent report summarized here; follow-up requested after corrections | Preparatory audit only, not the required independent disposition |
+| `2026-08-11T01:58:37Z` | `Codex/root` | Correct the audit findings and rerun the expanded suite | First post-refactor suite exited `1`: multiline masking replaced newline characters and caused a caught `IndexError`/tool exit `2` in one test. The newline-preserving correction then passed all 20 tests and repository validation. | Inline command output; regression cases retained in `tests/test_validate_protocol.py` | Discarded failing harness run is not a protocol failure or a pass; exact-target rerun remains pending |
+| `2026-08-11T02:03:55Z` | `Codex/validator_audit` | First correction follow-up against all original findings | Original findings were resolved, but the audit found one new HIGH and two MEDIUM parser cases: inline code incorrectly crossing a blank block boundary, list-item fences misparsed as violations, and one-letter external URI schemes misclassified as drive paths | Attributable agent report and added regression cases | Preparatory audit only; no review disposition |
+| `2026-08-11T02:03:55Z` | `Codex/root` | Block-aware inline masking, list-container fence handling, narrower drive-path recognition, and expanded regression suite | Validator exit `0`; all 21 tests pass; the three new cases now produce the intended violation/pass/pass results | Inline output and `tests/test_validate_protocol.py` | Full CommonMark remains out of scope; indented link-like syntax is conservatively unsupported |
+| `2026-08-11T02:03:55Z` | `Codex/validator_audit` | Narrow final recheck of the three new findings | All three resolved; all 21 tests, repository validation, and `git diff --check` pass; no remaining HIGH or MEDIUM regression found in that bounded recheck | Attributable agent report | Still not the required independent review of an immutable target |
+| `2026-08-11T02:03:55Z` | `Codex/root` | Initial combined pre-target shell harness | `NOT RUN`: execution layer rejected the command before process creation because temporary cleanup used a prohibited removal form; checks were rerun in smaller non-destructive commands | Direct tool rejection plus subsequent rows/commands | Rejection establishes neither pass nor repository failure |
 
 ## Self-review
 
 - **Participant:** `Codex/root`
-- **Reviewed UTC:** `NOT YET PERFORMED`
-- **Reviewed repository state:** `NOT YET AVAILABLE`
-- **Scope and authority references:** `NOT YET REVIEWED`
-- **Checks and evidence reviewed:** `NOT YET REVIEWED`
-- **Findings and corrections:** `NOT YET REVIEWED`
-- **Limitations:** This issue requires independent review; implementor self-review will prepare but cannot satisfy that gate.
+- **Reviewed UTC:** `2026-08-11T01:58:37Z`
+- **Reviewed repository state:** Working tree based on analysis boundary `57c2746`; immutable implementation commit not yet created
+- **Scope and authority references:** Root-only checker/tests/navigation against the accepted specification's tiny-helper allowance, `HARDEN-006`, accepted root-adoption ADR, and linked analysis
+- **Checks and evidence reviewed:** Current validator result, 20-test suite, compilation, diff whitespace, source/package boundary, and adversarial pre-review findings
+- **Findings and corrections:** Corrected the initial two HIGH/three MEDIUM/one LOW audit findings, the follow-up HIGH/two MEDIUM findings, and the intermediate newline-mask regression; the final narrow pre-review recheck found no remaining HIGH or MEDIUM regression
+- **Limitations:** This issue requires independent review; implementor self-review and adversarial preparation cannot satisfy that gate. Dedicated Markdown linting and non-Darwin portability remain unavailable.
 - **Residual risks:** False passes could incorrectly influence future compliance claims.
 - **Outcome:** `NOT_APPLICABLE`
 
@@ -96,6 +103,9 @@ No independent review round has been recorded.
 |---|---|---|---|---|
 | `2026-08-11T01:37:01Z` | `Codex/root` | `NONE` | `OPEN` | Created the meaningful codification issue before implementation |
 | `2026-08-11T01:37:01Z` | `Codex/root` | `OPEN` | `INVESTIGATING` | Completed repository recovery and bounded the candidate slice through linked evidence |
+| `2026-08-11T01:44:13Z` | `Codex/root` | `INVESTIGATING` | `IMPLEMENTING` | Began only the approved root-local checker, tests, and non-authoritative README navigation after committing analysis boundary `57c2746` |
+| `2026-08-11T01:58:37Z` | `Codex/root` | `IMPLEMENTING` | `VERIFYING` | The bounded implementation and expanded regression suite pass after attributable pre-review corrections; exact-target evidence remains required |
+| `2026-08-11T02:03:55Z` | `Codex/root` | `VERIFYING` | `VERIFYING` | Preserved follow-up findings and corrections additively; 21 tests and final bounded pre-review recheck pass |
 
 ## Closure checklist
 

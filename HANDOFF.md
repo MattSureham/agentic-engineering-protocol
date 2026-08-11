@@ -6,15 +6,15 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-11T01:37:01Z`
-- **Repository state:** Clean, synchronized `main` baseline `3dc8902f5ccd9fb67330e25e57380c119f717f25` was recovered before the codification-analysis records were opened. Current intended dirty paths are this HANDOFF, `HUMAN_CHECKPOINT.md`, [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md), and [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md) until the analysis boundary is committed.
-- **Evidence cutoff:** Prior durable evidence through the `2026-08-10T07:32:36Z` ADR reconciliation plus the codification gap analysis captured `2026-08-11T01:37:01Z` against baseline `3dc8902`.
+- **Snapshot updated UTC:** `2026-08-11T01:58:37Z`
+- **Repository state:** Analysis boundary `57c2746` is committed on `main` above synchronized remote baseline `3dc8902`. The intended implementation worktree contains only `.gitignore`, root `README.md`, this HANDOFF, the active issue, `HUMAN_CHECKPOINT.md`, `scripts/validate_protocol.py`, and `tests/test_validate_protocol.py`; it has not yet been frozen as an immutable target.
+- **Evidence cutoff:** Durable codification analysis at boundary `57c2746` plus corrected implementation and preparatory audit observations through `2026-08-11T01:58:37Z`; exact-target evidence remains pending.
 - **External checks:** On `2026-08-11T01:37:01Z`, `git fetch origin main` succeeded and local HEAD and cached `origin/main` both equaled `3dc8902f5ccd9fb67330e25e57380c119f717f25`; the remote must be fetched and compared again before publication.
 - **Stale when:** Checked-out revision/branch changes; dirty paths differ from the recorded codification phase; newer issue/evidence/ADR changes a claim; cached or direct remote changes; validation output changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
 
-- **CONFIRMED — Objective:** The owner authorized a bounded codification phase. [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `INVESTIGATING`; implement only the root-local structural checker identified by the linked analysis, then leave its immutable target for independent review.
+- **CONFIRMED — Objective:** The owner authorized a bounded codification phase. [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `VERIFYING`; freeze and revalidate only the root-local structural checker identified by the linked analysis, then leave its immutable target for independent review.
 - **CONFIRMED — Authority:** Root [`PROJECT_SPEC.md`](PROJECT_SPEC.md) is `ACCEPTED`; [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md) is accepted at authority boundary `7dea5457828b6590f9ab2a643b58047b032e53d1`.
 - **INFERRED — Codification boundary:** The specification's tiny-helper allowance and executable-contract tier authorize optional root test tooling. `HARDEN-006` and the accepted ADR forbid adding it to the reusable bundle; the package tree remains `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb` until implementation verification proves otherwise.
 - **CONFIRMED — Root adoption:** Immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` defines the root as a separately governed protocol instance with the required seven-tier precedence and passed both implementor verification and fresh independent review.
@@ -49,7 +49,7 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
-| [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) | `INVESTIGATING` | `MEDIUM` | `Codex/root` | `AGENT` | `INDEPENDENT` | Codify stable structural protocol invariants without redefining Markdown authority | Implement only the analysis-bounded root checker, verify it, and supply an immutable target for fresh review |
+| [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) | `VERIFYING` | `MEDIUM` | `Codex/root` | `AGENT` | `INDEPENDENT` | Codify stable structural protocol invariants without redefining Markdown authority | Freeze the corrected checker, rerun exact-target validation, and supply it for fresh review |
 | [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `OPEN` | `LOW` | `UNASSIGNED` | `HUMAN` | `SELF` | External task pressure versus terminal owner-wait state in fresh-participant onboarding | Owner directed `2026-08-07T02:31:47Z`: keep open, no protocol change; any future action needs a new owner decision |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define non-cooperating concurrent-writer guarantees | New owner-approved failure model and specification |
 | [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define authenticated identity and approval | New owner-approved trust model, specification, and ADR |
@@ -59,7 +59,7 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 ## Next Action
 
-Implement and test only the root-local structural checker bounded by [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md), without changing the accepted specification, either BOOTSTRAP, accepted ADR, reusable package, or deferred runtime-automation issue.
+Commit the corrected root-local checker as an immutable implementation target, rerun the full validation against that target, and record the exact target for fresh independent review without changing governed sources.
 
 ## Recent Activity
 

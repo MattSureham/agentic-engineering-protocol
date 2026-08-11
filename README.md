@@ -18,3 +18,7 @@ Root truth precedence is `PROJECT_SPEC → accepted ADRs → contracts/tests →
 The copy-ready protocol lives under [`protocol/`](protocol/). Its full philosophy, quick start, workflow, roles, and limitations are documented in [`protocol/README.md`](protocol/README.md).
 
 The package is intentionally Markdown- and filesystem-based. It does not require a particular programming language, framework, model vendor, CI provider, version-control system, database, service, or orchestrator.
+
+## Optional development validation
+
+Repository maintainers with Python 3 may run `python3 scripts/validate_protocol.py` and `python3 -m unittest discover -s tests -v`. This root-only, read-only helper checks a bounded set of structural invariants; it is not protocol authority, does not validate human judgment, and is not included in or required by the reusable package.
