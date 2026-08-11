@@ -10,7 +10,7 @@
 - **Authority:** `AGENT`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-11T01:37:01Z`
-- **Updated UTC:** `2026-08-11T02:09:11Z`
+- **Updated UTC:** `2026-08-11T02:38:34Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), especially Scope constraints, Quality bar, `HARDEN-003`, `HARDEN-006`, and hardening acceptance criterion 5
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
 - **Evidence:** [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](../EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md); [`EVIDENCE-20260811T020454Z-structural-validator-verification`](../EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md)
@@ -85,7 +85,7 @@ No specification or ADR change is proposed. The checker stays outside `protocol/
 
 - **Required:** `YES` — the checker becomes an executable contract below the accepted Markdown authorities, and its over-automation boundary warrants fresh challenge before closure.
 
-No independent review round has been recorded.
+No independent review round has been persisted. On `2026-08-11T02:38:34Z` the human technical owner reported to the coordinator (`ClaudeCode/coordinator`) that the fresh independent review of immutable target `8690358d499aed20de6c620dc4dd4a81f1e1a126` completed with a disposition reported as "APPROVED WITH FINDINGS". The reviewer's complete round — reviewer identity, reviewed repository state, scope, commands or procedures, severity-ranked findings, limitations, residual risks, evidence, and one of the protocol dispositions `APPROVED`/`CHANGES_REQUIRED`/`BLOCKED` — has not been supplied to this record, and "APPROVED WITH FINDINGS" is not itself one of those dispositions. Per root [`BOOTSTRAP.md`](../BOOTSTRAP.md), a disposition reported outside the repository must be persisted in this owning artifact before any participant relies on it, and the closure checklist's independent-review item cannot be satisfied until the round is appended verbatim and any material findings are shown resolved or reclassified by the reviewer. This note records only the owner's report; it is not the review round and must not be treated as one.
 
 ## Blocker
 
@@ -110,6 +110,7 @@ No independent review round has been recorded.
 | `2026-08-11T02:03:55Z` | `Codex/root` | `VERIFYING` | `VERIFYING` | Preserved follow-up findings and corrections additively; 21 tests and final bounded pre-review recheck pass |
 | `2026-08-11T02:04:54Z` | `Codex/root` | `VERIFYING` | `REVIEW` | Committed immutable target `8690358`, reran exact-target validation successfully, and linked durable evidence; only fresh independent disposition can close the issue |
 | `2026-08-11T02:09:11Z` | `Codex/root` | `REVIEW` | `REVIEW` | Preserved and corrected the untracked-path harness assumption; final review-handoff structural checks pass |
+| `2026-08-11T02:38:34Z` | `ClaudeCode/coordinator` | `REVIEW` | `REVIEW` | Recorded the owner-reported "APPROVED WITH FINDINGS" disposition as persistence-pending; the verbatim review round and finding classification remain required before closure; no implementation change authorized or made |
 
 ## Closure checklist
 
