@@ -6,28 +6,30 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-10T07:32:36Z`
-- **Repository state:** Published baseline `8d9756a6c90dd46f4035f46563b1b352c67eddd2` is clean and synchronized on `main` before this owner-authorized reconciliation. The containing commit MUST be a direct child of that baseline changing only `ADR/ADR-20260806T013907Z-root-protocol-adoption.md`, `HANDOFF.md`, `HUMAN_CHECKPOINT.md`, and `ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md`; resolve its self-referential identity with `git rev-parse HEAD`, verify the path set with `git diff --name-only 8d9756a6c90dd46f4035f46563b1b352c67eddd2..HEAD`, and require a clean worktree before relying on this snapshot.
-- **Evidence cutoff:** Repository audit captured `2026-08-06T01:39:07Z`; immutable hardening target and independent review through `2026-08-06T03:02:04Z`; pilot resumption and owner direction through `2026-08-07T02:31:47Z`; mismatch discovery and publication through `2026-08-10T06:12:48Z`; owner disposition, additive reconciliation, and final post-closure validation through `2026-08-10T07:32:36Z`.
-- **External checks:** On `2026-08-10T07:25:05Z`, local HEAD, cached `origin/main`, and direct remote `refs/heads/main` all equaled `8d9756a6c90dd46f4035f46563b1b352c67eddd2`. The reconciliation commit and its push must be rechecked on resumption because a commit cannot record its own hash.
-- **Stale when:** Checked-out revision/branch changes; dirty paths differ from the approved four-file reconciliation set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
+- **Snapshot updated UTC:** `2026-08-11T01:37:01Z`
+- **Repository state:** Clean, synchronized `main` baseline `3dc8902f5ccd9fb67330e25e57380c119f717f25` was recovered before the codification-analysis records were opened. Current intended dirty paths are this HANDOFF, `HUMAN_CHECKPOINT.md`, [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md), and [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md) until the analysis boundary is committed.
+- **Evidence cutoff:** Prior durable evidence through the `2026-08-10T07:32:36Z` ADR reconciliation plus the codification gap analysis captured `2026-08-11T01:37:01Z` against baseline `3dc8902`.
+- **External checks:** On `2026-08-11T01:37:01Z`, `git fetch origin main` succeeded and local HEAD and cached `origin/main` both equaled `3dc8902f5ccd9fb67330e25e57380c119f717f25`; the remote must be fetched and compared again before publication.
+- **Stale when:** Checked-out revision/branch changes; dirty paths differ from the recorded codification phase; newer issue/evidence/ADR changes a claim; cached or direct remote changes; validation output changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
 
-- **CONFIRMED — Objective:** Complete. The owner-authorized ADR review-record clarification is additive, verified, and [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md) is `CLOSED`; no authorized implementation work remains.
+- **CONFIRMED — Objective:** The owner authorized a bounded codification phase. [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `INVESTIGATING`; implement only the root-local structural checker identified by the linked analysis, then leave its immutable target for independent review.
 - **CONFIRMED — Authority:** Root [`PROJECT_SPEC.md`](PROJECT_SPEC.md) is `ACCEPTED`; [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md) is accepted at authority boundary `7dea5457828b6590f9ab2a643b58047b032e53d1`.
+- **INFERRED — Codification boundary:** The specification's tiny-helper allowance and executable-contract tier authorize optional root test tooling. `HARDEN-006` and the accepted ADR forbid adding it to the reusable bundle; the package tree remains `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb` until implementation verification proves otherwise.
 - **CONFIRMED — Root adoption:** Immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` defines the root as a separately governed protocol instance with the required seven-tier precedence and passed both implementor verification and fresh independent review.
 - **CONFIRMED — Record separation:** Durable root ADR, issue, evidence, template, and checkpoint artifacts exist. Five legacy closed issue IDs have migrated records; the full pre-compaction HANDOFF is preserved by immutable Git identity below.
 - **CONFIRMED — Pilot preservation:** Historical pilot content is byte-preserved at [`EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md`](EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md), with compatibility pointer [`PILOT_EVIDENCE.md`](PILOT_EVIDENCE.md). Original pilot commits/tests remain absent from root Git and are not clone-reproducible.
 - **CONFIRMED — Reusable product scope:** Only `protocol/BOOTSTRAP.md` and `protocol/HANDOFF.md` were intentionally edited; the package remains exactly ten files and separately governed.
 - **CONFIRMED — Hardening review:** Independent review round 1 by `ClaudeCode/hardening-review` returned `APPROVED` on the immutable target with no material findings, and [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md) is `CLOSED`.
 - **CONFIRMED — ADR review-gate interpretation:** Human technical owner `MattSureham` determined on `2026-08-10T07:25:05Z` that the hardening issue's independent `APPROVED` round satisfies the ADR's substantive review intent. The ADR retains its original acceptance-time statement and adds an attributable status clarification; its architecture, rationale, and `ACCEPTED` status are unchanged.
-- **CONFIRMED — Pilot resumption:** On `2026-08-07T02:25:23Z` a fresh participant (`ClaudeCode/pilot-1`) resumed from repository state only, verified every snapshot staleness trigger including the previously unverified closure commit/push, and opened one `LOW` record-only finding, [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md). On `2026-08-07T02:31:47Z` the owner approved publishing the resumption record (remote-verified) and directed that the finding remain `OPEN` with no protocol-source modification. No implementation was or is authorized.
+- **CONFIRMED — Pilot resumption:** On `2026-08-07T02:25:23Z` a fresh participant (`ClaudeCode/pilot-1`) resumed from repository state only, verified every snapshot staleness trigger including the previously unverified closure commit/push, and opened one `LOW` record-only finding, [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md). On `2026-08-07T02:31:47Z` the owner directed that finding to remain `OPEN` with no protocol-source modification; the current codification authorization does not alter it.
 
 ### Constraints and uncertainty
 
 - Preserve the Markdown-first, runtime-, language-, framework-, vendor-, CI-, and version-control-agnostic product boundary.
 - Do not add a runtime, orchestrator, daemon/service, database, complex CLI, external tracker integration, concurrent-writer guarantee, authenticated-identity claim, or large-scale coordination claim.
+- Keep the optional checker outside `protocol/`; it may validate existing deterministic structure but cannot define semantics, authority, review, evidence sufficiency, or lifecycle closure.
 - Do not claim production-grade or universal portability from the isolated pilot.
 - Keep root and reusable BOOTSTRAP files separately governed; semantic alignment is reviewed, not assumed from byte identity.
 - Preserve the additive ADR clarification and original historical text; any later architectural decision change remains subject to human authority and independent review.
@@ -36,6 +38,7 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 ### Unverified complexity
 
 - Separate root/product governance is justified by the accepted ADR and covered by planned semantic review; future divergence still requires participant judgment.
+- The optional Python development checker introduces a bounded parser and support surface; tests and independent review must cover false-pass and product-boundary risks.
 - All five deferred capability areas remain linked to `BLOCKED` issues and have no implementation.
 
 ### Background tasks
@@ -46,6 +49,7 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
+| [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) | `INVESTIGATING` | `MEDIUM` | `Codex/root` | `AGENT` | `INDEPENDENT` | Codify stable structural protocol invariants without redefining Markdown authority | Implement only the analysis-bounded root checker, verify it, and supply an immutable target for fresh review |
 | [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `OPEN` | `LOW` | `UNASSIGNED` | `HUMAN` | `SELF` | External task pressure versus terminal owner-wait state in fresh-participant onboarding | Owner directed `2026-08-07T02:31:47Z`: keep open, no protocol change; any future action needs a new owner decision |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define non-cooperating concurrent-writer guarantees | New owner-approved failure model and specification |
 | [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define authenticated identity and approval | New owner-approved trust model, specification, and ADR |
@@ -55,9 +59,21 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 ## Next Action
 
-Wait for the human technical owner. The ADR review-record mismatch is `CLOSED`; the `LOW` pilot-onboarding finding remains `OPEN` under prior owner direction; five deferred capability issues remain `BLOCKED` on new owner-approved specifications. No implementation work is authorized.
+Implement and test only the root-local structural checker bounded by [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md), without changing the accepted specification, either BOOTSTRAP, accepted ADR, reusable package, or deferred runtime-automation issue.
 
 ## Recent Activity
+
+### 2026-08-11T01:37:01Z — Codex/root — Protocol Codification Engineer
+
+- **Task:** Recover current authority and classify which existing protocol invariants can safely become mechanically verifiable before writing executable code.
+- **Context inspected:** Complete accepted root specification and BOOTSTRAP; current HANDOFF/checkpoint; accepted root-adoption ADR; all unresolved issues; reusable BOOTSTRAP, HANDOFF, README, specification, and record templates; recent audit and hardening evidence; clean Git/remote state and package tree.
+- **Actions performed:** Classified judgment, deterministic, and future-automation rules; bounded the smallest useful checker; opened the independently reviewed implementation issue before code; recorded why root-only validation does not alter the ten-file product or unblock runtime automation.
+- **Files modified:** Created [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md) and [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md); updated this HANDOFF and `HUMAN_CHECKPOINT.md`.
+- **Findings:** `CONFIRMED` — no reusable validator exists and prior checks are one-off. `CONFIRMED` — the package must remain exactly ten runtime-agnostic Markdown files. `INFERRED` — the accepted tiny-helper allowance authorizes a root-only structural test helper. `UNKNOWN` — independent review disposition and portability beyond the current environment.
+- **Verification performed:** Clean synchronized baseline/fetch/ancestry, governing-source digests, exact package tree, zero symlinks, Python version, linter availability, and existing HANDOFF headings were inspected; no implementation test ran because code does not yet exist.
+- **Issues created or updated:** Opened the validator issue as `INVESTIGATING`; the prior onboarding issue and five deferred issues are unchanged.
+- **Remaining uncertainty:** Parser behavior, regression coverage, immutable implementation identity, and fresh independent disposition.
+- **Recommended next action:** Perform the single implementation action under Next Action.
 
 ### 2026-08-10T07:32:36Z — Codex/root — ADR Review-Record Reconciliation Agent
 

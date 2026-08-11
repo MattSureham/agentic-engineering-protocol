@@ -4,12 +4,12 @@ This is a low-bandwidth synchronization point for the human technical owner. It 
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-10T07:32:36Z`
+- **Generated UTC:** `2026-08-11T01:37:01Z`
 - **Prepared by:** `Codex/root`
-- **Period covered:** Verified hardening closure through published mismatch baseline `8d9756a6c90dd46f4035f46563b1b352c67eddd2` and the owner's resolution of the accepted-ADR review-state inconsistency
+- **Period covered:** Published repository through clean synchronized baseline `3dc8902f5ccd9fb67330e25e57380c119f717f25` and the owner-authorized structural-codification analysis boundary
 - **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved hardening requirements and specification-evolution policy
-- **Implementation/reference state:** Immutable hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` has an independent `APPROVED` round in the closed hardening issue. Human technical owner `MattSureham` determined that it satisfies the accepted ADR's substantive review intent; the additive ADR clarification passed reconciliation verification without changing architecture or prior text, and the mismatch issue is `CLOSED`.
-- **Prior checkpoint:** `2026-08-10T06:07:54Z` by `Codex/root` (superseded by this owner-decision record)
+- **Implementation/reference state:** The accepted hardening architecture remains approved and unchanged. [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `INVESTIGATING`; no checker implementation or new maturity claim exists yet.
+- **Prior checkpoint:** `2026-08-10T07:32:36Z` by `Codex/root` (superseded by this codification-phase record)
 
 ## System mental model
 
@@ -25,6 +25,7 @@ Agents are replaceable participants. HANDOFF is a compact continuity index, not 
 | Separate operational and durable records | Keep HANDOFF resumable rather than archival | ADRs/issues/evidence own durable detail; HANDOFF indexes unresolved state only | [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), `CLOSED` |
 | Qualify pilot portability | Avoid claims unsupported by clone-contained artifacts | Historical record preserved; original pilot remains externally dependent | [`EVIDENCE-20260806T013907Z-post-pilot-audit`](EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md) |
 | Resolve accepted-ADR review-state mismatch | Persist the owner's interpretation without rewriting acceptance-time history | No product or architecture change; additive ADR note and record reconciliation only | [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md), `CLOSED` after verification |
+| Bound the first executable codification slice | Replace repeated one-off structural harnesses without automating judgment | Planned root-only optional checker; reusable package and authority hierarchy unchanged | [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md); implementation requires independent review |
 
 ## Architecture decisions
 
@@ -46,12 +47,14 @@ No architecture proposal or disputed architectural decision awaits owner action.
 |---|---|---|---|
 | Separate root/product protocol governance | Prevent silent authority coupling | Accepted ADR, semantic/link validation, independent review | Future divergence still requires judgment and review |
 | Live HANDOFF archival burden retired | Restore compact operational continuity | Migrated issue/evidence records and immutable Git provenance | None; independently verified |
+| Optional root Python structural checker | Make stable package/HANDOFF invariants repeatable | Standard-library tests and independent review are required before closure | Full CommonMark, semantic correctness, portability, and shipped automation remain outside scope |
 
 ### Drift assessment
 
 - **Last independent drift review:** Fresh independent review of the hardening target completed `2026-08-06T03:02:04Z` with disposition `APPROVED` and no material findings.
 - **Classification:** The legacy split-truth drift is resolved as `ALIGNED` at the approved target; future root/product semantic divergence remains review-dependent by design.
 - **Owner-relevant differences:** None outstanding for the review-record mismatch. The owner determination and additive status note preserve the original acceptance-time statement, and reconciliation verification passed. No broader maturity claim is introduced.
+- **Codification boundary:** The planned checker observes lower-tier structure only. It does not change the accepted architecture, source precedence, or reusable package and will remain in `REVIEW` until a fresh participant challenges that boundary.
 
 ## Assumptions and uncertainty that changed
 
@@ -61,13 +64,14 @@ No architecture proposal or disputed architectural decision awaits owner action.
 | `CONFIRMED` | Pilot record was treated as sufficient project evidence | It preserves an attributed result but not clone-based reproduction of original tests/commits | Post-pilot audit |
 | `CONFIRMED` | Whether the hardening issue's independent round satisfies the accepted ADR's review intent was unresolved | The human technical owner determined that it does; the original ADR sentence remains historical acceptance-time context | [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md) and the additive ADR note |
 | `UNKNOWN` | Broader portability | Still unestablished | No production-grade or universal claim |
+| `INFERRED` | Stable checks required participants to recreate ad hoc harnesses | A root-only tiny helper is authorized test organization when it preserves the ten-file product boundary | [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md); fresh review still required |
 
 ## Confidence and verification
 
-- **What is directly verified:** Conflicting legacy role statements resolved at the target; pre-hardening digests/line counts; absent pilot Git objects; exact ten-file package inventory with zero symlinks; byte-preserved pilot and five legacy issue bodies; exact root/package policy match; link integrity; isolated copy readiness; one fresh independent `APPROVED` hardening round; additive ADR reconciliation with all historical lines retained and no architectural change.
+- **What is directly verified:** Prior hardening and reconciliation evidence remains intact; baseline `3dc8902` was clean and synchronized; no committed validator existed; the package still had exactly ten regular files and zero symlinks; Python `3.9.6` was available.
 - **What was independently reviewed:** The hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` (round 1, `APPROVED`), plus the earlier protocol, migration, and specification-evolution targets.
-- **What was not run or remains unverified:** Dedicated Markdown linting (unavailable to implementor and reviewer alike), broader platform portability, concurrency guarantees, authenticated identity, large-scale coordination.
-- **Known regressions or unresolved risks:** No product regression, architectural change, or unresolved review-record mismatch is established. The five deferred capability areas remain `BLOCKED` pending owner-approved specifications.
+- **What was not run or remains unverified:** No checker implementation exists yet; dedicated Markdown linting remains unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
+- **Known regressions or unresolved risks:** A structural checker could overreach or false-pass if it conflates syntax with authority. The implementation is bounded by evidence and requires independent review; five deferred capability areas remain `BLOCKED`.
 
 ## Human attention required
 
@@ -77,11 +81,13 @@ On `2026-08-07T02:31:47Z` the owner directed that [`ISSUE-20260807T022523Z-pilot
 
 Unblocking any deferred capability (concurrency, authenticated identity, runtime automation, scale, tracker integration) still requires a new owner-approved specification; none is requested here.
 
+No additional owner decision is required for the approved root-only structural slice. Any proposal to ship tooling with `protocol/`, require it for adopters, or broaden it into runtime automation remains owner-gated.
+
 ## No human attention required
 
-- Routine record-keeping, compaction, and evidence preservation continue under the adopted root protocol without owner involvement.
+- Implementing and self-verifying the analysis-bounded root checker is authorized; closure still requires a fresh independent review.
 
 ## Next checkpoint trigger
 
-- **Trigger:** Any owner decision on deferred scope, any material root/product semantic divergence, or the next meaningful milestone
-- **Expected owner action before then:** `NONE`; no implementation action is requested
+- **Trigger:** Fresh independent disposition on the immutable structural-validator target, any proposed scope expansion, or any material root/product semantic divergence
+- **Expected owner action before then:** `NONE`; implementation and review do not authorize broader automation
