@@ -4,16 +4,16 @@
 
 - **ID:** `ISSUE-20260811T013701Z-structural-protocol-validator`
 - **Title:** Codify stable structural protocol invariants
-- **Status:** `VERIFYING`
+- **Status:** `REVIEW`
 - **Severity:** `MEDIUM`
 - **Owner:** `Codex/root`
 - **Authority:** `AGENT`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-11T01:37:01Z`
-- **Updated UTC:** `2026-08-11T02:03:55Z`
+- **Updated UTC:** `2026-08-11T02:09:11Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), especially Scope constraints, Quality bar, `HARDEN-003`, `HARDEN-006`, and hardening acceptance criterion 5
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
-- **Evidence:** [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](../EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md)
+- **Evidence:** [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](../EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md); [`EVIDENCE-20260811T020454Z-structural-validator-verification`](../EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md)
 
 ## Problem
 
@@ -66,14 +66,16 @@ No specification or ADR change is proposed. The checker stays outside `protocol/
 | `2026-08-11T02:03:55Z` | `Codex/root` | Block-aware inline masking, list-container fence handling, narrower drive-path recognition, and expanded regression suite | Validator exit `0`; all 21 tests pass; the three new cases now produce the intended violation/pass/pass results | Inline output and `tests/test_validate_protocol.py` | Full CommonMark remains out of scope; indented link-like syntax is conservatively unsupported |
 | `2026-08-11T02:03:55Z` | `Codex/validator_audit` | Narrow final recheck of the three new findings | All three resolved; all 21 tests, repository validation, and `git diff --check` pass; no remaining HIGH or MEDIUM regression found in that bounded recheck | Attributable agent report | Still not the required independent review of an immutable target |
 | `2026-08-11T02:03:55Z` | `Codex/root` | Initial combined pre-target shell harness | `NOT RUN`: execution layer rejected the command before process creation because temporary cleanup used a prohibited removal form; checks were rerun in smaller non-destructive commands | Direct tool rejection plus subsequent rows/commands | Rejection establishes neither pass nor repository failure |
+| `2026-08-11T02:04:54Z` | `Codex/root` | Exact-target suite at `8690358d499aed20de6c620dc4dd4a81f1e1a126`: tests, compilation, validator, deterministic-output comparison, ranged whitespace/path review, package/Git-tree identity, governed-source digests, symlink and credential scans | All executed checks exit `0`: 21 tests pass; validator pass; target range is the declared seven paths; protocol tree unchanged at `4e79dd4`; package ten files/zero symlinks; governed hashes unchanged | [`EVIDENCE-20260811T020454Z-structural-validator-verification`](../EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md) | Dedicated Markdown linters unavailable; Darwin/Python `3.9.6`; no CommonMark or broader portability claim |
+| `2026-08-11T02:09:11Z` | `Codex/root` | Post-record tests, validator, 39-file fence-aware structural link scan, HANDOFF structure/status, four-path review-handoff scope, governed-source exclusion, and `git diff --check` | Corrected run exits `0`: 21 tests pass; validator pass; 159 relative links/zero missing; five HANDOFF sections/one Next Action; exact four record paths; governed sources unchanged | Inline output plus verification evidence/HANDOFF | Preliminary path assertion exited `1` only because `git diff --name-only` omits untracked evidence; rerun used `git status --short` and passed |
 
 ## Self-review
 
 - **Participant:** `Codex/root`
 - **Reviewed UTC:** `2026-08-11T01:58:37Z`
-- **Reviewed repository state:** Working tree based on analysis boundary `57c2746`; immutable implementation commit not yet created
+- **Reviewed repository state:** Immutable implementation target `8690358d499aed20de6c620dc4dd4a81f1e1a126`, tree `3c55c49d9a9572ceb01c17d1369af8f90a2bbfe4`
 - **Scope and authority references:** Root-only checker/tests/navigation against the accepted specification's tiny-helper allowance, `HARDEN-006`, accepted root-adoption ADR, and linked analysis
-- **Checks and evidence reviewed:** Current validator result, 20-test suite, compilation, diff whitespace, source/package boundary, and adversarial pre-review findings
+- **Checks and evidence reviewed:** Exact-target validator result, 21-test suite, compilation, deterministic output, ranged diff/whitespace, governed-source and package identities, credential/symlink scans, and both adversarial pre-review rounds
 - **Findings and corrections:** Corrected the initial two HIGH/three MEDIUM/one LOW audit findings, the follow-up HIGH/two MEDIUM findings, and the intermediate newline-mask regression; the final narrow pre-review recheck found no remaining HIGH or MEDIUM regression
 - **Limitations:** This issue requires independent review; implementor self-review and adversarial preparation cannot satisfy that gate. Dedicated Markdown linting and non-Darwin portability remain unavailable.
 - **Residual risks:** False passes could incorrectly influence future compliance claims.
@@ -106,15 +108,17 @@ No independent review round has been recorded.
 | `2026-08-11T01:44:13Z` | `Codex/root` | `INVESTIGATING` | `IMPLEMENTING` | Began only the approved root-local checker, tests, and non-authoritative README navigation after committing analysis boundary `57c2746` |
 | `2026-08-11T01:58:37Z` | `Codex/root` | `IMPLEMENTING` | `VERIFYING` | The bounded implementation and expanded regression suite pass after attributable pre-review corrections; exact-target evidence remains required |
 | `2026-08-11T02:03:55Z` | `Codex/root` | `VERIFYING` | `VERIFYING` | Preserved follow-up findings and corrections additively; 21 tests and final bounded pre-review recheck pass |
+| `2026-08-11T02:04:54Z` | `Codex/root` | `VERIFYING` | `REVIEW` | Committed immutable target `8690358`, reran exact-target validation successfully, and linked durable evidence; only fresh independent disposition can close the issue |
+| `2026-08-11T02:09:11Z` | `Codex/root` | `REVIEW` | `REVIEW` | Preserved and corrected the untracked-path harness assumption; final review-handoff structural checks pass |
 
 ## Closure checklist
 
-- [ ] Expected behavior is tied to a higher-authority source.
-- [ ] The change or resolution is recorded.
-- [ ] Required verification ran and evidence is linked; unavailable checks remain explicit.
+- [x] Expected behavior is tied to a higher-authority source.
+- [x] The change or resolution is recorded.
+- [x] Required verification ran and evidence is linked; unavailable checks remain explicit.
 - [ ] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies.
 - [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
-- [ ] Required human authority is recorded in the owning artifact: product/contract in `PROJECT_SPEC.md`, architecture in an accepted ADR, or both for a mixed decision.
-- [ ] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
-- [ ] Residual uncertainty is absent or explicitly owned.
-- [ ] HANDOFF reflects the resulting current state and exactly one next action.
+- [x] Required human authority is recorded in the owning artifact: product/contract in `PROJECT_SPEC.md`, architecture in an accepted ADR, or both for a mixed decision.
+- [x] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
+- [x] Residual uncertainty is absent or explicitly owned.
+- [x] HANDOFF reflects the resulting current state and exactly one next action.

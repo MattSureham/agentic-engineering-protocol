@@ -4,11 +4,11 @@ This is a low-bandwidth synchronization point for the human technical owner. It 
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-11T01:58:37Z`
+- **Generated UTC:** `2026-08-11T02:09:11Z`
 - **Prepared by:** `Codex/root`
 - **Period covered:** Published repository through clean synchronized baseline `3dc8902f5ccd9fb67330e25e57380c119f717f25` and the owner-authorized structural-codification analysis boundary
 - **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved hardening requirements and specification-evolution policy
-- **Implementation/reference state:** The accepted hardening architecture remains approved and unchanged. The root-only checker and 21-test regression suite pass in the worktree after two preparatory-audit correction rounds; [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `VERIFYING`, without an immutable target or independent disposition yet.
+- **Implementation/reference state:** Immutable structural-validator target `8690358d499aed20de6c620dc4dd4a81f1e1a126` and its 21-test suite pass exact-target verification after two preparatory-audit correction rounds. [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `REVIEW`; no independent disposition or new maturity claim exists yet.
 - **Prior checkpoint:** `2026-08-10T07:32:36Z` by `Codex/root` (superseded by this codification-phase record)
 
 ## System mental model
@@ -25,7 +25,7 @@ Agents are replaceable participants. HANDOFF is a compact continuity index, not 
 | Separate operational and durable records | Keep HANDOFF resumable rather than archival | ADRs/issues/evidence own durable detail; HANDOFF indexes unresolved state only | [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), `CLOSED` |
 | Qualify pilot portability | Avoid claims unsupported by clone-contained artifacts | Historical record preserved; original pilot remains externally dependent | [`EVIDENCE-20260806T013907Z-post-pilot-audit`](EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md) |
 | Resolve accepted-ADR review-state mismatch | Persist the owner's interpretation without rewriting acceptance-time history | No product or architecture change; additive ADR note and record reconciliation only | [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md), `CLOSED` after verification |
-| Implement the first executable codification slice | Replace repeated one-off structural harnesses without automating judgment | Root-only optional checker and tests; reusable package and authority hierarchy unchanged | [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md); 21 tests pass after preparatory corrections; independent review required |
+| Implement the first executable codification slice | Replace repeated one-off structural harnesses without automating judgment | Root-only optional checker and tests; reusable package and authority hierarchy unchanged | Target `8690358`; [`EVIDENCE-20260811T020454Z-structural-validator-verification`](EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md); independent review required |
 
 ## Architecture decisions
 
@@ -68,9 +68,9 @@ No architecture proposal or disputed architectural decision awaits owner action.
 
 ## Confidence and verification
 
-- **What is directly verified:** Prior hardening and reconciliation evidence remains intact; analysis boundary `57c2746` precedes implementation; the corrected root checker reports pass; 21 regression tests and Python compilation pass; the package remains exactly ten regular Markdown files with zero symlinks in the working tree; the final bounded pre-review recheck found no remaining HIGH or MEDIUM regression.
-- **What was independently reviewed:** The hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` (round 1, `APPROVED`), plus the earlier protocol, migration, and specification-evolution targets.
-- **What was not run or remains unverified:** Immutable-target validation and independent disposition remain pending; dedicated Markdown linting is unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
+- **What is directly verified:** Analysis boundary `57c2746` precedes immutable target `8690358`; the checker, 21 regression tests, compilation, deterministic-output, ranged scope/whitespace, package identity, governed-source digest, symlink, and credential checks pass; final bounded pre-review recheck found no remaining HIGH or MEDIUM regression.
+- **What was independently reviewed:** The hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` and earlier protocol/migration/specification-evolution targets. The new validator target has not yet received independent review.
+- **What was not run or remains unverified:** Independent disposition remains pending; dedicated Markdown linting is unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
 - **Known regressions or unresolved risks:** A structural checker could overreach or false-pass if it conflates syntax with authority. The implementation is bounded by evidence and requires independent review; five deferred capability areas remain `BLOCKED`.
 
 ## Human attention required
@@ -83,11 +83,13 @@ Unblocking any deferred capability (concurrency, authenticated identity, runtime
 
 No additional owner decision is required for the approved root-only structural slice. Any proposal to ship tooling with `protocol/`, require it for adopters, or broaden it into runtime automation remains owner-gated.
 
+Fresh independent review—not owner approval—is the current gate. The reviewer must inspect target `8690358` and the governing Markdown directly and must not treat preparatory audit reports as an approval.
+
 ## No human attention required
 
-- Implementing and self-verifying the analysis-bounded root checker is authorized; closure still requires a fresh independent review.
+- The review-handoff record may be published without owner involvement; closure requires a fresh independent `APPROVED` disposition.
 
 ## Next checkpoint trigger
 
-- **Trigger:** Fresh independent disposition on the immutable structural-validator target, any proposed scope expansion, or any material root/product semantic divergence
+- **Trigger:** Fresh independent disposition on target `8690358`, any proposed scope expansion, or any material root/product semantic divergence
 - **Expected owner action before then:** `NONE`; implementation and review do not authorize broader automation

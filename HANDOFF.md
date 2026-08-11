@@ -6,17 +6,18 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-11T01:58:37Z`
-- **Repository state:** Analysis boundary `57c2746` is committed on `main` above synchronized remote baseline `3dc8902`. The intended implementation worktree contains only `.gitignore`, root `README.md`, this HANDOFF, the active issue, `HUMAN_CHECKPOINT.md`, `scripts/validate_protocol.py`, and `tests/test_validate_protocol.py`; it has not yet been frozen as an immutable target.
-- **Evidence cutoff:** Durable codification analysis at boundary `57c2746` plus corrected implementation and preparatory audit observations through `2026-08-11T01:58:37Z`; exact-target evidence remains pending.
-- **External checks:** On `2026-08-11T01:37:01Z`, `git fetch origin main` succeeded and local HEAD and cached `origin/main` both equaled `3dc8902f5ccd9fb67330e25e57380c119f717f25`; the remote must be fetched and compared again before publication.
+- **Snapshot updated UTC:** `2026-08-11T02:09:11Z`
+- **Repository state:** Immutable implementation target `8690358d499aed20de6c620dc4dd4a81f1e1a126` (tree `3c55c49d9a9572ceb01c17d1369af8f90a2bbfe4`) is committed on `main`, two commits ahead of cached `origin/main`. The current review-handoff worktree is limited to this HANDOFF, `HUMAN_CHECKPOINT.md`, the active issue, and [`EVIDENCE-20260811T020454Z-structural-validator-verification`](EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md) until its containing record commit.
+- **Evidence cutoff:** Exact-target validation, final bounded preparatory recheck, and corrected post-record validation through `2026-08-11T02:09:11Z`, recorded in the active issue and structural-validator verification evidence.
+- **External checks:** On `2026-08-11T01:37:01Z`, `git fetch origin main` succeeded and local HEAD and cached `origin/main` both equaled `3dc8902f5ccd9fb67330e25e57380c119f717f25`. Publication must fetch again, require that remote baseline, and verify the final containing commit remotely.
 - **Stale when:** Checked-out revision/branch changes; dirty paths differ from the recorded codification phase; newer issue/evidence/ADR changes a claim; cached or direct remote changes; validation output changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
 
-- **CONFIRMED — Objective:** The owner authorized a bounded codification phase. [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `VERIFYING`; freeze and revalidate only the root-local structural checker identified by the linked analysis, then leave its immutable target for independent review.
+- **CONFIRMED — Objective:** Implementation is complete but not closed. [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `REVIEW`; only a fresh independent participant may review immutable target `8690358d499aed20de6c620dc4dd4a81f1e1a126` and supply a disposition.
 - **CONFIRMED — Authority:** Root [`PROJECT_SPEC.md`](PROJECT_SPEC.md) is `ACCEPTED`; [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md) is accepted at authority boundary `7dea5457828b6590f9ab2a643b58047b032e53d1`.
-- **INFERRED — Codification boundary:** The specification's tiny-helper allowance and executable-contract tier authorize optional root test tooling. `HARDEN-006` and the accepted ADR forbid adding it to the reusable bundle; the package tree remains `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb` until implementation verification proves otherwise.
+- **CONFIRMED — Implemented slice:** Root-only `scripts/validate_protocol.py` and its 21-test standard-library suite validate only manifest/file integrity, supported package links, and HANDOFF structure with stable exit semantics. Exact-target evidence confirms the package tree remains `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb`.
+- **INFERRED — Authority boundary:** The specification's tiny-helper allowance and executable-contract tier authorize this optional root test tooling. No executable entered `protocol/`; the blocked runtime-automation capability, source precedence, and Markdown authority remain unchanged pending fresh review of that interpretation.
 - **CONFIRMED — Root adoption:** Immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` defines the root as a separately governed protocol instance with the required seven-tier precedence and passed both implementor verification and fresh independent review.
 - **CONFIRMED — Record separation:** Durable root ADR, issue, evidence, template, and checkpoint artifacts exist. Five legacy closed issue IDs have migrated records; the full pre-compaction HANDOFF is preserved by immutable Git identity below.
 - **CONFIRMED — Pilot preservation:** Historical pilot content is byte-preserved at [`EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md`](EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md), with compatibility pointer [`PILOT_EVIDENCE.md`](PILOT_EVIDENCE.md). Original pilot commits/tests remain absent from root Git and are not clone-reproducible.
@@ -49,7 +50,7 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
-| [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) | `VERIFYING` | `MEDIUM` | `Codex/root` | `AGENT` | `INDEPENDENT` | Codify stable structural protocol invariants without redefining Markdown authority | Freeze the corrected checker, rerun exact-target validation, and supply it for fresh review |
+| [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) | `REVIEW` | `MEDIUM` | `Codex/root` | `AGENT` | `INDEPENDENT` | Codify stable structural protocol invariants without redefining Markdown authority | Fresh participant reviews target `8690358` and [`EVIDENCE-20260811T020454Z-structural-validator-verification`](EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md) |
 | [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `OPEN` | `LOW` | `UNASSIGNED` | `HUMAN` | `SELF` | External task pressure versus terminal owner-wait state in fresh-participant onboarding | Owner directed `2026-08-07T02:31:47Z`: keep open, no protocol change; any future action needs a new owner decision |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define non-cooperating concurrent-writer guarantees | New owner-approved failure model and specification |
 | [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define authenticated identity and approval | New owner-approved trust model, specification, and ADR |
@@ -59,9 +60,21 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 ## Next Action
 
-Commit the corrected root-local checker as an immutable implementation target, rerun the full validation against that target, and record the exact target for fresh independent review without changing governed sources.
+A fresh independent participant reviews immutable target `8690358d499aed20de6c620dc4dd4a81f1e1a126` against the accepted specification, ADR, codification analysis, tests, and verification evidence, then appends a severity-ranked disposition without relying on the implementor's conclusions.
 
 ## Recent Activity
+
+### 2026-08-11T02:04:54Z — Codex/root — Structural Validator Implementor
+
+- **Task:** Implement only the approved deterministic slice, challenge it adversarially, freeze an immutable target, and prepare independent review without claiming closure.
+- **Context inspected:** Analysis boundary `57c2746`; accepted specification/ADR and protected source hashes; active/deferred issues; prior one-off validation evidence; package and HANDOFF contracts; full new checker/tests; preparatory audit reports.
+- **Actions performed:** Added the optional root-only standard-library checker, 21 regression tests, Python cache ignores, and root README navigation; preserved stable rules/exits and unsupported syntax; corrected all preparatory HIGH/MEDIUM findings plus one intermediate harness regression; committed target `8690358`; recorded exact-target evidence.
+- **Files modified:** Target changes only `.gitignore`, root README/HANDOFF/checkpoint, the active issue, `scripts/validate_protocol.py`, and `tests/test_validate_protocol.py`. This review handoff adds only the verification evidence and updates the issue/HANDOFF/checkpoint.
+- **Findings:** `CONFIRMED` — target validation and 21 tests pass; package and governed sources are unchanged. `INFERRED` — the root-only helper stays outside deferred runtime automation. `UNKNOWN` — fresh independent disposition, broader platform portability, and unsupported future Markdown behavior.
+- **Verification performed:** Exact-target tests/compilation/validator/determinism/ranged diff/whitespace/package identity/symlink/governed-digest/credential checks all exited `0`; post-record rerun covered 21 tests, 39 Markdown files/159 relative links with zero missing, five HANDOFF sections/one action, and exact four record paths. Preparatory corrections, one rejected/non-run shell harness, and one corrected untracked-path harness assumption are preserved; Markdown linters are `NOT_AVAILABLE`.
+- **Issues created or updated:** Advanced [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) to `REVIEW`; all six prior unresolved issues remain unchanged.
+- **Remaining uncertainty:** Independent review is mandatory before closure; the checker is not CommonMark, CI, runtime, or universal-portability validation.
+- **Recommended next action:** Perform only the independent review under Next Action.
 
 ### 2026-08-11T01:37:01Z — Codex/root — Protocol Codification Engineer
 
