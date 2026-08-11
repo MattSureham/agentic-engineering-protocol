@@ -10,7 +10,7 @@
 - **Authority:** `AGENT`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-11T01:37:01Z`
-- **Updated UTC:** `2026-08-11T02:38:34Z`
+- **Updated UTC:** `2026-08-11T02:49:05Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), especially Scope constraints, Quality bar, `HARDEN-003`, `HARDEN-006`, and hardening acceptance criterion 5
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
 - **Evidence:** [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](../EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md); [`EVIDENCE-20260811T020454Z-structural-validator-verification`](../EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md)
@@ -87,6 +87,33 @@ No specification or ADR change is proposed. The checker stays outside `protocol/
 
 No independent review round has been persisted. On `2026-08-11T02:38:34Z` the human technical owner reported to the coordinator (`ClaudeCode/coordinator`) that the fresh independent review of immutable target `8690358d499aed20de6c620dc4dd4a81f1e1a126` completed with a disposition reported as "APPROVED WITH FINDINGS". The reviewer's complete round — reviewer identity, reviewed repository state, scope, commands or procedures, severity-ranked findings, limitations, residual risks, evidence, and one of the protocol dispositions `APPROVED`/`CHANGES_REQUIRED`/`BLOCKED` — has not been supplied to this record, and "APPROVED WITH FINDINGS" is not itself one of those dispositions. Per root [`BOOTSTRAP.md`](../BOOTSTRAP.md), a disposition reported outside the repository must be persisted in this owning artifact before any participant relies on it, and the closure checklist's independent-review item cannot be satisfied until the round is appended verbatim and any material findings are shown resolved or reclassified by the reviewer. This note records only the owner's report; it is not the review round and must not be treated as one.
 
+### 2026-08-11T02:49:05Z — ClaudeCode/validator-review
+
+This is the complete round whose completion the owner reported at `2026-08-11T02:38:34Z`, persisted by the reviewing participant without altering its conclusion.
+
+- **Reviewed repository state:** Immutable target `8690358d499aed20de6c620dc4dd4a81f1e1a126` (tree `3c55c49d9a9572ceb01c17d1369af8f90a2bbfe4`), parent/analysis boundary `57c274641c1e779dbf95d36ed1ba0a03d7ef8fa7`, and post-target record-only commits `c89eb02f6ab685d5e6fb18090404ea145abd3ae2` and `ea2b63d0479c187b0619edddd015483eb579e7ec`. The review executed against a `git archive` extraction of the exact target in an isolated temporary directory, never against a mutated checkout; the live worktree stayed clean on `main`. The reviewer is a fresh participant instance with no authorship of the target (implementor `Codex/root`; preparatory audits `Codex/validator_audit`).
+- **Scope:** The codification gap analysis, the complete validator implementation (`scripts/validate_protocol.py`), the complete test suite (`tests/test_validate_protocol.py`), the exact-target verification evidence, both HANDOFF revisions and the current one, the accepted specification and root-adoption ADR, the full target diff, and post-target drift scope.
+- **Commands or procedures:** `git rev-parse` target/tree/parent and `8690358:protocol` identities; `git diff --name-status`/`--check` over `57c2746..8690358` and `8690358..ea2b63d`; `git archive 8690358 | tar -x` into an isolated temporary directory; `python3 scripts/validate_protocol.py` at the extracted target (exit `0`, exact output `PASS structural protocol validation (package_files=10 handoffs=2)`) run twice with byte-identical output; `python3 -m unittest discover -s tests` (21 tests, `OK`); `python3 -m py_compile` on both Python files; `shasum -a 256` of governed sources (`PROJECT_SPEC.md`, `BOOTSTRAP.md`, the accepted ADR, the runtime-automation issue) matching the evidence record; validator rerun against the live post-record worktree (exit `0`); `git ls-remote`/`rev-parse` remote equality at `ea2b63d`; HANDOFF section/Next Action/index inspection at the review boundary. All bytecode creation was suppressed; the isolated fixture was deleted afterward.
+- **Specification compliance:** The implemented slice is exactly the analysis's "smallest useful executable slice": package manifest/file types, Markdown byte/fence integrity, supported relative-link resolution, and HANDOFF shape. No Classification A (judgment) or Classification C (future automation) item is implemented. The reusable package tree is unchanged (`4e79dd41eda4bac91329cf2fa8a88cd96bd168cb` at parent and target), preserving `HARDEN-006`. The `Authority: AGENT` classification is defensible: no new dependency, service, contract change, or specification/ADR contradiction; the specification's tiny-helper allowance and executable-contract tier cover optional root test tooling.
+- **Correctness and regression findings:** No material finding. The 21-test suite covers manifest violations, symlink and non-regular entries, Markdown byte/fence invariants, broken/escaping/absolute/drive/file-URI links, unsupported-syntax exits, HANDOFF structural failures, determinism, and read-only behavior; all pass at the exact target under independent execution. The parser conservatively returns `UNSUPPORTED` (exit `2`) rather than passing ambiguous syntax.
+- **Architecture and complexity findings:** The checker introduces no competing source of truth. It is a tier-3 executable contract subordinate to the Markdown authorities: read-only (proven by the before/after fixture snapshot test), standard-library only, no network or Git access, outside `protocol/`, not shipped to or required by adopters, and unable to close issues, approve work, or mutate state. Its normative constants (ten-file manifest, five HANDOFF sections, five snapshot-field labels) duplicate the Markdown authorities; the failure direction is loud, not silent redefinition (finding F2).
+- **Material findings and resolution conditions:** `NONE` material. The five severity-ranked findings exactly as reported:
+
+  | # | Severity | Finding |
+  |---|---|---|
+  | F1 | LOW | "Tiny helper" framing understates reality: 793-line checker + 365-line suite is the repository's largest executable artifact. Not a violation (single file, stdlib, `--root` is the entire CLI, complexity declared and test-covered), but it is a maintained component, not an incidental script. |
+  | F2 | LOW | Normative constants are duplicated in code (ten-file manifest, five HANDOFF sections, five snapshot-field labels). If the Markdown authorities change those contracts, the validator goes stale. Failure direction is safe (loud), but the update obligation should travel with any such contract change. |
+  | F3 | LOW | Mixed VIOLATION+UNSUPPORTED output exits `2` (documented as "inability to evaluate"), the same code as pure evaluator failure. Output lines stay accurate; only matters if automation ever consumes exit codes — none does. |
+  | F4 | LOW | Codified checks cover only the package and the two HANDOFFs; root governing Markdown (BOOTSTRAP, spec, issues, evidence) still relies on one-off scans. Consistent with the approved slice; a future-slice candidate, not a defect. |
+  | F5 | LOW | HANDOFF records "The owner authorized a bounded codification phase" as `CONFIRMED` without citing a discrete owner-direction record (contrast the timestamped 2026-08-07/2026-08-10 directions). Harmless because the issue stands on `AGENT` authority, but the provenance chain has a gap. |
+
+  **Finding classification (per the recorded Next Action):** F1–F5 are accepted as residual risk/observations; none requires a durable issue or any change before closure. The review's non-binding suggestions — cite the owner codification direction (F5) and record the constants-update obligation (F2) in this issue's residual uncertainty — are carried into that section below.
+- **Limitations:** The reviewer environment is the same Darwin/Python `3.9.6` class as the implementor's, so platform portability is unexamined by this round. The checker is not a CommonMark renderer and this review does not make it one. Repository-recorded identities are not cryptographically authenticated. The review ran in an isolated extraction; behavior was additionally confirmed once on the live worktree.
+- **Residual risks:** A false pass could still influence future compliance claims (as the implementor's self-review noted); duplicated constants can drift from the Markdown authorities; root governing-Markdown link integrity remains a one-off check outside this slice.
+- **Evidence:** This round's commands and outputs as listed; [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](../EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md); [`EVIDENCE-20260811T020454Z-structural-validator-verification`](../EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md); the Git objects cited above.
+- **Disposition:** `APPROVED` — reported in session output as **APPROVED WITH FINDINGS**; because all five findings are LOW, non-material, and require no changes before closure, the protocol disposition is `APPROVED` with the findings recorded. The conclusion is unchanged by this persistence.
+- **Prior-round resolution:** `FIRST ROUND` — the two `Codex/validator_audit` passes were implementor-side preparatory audits, not independent rounds; this is the first independent round.
+
 ## Blocker
 
 - **Blocked from:** `NOT BLOCKED`
@@ -98,6 +125,7 @@ No independent review round has been persisted. On `2026-08-11T02:38:34Z` the hu
 
 - The exact false-positive/false-negative boundary will remain limited to the supported syntax and tested environment.
 - A fresh independent participant must verify that the executable slice does not redefine protocol semantics or cross into deferred runtime automation.
+- Independent review round 1 (`2026-08-11T02:49:05Z`) is `APPROVED` with five LOW findings accepted as residual risk. Two non-binding suggestions remain owned here: record the constants-update obligation whenever the Markdown authorities change the package manifest or HANDOFF contract (F2), and cite the owner codification-phase direction in a durable record if one exists (F5).
 
 ## Activity history
 
@@ -111,6 +139,7 @@ No independent review round has been persisted. On `2026-08-11T02:38:34Z` the hu
 | `2026-08-11T02:04:54Z` | `Codex/root` | `VERIFYING` | `REVIEW` | Committed immutable target `8690358`, reran exact-target validation successfully, and linked durable evidence; only fresh independent disposition can close the issue |
 | `2026-08-11T02:09:11Z` | `Codex/root` | `REVIEW` | `REVIEW` | Preserved and corrected the untracked-path harness assumption; final review-handoff structural checks pass |
 | `2026-08-11T02:38:34Z` | `ClaudeCode/coordinator` | `REVIEW` | `REVIEW` | Recorded the owner-reported "APPROVED WITH FINDINGS" disposition as persistence-pending; the verbatim review round and finding classification remain required before closure; no implementation change authorized or made |
+| `2026-08-11T02:49:05Z` | `ClaudeCode/validator-review` | `REVIEW` | `REVIEW` | Persisted the complete independent round unchanged: protocol disposition `APPROVED` (reported as "APPROVED WITH FINDINGS"), five LOW findings classified as accepted residual risk; closure decision left to a coordinator per the recorded gate; no implementation change |
 
 ## Closure checklist
 
