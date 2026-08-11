@@ -6,10 +6,10 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-11T02:09:11Z`
-- **Repository state:** Immutable implementation target `8690358d499aed20de6c620dc4dd4a81f1e1a126` (tree `3c55c49d9a9572ceb01c17d1369af8f90a2bbfe4`) is committed on `main`, two commits ahead of cached `origin/main`. The current review-handoff worktree is limited to this HANDOFF, `HUMAN_CHECKPOINT.md`, the active issue, and [`EVIDENCE-20260811T020454Z-structural-validator-verification`](EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md) until its containing record commit.
-- **Evidence cutoff:** Exact-target validation, final bounded preparatory recheck, and corrected post-record validation through `2026-08-11T02:09:11Z`, recorded in the active issue and structural-validator verification evidence.
-- **External checks:** On `2026-08-11T01:37:01Z`, `git fetch origin main` succeeded and local HEAD and cached `origin/main` both equaled `3dc8902f5ccd9fb67330e25e57380c119f717f25`. Publication must fetch again, require that remote baseline, and verify the final containing commit remotely.
+- **Snapshot updated UTC:** `2026-08-11T02:11:48Z`
+- **Repository state:** Published review handoff `c89eb02f6ab685d5e6fb18090404ea145abd3ae2` is clean and synchronized on `main`. This publication-verifier record MUST be its direct child changing only `HANDOFF.md`; resolve the containing commit with `git rev-parse HEAD`, confirm the parent/path set, and require a clean worktree before relying on the snapshot.
+- **Evidence cutoff:** Exact-target validation, final bounded preparatory recheck, corrected post-record validation, review-handoff publication, and remote equality through `2026-08-11T02:11:48Z`.
+- **External checks:** On `2026-08-11T02:11:48Z`, local HEAD, cached `origin/main`, and direct remote `refs/heads/main` all equaled review handoff `c89eb02f6ab685d5e6fb18090404ea145abd3ae2`. The containing HANDOFF-only commit and its push must be verified on resumption because a commit cannot record its own hash.
 - **Stale when:** Checked-out revision/branch changes; dirty paths differ from the recorded codification phase; newer issue/evidence/ADR changes a claim; cached or direct remote changes; validation output changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
@@ -63,6 +63,18 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 A fresh independent participant reviews immutable target `8690358d499aed20de6c620dc4dd4a81f1e1a126` against the accepted specification, ADR, codification analysis, tests, and verification evidence, then appends a severity-ranked disposition without relying on the implementor's conclusions.
 
 ## Recent Activity
+
+### 2026-08-11T02:11:48Z — Codex/root — Codification Publication Verifier
+
+- **Task:** Publish the analysis, immutable validator target, and review handoff without remote overwrite, verify the public boundary, and leave one fresh-review action.
+- **Context inspected:** Clean three-commit local chain `57c2746` → `8690358` → `c89eb02`; fetched `origin/main`; ancestry, full range whitespace, validator/tests, remote URL, and local/cached/direct refs.
+- **Actions performed:** Required fetched remote baseline `3dc8902` to remain the ancestor; pushed normally without force; verified all three refs at `c89eb02`; prepared this final HANDOFF-only publication record.
+- **Files modified:** This HANDOFF only after the published review boundary.
+- **Findings:** `CONFIRMED` — the immutable implementation and evidence are public and remote-durable through `c89eb02`. `CONFIRMED` — issue remains `REVIEW` and no governed source changed. `UNKNOWN` — this record's self-referential containing commit until a fresh participant resolves and checks it.
+- **Verification performed:** Pre-push validator and 21 tests passed; `git fetch`/ancestry/range checks exited `0`; push advanced `3dc8902..c89eb02`; local, cached-origin, and direct-remote refs all equaled `c89eb02`; worktree was clean before this record.
+- **Issues created or updated:** None; [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) remains `REVIEW`, and all prior unresolved issues remain unchanged.
+- **Remaining uncertainty:** The containing HANDOFF-only commit and push cannot be named inside themselves; broader validator limitations and independent disposition remain as recorded.
+- **Recommended next action:** After verifying this record's containing commit and remote equality, perform only the independent review under Next Action.
 
 ### 2026-08-11T02:04:54Z — Codex/root — Structural Validator Implementor
 
