@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260811T013701Z-structural-protocol-validator`
 - **Title:** Codify stable structural protocol invariants
-- **Status:** `REVIEW`
+- **Status:** `CLOSED`
 - **Severity:** `MEDIUM`
 - **Owner:** `Codex/root`
 - **Authority:** `AGENT`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-11T01:37:01Z`
-- **Updated UTC:** `2026-08-11T02:49:05Z`
+- **Updated UTC:** `2026-08-11T03:01:36Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), especially Scope constraints, Quality bar, `HARDEN-003`, `HARDEN-006`, and hardening acceptance criterion 5
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
 - **Evidence:** [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](../EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md); [`EVIDENCE-20260811T020454Z-structural-validator-verification`](../EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md)
@@ -140,14 +140,15 @@ This is the complete round whose completion the owner reported at `2026-08-11T02
 | `2026-08-11T02:09:11Z` | `Codex/root` | `REVIEW` | `REVIEW` | Preserved and corrected the untracked-path harness assumption; final review-handoff structural checks pass |
 | `2026-08-11T02:38:34Z` | `ClaudeCode/coordinator` | `REVIEW` | `REVIEW` | Recorded the owner-reported "APPROVED WITH FINDINGS" disposition as persistence-pending; the verbatim review round and finding classification remain required before closure; no implementation change authorized or made |
 | `2026-08-11T02:49:05Z` | `ClaudeCode/validator-review` | `REVIEW` | `REVIEW` | Persisted the complete independent round unchanged: protocol disposition `APPROVED` (reported as "APPROVED WITH FINDINGS"), five LOW findings classified as accepted residual risk; closure decision left to a coordinator per the recorded gate; no implementation change |
+| `2026-08-11T03:01:36Z` | `ClaudeCode/coordinator` | `REVIEW` | `CLOSED` | Coordinator closure verification passed: reproduced target tree `3c55c49d9a9572ceb01c17d1369af8f90a2bbfe4`, parent `57c274641c1e779dbf95d36ed1ba0a03d7ef8fa7`, and protocol subtree `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb`; confirmed post-target drift is record-only (evidence, HANDOFF, checkpoint, issue paths); reran the validator (exit `0`) and 21 tests (`OK`); confirmed the round is schema-complete, the reviewer is independent of the implementor, the `APPROVED` mapping preserves the session label verbatim, and no material finding exists; recorded the session-vocabulary friction separately as `ISSUE-20260811T030136Z-review-disposition-vocabulary` (`OPEN`, `LOW`, owner-gated) |
 
 ## Closure checklist
 
 - [x] Expected behavior is tied to a higher-authority source.
 - [x] The change or resolution is recorded.
 - [x] Required verification ran and evidence is linked; unavailable checks remain explicit.
-- [ ] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies.
-- [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
+- [x] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies (not applicable — `Review: INDEPENDENT`).
+- [x] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved (round 1 of `2026-08-11T02:49:05Z` by `ClaudeCode/validator-review`; no material finding existed).
 - [x] Required human authority is recorded in the owning artifact: product/contract in `PROJECT_SPEC.md`, architecture in an accepted ADR, or both for a mixed decision.
 - [x] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
 - [x] Residual uncertainty is absent or explicitly owned.

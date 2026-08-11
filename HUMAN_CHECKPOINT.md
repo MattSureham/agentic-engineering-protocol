@@ -4,12 +4,12 @@ This is a low-bandwidth synchronization point for the human technical owner. It 
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-11T02:09:11Z`
-- **Prepared by:** `Codex/root`
-- **Period covered:** Published repository through clean synchronized baseline `3dc8902f5ccd9fb67330e25e57380c119f717f25` and the owner-authorized structural-codification analysis boundary
+- **Generated UTC:** `2026-08-11T03:01:36Z`
+- **Prepared by:** `ClaudeCode/coordinator`
+- **Period covered:** Published repository through review-persistence record `f06982573ae0743f5feb7c51858ff96822dc9714` and the coordinator milestone-closure verification
 - **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved hardening requirements and specification-evolution policy
-- **Implementation/reference state:** Immutable structural-validator target `8690358d499aed20de6c620dc4dd4a81f1e1a126` and its 21-test suite pass exact-target verification after two preparatory-audit correction rounds. [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `REVIEW`; no independent disposition or new maturity claim exists yet.
-- **Prior checkpoint:** `2026-08-10T07:32:36Z` by `Codex/root` (superseded by this codification-phase record)
+- **Implementation/reference state:** Immutable structural-validator target `8690358d499aed20de6c620dc4dd4a81f1e1a126` and its 21-test suite passed exact-target verification and fresh independent review. [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `CLOSED` with an independent `APPROVED` round; no new maturity claim follows beyond that reviewed scope.
+- **Prior checkpoint:** `2026-08-11T02:09:11Z` by `Codex/root` (superseded by this closure record)
 
 ## System mental model
 
@@ -25,7 +25,7 @@ Agents are replaceable participants. HANDOFF is a compact continuity index, not 
 | Separate operational and durable records | Keep HANDOFF resumable rather than archival | ADRs/issues/evidence own durable detail; HANDOFF indexes unresolved state only | [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), `CLOSED` |
 | Qualify pilot portability | Avoid claims unsupported by clone-contained artifacts | Historical record preserved; original pilot remains externally dependent | [`EVIDENCE-20260806T013907Z-post-pilot-audit`](EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md) |
 | Resolve accepted-ADR review-state mismatch | Persist the owner's interpretation without rewriting acceptance-time history | No product or architecture change; additive ADR note and record reconciliation only | [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md), `CLOSED` after verification |
-| Implement the first executable codification slice | Replace repeated one-off structural harnesses without automating judgment | Root-only optional checker and tests; reusable package and authority hierarchy unchanged | Target `8690358`; [`EVIDENCE-20260811T020454Z-structural-validator-verification`](EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md); independent review required |
+| Implement the first executable codification slice | Replace repeated one-off structural harnesses without automating judgment | Root-only optional checker and tests; reusable package and authority hierarchy unchanged | Target `8690358`; [`EVIDENCE-20260811T020454Z-structural-validator-verification`](EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md); independent round `APPROVED`, issue `CLOSED` |
 
 ## Architecture decisions
 
@@ -47,14 +47,14 @@ No architecture proposal or disputed architectural decision awaits owner action.
 |---|---|---|---|
 | Separate root/product protocol governance | Prevent silent authority coupling | Accepted ADR, semantic/link validation, independent review | Future divergence still requires judgment and review |
 | Live HANDOFF archival burden retired | Restore compact operational continuity | Migrated issue/evidence records and immutable Git provenance | None; independently verified |
-| Optional root Python structural checker | Make stable package/HANDOFF invariants repeatable | Standard-library tests and independent review are required before closure | Full CommonMark, semantic correctness, portability, and shipped automation remain outside scope |
+| Optional root Python structural checker | Make stable package/HANDOFF invariants repeatable | Standard-library tests plus completed independent review; five LOW findings accepted as residual risk | Full CommonMark, semantic correctness, portability, and shipped automation remain outside scope |
 
 ### Drift assessment
 
 - **Last independent drift review:** Fresh independent review of the hardening target completed `2026-08-06T03:02:04Z` with disposition `APPROVED` and no material findings.
 - **Classification:** The legacy split-truth drift is resolved as `ALIGNED` at the approved target; future root/product semantic divergence remains review-dependent by design.
 - **Owner-relevant differences:** None outstanding for the review-record mismatch. The owner determination and additive status note preserve the original acceptance-time statement, and reconciliation verification passed. No broader maturity claim is introduced.
-- **Codification boundary:** The planned checker observes lower-tier structure only. It does not change the accepted architecture, source precedence, or reusable package and will remain in `REVIEW` until a fresh participant challenges that boundary.
+- **Codification boundary:** The checker observes lower-tier structure only. Independent review confirmed it does not change the accepted architecture, source precedence, or reusable package; the milestone is `CLOSED`.
 
 ## Assumptions and uncertainty that changed
 
@@ -64,14 +64,14 @@ No architecture proposal or disputed architectural decision awaits owner action.
 | `CONFIRMED` | Pilot record was treated as sufficient project evidence | It preserves an attributed result but not clone-based reproduction of original tests/commits | Post-pilot audit |
 | `CONFIRMED` | Whether the hardening issue's independent round satisfies the accepted ADR's review intent was unresolved | The human technical owner determined that it does; the original ADR sentence remains historical acceptance-time context | [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md) and the additive ADR note |
 | `UNKNOWN` | Broader portability | Still unestablished | No production-grade or universal claim |
-| `INFERRED` | Stable checks required participants to recreate ad hoc harnesses | A root-only tiny helper is authorized test organization when it preserves the ten-file product boundary | [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md); fresh review still required |
+| `INFERRED` | Stable checks required participants to recreate ad hoc harnesses | A root-only tiny helper is authorized test organization when it preserves the ten-file product boundary | [`EVIDENCE-20260811T013701Z-codification-gap-analysis`](EVIDENCE/EVIDENCE-20260811T013701Z-codification-gap-analysis.md); independent review confirmed this boundary |
 
 ## Confidence and verification
 
-- **What is directly verified:** Analysis boundary `57c2746` precedes immutable target `8690358`; the checker, 21 regression tests, compilation, deterministic-output, ranged scope/whitespace, package identity, governed-source digest, symlink, and credential checks pass; final bounded pre-review recheck found no remaining HIGH or MEDIUM regression.
-- **What was independently reviewed:** The hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` and earlier protocol/migration/specification-evolution targets. The new validator target has not yet received independent review.
-- **What was not run or remains unverified:** Independent disposition remains pending; dedicated Markdown linting is unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
-- **Known regressions or unresolved risks:** A structural checker could overreach or false-pass if it conflates syntax with authority. The implementation is bounded by evidence and requires independent review; five deferred capability areas remain `BLOCKED`.
+- **What is directly verified:** Analysis boundary `57c2746` precedes immutable target `8690358`; the checker, 21 regression tests, compilation, deterministic-output, ranged scope/whitespace, package identity, governed-source digest, symlink, and credential checks pass; final bounded pre-review recheck found no remaining HIGH or MEDIUM regression; coordinator closure verification reproduced target identities and reran the suite.
+- **What was independently reviewed:** The hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`, earlier protocol/migration/specification-evolution targets, and now structural-validator target `8690358` (round 1 `APPROVED`, five LOW findings accepted as residual risk).
+- **What was not run or remains unverified:** Dedicated Markdown linting is unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
+- **Known regressions or unresolved risks:** A structural checker could overreach or false-pass if it conflates syntax with authority; the reviewer accepted this and four related LOW findings as residual risk, owned in the closed issue. Five deferred capability areas remain `BLOCKED`.
 
 ## Human attention required
 
@@ -83,13 +83,13 @@ Unblocking any deferred capability (concurrency, authenticated identity, runtime
 
 No additional owner decision is required for the approved root-only structural slice. Any proposal to ship tooling with `protocol/`, require it for adopters, or broaden it into runtime automation remains owner-gated.
 
-Fresh independent review—not owner approval—is the current gate. The reviewer must inspect target `8690358` and the governing Markdown directly and must not treat preparatory audit reports as an approval.
+One optional owner decision: [`ISSUE-20260811T030136Z-review-disposition-vocabulary`](ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md) (`OPEN`, `LOW`) records that the reviewer's session verdict "APPROVED WITH FINDINGS" needed a persist-and-map cycle before the coordinator could act. The owner may direct a reporting-vocabulary clarification or keep the current persistence discipline; no protocol change is proposed by the issue itself.
 
 ## No human attention required
 
-- The review-handoff record may be published without owner involvement; closure requires a fresh independent `APPROVED` disposition.
+- The validator milestone closed through the standard gate: fresh independent round `APPROVED`, coordinator closure verification passed, no implementation change after the immutable target.
 
 ## Next checkpoint trigger
 
-- **Trigger:** Fresh independent disposition on target `8690358`, any proposed scope expansion, or any material root/product semantic divergence
-- **Expected owner action before then:** `NONE`; implementation and review do not authorize broader automation
+- **Trigger:** Owner direction on the vocabulary-friction issue, any proposed scope expansion, or any material root/product semantic divergence
+- **Expected owner action before then:** `NONE` beyond the optional vocabulary decision above; the closed milestone does not authorize broader automation
