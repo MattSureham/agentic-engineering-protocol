@@ -4,7 +4,7 @@
 
 - **ID:** `ISSUE-20260814T092504Z-host-adapter-rotation`
 - **Title:** Implement the authorized host adapter and participant rotation milestone
-- **Status:** `INVESTIGATING`
+- **Status:** `IMPLEMENTING`
 - **Severity:** `MEDIUM`
 - **Owner:** `ClaudeCode/root`
 - **Authority:** `HUMAN`
@@ -75,10 +75,10 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260814T092504Z-host-rotation-v1",
   "authority_digest": "a38bb7bfd1511045e8e09b4a0dc6af7893f24a8a833e9a3faa444660cc3b977b",
-  "state": "READY",
-  "attempt": 0,
-  "implementor": null,
-  "base_revision": null,
+  "state": "IN_PROGRESS",
+  "attempt": 1,
+  "implementor": "agent:ClaudeCode-rotation",
+  "base_revision": "a21997dabfcc555c2b82458789aa75871f787055",
   "target_revision": null,
   "verification_evidence": [],
   "review_references": [],
@@ -98,6 +98,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": "AUTHORIZED",
       "to": "READY",
       "reason": "Validated transition AUTHORIZED to READY."
+    },
+    {
+      "sequence": 3,
+      "utc": "2026-08-14T09:52:19Z",
+      "actor": "agent:ClaudeCode-rotation",
+      "from": "READY",
+      "to": "IN_PROGRESS",
+      "reason": "Implementation attempt 1 began from immutable base a21997dabfcc555c2b82458789aa75871f787055."
     }
   ]
 }
@@ -139,6 +147,7 @@ No independent review round has been recorded. Review begins after the first imm
 |---|---|---|---|---|
 | `2026-08-14T09:25:04Z` | `human:MattSureham` | `NONE` | `INVESTIGATING` | Owner direction authorized the host adapter and participant rotation phase; specification evolution, accepted ADR, probe evidence, and this owning issue recorded; pipeline state `AUTHORIZED` |
 | `2026-08-14T09:52:19Z` | `agent:ClaudeCode-rotation` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
+| `2026-08-14T09:52:19Z` | `agent:ClaudeCode-rotation` | `INVESTIGATING` | `IMPLEMENTING` | Pipeline READY -> IN_PROGRESS. Implementation attempt 1 began from immutable base a21997dabfcc555c2b82458789aa75871f787055. |
 
 ## Closure checklist
 
