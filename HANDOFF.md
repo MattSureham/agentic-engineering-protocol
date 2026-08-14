@@ -7,9 +7,9 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 ### Snapshot metadata
 
 - **Snapshot updated UTC:** `2026-08-14T05:05:00Z`
-- **Repository state:** Published review-round-2 record `25e94e355d431e7697cd6abe3a5b2c09c73938df` is the remote tip; local `main` additionally carries unpublished recorder commits `2a5d00b` (closure-checklist completion), `6a39cc6` (milestone acceptance record), and this wording-closure record. This record MUST be a direct child of `6a39cc6` changing only `ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md`, `ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md`, `HANDOFF.md`, and `HUMAN_CHECKPOINT.md`; resolve the containing commit with `git rev-parse HEAD`, confirm the parent/path set, and require a clean worktree before relying on the snapshot.
+- **Repository state:** Local `main` equals published `origin/main`; the recorder chain `2a5d00b` → `6a39cc6` → `c2223fb` was published by normal non-force push on `2026-08-14` and this publication record is its HANDOFF-only follow-up. This record MUST be a direct child of `c2223fbfa36b3da048d685646cc4a1684e3088b7` changing only `HANDOFF.md` and `HUMAN_CHECKPOINT.md`; resolve the containing commit with `git rev-parse HEAD`, confirm the parent/path set, and require a clean worktree before relying on the snapshot.
 - **Evidence cutoff:** Structural-validator closure through `2026-08-11T03:01:36Z`; accepted pipeline authority through published `a6f2699`; attempt-1 target/review through `2026-08-14T03:19:38Z`; attempt-2 target, verification, and review handoff through `2026-08-14T04:10:25Z`; independent review round 2 (`APPROVED`) through `2026-08-14T04:41:08Z`; recorder checklist completion `2026-08-14T04:53:53Z`; pipeline-validated `ACCEPTED` transition `2026-08-14T04:54:43Z`; wording-issue closure verification `2026-08-14T05:03:21Z`.
-- **External checks:** At `2026-08-14T04:53:53Z`, local HEAD, cached `origin/main`, and direct remote `refs/heads/main` all equaled `25e94e355d431e7697cd6abe3a5b2c09c73938df` before the recorder commits; publication of the pending chain is a normal non-force push with local/cached/direct equality re-verification.
+- **External checks:** At publication on `2026-08-14`, pre-push fetch confirmed no divergence (`origin/main` `25e94e3` an ancestor of HEAD); the push advanced `25e94e3..c2223fb`; local HEAD, cached `origin/main`, and direct remote `refs/heads/main` all equaled `c2223fbfa36b3da048d685646cc4a1684e3088b7` immediately afterward. Publishing this HANDOFF-only follow-up is a normal non-force push with the same equality re-verification.
 - **Stale when:** Checked-out revision/branch changes; dirty paths differ from the recorded acceptance set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; accepted milestone JSON or its digest changes; validation output changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
@@ -62,9 +62,21 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 ## Next Action
 
-A participant publishes the pending record chain (`2a5d00b`, `6a39cc6`, and this wording-closure record) with a normal non-force push and re-verifies local/cached/direct remote equality. No further milestone exists in the accepted contract and no unresolved issue is actionable: the four remaining issues are `BLOCKED` on new owner authority. Absence of a next contract is a terminal result, not permission to invent work; after publication, wait for owner direction.
+A participant publishes this HANDOFF-only publication record with a normal non-force push and re-verifies local/cached/direct remote equality. No further milestone exists in the accepted contract and no unresolved issue is actionable: the four remaining issues are `BLOCKED` on new owner authority. Absence of a next contract is a terminal result, not permission to invent work; after publication, wait for owner direction.
 
 ## Recent Activity
+
+### 2026-08-14T05:05:00Z — ClaudeCode/coordinator — Publication Verifier
+
+- **Task:** Publish the pending recorder chain (checklist completion, milestone acceptance, wording-issue closures) and verify the public boundary.
+- **Context inspected:** Local chain `25e94e3..c2223fb`; fetched `origin/main`; ancestry; local/cached/direct refs.
+- **Actions performed:** Fetched; confirmed cached `origin/main` `25e94e3` is an ancestor of HEAD (no divergence); pushed normally without force, advancing `25e94e3..c2223fb`; compared local HEAD, cached `origin/main`, and direct remote `refs/heads/main` — all `c2223fbfa36b3da048d685646cc4a1684e3088b7`; prepared this HANDOFF-only publication record.
+- **Files modified:** This HANDOFF and `HUMAN_CHECKPOINT.md` only after the published boundary `c2223fb`.
+- **Findings:** `CONFIRMED` — the accepted milestone, both wording-issue closures, and all recorder records are public and remote-durable through `c2223fb`. `UNKNOWN` — this record's self-referential containing commit until a fresh participant resolves and checks it.
+- **Verification performed:** `git fetch origin`; `git merge-base --is-ancestor origin/main HEAD` exit `0`; `git push origin main` advanced `25e94e3..c2223fb`; `git rev-parse HEAD origin/main` and `git ls-remote origin refs/heads/main` all returned `c2223fbfa36b3da048d685646cc4a1684e3088b7`.
+- **Issues created or updated:** None; all milestone and wording issues are `CLOSED`; four deferrals remain `BLOCKED`.
+- **Remaining uncertainty:** This publication record requires its own commit and push; any failure must be recorded rather than leaving a false terminal state.
+- **Recommended next action:** Commit and publish this record, verify final local/remote equality, then wait for owner direction.
 
 ### 2026-08-14T05:05:00Z — ClaudeCode/coordinator — Wording-Issue Closure Verification Coordinator
 
