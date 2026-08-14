@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260814T051405Z-role-dispatch`
 - **Title:** Implement the authorized automated role dispatch milestone
-- **Status:** `REVIEW`
+- **Status:** `CLOSED`
 - **Severity:** `MEDIUM`
 - **Owner:** `ClaudeCode/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-14T05:14:05Z`
-- **Updated UTC:** `2026-08-14T08:58:30Z`
+- **Updated UTC:** `2026-08-14T08:57:40Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Automated role dispatch phase and `MILESTONE-20260814T051405Z-role-dispatch-v1`
 - **ADRs:** [`ADR-20260814T051405Z-automated-role-dispatch`](../ADR/ADR-20260814T051405Z-automated-role-dispatch.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** [`EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json`](../EVIDENCE/EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json) (pipeline-generated submission record, result `PASS`) plus the verification table below
@@ -79,7 +79,7 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260814T051405Z-role-dispatch-v1",
   "authority_digest": "afe725805d919f850e7d44017a2b4b63ba6b0f3453ec6bea84ece1ee265b638c",
-  "state": "AWAITING_PEER_REVIEW",
+  "state": "ACCEPTED",
   "attempt": 1,
   "implementor": "agent:ClaudeCode-dispatch",
   "base_revision": "10d9610f8d5d6167360b6f5fd4bfdf4392971ac4",
@@ -87,7 +87,9 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "verification_evidence": [
     "EVIDENCE/EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json"
   ],
-  "review_references": [],
+  "review_references": [
+    "ISSUES/ISSUE-20260814T051405Z-role-dispatch.md#2026-08-14t084505z--claudecodedispatch-review"
+  ],
   "events": [
     {
       "sequence": 1,
@@ -120,6 +122,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": "IN_PROGRESS",
       "to": "AWAITING_PEER_REVIEW",
       "reason": "Immutable target 4a2601f04db9cf8b0f2e909fd4ca8f45666fe8c8 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json."
+    },
+    {
+      "sequence": 5,
+      "utc": "2026-08-14T08:57:40Z",
+      "actor": "agent:ClaudeCode-dispatch-record",
+      "from": "AWAITING_PEER_REVIEW",
+      "to": "ACCEPTED",
+      "reason": "Independent review ISSUES/ISSUE-20260814T051405Z-role-dispatch.md#2026-08-14t084505z--claudecodedispatch-review approved the verified target with zero open material findings."
     }
   ]
 }
@@ -182,6 +192,7 @@ This issue requires independent review of its immutable implementation target; a
 | `2026-08-14T05:48:59Z` | `agent:ClaudeCode-dispatch` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target 4a2601f04db9cf8b0f2e909fd4ca8f45666fe8c8 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json. |
 | `2026-08-14T08:45:05Z` | `ClaudeCode/dispatch-review` | `REVIEW` | `REVIEW` | Recorded independent review round 1 on immutable target `4a2601f`: `APPROVED` with zero open material findings after extracted-target verification and a fifteen-scenario adverse reproduction; the `ACCEPTED` transition and closure-checklist completion remain with the next recorder, whose label must differ from `agent:ClaudeCode-dispatch` and `ClaudeCode/dispatch-review`. |
 | `2026-08-14T08:58:30Z` | `ClaudeCode/dispatch-record` | `REVIEW` | `REVIEW` | Recorder verification before acceptance, without re-review: dispatcher routes to the recorder role and this label differs from both prior labels; the persisted round is mechanically parseable with disposition `APPROVED` and zero open material findings on the exact verified target `4a2601f04db9cf8b0f2e909fd4ca8f45666fe8c8`; reviewer/implementor label inequality holds; base ancestry reproduced; post-target drift through `f798cfc` is record-only; local HEAD, cached `origin/main`, and direct remote are equal with a clean worktree; completed the two evidence-supported closure-checklist items. |
+| `2026-08-14T08:57:40Z` | `agent:ClaudeCode-dispatch-record` | `REVIEW` | `CLOSED` | Pipeline AWAITING_PEER_REVIEW -> ACCEPTED. Independent review ISSUES/ISSUE-20260814T051405Z-role-dispatch.md#2026-08-14t084505z--claudecodedispatch-review approved the verified target with zero open material findings. |
 
 ## Closure checklist
 
