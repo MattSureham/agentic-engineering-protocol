@@ -4,16 +4,16 @@
 
 - **ID:** `ISSUE-20260814T051405Z-role-dispatch`
 - **Title:** Implement the authorized automated role dispatch milestone
-- **Status:** `IMPLEMENTING`
+- **Status:** `REVIEW`
 - **Severity:** `MEDIUM`
 - **Owner:** `ClaudeCode/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-14T05:14:05Z`
-- **Updated UTC:** `2026-08-14T05:43:14Z`
+- **Updated UTC:** `2026-08-14T05:48:59Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Automated role dispatch phase and `MILESTONE-20260814T051405Z-role-dispatch-v1`
 - **ADRs:** [`ADR-20260814T051405Z-automated-role-dispatch`](../ADR/ADR-20260814T051405Z-automated-role-dispatch.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
-- **Evidence:** Verification table below; pipeline-generated submission evidence under `EVIDENCE/` is recorded by the review-submission gate
+- **Evidence:** [`EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json`](../EVIDENCE/EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json) (pipeline-generated submission record, result `PASS`) plus the verification table below
 - **Milestone:** `MILESTONE-20260814T051405Z-role-dispatch-v1`
 
 Primary states are `OPEN`, `INVESTIGATING`, `IMPLEMENTING`, `VERIFYING`, `REVIEW`, and `CLOSED`. `BLOCKED` records a temporary side state. Code written is not closure.
@@ -67,6 +67,8 @@ The owner direction is recorded verbatim in HUMAN_CHECKPOINT and summarized unde
 | `2026-08-14T05:43:14Z` | `agent:ClaudeCode-dispatch` | Live read-only check on this repository: `python3 scripts/run_dispatch.py --json` twice, compared byte-for-byte; `git status --porcelain` before and after | Byte-identical decision (role `implementer`, state `IN_PROGRESS`, milestone 2 selected); worktree status unchanged, confirming no mutation | Inline | Single live state exercised; the fixture suite covers every other state |
 | `2026-08-14T05:43:14Z` | `agent:ClaudeCode-dispatch` | Fixture coverage across every dispatch-relevant state: `AUTHORIZED`, `READY`, `IN_PROGRESS`, `AWAITING_PEER_REVIEW` (no round, stale-target round, `APPROVED` round, `CHANGES_REQUIRED` round, `BLOCKED` round), `CHANGES_REQUIRED`, `BLOCKED_HUMAN_AUTHORITY`, all-`ACCEPTED` terminal, and dependency-ordered selection | Each routes to exactly the one expected role with the expected eligibility constraints and commands; byte-identity, timestamp-free output, and no-mutation assertions pass | `tests/test_run_dispatch.py` (19 tests) | Semantic adequacy of routing wording remains reviewer judgment |
 
+- **Pipeline verification `2026-08-14T05:48:59Z`:** [`EVIDENCE/EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json`](../EVIDENCE/EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json) — deterministic structural and accepted-command gates passed for `4a2601f04db9cf8b0f2e909fd4ca8f45666fe8c8`.
+
 ## Pipeline state
 
 The JSON block is operational state bound to the accepted milestone contract. It does not contain or override scope.
@@ -77,12 +79,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260814T051405Z-role-dispatch-v1",
   "authority_digest": "afe725805d919f850e7d44017a2b4b63ba6b0f3453ec6bea84ece1ee265b638c",
-  "state": "IN_PROGRESS",
+  "state": "AWAITING_PEER_REVIEW",
   "attempt": 1,
   "implementor": "agent:ClaudeCode-dispatch",
   "base_revision": "10d9610f8d5d6167360b6f5fd4bfdf4392971ac4",
-  "target_revision": null,
-  "verification_evidence": [],
+  "target_revision": "4a2601f04db9cf8b0f2e909fd4ca8f45666fe8c8",
+  "verification_evidence": [
+    "EVIDENCE/EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json"
+  ],
   "review_references": [],
   "events": [
     {
@@ -108,6 +112,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": "READY",
       "to": "IN_PROGRESS",
       "reason": "Implementation attempt 1 began from immutable base 10d9610f8d5d6167360b6f5fd4bfdf4392971ac4."
+    },
+    {
+      "sequence": 4,
+      "utc": "2026-08-14T05:48:59Z",
+      "actor": "agent:ClaudeCode-dispatch",
+      "from": "IN_PROGRESS",
+      "to": "AWAITING_PEER_REVIEW",
+      "reason": "Immutable target 4a2601f04db9cf8b0f2e909fd4ca8f45666fe8c8 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json."
     }
   ]
 }
@@ -152,6 +164,7 @@ No independent review round has been recorded.
 | `2026-08-14T05:30:25Z` | `agent:ClaudeCode-dispatch` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 | `2026-08-14T05:30:34Z` | `agent:ClaudeCode-dispatch` | `INVESTIGATING` | `IMPLEMENTING` | Pipeline READY -> IN_PROGRESS. Implementation attempt 1 began from immutable base 10d9610f8d5d6167360b6f5fd4bfdf4392971ac4. |
 | `2026-08-14T05:43:14Z` | `agent:ClaudeCode-dispatch` | `IMPLEMENTING` | `IMPLEMENTING` | Implemented attempt 1 within the contract allowed paths: root `ROLE_CONTRACTS.md` (implementer, independent-reviewer, recorder/coordinator, human-escalation contracts plus the documented manual host adapter boundary), read-only `scripts/run_dispatch.py` reusing the accepted pipeline parsers, and 19-test `tests/test_run_dispatch.py` covering every dispatch-relevant state; `README.md` navigation updated; 63 tests and the structural validator pass; verification rows recorded above |
+| `2026-08-14T05:48:59Z` | `agent:ClaudeCode-dispatch` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target 4a2601f04db9cf8b0f2e909fd4ca8f45666fe8c8 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260814T054859Z-milestone-20260814t051405z-role-dispatch-v1-attempt-1.json. |
 
 ## Closure checklist
 
