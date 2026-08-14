@@ -4,16 +4,16 @@
 
 - **ID:** `ISSUE-20260806T013907Z-runtime-automation`
 - **Title:** Implement the authorized root-local milestone pipeline
-- **Status:** `IMPLEMENTING`
+- **Status:** `REVIEW`
 - **Severity:** `MEDIUM`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-06T01:39:07Z`
-- **Updated UTC:** `2026-08-14T04:02:07Z`
+- **Updated UTC:** `2026-08-14T04:08:12Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Authorized milestone pipeline phase and `MILESTONE-20260814T015817Z-authorized-pipeline-v1`; historical post-pilot hardening deferral retained as prior context
 - **ADRs:** [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
-- **Evidence:** [`EVIDENCE-20260806T013907Z-post-pilot-audit`](../EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md); [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md); [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md); generated [`attempt-1 verification`](../EVIDENCE/EVIDENCE-20260814T023116Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-1.json)
+- **Evidence:** [`EVIDENCE-20260806T013907Z-post-pilot-audit`](../EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md); [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md); [`attempt-1 verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md) and generated [`attempt-1 JSON`](../EVIDENCE/EVIDENCE-20260814T023116Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-1.json); [`attempt-2 verification`](../EVIDENCE/EVIDENCE-20260814T040812Z-authorized-pipeline-fix-verification.md) and generated [`attempt-2 JSON`](../EVIDENCE/EVIDENCE-20260814T040644Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-2.json)
 - **Milestone:** `MILESTONE-20260814T015817Z-authorized-pipeline-v1`
 
 ## Problem
@@ -62,13 +62,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260814T015817Z-authorized-pipeline-v1",
   "authority_digest": "36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4",
-  "state": "IN_PROGRESS",
+  "state": "AWAITING_PEER_REVIEW",
   "attempt": 2,
   "implementor": "agent:Codex-root-fix-2",
   "base_revision": "57fe35c3a397fb1d71caa466d32a62f84fd51802",
-  "target_revision": null,
+  "target_revision": "26d890f6e27ad181265ee5417a45637d867aa2dc",
   "verification_evidence": [
-    "EVIDENCE/EVIDENCE-20260814T023116Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-1.json"
+    "EVIDENCE/EVIDENCE-20260814T023116Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-1.json",
+    "EVIDENCE/EVIDENCE-20260814T040644Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-2.json"
   ],
   "review_references": [
     "ISSUES/ISSUE-20260806T013907Z-runtime-automation.md#2026-08-14t031106z--claudecodepipeline-review"
@@ -121,6 +122,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": "CHANGES_REQUIRED",
       "to": "IN_PROGRESS",
       "reason": "Implementation attempt 2 began from immutable base 57fe35c3a397fb1d71caa466d32a62f84fd51802."
+    },
+    {
+      "sequence": 7,
+      "utc": "2026-08-14T04:06:44Z",
+      "actor": "agent:Codex-root-fix-2",
+      "from": "IN_PROGRESS",
+      "to": "AWAITING_PEER_REVIEW",
+      "reason": "Immutable target 26d890f6e27ad181265ee5417a45637d867aa2dc passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260814T040644Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-2.json."
     }
   ]
 }
@@ -136,8 +145,11 @@ The authority-boundary statement that no implementation existed is preserved her
 | `2026-08-14T02:24:27Z` | `Codex/root` | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v`; `python3 scripts/run_pipeline.py status --json` repeated through both supported root-option positions; `git diff --check` | `39` tests pass; live contract/state status passes with digest `36fba5d...`; repeated JSON output has identical SHA-256 `6565d689...`; diff check passes | Candidate worktree output; immutable evidence pending | Candidate is not an immutable target; independent review and broader platform/CommonMark validation remain pending |
 | `2026-08-14T02:39:53Z` | `Codex/root` | Two safe temporary-repository reproductions: an accepted command writes an unexpected worktree file; a committed baseline `EVIDENCE` symlink targets a sibling temporary directory | Both submissions incorrectly exit `0` and enter `AWAITING_PEER_REVIEW`; the first leaves the unexpected file, the second creates JSON outside the repository | [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md), Post-target implementor findings `F1`/`F2` | Target remains immutable; reviewer must independently classify; fixes are not present |
 | `2026-08-14T04:02:07Z` | `Codex/root-fix-2` | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v`; structural validator; read-only pipeline status; targeted adversarial fixture runs; `git diff --check` | `44` tests pass; structural validation passes; status reports attempt-2 `IN_PROGRESS`; ordinary/ignored/HEAD/specification/issue mutations produce failure evidence without state advancement; unsafe evidence directories cannot receive output; generated Markdown remains contiguous | Candidate worktree plus independent round-1 resolution conditions | Candidate is not yet an immutable target and implementor verification is not independent review |
+| `2026-08-14T04:08:12Z` | `Codex/root-fix-2` | Pipeline submission against target `26d890f`; generated-evidence inspection; exact-target `git archive` rerun; compilation, isolated copy, repository Markdown/link, scope, governed-source, whitespace, and credential scans | Pipeline and exact-target suite pass 44 tests; all four postconditions pass; exact 10-file package/zero symlinks; 43 Markdown files/216 relative links/zero findings; five allowed target paths; zero credential-shaped matches | [`EVIDENCE-20260814T040812Z-authorized-pipeline-fix-verification`](../EVIDENCE/EVIDENCE-20260814T040812Z-authorized-pipeline-fix-verification.md) and generated [`attempt-2 JSON`](../EVIDENCE/EVIDENCE-20260814T040644Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-2.json) | Implementor evidence cannot satisfy fresh independent review; Darwin/Python/Git and Markdown-linter limits remain explicit |
 
 - **Pipeline verification `2026-08-14T02:31:16Z`:** [`EVIDENCE/EVIDENCE-20260814T023116Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-1.json`](../EVIDENCE/EVIDENCE-20260814T023116Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-1.json) — deterministic structural and accepted-command gates passed for `6c0a3bda06686635023e334a4e644fb176372b04`.
+
+- **Pipeline verification `2026-08-14T04:06:44Z`:** [`EVIDENCE/EVIDENCE-20260814T040644Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-2.json`](../EVIDENCE/EVIDENCE-20260814T040644Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-2.json) — deterministic structural and accepted-command gates passed for `26d890f6e27ad181265ee5417a45637d867aa2dc`.
 
 ## Self-review
 
@@ -161,6 +173,10 @@ The authority-boundary statement that no implementation existed is preserved her
 - **Verification:** Full candidate suite reports `Ran 44 tests ... OK`; structural validator and live read-only pipeline status pass; whitespace check passes. Exact-target verification and generated attempt-2 evidence remain pending.
 - **Remaining uncertainty:** Fresh independent review must determine whether the new immutable target satisfies `R1`/`R2` and whether `R3` is fully resolved. TOCTOU behavior under non-cooperating writers, authenticated identity, broader platform portability, and semantic safety of owner-authorized commands remain outside the accepted boundary.
 - **Boundary:** This is attributable implementor evidence only. It records no peer-review disposition and cannot satisfy the independent-review gate.
+
+#### Immutable target result
+
+Pipeline submission at `2026-08-14T04:06:44Z` bound attempt 2 to target `26d890f6e27ad181265ee5417a45637d867aa2dc`, generated a `PASS` record with all four repository postconditions `PASS`, and advanced only to `AWAITING_PEER_REVIEW`. The complete exact-target matrix and integrity hashes are in [`EVIDENCE-20260814T040812Z-authorized-pipeline-fix-verification`](../EVIDENCE/EVIDENCE-20260814T040812Z-authorized-pipeline-fix-verification.md). This additive result supersedes only the candidate-pending statement above; it does not supply an independent disposition.
 
 ## Independent review rounds
 
@@ -193,8 +209,8 @@ The authority-boundary statement that no implementation existed is preserved her
 ## Residual uncertainty
 
 - Independent review round 1 (`2026-08-14T03:11:06Z`, `ClaudeCode/pipeline-review`) independently reproduced the target verification and both gate findings, and recorded `CHANGES_REQUIRED` with two open material findings (`R1`/`R2`, matching implementor `F1`/`F2`) and one non-material finding (`R3`/`F3`). Immutable target identity and deterministic output remain confirmed by the linked evidence.
-- `R1` and `R2` are reviewer-confirmed material findings against target `6c0a3bd`. Attempt-2 candidate code and regression tests implement their exact resolution conditions, but the findings remain open until a fresh reviewer approves the new immutable target.
-- `F3` (reviewer `R3`) is independently classified `LOW` and non-material. Attempt 2 separates prose/table insertion, normalizes only table-breaking whitespace, and tests renderer continuity; independent confirmation remains pending.
+- `R1` and `R2` are reviewer-confirmed material findings against target `6c0a3bd`. Exact target `26d890f` and generated attempt-2 evidence implement and exercise their resolution conditions, but the findings remain open until a fresh reviewer records a new disposition.
+- `F3` (reviewer `R3`) is independently classified `LOW` and non-material. Exact target `26d890f` separates prose/table insertion, normalizes only table-breaking whitespace, and tests renderer continuity; independent confirmation remains pending.
 - Broader portability and any supported adopter distribution remain unknown and unclaimed.
 - Recorded label inequality cannot authenticate participant identity; concurrent writers remain outside the failure model.
 
@@ -212,12 +228,14 @@ The authority-boundary statement that no implementation existed is preserved her
 | `2026-08-14T03:18:19Z` | `agent:ClaudeCode-pipeline-review` | `REVIEW` | `IMPLEMENTING` | Pipeline AWAITING_PEER_REVIEW -> CHANGES_REQUIRED. Independent review ISSUES/ISSUE-20260806T013907Z-runtime-automation.md#2026-08-14t031106z--claudecodepipeline-review recorded 2 open material finding(s); within-scope fixes are required. |
 | `2026-08-14T03:55:38Z` | `agent:Codex-root-fix-2` | `IMPLEMENTING` | `IMPLEMENTING` | Pipeline CHANGES_REQUIRED -> IN_PROGRESS. Implementation attempt 2 began from immutable base 57fe35c3a397fb1d71caa466d32a62f84fd51802. |
 | `2026-08-14T04:02:07Z` | `Codex/root-fix-2` | `IMPLEMENTING` | `IMPLEMENTING` | Implemented candidate resolutions for `R1`/`R2` and `R3`; 44 tests, structural validation, live status, and whitespace checks pass; immutable target submission and fresh review remain. |
+| `2026-08-14T04:06:44Z` | `agent:Codex-root-fix-2` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target 26d890f6e27ad181265ee5417a45637d867aa2dc passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260814T040644Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-2.json. |
+| `2026-08-14T04:08:12Z` | `Codex/root-fix-2` | `REVIEW` | `REVIEW` | Recorded exact-target reproduction, generated-postcondition inspection, scope/package/Markdown/integrity evidence, and limitations without supplying or inferring a peer disposition. |
 
 ## Closure checklist
 
 - [x] Expected behavior is tied to a higher-authority source.
 - [x] The change or resolution is recorded.
-- [ ] Required verification is incomplete: candidate fixes pass 44 tests, but exact-target pipeline evidence and fresh independent confirmation of `R1`/`R2` remain pending; unavailable checks remain explicit.
+- [x] Required deterministic and exact-target verification passes and is linked; unavailable checks remain explicit. Fresh independent confirmation is tracked by the separate review-gate item below.
 - [x] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies (not applicable — `Review: INDEPENDENT`).
 - [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
 - [x] Required human authority is recorded in the owning artifact: the accepted specification and compatible accepted ADR.

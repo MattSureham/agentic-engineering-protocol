@@ -4,11 +4,11 @@ This is a low-bandwidth synchronization point for the human technical owner. It 
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-14T04:02:07Z`
+- **Generated UTC:** `2026-08-14T04:10:25Z`
 - **Prepared by:** `Codex/root-fix-2`
-- **Period covered:** Published closure baseline `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d` through independent pipeline review round 1 and the start of fix attempt 2 from `57fe35c3a397fb1d71caa466d32a62f84fd51802`
+- **Period covered:** Published closure baseline `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d` through published pipeline fix target `26d890f6e27ad181265ee5417a45637d867aa2dc` and its attempt-2 review handoff
 - **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved Authorized milestone pipeline phase and preserved prior requirements
-- **Implementation/reference state:** Independent review of target `6c0a3bd` returned `CHANGES_REQUIRED` on material `R1`/`R2`. Attempt-2 candidate code now covers those resolution conditions plus non-material `R3` under 44 passing tests, but no new immutable target or fresh independent disposition exists yet. The milestone remains `IN_PROGRESS` and unaccepted; the two bounded wording issues retain scoped `APPROVED` rounds because their bytes are unchanged.
+- **Implementation/reference state:** Published target `26d890f6e27ad181265ee5417a45637d867aa2dc` implements the recorded `R1`/`R2` conditions and `R3` correction. Pipeline and extracted-target runs pass 44 tests, but the milestone is only `AWAITING_PEER_REVIEW` and remains unaccepted until a fresh independent round. The two bounded wording issues retain scoped `APPROVED` rounds because their reviewed bytes are unchanged.
 - **Prior checkpoint:** `2026-08-11T03:01:36Z` by `ClaudeCode/coordinator` (superseded by this authority record)
 
 ## System mental model
@@ -29,7 +29,7 @@ An explicit milestone in accepted `PROJECT_SPEC.md` is prior authorization to im
 | Resolve accepted-ADR review-state mismatch | Persist the owner's interpretation without rewriting acceptance-time history | No product or architecture change; additive ADR note and record reconciliation only | [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md), `CLOSED` after verification |
 | Implement the first executable codification slice | Replace repeated one-off structural harnesses without automating judgment | Root-only optional checker and tests; reusable package and authority hierarchy unchanged | Target `8690358`; [`EVIDENCE-20260811T020454Z-structural-validator-verification`](EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md); independent round `APPROVED`, issue `CLOSED` |
 | Authorize the root-local milestone pipeline | Remove redundant owner prompts for already-accepted scope while retaining human architecture/product authority | One accepted milestone, issue-embedded operational state, local Git/check execution, mandatory independent review; no package runtime | [`PROJECT_SPEC.md`](PROJECT_SPEC.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), authority analysis |
-| Implement and independently challenge the bounded pipeline target | Prove one accepted milestone can traverse deterministic gates without creating authority | Root-only Python state/gate CLI, isolated Git lifecycle suite, exact review vocabulary, and no runtime inside `protocol/` | Published target `6c0a3bd`; independent round 1 returned `CHANGES_REQUIRED` on material `R1`/`R2`; attempt 2 is now authorized and `IN_PROGRESS` |
+| Correct and resubmit the bounded pipeline target | Satisfy independent round-1 gate findings without changing accepted authority | Target `26d890f` adds post-command repository conditions, evidence-boundary checks, and rendering-safe record insertion; no runtime enters `protocol/` | Generated/full attempt-2 evidence passes; fresh independent disposition pending |
 
 ## Architecture decisions
 
@@ -53,7 +53,7 @@ No architecture proposal or disputed architectural decision awaits owner action.
 | Separate root/product protocol governance | Prevent silent authority coupling | Accepted ADR, semantic/link validation, independent review | Future divergence still requires judgment and review |
 | Live HANDOFF archival burden retired | Restore compact operational continuity | Migrated issue/evidence records and immutable Git provenance | None; independently verified |
 | Optional root Python structural checker | Make stable package/HANDOFF invariants repeatable | Standard-library tests plus completed independent review; five LOW findings accepted as residual risk | Full CommonMark, semantic correctness, portability, and shipped automation remain outside scope |
-| Root-local milestone state/gate engine | Mechanically enforce stable authorization, verification, review, and escalation transitions | Accepted contract/ADR plus 23 isolated pipeline tests and 21 retained structural tests in attempt-2 candidate; exact target/review pending | Candidate covers `R1`/`R2`/`R3`; remaining limits are Python/Git portability, unauthenticated labels, cooperative-only writers, and semantic safety of owner-authorized commands |
+| Root-local milestone state/gate engine | Mechanically enforce stable authorization, verification, review, and escalation transitions | Accepted contract/ADR plus 23 pipeline tests and 21 retained structural tests at target `26d890f`; exact-target and generated evidence pass | Fresh independent review; Python/Git portability, unauthenticated labels, cooperative-only writers, and semantic safety of owner-authorized commands |
 
 ### Drift assessment
 
@@ -75,10 +75,10 @@ No architecture proposal or disputed architectural decision awaits owner action.
 
 ## Confidence and verification
 
-- **What is directly verified:** Prior structural target/review remains valid; authority boundary `a6f2699` and immutable target `6c0a3bd` are published; package/contract checks and 39 target tests pass. Independent reproductions confirm `R1` and `R2`, and pipeline state now records attempt-2 `IN_PROGRESS` from synchronized base `57fe35c`.
+- **What is directly verified:** Prior structural target/review remains valid; attempt-2 target `26d890f` is published; pipeline and extracted-target suites pass 44 tests; all four repository postconditions pass; package, Markdown/link, scope, source-identity, and credential scans pass within recorded limits.
 - **What was independently reviewed:** The hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`, earlier protocol/migration/specification-evolution targets, and now structural-validator target `8690358` (round 1 `APPROVED`, five LOW findings accepted as residual risk).
-- **What was not run or remains unverified:** Attempt-2 implementation and fresh independent disposition do not yet exist; dedicated Markdown linting is unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
-- **Known regressions or unresolved risks:** Attempt-2 candidate fixes the observed `R1`/`R2`/`R3` behaviors, but they remain acceptance findings until fresh independent review of an immutable target. Four deferred capability areas remain `BLOCKED`; ignored root and prior package `.DS_Store` artifacts were moved to recoverable Trash locations rather than admitted into validation.
+- **What was not run or remains unverified:** No fresh independent disposition exists for `26d890f`; dedicated Markdown linting is unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
+- **Known regressions or unresolved risks:** Implementor evidence says target `26d890f` fixes `R1`/`R2`/`R3`, but those remain acceptance findings until fresh independent review. Four deferred capability areas remain `BLOCKED`; ignored root and prior package `.DS_Store` artifacts were moved to recoverable Trash locations rather than admitted into validation.
 
 ## Human attention required
 

@@ -6,19 +6,19 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-14T04:02:07Z`
-- **Repository state:** Attempt-2 boundary commit `87cf4ac` is a clean child of synchronized base `57fe35c`. The current worktree contains only the bounded pipeline source/test corrections and synchronized runtime-issue/HANDOFF/checkpoint records; no specification, ADR, BOOTSTRAP, reusable-package, or unrelated issue change is present.
-- **Evidence cutoff:** Structural-validator closure through `2026-08-11T03:01:36Z`; accepted pipeline authority through published `a6f2699`; attempt-1 target/review through `2026-08-14T03:19:38Z`; attempt-2 transition and candidate verification through `2026-08-14T04:02:07Z`.
-- **External checks:** At `2026-08-14T03:55:38Z`, local HEAD, cached `origin/main`, and direct remote `refs/heads/main` all equaled `57fe35c3a397fb1d71caa466d32a62f84fd51802`; fetch succeeded and confirmed no divergence before attempt 2.
+- **Snapshot updated UTC:** `2026-08-14T04:10:25Z`
+- **Repository state:** Immutable attempt-2 implementation target `26d890f6e27ad181265ee5417a45637d867aa2dc` is published and remains unaccepted. The checked-out HEAD for this snapshot is its containing record-only handoff commit, recoverable with `git rev-parse HEAD`; a commit cannot embed its own hash. Its delta from the target contains only generated/full attempt-2 evidence, the owning issue's pipeline transition/verification record, this HANDOFF, and `HUMAN_CHECKPOINT.md`.
+- **Evidence cutoff:** Structural-validator closure through `2026-08-11T03:01:36Z`; accepted pipeline authority through published `a6f2699`; attempt-1 target/review through `2026-08-14T03:19:38Z`; attempt-2 target, generated/full verification, and review handoff through `2026-08-14T04:10:25Z`.
+- **External checks:** At `2026-08-14T04:10:25Z`, fetch required cached `origin/main` to remain `57fe35c` and its ancestry to target `26d890f`; normal non-force push succeeded, and local HEAD, cached `origin/main`, and direct remote `refs/heads/main` then equaled `26d890f6e27ad181265ee5417a45637d867aa2dc` before the record-only handoff commit.
 - **Stale when:** Checked-out revision/branch changes; dirty paths differ from the recorded review-outcome set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; accepted milestone JSON or its digest changes; validation output changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
 
-- **CONFIRMED — Objective:** Resolve the two reviewer-confirmed material findings against target `6c0a3bd` within the accepted scope of `MILESTONE-20260814T015817Z-authorized-pipeline-v1` and resubmit a new immutable target for fresh independent review. The accepted specification authorizes this fix/re-review loop without a new owner prompt; the implementation remains unaccepted.
+- **CONFIRMED — Objective:** Obtain fresh independent review of immutable target `26d890f` against the accepted milestone and prior round's `R1`/`R2` resolution conditions, with `R3` included as a non-material correction. The implementation remains unaccepted until the protocol review gate is satisfied.
 - **CONFIRMED — Authority:** Human technical owner `MattSureham` accepted the milestone authority clarification and root-dogfood-first implementation plan. [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md) defines compatible architecture; accepted root-adoption ADR remains unchanged.
-- **CONFIRMED — Runtime issue:** The issue is `IMPLEMENTING`; machine state is `IN_PROGRESS`, attempt 2 by `agent:Codex-root-fix-2`, base `57fe35c`, no target yet, and contract digest `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4`. Independent review round 1 (`2026-08-14T03:11:06Z`, `ClaudeCode/pipeline-review`) remains `CHANGES_REQUIRED` with material findings `R1`/`R2`; the accepted fix loop requires no new owner approval.
+- **CONFIRMED — Runtime issue:** The issue is `REVIEW`; machine state is `AWAITING_PEER_REVIEW`, attempt 2 by `agent:Codex-root-fix-2`, base `57fe35c`, target `26d890f`, and contract digest `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4`. Round 1 remains `CHANGES_REQUIRED`; no round has reviewed target `26d890f` yet.
 - **CONFIRMED — Related wording:** Both bounded wording issues hold scoped independent `APPROVED` rounds (zero open material findings within their change sets) on shared target `6c0a3bd`; they remain `REVIEW` pending coordinator closure verification, which must re-check the wording if the fix loop alters their change sets.
-- **CONFIRMED — Pipeline implementation:** Attempt-2 candidate adds post-command HEAD/worktree/ignored-path/source-byte gates with failure evidence, rejects unsafe `EVIDENCE/` ownership boundaries at orientation and pre-write, and separates table/prose record insertion. The full candidate suite passes 44 tests, including every `R1`/`R2` reproduction class and `R3` continuity; immutable target verification and fresh independent disposition remain pending.
+- **CONFIRMED — Pipeline implementation:** Target `26d890f` adds post-command HEAD/worktree/ignored-path/source-byte gates with failure evidence, rejects unsafe `EVIDENCE/` ownership boundaries at orientation and pre-write, and separates table/prose record insertion. Pipeline submission and an extracted-target rerun each pass 44 tests; all four generated postconditions pass; the package remains ten Markdown files/zero symlinks. Fresh independent disposition remains pending.
 - **CONFIRMED — Prior milestone:** [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `CLOSED` on independently approved target `8690358d499aed20de6c620dc4dd4a81f1e1a126`.
 - **CONFIRMED — Prior structural slice:** Root-only `scripts/validate_protocol.py` and its 21-test standard-library suite validate only manifest/file integrity, supported package links, and HANDOFF structure with stable exit semantics. Its earlier approved target used package tree `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb`; the current pipeline target intentionally evolves package guidance to tree `70cf91821a3ae7651b2eea2644aea2a62d29aaf6` under the accepted milestone.
 - **CONFIRMED — Distribution boundary:** The new pipeline is root-only dogfood. No executable enters `protocol/`; the reusable package remains exactly ten Markdown files and usable without automation.
@@ -44,7 +44,7 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 - Separate root/product governance remains justified by the accepted adoption ADR; new semantic divergence is bounded by the accepted pipeline requirements and must receive independent review.
 - The pipeline adds embedded JSON schemas, Git coupling, subprocess execution, and cooperative issue replacement. The accepted ADR records their failure modes and required coverage.
-- Reviewer-confirmed findings `R1`/`R2` establish that the target's gate/output boundary is incomplete; they remain in the active runtime issue with exact resolution conditions rather than being rationalized as passing tests. `R3` challenges renderer continuity but not preserved bytes and is non-material.
+- Reviewer-confirmed findings `R1`/`R2` remain the acceptance boundary. Attempt-2 evidence says target `26d890f` satisfies their conditions and `R3`, but only a fresh independent round can resolve them; passing implementor checks are not substituted for that judgment.
 - Four deferred capability areas remain linked to `BLOCKED` issues. Runtime automation alone is unblocked for the exact accepted milestone.
 
 ### Background tasks
@@ -55,7 +55,7 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
-| [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `IMPLEMENTING` | `MEDIUM` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Implement the accepted root-local milestone state-and-gate pipeline | Attempt-2 candidate resolves `R1`/`R2` and `R3` under 44 tests; exact target, generated evidence, and fresh review remain |
+| [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `REVIEW` | `MEDIUM` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Implement the accepted root-local milestone state-and-gate pipeline | Target `26d890f` is published; generated/full evidence passes; fresh review must disposition prior `R1`/`R2` and `R3` |
 | [`ISSUE-20260811T030136Z-review-disposition-vocabulary`](ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md) | `REVIEW` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Require exact protocol vocabulary for session and durable review verdicts | Scoped `APPROVED` round on shared target `6c0a3bd`; coordinator closure verification pending |
 | [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `REVIEW` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Distinguish accepted milestone authority from external/inferred work pressure | Scoped `APPROVED` round on shared target `6c0a3bd`; coordinator closure verification pending |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define non-cooperating concurrent-writer guarantees | New owner-approved failure model and specification |
@@ -65,9 +65,21 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 ## Next Action
 
-Complete the attempt-2 release matrix, freeze the bounded candidate as an immutable target, then use the pipeline to generate attempt-2 evidence and advance only to `AWAITING_PEER_REVIEW` for a fresh independent participant.
+A fresh independent participant reviews immutable target `26d890f6e27ad181265ee5417a45637d867aa2dc`, directly challenges the attempt-2 evidence and prior `R1`/`R2`/`R3` resolution claims, and appends exactly one protocol disposition without accepting or closing work outside that review role.
 
 ## Recent Activity
+
+### 2026-08-14T04:10:25Z — Codex/root-fix-2 — Verification and Review-Handoff Recorder
+
+- **Task:** Freeze, verify, publish, and hand off pipeline fix attempt 2 without reviewing or accepting the implementor's own target.
+- **Context inspected:** Staged five-path candidate; target/base/contract identities; generated attempt-2 JSON; independent round-1 conditions; exact target archive; complete test, package, Markdown, scope, source-identity, credential, and remote state.
+- **Actions performed:** Committed target `26d890f`; invoked the pipeline submission gate, which generated attempt-2 JSON and advanced only to `AWAITING_PEER_REVIEW`; reproduced the target from `git archive`; recorded full evidence and limitations; published the immutable target after fetch/no-divergence checks. No independent disposition was generated or inferred.
+- **Files modified:** Target changes exactly five allowed paths. Post-target changes are record-only: two attempt-2 evidence files, owning issue, this HANDOFF, and `HUMAN_CHECKPOINT.md`.
+- **Findings:** `CONFIRMED` — pipeline/extracted-target runs pass 44 tests; four repository postconditions pass; exact package/Markdown/scope/governed-source checks pass. `INFERRED` — `R1`/`R2`/`R3` are resolved. `UNKNOWN` — fresh peer disposition and milestone acceptance.
+- **Verification performed:** Target tree `86b53f3`; generated evidence SHA-256 `33f756c...`; exact package tree `70cf918`; structural validator pass; 43 Markdown files/216 links/zero findings; five allowed paths; zero credential-shaped matches; target local/cached/direct remote equality confirmed. Dedicated Markdown linters remain unavailable.
+- **Issues created or updated:** Runtime issue advanced to `REVIEW`/`AWAITING_PEER_REVIEW`; both wording issues remain `REVIEW` with unchanged scoped approvals; four deferrals remain `BLOCKED`.
+- **Remaining uncertainty:** Independent semantic review; broader portability/CommonMark; authenticated identity; non-cooperating writers; semantic safety of accepted commands.
+- **Recommended next action:** Perform exactly the independent review under Next Action. Do not request routine owner approval and do not accept the target from the implementor role.
 
 ### 2026-08-14T04:02:07Z — Codex/root-fix-2 — Pipeline Fix Implementor
 
