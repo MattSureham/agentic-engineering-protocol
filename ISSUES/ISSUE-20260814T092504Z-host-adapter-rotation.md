@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260814T092504Z-host-adapter-rotation`
 - **Title:** Implement the authorized host adapter and participant rotation milestone
-- **Status:** `IMPLEMENTING`
+- **Status:** `REVIEW`
 - **Severity:** `MEDIUM`
 - **Owner:** `ClaudeCode/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-14T09:25:04Z`
-- **Updated UTC:** `2026-08-14T10:03:49Z`
+- **Updated UTC:** `2026-08-14T10:13:57Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Host adapter and participant rotation phase and `MILESTONE-20260814T092504Z-host-rotation-v1`
 - **ADRs:** [`ADR-20260814T092504Z-host-adapter-rotation`](../ADR/ADR-20260814T092504Z-host-adapter-rotation.md); [`ADR-20260814T051405Z-automated-role-dispatch`](../ADR/ADR-20260814T051405Z-automated-role-dispatch.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** [`EVIDENCE-20260814T092504Z-host-capability-probe`](../EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) (live host capability probes establishing the launch-interface boundary)
@@ -68,6 +68,8 @@ The owner direction is recorded through specification evolution and summarized i
 | `2026-08-14T10:03:49Z` | `agent:ClaudeCode-rotation` | `python3 scripts/validate_protocol.py` | `PASS structural protocol validation (package_files=10 handoffs=2)`, exit `0` | Inline | Structural invariants only |
 | `2026-08-14T10:03:49Z` | `agent:ClaudeCode-rotation` | Rotation acceptance-criteria coverage: stubbed-decision routing; every probed failure class (launch failure, budget exhaustion, timeout, session error, non-advancing); pre-launch independence filtering for reviewer/recorder/bound-implementor; exhausted-pool stop without escalation; crash truncation with restart at ledger steps; append-only ledger fields; attempt/step/spend bounds; CLI end-to-end against the real dispatcher binary on a fixture repository in the terminal state | Each maps to the expected outcome class or stop reason with ledger records; no scenario produces a `BLOCKED_HUMAN_AUTHORITY` transition; unrecognized eligibility constraints and envelope shapes fail closed | `tests/test_run_rotation.py` (26 tests) | Live runner invocation against this repository deliberately not exercised: the live decision is this attempt's own implementer role, and a real launch is operational use, not verification |
 
+- **Pipeline verification `2026-08-14T10:13:57Z`:** [`EVIDENCE/EVIDENCE-20260814T101357Z-milestone-20260814t092504z-host-rotation-v1-attempt-1.json`](../EVIDENCE/EVIDENCE-20260814T101357Z-milestone-20260814t092504z-host-rotation-v1-attempt-1.json) — deterministic structural and accepted-command gates passed for `d6471f54b7e75f255b308d44885146762642b261`.
+
 ## Pipeline state
 
 The JSON block is operational state bound to the accepted milestone contract. It does not contain or override scope.
@@ -78,12 +80,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260814T092504Z-host-rotation-v1",
   "authority_digest": "a38bb7bfd1511045e8e09b4a0dc6af7893f24a8a833e9a3faa444660cc3b977b",
-  "state": "IN_PROGRESS",
+  "state": "AWAITING_PEER_REVIEW",
   "attempt": 1,
   "implementor": "agent:ClaudeCode-rotation",
   "base_revision": "a21997dabfcc555c2b82458789aa75871f787055",
-  "target_revision": null,
-  "verification_evidence": [],
+  "target_revision": "d6471f54b7e75f255b308d44885146762642b261",
+  "verification_evidence": [
+    "EVIDENCE/EVIDENCE-20260814T101357Z-milestone-20260814t092504z-host-rotation-v1-attempt-1.json"
+  ],
   "review_references": [],
   "events": [
     {
@@ -109,6 +113,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": "READY",
       "to": "IN_PROGRESS",
       "reason": "Implementation attempt 1 began from immutable base a21997dabfcc555c2b82458789aa75871f787055."
+    },
+    {
+      "sequence": 4,
+      "utc": "2026-08-14T10:13:57Z",
+      "actor": "agent:ClaudeCode-rotation",
+      "from": "IN_PROGRESS",
+      "to": "AWAITING_PEER_REVIEW",
+      "reason": "Immutable target d6471f54b7e75f255b308d44885146762642b261 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260814T101357Z-milestone-20260814t092504z-host-rotation-v1-attempt-1.json."
     }
   ]
 }
@@ -156,6 +168,7 @@ No independent review round has been recorded. Review begins after the first imm
 | `2026-08-14T09:52:19Z` | `agent:ClaudeCode-rotation` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 | `2026-08-14T09:52:19Z` | `agent:ClaudeCode-rotation` | `INVESTIGATING` | `IMPLEMENTING` | Pipeline READY -> IN_PROGRESS. Implementation attempt 1 began from immutable base a21997dabfcc555c2b82458789aa75871f787055. |
 | `2026-08-14T10:03:49Z` | `agent:ClaudeCode-rotation` | `IMPLEMENTING` | `IMPLEMENTING` | Implemented attempt 1 within the contract allowed paths: `scripts/run_rotation.py` (dispatcher-consuming bounded runner with stub-injectable launcher, probed-envelope taxonomy, independence filtering, recovery, append-only ledger), `ROTATION_PARTICIPANTS.json` registry, empty durable `ROTATION_LOG.jsonl`, 26-test `tests/test_run_rotation.py`, `ROLE_CONTRACTS.md` adapter/rotation guidance, `README.md` navigation; owning-issue activity section conformed to the pipeline table gate (`a9a7fb0`); 89 tests and the structural validator pass; verification rows recorded above |
+| `2026-08-14T10:13:57Z` | `agent:ClaudeCode-rotation` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target d6471f54b7e75f255b308d44885146762642b261 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260814T101357Z-milestone-20260814t092504z-host-rotation-v1-attempt-1.json. |
 
 ## Closure checklist
 

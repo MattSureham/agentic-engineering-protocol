@@ -1,0 +1,70 @@
+{
+  "authority_digest": "a38bb7bfd1511045e8e09b4a0dc6af7893f24a8a833e9a3faa444660cc3b977b",
+  "base_revision": "a21997dabfcc555c2b82458789aa75871f787055",
+  "checks": [
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "id": "repository-unit-tests",
+      "stderr": "test_decision_shape_is_bounded (test_run_dispatch.DispatchOutputTests) ... ok\ntest_dispatch_mutates_nothing (test_run_dispatch.DispatchOutputTests) ... ok\ntest_human_output_lists_role_and_contract (test_run_dispatch.DispatchOutputTests) ... ok\ntest_invalid_root_is_an_error (test_run_dispatch.DispatchOutputTests) ... ok\ntest_output_carries_no_timestamps (test_run_dispatch.DispatchOutputTests) ... ok\ntest_output_is_byte_identical_for_identical_state (test_run_dispatch.DispatchOutputTests) ... ok\ntest_role_contract_anchors_exist (test_run_dispatch.DispatchOutputTests) ... ok\ntest_accepted_milestone_routes_to_terminal (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_approved_round_routes_to_recorder (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_authorized_routes_to_implementer (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_awaiting_review_without_round_routes_to_reviewer (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_blocked_review_disposition_routes_to_human_escalation (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_blocked_state_routes_to_human_escalation (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_changes_required_round_routes_to_reviewer_completion (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_changes_required_state_routes_to_implementer (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_in_progress_routes_to_bound_implementer (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_ready_routes_to_implementer (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_selection_follows_dependency_order (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_stale_round_routes_to_reviewer (test_run_dispatch.DispatchRoutingTests) ... ok\ntest_contract_rejects_path_escape_dependency_order_and_digest_drift (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_draft_specification_is_not_authority_and_does_not_mutate (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_evidence_directory_must_be_an_owned_real_directory (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_failed_check_preserves_evidence_without_advancing (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_full_lifecycle_accepts_reviewed_target (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_generated_issue_markdown_keeps_tables_and_headings_separated (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_human_escalation_requires_durable_human_blocker (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_invalid_transition_and_invocation_do_not_mutate (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_issue_conflict_is_detected_before_atomic_replacement (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_malformed_duplicate_and_unsupported_contracts_fail_closed (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_material_findings_drive_fix_and_rereview (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_out_of_scope_target_is_rejected_without_evidence (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_post_target_implementation_drift_prevents_acceptance (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_repository_mutations_fail_with_evidence_without_advancing (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_review_gate_rejects_identity_target_vocabulary_and_material_mismatch (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_review_submission_refuses_preexisting_ignored_artifact (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_second_authorized_milestone_selected_after_acceptance (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_status_is_deterministic_read_only_and_machine_readable (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_structural_validator_is_reused (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_tampered_evidence_reference_fails_status (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_transition_time_evidence_symlink_is_rejected_before_write (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_unavailable_and_timed_out_checks_are_failures_with_evidence (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_unchecked_closure_prevents_acceptance (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_attempts_exhausted_stops_and_is_durable_across_restart (test_run_rotation.RotationBoundsTests) ... ok\ntest_spend_bound_stops_before_next_launch (test_run_rotation.RotationBoundsTests) ... ok\ntest_steps_bound_stops_even_when_advancing (test_run_rotation.RotationBoundsTests) ... ok\ntest_cli_consumes_the_real_dispatcher_and_stops_at_terminal (test_run_rotation.RotationCliTests) ... ok\ntest_non_advancing_success_is_a_participant_failure (test_run_rotation.RotationFailureTaxonomyTests) ... ok\ntest_quota_exhaustion_is_a_participant_failure (test_run_rotation.RotationFailureTaxonomyTests) ... ok\ntest_retry_rotates_to_the_next_eligible_participant (test_run_rotation.RotationFailureTaxonomyTests) ... ok\ntest_spawn_failure_is_launch_failure (test_run_rotation.RotationFailureTaxonomyTests) ... ok\ntest_timeout_is_timeout (test_run_rotation.RotationFailureTaxonomyTests) ... ok\ntest_unknown_error_subtype_fails_closed (test_run_rotation.RotationFailureTaxonomyTests) ... ok\ntest_unparseable_envelope_is_session_error (test_run_rotation.RotationFailureTaxonomyTests) ... ok\ntest_crash_resume_matches_failure_resume_sequence (test_run_rotation.RotationRecoveryTests) ... ok\ntest_ledger_is_append_only_with_required_fields (test_run_rotation.RotationRecoveryTests) ... ok\ntest_recovery_records_advancement_without_duplicate_launch (test_run_rotation.RotationRecoveryTests) ... ok\ntest_recovery_without_advancement_records_session_error_and_rotates (test_run_rotation.RotationRecoveryTests) ... ok\ntest_duplicate_labels_rejected (test_run_rotation.RotationRegistryTests) ... ok\ntest_empty_participants_rejected (test_run_rotation.RotationRegistryTests) ... ok\ntest_wrong_schema_rejected (test_run_rotation.RotationRegistryTests) ... ok\ntest_bound_implementor_label_is_the_only_candidate (test_run_rotation.RotationRoutingTests) ... ok\ntest_exhausted_pool_stops_without_escalation (test_run_rotation.RotationRoutingTests) ... ok\ntest_human_escalation_decision_stops_without_launch (test_run_rotation.RotationRoutingTests) ... ok\ntest_prompt_substitutes_participant_label (test_run_rotation.RotationRoutingTests) ... ok\ntest_recorder_excludes_implementor_and_reviewer (test_run_rotation.RotationRoutingTests) ... ok\ntest_reviewer_independence_excludes_implementor (test_run_rotation.RotationRoutingTests) ... ok\ntest_terminal_decision_stops_without_launch (test_run_rotation.RotationRoutingTests) ... ok\ntest_unrecognized_constraint_fails_closed (test_run_rotation.RotationRoutingTests) ... ok\ntest_broken_and_escaping_links_fail (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_cli_usage_error_has_stable_summary (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_current_repository_passes (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_fenced_handoff_headings_do_not_affect_structure (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_handoff_section_shape_failures (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_handoff_snapshot_field_and_next_action_failures (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_indented_link_like_syntax_returns_unsupported (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_inline_code_does_not_span_blank_block_boundary (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_isolated_copy_with_spaces_is_deterministic_and_read_only (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_malformed_inline_link_returns_unsupported (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_markdown_byte_and_fence_invariants_fail (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_missing_and_symlinked_root_handoff_fail (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_missing_and_unexpected_entries_fail_manifest (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_missing_root_is_tool_error (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_non_regular_expected_entry_fails (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_reference_style_links_return_unsupported (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_supported_links_and_code_examples_pass (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_symlink_escape_fails (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_symlinked_bundle_root_fails_without_scanning_target (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_symlinked_package_entry_fails (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_unicode_space_and_parentheses_target_is_resolved (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\n\n----------------------------------------------------------------------\nRan 89 tests in 24.823s\n\nOK\n",
+      "stderr_truncated": false,
+      "stdout": "",
+      "stdout_truncated": false,
+      "timed_out": false,
+      "timeout_seconds": 120
+    }
+  ],
+  "environment": {
+    "platform": "darwin",
+    "python": "3.9.6"
+  },
+  "id": "EVIDENCE-20260814T101357Z-milestone-20260814t092504z-host-rotation-v1-attempt-1",
+  "limitations": [
+    "Participant labels are recorded assertions, not authenticated identities.",
+    "Passing deterministic checks does not establish semantic correctness or review adequacy."
+  ],
+  "milestone_id": "MILESTONE-20260814T092504Z-host-rotation-v1",
+  "participant": "agent:ClaudeCode-rotation",
+  "recorded_utc": "2026-08-14T10:13:57Z",
+  "repository_postconditions": [
+    {
+      "detail": "HEAD matches submitted target",
+      "id": "head-unchanged",
+      "path": ".git",
+      "result": "PASS"
+    },
+    {
+      "detail": "working tree has no tracked, untracked, or ignored artifacts",
+      "id": "worktree-clean",
+      "path": ".git",
+      "result": "PASS"
+    },
+    {
+      "detail": "authority source bytes are unchanged",
+      "id": "authority-source-unchanged",
+      "path": "PROJECT_SPEC.md",
+      "result": "PASS"
+    },
+    {
+      "detail": "owning issue bytes are unchanged",
+      "id": "issue-source-unchanged",
+      "path": "ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md",
+      "result": "PASS"
+    }
+  ],
+  "result": "PASS",
+  "schema": "aep-pipeline-verification/v1",
+  "structural_validator": {
+    "finding_count": 0,
+    "result": "PASS"
+  },
+  "target_revision": "d6471f54b7e75f255b308d44885146762642b261"
+}
