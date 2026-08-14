@@ -176,7 +176,7 @@ This issue requires independent review of its immutable implementation target; a
 
 ## Residual uncertainty
 
-- Independent review round 1 (`2026-08-14T08:45:05Z`, `ClaudeCode/dispatch-review`) is persisted with disposition `APPROVED` and zero open material findings; the recorder's acceptance gates and closure-checklist completion are the remaining work.
+- The milestone lifecycle is complete: independent review round 1 (`2026-08-14T08:45:05Z`, `ClaudeCode/dispatch-review`) is `APPROVED` with zero open material findings; recorder `ClaudeCode/dispatch-record` completed the evidence-supported closure-checklist items on `2026-08-14T08:58:30Z` and the pipeline validated the `AWAITING_PEER_REVIEW` → `ACCEPTED` transition under `agent:ClaudeCode-dispatch-record` on `2026-08-14T08:57:40Z`.
 - Host launch capability remains unknown and out of scope; the adapter boundary is documented instead.
 - Broader platform portability beyond the recorded Darwin/Python 3.9 environment is unestablished, unchanged from the pipeline milestone.
 
