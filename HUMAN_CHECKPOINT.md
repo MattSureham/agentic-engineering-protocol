@@ -4,11 +4,11 @@ This is a low-bandwidth synchronization point for the human technical owner. It 
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-14T02:02:50Z`
+- **Generated UTC:** `2026-08-14T02:24:27Z`
 - **Prepared by:** `Codex/root`
-- **Period covered:** Published closure baseline `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d` through the accepted pipeline authority boundary
+- **Period covered:** Published closure baseline `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d` through the bounded pipeline implementation candidate
 - **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved Authorized milestone pipeline phase and preserved prior requirements
-- **Implementation/reference state:** No pipeline runtime exists yet. Milestone `MILESTONE-20260814T015817Z-authorized-pipeline-v1` is accepted and operational state is `AUTHORIZED`; implementation, deterministic verification, immutable target, and independent review remain pending.
+- **Implementation/reference state:** The root-only pipeline candidate exists and milestone `MILESTONE-20260814T015817Z-authorized-pipeline-v1` is `IN_PROGRESS` at attempt 1 from published authority boundary `a6f2699`. Candidate tests pass; immutable-target verification and independent review remain pending, so the milestone is not accepted.
 - **Prior checkpoint:** `2026-08-11T03:01:36Z` by `ClaudeCode/coordinator` (superseded by this authority record)
 
 ## System mental model
@@ -29,6 +29,7 @@ An explicit milestone in accepted `PROJECT_SPEC.md` is prior authorization to im
 | Resolve accepted-ADR review-state mismatch | Persist the owner's interpretation without rewriting acceptance-time history | No product or architecture change; additive ADR note and record reconciliation only | [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md), `CLOSED` after verification |
 | Implement the first executable codification slice | Replace repeated one-off structural harnesses without automating judgment | Root-only optional checker and tests; reusable package and authority hierarchy unchanged | Target `8690358`; [`EVIDENCE-20260811T020454Z-structural-validator-verification`](EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md); independent round `APPROVED`, issue `CLOSED` |
 | Authorize the root-local milestone pipeline | Remove redundant owner prompts for already-accepted scope while retaining human architecture/product authority | One accepted milestone, issue-embedded operational state, local Git/check execution, mandatory independent review; no package runtime | [`PROJECT_SPEC.md`](PROJECT_SPEC.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), authority analysis |
+| Implement the bounded pipeline candidate | Prove one accepted milestone can traverse deterministic gates without creating authority | Root-only Python state/gate CLI, isolated Git lifecycle suite, exact review vocabulary, and no runtime inside `protocol/` | 39 candidate tests pass; immutable target/evidence and peer disposition pending |
 
 ## Architecture decisions
 
@@ -52,7 +53,7 @@ No architecture proposal or disputed architectural decision awaits owner action.
 | Separate root/product protocol governance | Prevent silent authority coupling | Accepted ADR, semantic/link validation, independent review | Future divergence still requires judgment and review |
 | Live HANDOFF archival burden retired | Restore compact operational continuity | Migrated issue/evidence records and immutable Git provenance | None; independently verified |
 | Optional root Python structural checker | Make stable package/HANDOFF invariants repeatable | Standard-library tests plus completed independent review; five LOW findings accepted as residual risk | Full CommonMark, semantic correctness, portability, and shipped automation remain outside scope |
-| Root-local milestone state/gate engine | Mechanically enforce stable authorization, verification, review, and escalation transitions | Accepted contract/ADR; planned parser/state/Git/subprocess tests and independent review | Python/Git portability, unauthenticated labels, and concurrent writers remain explicitly limited |
+| Root-local milestone state/gate engine | Mechanically enforce stable authorization, verification, review, and escalation transitions | Accepted contract/ADR plus 18 isolated pipeline tests and 21 retained structural tests; independent review pending | Python/Git portability, unauthenticated labels, and concurrent writers remain explicitly limited |
 
 ### Drift assessment
 
@@ -74,9 +75,9 @@ No architecture proposal or disputed architectural decision awaits owner action.
 
 ## Confidence and verification
 
-- **What is directly verified:** Prior structural target/review remains valid; recovered closure commit `cb5e8d6` is published; the current package validator passes after ignored OS metadata recovery; the accepted milestone contract parses to digest `36fba5d...`.
+- **What is directly verified:** Prior structural target/review remains valid; authority boundary `a6f2699` is published; the package validator passes; the accepted contract resolves to digest `36fba5d...`; 39 candidate tests pass, including failure, fix/re-review, acceptance, continuation, and escalation paths.
 - **What was independently reviewed:** The hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`, earlier protocol/migration/specification-evolution targets, and now structural-validator target `8690358` (round 1 `APPROVED`, five LOW findings accepted as residual risk).
-- **What was not run or remains unverified:** Pipeline implementation/tests do not yet exist; dedicated Markdown linting is unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
+- **What was not run or remains unverified:** The candidate is not yet an immutable verified target and has no independent disposition; dedicated Markdown linting is unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
 - **Known regressions or unresolved risks:** Ignored `protocol/.DS_Store` caused a real exact-manifest failure and was moved to Trash before authority recording. Four deferred capability areas remain `BLOCKED`.
 
 ## Human attention required

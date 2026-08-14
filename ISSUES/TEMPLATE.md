@@ -16,6 +16,7 @@ Copy this file to `ISSUE-YYYYMMDDTHHMMSSZ-short-slug.md`, replace every brackete
 - **Requirements:** `[PROJECT_SPEC references]`
 - **ADRs:** `[accepted/proposed ADR links or NONE]`
 - **Evidence:** `[evidence links or NONE YET]`
+- **Milestone:** `[accepted PROJECT_SPEC milestone ID or NONE]`
 
 Primary states are `OPEN`, `INVESTIGATING`, `IMPLEMENTING`, `VERIFYING`, `REVIEW`, and `CLOSED`. `BLOCKED` records a temporary side state. Code written is not closure.
 
@@ -60,6 +61,14 @@ Primary states are `OPEN`, `INVESTIGATING`, `IMPLEMENTING`, `VERIFYING`, `REVIEW
 |---|---|---|---|---|---|
 | `[time]` | `[participant]` | `[exact command/procedure or NOT RUN]` | `[result]` | `[link/concise output]` | `[limitations]` |
 
+## Pipeline state (optional)
+
+Use this section only when an accepted specification and compatible accepted ADR define an executable milestone schema. The machine block is operational lifecycle state inside this owning issue; it cannot authorize or restate scope. Ordinary issues write `NOT APPLICABLE` and omit the markers.
+
+Required state fields and transitions come from the accepted milestone contract/ADR. Preserve the event array append-only. A tool must refuse missing, duplicate, malformed, unsupported, or authority-digest-mismatched state instead of inferring it.
+
+`[A pipeline-managed issue replaces this paragraph with its exact AEP-PIPELINE-STATE markers and schema-valid JSON block. Otherwise: NOT APPLICABLE.]`
+
 ## Self-review
 
 Complete this section when metadata says `Review: SELF`. It may also prepare an independently reviewed issue, but it never substitutes for required independent review.
@@ -85,6 +94,8 @@ Append one complete subsection per review round. Never replace an earlier findin
 ### [UTC timestamp] — [reviewer]
 
 - **Reviewed repository state:** `[commit, hashes, files, or other durable reference]`
+- **Reviewed target:** `[exact immutable target; required for pipeline-managed milestones]`
+- **Open material findings:** `[nonnegative integer; required for pipeline-managed milestones]`
 - **Scope:** `[requirements, ADRs, implementation, tests, and evidence inspected]`
 - **Commands or procedures:** `[exact checks performed]`
 - **Specification compliance:** `[findings and references]`
@@ -96,6 +107,8 @@ Append one complete subsection per review round. Never replace an earlier findin
 - **Evidence:** `[links or inline observations]`
 - **Disposition:** `[APPROVED/CHANGES_REQUIRED/BLOCKED]`
 - **Prior-round resolution:** `[how earlier findings were resolved, or FIRST ROUND]`
+
+The disposition value must be exactly one of the three values above in both session-facing and durable reports. Put qualifiers and non-blocking findings in the finding/residual-risk fields; do not invent a fourth disposition. For pipeline-managed milestones, the recorded reviewer label must differ from the implementor label, but this comparison does not authenticate identity.
 
 ## Blocker
 

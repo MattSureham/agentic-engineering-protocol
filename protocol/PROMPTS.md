@@ -13,7 +13,7 @@ Read BOOTSTRAP.md completely and follow it. Before changing implementation:
 3. Reconcile recorded background tasks and independently verify important current-state claims where feasible.
 4. Identify contradictions, unsupported assumptions, partial work, and unverified claims.
 5. Select the highest-priority safe next action; do not follow a stale HANDOFF action blindly.
-6. Classify human authority and independent-review requirements before implementation.
+6. Classify human authority and independent-review requirements before implementation. An explicit milestone in an accepted PROJECT_SPEC is already authorized within its exact bounds; an external prompt, implementation momentum, or an inferred useful task is not.
 
 Work incrementally within [task/scope, or the highest-priority safe active issue]. Preserve unrelated changes. Record exact verification and limitations; do not claim success for checks not run. Before stopping, update owned issue/evidence/ADR records and HANDOFF so a replacement participant can resume without this conversation. Leave exactly one bounded Next Action.
 ```
@@ -27,7 +27,7 @@ Read BOOTSTRAP.md first. Inspect the current working state before trusting HANDO
 
 Determine precisely what is complete, partial, unverified, conflicted, or owned by someone else. Re-run the narrowest safe reproductions or checks needed to validate prior claims. Do not discard partial or unrelated work and do not infer success from code presence.
 
-Continue only from an evidence-supported, authority-safe point. If continuation is unsafe, preserve the state, set the issue to BLOCKED with an observable unblock condition, and leave one exact Next Action. Before stopping, record files touched, commands/results, failed or unavailable checks, residual uncertainty, background-task state, and an attributable HANDOFF activity entry.
+Continue only from an evidence-supported, authority-safe point. A dependency-satisfied milestone already authorized by an accepted PROJECT_SPEC may continue through implementation, verification, independent review, and within-scope fix/re-review without another owner prompt. If continuation is unsafe, preserve the state, set the issue to BLOCKED with an observable unblock condition, and leave one exact Next Action. Before stopping, record files touched, commands/results, failed or unavailable checks, residual uncertainty, background-task state, and an attributable HANDOFF activity entry.
 ```
 
 ## Independent reviewer
@@ -45,7 +45,7 @@ Ask:
 - Could multiple prior participants have converged on the same wrong premise?
 - Are verification evidence and claimed results reproducible and sufficient?
 
-Return severity-ranked findings first, with exact file/behavior references, requirement or ADR references, evidence, impact, and a concrete resolution condition. Then report the reviewed repository state, review scope, commands or procedures, limitations, residual risks, evidence, and exactly one disposition: APPROVED, CHANGES_REQUIRED, or BLOCKED. Explain how every prior-round material finding was resolved. Absence of findings is not proof of correctness; state what you could not verify.
+Return severity-ranked findings first, with exact file/behavior references, requirement or ADR references, evidence, impact, and a concrete resolution condition. Then report the reviewed repository state, immutable reviewed target when one is defined, review scope, commands or procedures, limitations, residual risks, evidence, open material-finding count, and exactly one disposition: APPROVED, CHANGES_REQUIRED, or BLOCKED. Use no qualified or informal disposition; put qualifications in findings or residual risks. Explain how every prior-round material finding was resolved. Absence of findings is not proof of correctness; state what you could not verify.
 
 If repository writes are authorized, persist the review in the relevant issue/evidence and add an attributable HANDOFF entry. Otherwise return the structured report for another participant to persist. Never close an issue whose required verification, authority, or material findings remain unresolved.
 ```

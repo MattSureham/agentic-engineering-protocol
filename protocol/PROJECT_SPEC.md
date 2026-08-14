@@ -111,6 +111,23 @@ Label each statement `CONFIRMED`, `INFERRED`, or `UNKNOWN`. An unresolved item t
 |---|---|---|---|
 | `UNKNOWN` | `[open assumption or decision]` | `[what resolves it]` | `[owner]` |
 
+## Authorized milestones (optional)
+
+An explicit milestone in an `ACCEPTED` specification may constitute prior human authorization to implement, verify, fix, independently review, and accept only that declared scope. A lifecycle boundary does not by itself require another owner approval. Human authority remains required when requirements or accepted architecture must change, scope expands, a human-gated blocker must be resolved, evidence cannot establish authority, review exposes a material unresolved ambiguity, or an unapproved high-impact external action is required.
+
+Projects without executable milestone tooling may keep the empty contract below and follow the ordinary issue lifecycle manually. Projects that adopt compatible tooling replace the empty array through the normal specification-evolution process. Runtime state may reference a canonical digest of a milestone entry but MUST NOT copy, add, or override scope. An edit to this block in an accepted specification is a material requirement change.
+
+Each adopted milestone schema must define stable ID, ordering, owning issue, dependencies, bounded scope, allowed paths or components, deterministic acceptance checks, timeouts, and independent-review requirement. Do not list speculative future work merely to avoid a later owner decision.
+
+<!-- AEP-AUTHORIZED-MILESTONES-V1:BEGIN -->
+```json
+{
+  "schema": "aep-authorized-milestones/v1",
+  "milestones": []
+}
+```
+<!-- AEP-AUTHORIZED-MILESTONES-V1:END -->
+
 ## Specification evolution
 
 `PROJECT_SPEC.md` is authoritative but not immutable.

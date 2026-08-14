@@ -4,16 +4,17 @@
 
 - **ID:** `ISSUE-20260806T013907Z-runtime-automation`
 - **Title:** Implement the authorized root-local milestone pipeline
-- **Status:** `INVESTIGATING`
+- **Status:** `IMPLEMENTING`
 - **Severity:** `MEDIUM`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-06T01:39:07Z`
-- **Updated UTC:** `2026-08-14T01:58:17Z`
+- **Updated UTC:** `2026-08-14T02:24:27Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Authorized milestone pipeline phase and `MILESTONE-20260814T015817Z-authorized-pipeline-v1`; historical post-pilot hardening deferral retained as prior context
 - **ADRs:** [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** [`EVIDENCE-20260806T013907Z-post-pilot-audit`](../EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md); [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md)
+- **Milestone:** `MILESTONE-20260814T015817Z-authorized-pipeline-v1`
 
 ## Problem
 
@@ -60,10 +61,10 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260814T015817Z-authorized-pipeline-v1",
   "authority_digest": "36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4",
-  "state": "AUTHORIZED",
-  "attempt": 0,
-  "implementor": null,
-  "base_revision": null,
+  "state": "IN_PROGRESS",
+  "attempt": 1,
+  "implementor": "agent:Codex-root",
+  "base_revision": "a6f2699a4bed2e1a08c9a506bad62204bd2d0086",
   "target_revision": null,
   "verification_evidence": [],
   "review_references": [],
@@ -75,6 +76,22 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": null,
       "to": "AUTHORIZED",
       "reason": "Accepted PROJECT_SPEC milestone and compatible accepted ADR satisfy the prior blocker."
+    },
+    {
+      "sequence": 2,
+      "utc": "2026-08-14T02:06:16Z",
+      "actor": "agent:Codex-root",
+      "from": "AUTHORIZED",
+      "to": "READY",
+      "reason": "Accepted contract, dependencies, structural baseline, issue blocker, and authority digest were reconciled."
+    },
+    {
+      "sequence": 3,
+      "utc": "2026-08-14T02:06:16Z",
+      "actor": "agent:Codex-root",
+      "from": "READY",
+      "to": "IN_PROGRESS",
+      "reason": "Implementation began from immutable authority boundary a6f2699a4bed2e1a08c9a506bad62204bd2d0086."
     }
   ]
 }
@@ -83,18 +100,22 @@ The JSON block is operational state bound to the accepted milestone contract. It
 
 ## Verification
 
-`NOT RUN` — no pipeline implementation exists at this authority boundary. Baseline recovery, remote publication, authority reconciliation, contract digest, and structural-validator observations are recorded in the linked authority analysis. Runtime verification will be appended after implementation.
+The authority-boundary statement that no implementation existed is preserved here. Candidate implementation verification is recorded additively below and will be superseded by immutable-target evidence when the state advances to `AWAITING_PEER_REVIEW`.
+
+| UTC time | Participant | Command or procedure | Result and exit status | Evidence | Limitations |
+|---|---|---|---|---|---|
+| `2026-08-14T02:24:27Z` | `Codex/root` | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v`; `python3 scripts/run_pipeline.py status --json` repeated through both supported root-option positions; `git diff --check` | `39` tests pass; live contract/state status passes with digest `36fba5d...`; repeated JSON output has identical SHA-256 `6565d689...`; diff check passes | Candidate worktree output; immutable evidence pending | Candidate is not an immutable target; independent review and broader platform/CommonMark validation remain pending |
 
 ## Self-review
 
 - **Participant:** `Codex/root`
-- **Reviewed UTC:** `PENDING`
+- **Reviewed UTC:** `2026-08-14T02:24:27Z`
 - **Reviewed repository state:** `PENDING immutable target`
 - **Scope and authority references:** Accepted milestone, specification change, and pipeline ADR linked above
-- **Checks and evidence reviewed:** `PENDING`
-- **Findings and corrections:** `PENDING`
+- **Checks and evidence reviewed:** Candidate 37-test suite, live status output, accepted specification/ADR, path allowlist, package boundary, and diff integrity
+- **Findings and corrections:** Corrected metadata parsing to distinguish root specification status from issue metadata; rejected ambiguous path spellings; added resolution and authority checks for evidence/review references; all corrections were rerun through the complete suite.
 - **Limitations:** Implementor self-review cannot satisfy this issue's independent-review gate.
-- **Residual risks:** `PENDING`
+- **Residual risks:** Python/Git portability beyond the recorded environment, output sensitivity of owner-authorized checks, unauthenticated participant labels, cooperative-only issue replacement, and independent semantic review remain.
 - **Outcome:** `NOT_APPLICABLE`
 
 ## Independent review rounds
@@ -124,15 +145,16 @@ No independent review round has been recorded. A fresh participant must inspect 
 | `2026-08-06T01:39:07Z` | `Codex/root` | `OPEN` | `BLOCKED` | Product-boundary change lacks approved scope |
 | `2026-08-14T01:58:17Z` | Human technical owner `MattSureham`, recorded by `Codex/root` | `BLOCKED` | `OPEN` | Explicit owner decision plus accepted specification and compatible accepted ADR satisfy the exact unblock condition; only the root-local milestone is authorized |
 | `2026-08-14T01:58:17Z` | `Codex/root` | `OPEN` | `INVESTIGATING` | Recorded the accepted contract digest, architecture, boundaries, failure model, and implementation/review gates before adding runtime behavior |
+| `2026-08-14T02:06:16Z` | `Codex/root` | `INVESTIGATING` | `IMPLEMENTING` | Committed authority boundary `a6f2699`; reconciled deterministic readiness and began attempt 1 without a new owner gate |
 
 ## Closure checklist
 
 - [x] Expected behavior is tied to a higher-authority source.
-- [ ] The change or resolution is recorded.
+- [x] The change or resolution is recorded.
 - [ ] Required verification ran and evidence is linked; unavailable checks remain explicit.
 - [x] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies (not applicable — `Review: INDEPENDENT`).
 - [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
 - [x] Required human authority is recorded in the owning artifact: the accepted specification and compatible accepted ADR.
-- [ ] New complexity is covered, removed, or linked to explicitly accepted residual debt.
+- [x] New complexity is covered by the accepted ADR and candidate tests or linked to the existing blocked identity/concurrency issues.
 - [x] Residual uncertainty is absent or explicitly owned.
 - [ ] HANDOFF reflects the resulting current state and exactly one next action.

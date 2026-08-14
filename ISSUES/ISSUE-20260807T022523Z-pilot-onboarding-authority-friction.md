@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`
 - **Title:** External task pressure versus terminal owner-wait state in fresh-participant onboarding
-- **Status:** `INVESTIGATING`
+- **Status:** `IMPLEMENTING`
 - **Severity:** `LOW`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-07T02:25:23Z`
-- **Updated UTC:** `2026-08-14T01:58:17Z`
+- **Updated UTC:** `2026-08-14T02:24:27Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) specification-evolution policy and Authorized milestone pipeline phase; reusable protocol freshness/onboarding requirements
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** Inline verification record below; [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md)
@@ -58,12 +58,14 @@ No implementation is proposed by this issue. Candidate owner options, recorded f
 2. Approve explicit wording in the reusable `protocol/BOOTSTRAP.md` stating that external prompts do not grant authority and that a terminal owner-wait state is a valid condition to preserve; follow the specification-evolution policy and independent-review gate for the product change.
 3. Approve equivalent wording in the root `BOOTSTRAP.md` only, accepting root/product divergence to be reviewed under the separate-governance rule.
 
+The preceding options are preserved as the original investigation. On `2026-08-14T01:58:17Z`, the owner selected a bounded form of option 2 plus aligned root wording: accepted specification milestones are prior authorization within their exact bounds, while external prompts, implementation momentum, participant preference, and inferred useful work are not. The terminal no-authorized-work state remains valid. No broader onboarding redesign is selected.
+
 ## Change
 
-- **Files or components:** This issue file; `HANDOFF.md` and `HUMAN_CHECKPOINT.md` index/queue updates only.
-- **Behavior changed:** None. No protocol source, specification, ADR, or evidence body was modified.
-- **Out-of-scope work deliberately excluded:** Any BOOTSTRAP wording change; any implementation against the five `BLOCKED` deferrals.
-- **Rollback or recovery:** Delete this issue file and revert the two index files; no external state was touched.
+- **Files or components:** Root and reusable `BOOTSTRAP.md`, reusable prompts/README guidance, this issue, `HANDOFF.md`, and `HUMAN_CHECKPOINT.md`.
+- **Behavior changed:** Fresh participants are now told explicitly to distinguish prior authorization in an accepted milestone from external or inferred task pressure and to preserve a valid terminal no-work state.
+- **Out-of-scope work deliberately excluded:** Broader onboarding redesign; any implementation against the four still-`BLOCKED` capability deferrals; runtime inside the reusable package.
+- **Rollback or recovery:** Revert the shared immutable pipeline wording target while preserving this owner decision and the original pilot observation.
 
 ## Unverified complexity
 
@@ -76,6 +78,7 @@ No implementation is proposed by this issue. Candidate owner options, recorded f
 | UTC time | Participant | Command or procedure | Result and exit status | Evidence | Limitations |
 |---|---|---|---|---|---|
 | `2026-08-07T02:25:23Z` | `ClaudeCode/pilot-1` | Procedures listed under Evidence or reproduction | All passed, exit `0`; snapshot claims CONFIRMED; no staleness trigger fired | Inline table above | Dedicated Markdown linters not run; single-participant observation |
+| `2026-08-14T02:24:27Z` | `Codex/root` | Inspect root/reusable BOOTSTRAP, reusable onboarding/resumption prompts, accepted milestone authority, and candidate structural/full unit checks | Explicit authority distinction is present in both normative documents and prompts; 39 repository tests pass | Shared pipeline candidate worktree; immutable evidence pending | Implementor inspection cannot satisfy independent review |
 
 ## Self-review
 
@@ -89,6 +92,8 @@ No implementation is proposed by this issue. Candidate owner options, recorded f
 - **Residual risks:** The owner may judge this finding out of scope; closure then requires only a recorded rationale
 - **Outcome:** `COMPLETE`
 
+The historical self-review above covered creation of the finding only. Implementor `Codex/root` inspected the bounded wording at `2026-08-14T02:24:27Z`; no broader onboarding behavior was added, and this preparatory check does not satisfy the now-required independent review.
+
 ## Independent review rounds
 
 - **Required:** `NO` — record-only finding with no change to external behavior, contracts, dependencies, persistent state, security/trust, concurrency, background processes, cross-module coupling, or governance architecture. If the owner approves option 2 or 3 under Investigation and decision, the resulting wording change is a separate meaningful change with its own review gate.
@@ -96,9 +101,9 @@ No implementation is proposed by this issue. Candidate owner options, recorded f
 ## Blocker
 
 - **Blocked from:** `NOT BLOCKED`
-- **Blocker:** `NONE` — closure requires only an owner decision on the three recorded options
-- **Unblock owner:** Human technical owner (`MattSureham`)
-- **Unblock condition:** Recorded owner decision selecting option 1, 2, or 3 (or rejecting the finding with rationale)
+- **Blocker:** `NONE` — the bounded owner decision is recorded; verification and independent review remain
+- **Unblock owner:** `NONE`
+- **Unblock condition:** `NONE`
 
 ## Owner direction
 
@@ -112,7 +117,7 @@ This supersedes the earlier "do not modify at this time" direction only for that
 
 ## Residual uncertainty
 
-- Whether implicit protocol coverage of terminal owner-wait states is sufficient; owned by the human technical owner via the decision above.
+- Exact wording compatibility and independent disposition remain pending. The authority distinction itself is no longer uncertain.
 
 ## Activity history
 
@@ -121,11 +126,12 @@ This supersedes the earlier "do not modify at this time" direction only for that
 | `2026-08-07T02:25:23Z` | `ClaudeCode/pilot-1` | `NONE` | `OPEN` | Created from the first fresh-participant pilot session after verifying all snapshot staleness triggers; records the external-pressure/terminal-state tension and a positive finding on the self-referential closure-verification procedure |
 | `2026-08-07T02:31:47Z` | `ClaudeCode/pilot-1` | `OPEN` | `OPEN` | Recorded owner direction: keep the finding open, do not close, do not modify protocol source at that time; approved push of the pilot-resumption record `276e55491da800a4b37d52ae76842a4ec4c0a647` was completed and remote-verified |
 | `2026-08-14T01:58:17Z` | Human technical owner `MattSureham`, recorded by `Codex/root` | `OPEN` | `INVESTIGATING` | Current owner decision supersedes the prior hold only for the exact accepted-milestone versus inferred-scope clarification; wording implementation and independent review are now authorized |
+| `2026-08-14T02:06:16Z` | `Codex/root` | `INVESTIGATING` | `IMPLEMENTING` | Began the exact root/reusable authority clarification from committed boundary `a6f2699`; broader onboarding changes remain excluded |
 
 ## Closure checklist
 
 - [x] Expected behavior is tied to a higher-authority source.
-- [ ] The change or resolution is recorded.
+- [x] The change or resolution is recorded.
 - [ ] Required verification ran and evidence is linked; unavailable checks remain explicit.
 - [x] If `Review: SELF`, the historical record-only Self-review outcome is `COMPLETE`; it does not satisfy the newly required independent review of governance wording.
 - [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.

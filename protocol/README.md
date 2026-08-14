@@ -162,12 +162,13 @@ See [`EXAMPLE.md`](EXAMPLE.md) for a small filled-in illustration.
 ## Expected workflow
 
 1. A participant reads BOOTSTRAP and independently inspects current truth.
-2. It selects or creates an issue and classifies authority and review requirements.
+2. It selects or creates an issue and classifies authority and review requirements. An explicitly declared milestone in an accepted specification is prior authorization within its exact scope; inferred work and external task pressure are not.
 3. It reproduces or establishes the problem before changing behavior.
 4. It implements a small scoped change and records proportional verification.
-5. Low-risk local work records attributable self-review; the risk categories defined in BOOTSTRAP require independent review, and durable architecture requires prior human authority.
+5. Low-risk local work records attributable self-review; the risk categories defined in BOOTSTRAP require independent review, and durable architecture requires prior human authority. Required independent review may be performed by a peer agent whose participant label differs from the implementor's; the protocol does not authenticate that label.
 6. Durable facts stay in the specification, ADR, contracts, or evidence. HANDOFF retains only what the next participant needs operationally.
-7. Before stopping, the participant reconciles background work and leaves exactly one next action.
+7. Material review findings return already-authorized work to a within-scope fix/re-review loop. Acceptance may expose the next dependency-satisfied milestone already in the accepted specification without another owner prompt; no declared milestone means no authorized work.
+8. Before stopping, the participant reconciles background work and leaves exactly one next action.
 
 Temporary roles can include Implementor, Reviewer, Verification Agent, Risk Reviewer, and Architecture Reviewer. They are roles for a task, not a permanent hierarchy.
 
@@ -197,6 +198,7 @@ Independent reviewers should challenge the premise of a change, not just its mec
 ## Limitations
 
 - Markdown cannot enforce compliance; participants and reviewers must follow the protocol.
+- Optional project-local tooling may validate deterministic structure or lifecycle gates, but it is not part of this reusable package, cannot create authority, and cannot replace judgment about scope, evidence adequacy, or review quality.
 - The protocol improves evidence quality but cannot prove that tests, specifications, or human decisions are themselves correct.
 - Independent review reduces correlated error but does not eliminate it.
 - Concurrent participants can still create merge conflicts; repository-unique timestamp IDs reduce record allocation collisions but do not coordinate code edits.

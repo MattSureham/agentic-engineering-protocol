@@ -36,6 +36,7 @@ Use these labels for material claims:
 - `ADR/` owns durable root architecture decisions and rationale. Only accepted ADRs are authoritative.
 - Executable contracts/tests and `EVIDENCE/` own reproducible observations. Evidence supports or challenges claims; it does not authorize product or architecture decisions.
 - `ISSUES/` owns detailed lifecycle, findings, disagreements, blockers, and residual uncertainty for meaningful work.
+- Machine-readable milestone state, when enabled by an accepted specification and compatible accepted ADR, lives inside the owning issue. It is operational lifecycle data bound to the authoritative contract digest; it cannot add scope, requirements, architecture, approvals, or a new truth tier.
 - `HANDOFF.md` owns only the current operational snapshot, compact unresolved-issue index, non-terminal background-task state, one next action, recent activity, and an archive index.
 - `HUMAN_CHECKPOINT.md` is a low-bandwidth owner summary and decision queue. It cannot override the specification or accepted ADRs.
 - `README.md` is repository navigation. Files under `protocol/` are the reusable product, governed by the root specification but not a replacement for root development records.
@@ -63,15 +64,17 @@ Before implementation:
 5. Reconcile each non-terminal background task through its recorded query mechanism. Mark a missing process or remote reference `ORPHANED`; never assume it remains active.
 6. Inspect the files relevant to proposed work independently. Verify important HANDOFF claims rather than inheriting them.
 7. Identify contradictions, unsupported assumptions, unavailable tools, incomplete work, remote divergence, and dirty files that may belong to someone else.
-8. Confirm that the accepted specification authorizes the proposed behavior. If it is missing or ambiguous, limit work to investigation, evidence, or an explicitly reversible proposal.
+8. Confirm that the accepted specification authorizes the proposed behavior. An explicit current milestone in `PROJECT_SPEC.md` is prior human authorization for its declared scope; no new approval is needed merely to enter its next implementation, verification, review, or within-scope fix stage. If authority is missing, stale, or ambiguous, limit work to investigation, evidence, or an explicitly reversible proposal.
 9. Treat HANDOFF's Next Action as a continuity pointer, not higher authority. Select the highest-priority safe action supported by current evidence.
-10. Classify authority and review requirements, then update or create an issue for meaningful work before implementation.
+10. Classify authority and review requirements, then update or create an issue for meaningful work before implementation. If an accepted milestone contract and local pipeline exist, reconcile its machine state from the owning issue and use it only for the transitions it supports.
 
 Never discard, overwrite, or reformat unrelated participant changes merely to obtain a clean tree. Do not push across unexpected remote divergence.
 
 ## Selecting and scoping work
 
 Prefer small, reversible changes tied to an explicit requirement or demonstrated gap. Do not broaden work for adjacent cleanup.
+
+An external task prompt, implementation momentum, participant preference, or an inferred useful next step does not create product scope. Conversely, do not ask the owner to reapprove a milestone already explicit in the accepted specification. Continue autonomously through deterministic gates and independent review while scope and authority remain intact; stop at a real authority boundary, not at a routine lifecycle boundary.
 
 Routine work may remain inline in HANDOFF only when it is local, reversible, contract-preserving, verified in one run, and introduces none of the complexity categories below. Meaningful, blocked, disputed, unverified, review-gated, or cross-session work uses [`ISSUES/TEMPLATE.md`](ISSUES/TEMPLATE.md) and this lifecycle:
 
@@ -102,6 +105,10 @@ For a boundary-crossing decision, gather evidence; record exact proposed wording
 
 Changes to root authority, precedence, record ownership, or required gates cross this boundary. Product-protocol changes follow the root specification and its acceptance criteria.
 
+When `PROJECT_SPEC.md` defines an accepted milestone, it authorizes execution only within that milestone's recorded scope and constraints. Deterministic verification proves only the checks it ran. Independent review supplies a separate disposition but cannot expand the milestone. Human escalation remains required when specification text must change, scope or accepted architecture would change, a human-gated blocker must be resolved, evidence cannot establish authority, review exposes a material unresolved ambiguity, or a high-impact external action lacks prior authorization.
+
+If independent review returns material findings whose resolution remains inside the accepted milestone, return to implementation and repeat verification/review without seeking another routine owner approval. After `APPROVED` and all acceptance gates, the next dependency-satisfied milestone already present in the accepted specification may begin without a new prompt. If none exists, the valid next action is to stop; never manufacture one in runtime state.
+
 ## Review requirements
 
 Meaningful issues have separate `Authority` and `Review` fields:
@@ -115,7 +122,9 @@ Independent review is required before closing changes that affect external behav
 
 An independent reviewer must be a different participant or fresh agent instance that did not implement the target. It inspects the specification, accepted ADRs, tests/contracts, implementation, and evidence directly and challenges unsupported assumptions, alternate interpretations, regressions, unnecessary complexity, and drift.
 
-Append each review round with reviewer identity, immutable reviewed state, scope, procedures, findings, limitations, residual risks, evidence, and `APPROVED`, `CHANGES_REQUIRED`, or `BLOCKED`. Never replace an earlier round. If no reviewer is available, leave the issue in `REVIEW` or `BLOCKED`; do not self-certify closure.
+Append each review round with reviewer identity, immutable reviewed state, scope, procedures, findings, limitations, residual risks, evidence, and exactly one disposition: `APPROVED`, `CHANGES_REQUIRED`, or `BLOCKED`. Use that exact vocabulary in session-facing verdicts as well as durable records; put qualifiers such as non-blocking findings in findings and residual risks, not in a fourth disposition. Never replace an earlier round. If no reviewer is available, leave the issue in `REVIEW` or `BLOCKED`; do not self-certify closure.
+
+For a pipeline-managed milestone, also record the exact reviewed target and the nonnegative count of open material findings in the owning issue. Recorded implementor and reviewer labels must differ, but label inequality is not authenticated identity. `APPROVED` requires zero open material findings. `CHANGES_REQUIRED` prevents acceptance and returns within-scope work to implementation. `BLOCKED` never maps to approval and must identify what authority or evidence is missing.
 
 ## Evidence and verification
 
@@ -194,5 +203,6 @@ When HANDOFF approaches 1,000 lines or becomes hard to scan, compact it. Preserv
 4. Update specification, ADR, issue, evidence, and checkpoint records at their source of ownership.
 5. Reconcile background tasks.
 6. Reconcile HANDOFF metadata, snapshot, unresolved index, recent activity, archive, and exactly one next action.
-7. Commit coherent milestones when authorized; before pushing, check upstream divergence and never overwrite unexpected remote work.
-8. Report changes, verification, unavailable checks, limitations, and uncertainty without overstating completion.
+7. Reconcile any accepted milestone's issue-embedded machine state with its human-readable issue lifecycle and HANDOFF pointer; a conflict is a failure, not permission to choose the convenient record.
+8. Commit coherent milestones when authorized; before pushing, check upstream divergence and never overwrite unexpected remote work.
+9. Report changes, verification, unavailable checks, limitations, and uncertainty without overstating completion.

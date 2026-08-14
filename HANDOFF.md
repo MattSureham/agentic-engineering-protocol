@@ -6,18 +6,19 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-14T02:02:50Z`
-- **Repository state:** Clean published baseline `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d` on `main` was synchronized with cached and direct `origin/main` before the current authority-record diff. The current intended dirty set is the accepted specification, new accepted pipeline ADR, authority evidence, three affected issues, this HANDOFF, and `HUMAN_CHECKPOINT.md`; no runtime source exists yet.
-- **Evidence cutoff:** Structural-validator closure through `2026-08-11T03:01:36Z`; baseline publication, owner-authority reconciliation, package-metadata recovery, and accepted pipeline boundary through `2026-08-14T02:02:50Z`.
-- **External checks:** At `2026-08-14T01:58:17Z`, fetch showed direct/cached remote `f06982573ae0743f5feb7c51858ff96822dc9714` with local direct child `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d`; normal push succeeded and all refs equaled `cb5e8d6`. The package validator then exited `0` after ignored `protocol/.DS_Store` was moved to the explicit recoverable Trash path recorded in authority evidence.
+- **Snapshot updated UTC:** `2026-08-14T02:24:27Z`
+- **Repository state:** `main` and public `origin/main` contain the accepted authority boundary `a6f2699a4bed2e1a08c9a506bad62204bd2d0086`. The dirty worktree is the bounded implementation candidate: root/reusable wording and templates, three active issue records, HANDOFF/checkpoint/README, and new root-only pipeline source/tests; no path lies outside the accepted milestone allowlist.
+- **Evidence cutoff:** Structural-validator closure through `2026-08-11T03:01:36Z`; accepted pipeline authority and remote publication through `2026-08-14T02:24:27Z`; candidate implementation checks through the same time. Immutable-target verification evidence does not yet exist.
+- **External checks:** At `2026-08-14T02:24:27Z`, fetch/ancestry checks required direct and cached remote `cb5e8d6` to equal the authority commit's parent; normal non-force push succeeded, and local/cached/direct remote then equaled `a6f2699a4bed2e1a08c9a506bad62204bd2d0086`. The package validator continues to pass after the ignored `protocol/.DS_Store` recovery recorded in authority evidence.
 - **Stale when:** Checked-out revision/branch changes; dirty paths differ from this authority boundary; newer issue/evidence/ADR changes a claim; cached or direct remote changes; accepted milestone JSON or its digest changes; validation output changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
 
 - **CONFIRMED — Objective:** Implement only `MILESTONE-20260814T015817Z-authorized-pipeline-v1`, now explicitly accepted in root [`PROJECT_SPEC.md`](PROJECT_SPEC.md), through [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md). No repeated owner approval is required within that contract; implementation remains unaccepted until deterministic verification and fresh independent review succeed.
 - **CONFIRMED — Authority:** Human technical owner `MattSureham` accepted the milestone authority clarification and root-dogfood-first implementation plan. [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md) defines compatible architecture; accepted root-adoption ADR remains unchanged.
-- **CONFIRMED — Runtime issue:** The former runtime deferral's exact unblock condition is satisfied. The issue is `INVESTIGATING`; its state block is `AUTHORIZED` and bound to contract digest `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4`.
-- **CONFIRMED — Related wording:** The current owner decision authorizes the exact onboarding authority distinction and requires all review verdicts to use `APPROVED`, `CHANGES_REQUIRED`, or `BLOCKED`. Both related issues are `INVESTIGATING` and share the implementation target's independent-review gate.
+- **CONFIRMED — Runtime issue:** The former runtime deferral's exact unblock condition is satisfied. The issue is `IMPLEMENTING`; state is `IN_PROGRESS`, attempt 1 by `agent:Codex-root`, base `a6f2699`, bound to contract digest `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4`.
+- **CONFIRMED — Related wording:** The exact onboarding-authority and review-vocabulary clarifications are `IMPLEMENTING` and share the implementation target's independent-review gate.
+- **CONFIRMED — Pipeline candidate:** `scripts/run_pipeline.py` now exposes deterministic status and the accepted transition set; `tests/test_run_pipeline.py` exercises authorization/schema refusal, scope/digest/dependency gates, verification failure evidence, atomic conflict behavior, fix/re-review, peer separation, acceptance, next-milestone selection, and human escalation. Candidate checks pass, but no immutable target or peer disposition exists yet.
 - **CONFIRMED — Prior milestone:** [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `CLOSED` on independently approved target `8690358d499aed20de6c620dc4dd4a81f1e1a126`.
 - **CONFIRMED — Implemented slice:** Root-only `scripts/validate_protocol.py` and its 21-test standard-library suite validate only manifest/file integrity, supported package links, and HANDOFF structure with stable exit semantics. Exact-target evidence confirms the package tree remains `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb`.
 - **CONFIRMED — Distribution boundary:** The new pipeline is root-only dogfood. No executable enters `protocol/`; the reusable package remains exactly ten Markdown files and usable without automation.
@@ -53,9 +54,9 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
-| [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `INVESTIGATING` | `MEDIUM` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Implement the accepted root-local milestone state-and-gate pipeline | Accepted spec/ADR and contract digest recorded; implementation target and review pending |
-| [`ISSUE-20260811T030136Z-review-disposition-vocabulary`](ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md) | `INVESTIGATING` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Require exact protocol vocabulary for session and durable review verdicts | Owner selected exact wording semantics; shared implementation/review target pending |
-| [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `INVESTIGATING` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Distinguish accepted milestone authority from external/inferred work pressure | Current owner direction supersedes the prior hold only for the exact clarification; shared target pending |
+| [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `IMPLEMENTING` | `MEDIUM` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Implement the accepted root-local milestone state-and-gate pipeline | Candidate has 39 passing tests; immutable verification target and review pending |
+| [`ISSUE-20260811T030136Z-review-disposition-vocabulary`](ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md) | `IMPLEMENTING` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Require exact protocol vocabulary for session and durable review verdicts | Shared attempt 1 target pending |
+| [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `IMPLEMENTING` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Distinguish accepted milestone authority from external/inferred work pressure | Shared attempt 1 target pending |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define non-cooperating concurrent-writer guarantees | New owner-approved failure model and specification |
 | [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define authenticated identity and approval | New owner-approved trust model, specification, and ADR |
 | [`ISSUE-20260806T013907Z-large-scale-coordination`](ISSUES/ISSUE-20260806T013907Z-large-scale-coordination.md) | `BLOCKED` | `LOW` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define and validate large-scale coordination claims | New owner-approved scale contract |
@@ -63,9 +64,21 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 ## Next Action
 
-Commit the accepted pipeline authority boundary without runtime source, then implement only `MILESTONE-20260814T015817Z-authorized-pipeline-v1` from that immutable base and advance its three owning issues toward one shared independently reviewable target.
+Run the complete candidate validation matrix, reconcile all results and limitations, and create the immutable pipeline implementation target if every required check passes.
 
 ## Recent Activity
+
+### 2026-08-14T02:24:27Z — Codex/root — Pipeline Implementor
+
+- **Task:** Implement the smallest root-local state/gate engine and bounded authority/review wording authorized by milestone `MILESTONE-20260814T015817Z-authorized-pipeline-v1`.
+- **Context inspected:** Accepted pipeline phase and contract, accepted pipeline ADR, root/reusable BOOTSTRAP and templates, owning/related issues, structural validator API/tests, Git target and issue-review semantics.
+- **Actions performed:** Added deterministic contract/state parsing, live structural-validator reuse, local Git scope/target gates, shell-free bounded acceptance checks, JSON verification evidence, atomic issue transitions, exact peer-review gates, fix/re-review and human-escalation paths; added isolated Git lifecycle tests and concise root/reusable guidance. Published the separate authority boundary after no-divergence checks.
+- **Files modified:** Only paths in the accepted milestone allowlist; new executable files are root-only under `scripts/` and `tests/`. The reusable bundle retains exactly ten Markdown files and no runtime dependency.
+- **Findings:** `CONFIRMED` — live status resolves the accepted contract digest and `IN_PROGRESS` projection. `CONFIRMED` — failed, unavailable, and timed-out checks preserve failure evidence without advancing. `CONFIRMED` — isolated fixtures exercise a two-milestone continuation and full fix/re-review loop. `UNKNOWN` — immutable-target result and independent disposition.
+- **Verification performed:** Candidate full suite passes `39` tests; repeated live JSON status is byte-identical (SHA-256 `6565d689e5bcddcd75afd8dcc9eead91e1b943df877a93a93c5379eaab1cb321`); `git diff --check` passes. Complete release matrix and immutable evidence remain pending.
+- **Issues created or updated:** Runtime automation, onboarding-authority, and review-vocabulary issues remain `IMPLEMENTING`; no blocked capability issue changed.
+- **Remaining uncertainty:** Final target identity, complete validation output, dedicated Markdown lint availability, broader portability, and fresh independent review.
+- **Recommended next action:** Perform exactly the candidate validation and target-freeze action under Next Action.
 
 ### 2026-08-14T02:02:50Z — Codex/root — Pipeline Authority Recorder
 
