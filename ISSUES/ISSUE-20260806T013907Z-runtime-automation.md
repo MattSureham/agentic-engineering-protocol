@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260806T013907Z-runtime-automation`
 - **Title:** Implement the authorized root-local milestone pipeline
-- **Status:** `REVIEW`
+- **Status:** `CLOSED`
 - **Severity:** `MEDIUM`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-06T01:39:07Z`
-- **Updated UTC:** `2026-08-14T04:53:53Z`
+- **Updated UTC:** `2026-08-14T04:54:43Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Authorized milestone pipeline phase and `MILESTONE-20260814T015817Z-authorized-pipeline-v1`; historical post-pilot hardening deferral retained as prior context
 - **ADRs:** [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** [`EVIDENCE-20260806T013907Z-post-pilot-audit`](../EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md); [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md); [`attempt-1 verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md) and generated [`attempt-1 JSON`](../EVIDENCE/EVIDENCE-20260814T023116Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-1.json); [`attempt-2 verification`](../EVIDENCE/EVIDENCE-20260814T040812Z-authorized-pipeline-fix-verification.md) and generated [`attempt-2 JSON`](../EVIDENCE/EVIDENCE-20260814T040644Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-2.json)
@@ -62,7 +62,7 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260814T015817Z-authorized-pipeline-v1",
   "authority_digest": "36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4",
-  "state": "AWAITING_PEER_REVIEW",
+  "state": "ACCEPTED",
   "attempt": 2,
   "implementor": "agent:Codex-root-fix-2",
   "base_revision": "57fe35c3a397fb1d71caa466d32a62f84fd51802",
@@ -72,7 +72,8 @@ The JSON block is operational state bound to the accepted milestone contract. It
     "EVIDENCE/EVIDENCE-20260814T040644Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-2.json"
   ],
   "review_references": [
-    "ISSUES/ISSUE-20260806T013907Z-runtime-automation.md#2026-08-14t031106z--claudecodepipeline-review"
+    "ISSUES/ISSUE-20260806T013907Z-runtime-automation.md#2026-08-14t031106z--claudecodepipeline-review",
+    "ISSUES/ISSUE-20260806T013907Z-runtime-automation.md#2026-08-14t044108z--claudecodepipeline-review-2"
   ],
   "events": [
     {
@@ -130,6 +131,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": "IN_PROGRESS",
       "to": "AWAITING_PEER_REVIEW",
       "reason": "Immutable target 26d890f6e27ad181265ee5417a45637d867aa2dc passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260814T040644Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-2.json."
+    },
+    {
+      "sequence": 8,
+      "utc": "2026-08-14T04:54:43Z",
+      "actor": "agent:ClaudeCode-coordinator",
+      "from": "AWAITING_PEER_REVIEW",
+      "to": "ACCEPTED",
+      "reason": "Independent review ISSUES/ISSUE-20260806T013907Z-runtime-automation.md#2026-08-14t044108z--claudecodepipeline-review-2 approved the verified target with zero open material findings."
     }
   ]
 }
@@ -248,6 +257,7 @@ Pipeline submission at `2026-08-14T04:06:44Z` bound attempt 2 to target `26d890f
 | `2026-08-14T04:08:12Z` | `Codex/root-fix-2` | `REVIEW` | `REVIEW` | Recorded exact-target reproduction, generated-postcondition inspection, scope/package/Markdown/integrity evidence, and limitations without supplying or inferring a peer disposition. |
 | `2026-08-14T04:41:08Z` | `ClaudeCode/pipeline-review-2` | `REVIEW` | `REVIEW` | Recorded independent review round 2 on immutable target `26d890f`: `APPROVED` with zero open material findings after a nine-scenario adverse reproduction; the `ACCEPTED` transition and closure-checklist completion remain with the next recorder. |
 | `2026-08-14T04:53:53Z` | `ClaudeCode/coordinator` | `REVIEW` | `REVIEW` | Recorder verification before acceptance: round-2 commit `25e94e3` scope is exactly this issue plus HANDOFF; target parent `87cf4ac` and base `57fe35c` ancestry reproduced; post-target range is record-only; 44 tests, structural validator, and whitespace checks pass; local/cached/direct remote equal `25e94e3`; completed the final closure-checklist item against the persisted round. |
+| `2026-08-14T04:54:43Z` | `agent:ClaudeCode-coordinator` | `REVIEW` | `CLOSED` | Pipeline AWAITING_PEER_REVIEW -> ACCEPTED. Independent review ISSUES/ISSUE-20260806T013907Z-runtime-automation.md#2026-08-14t044108z--claudecodepipeline-review-2 approved the verified target with zero open material findings. |
 
 ## Closure checklist
 
