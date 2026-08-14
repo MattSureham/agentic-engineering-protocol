@@ -6,17 +6,17 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-14T03:19:38Z`
-- **Repository state:** Immutable implementation target `6c0a3bda06686635023e334a4e644fb176372b04` is published and remains unaccepted. The checked-out `main` HEAD is this snapshot's containing review-outcome commit, recoverable with `git rev-parse HEAD`; a commit cannot embed its own hash. Its delta from the target contains only generated/full evidence, the three reviewed issue records (including the persisted independent round and the pipeline-recorded `CHANGES_REQUIRED` transition), and this HANDOFF; no implementation or governed authority source changed after the target.
-- **Evidence cutoff:** Structural-validator closure through `2026-08-11T03:01:36Z`; accepted pipeline authority through published `a6f2699`; immutable target, generated deterministic verification, publication, and implementor findings `F1`–`F3` through `2026-08-14T02:40:06Z`; independent review round 1 and the recorded `CHANGES_REQUIRED` transition through `2026-08-14T03:19:38Z`.
-- **External checks:** At `2026-08-14T02:32:24Z`, fetch/ancestry checks required direct and cached remote `a6f2699a4bed2e1a08c9a506bad62204bd2d0086` to equal target `6c0a3bd`'s parent; normal non-force push succeeded, and local/cached/direct remote then equaled `6c0a3bda06686635023e334a4e644fb176372b04`. At `2026-08-14T03:11:06Z`, local `main` equaled cached `origin/main` at `d85223b95de7564567316087efbb86d80d76597c` before the review-outcome commits.
+- **Snapshot updated UTC:** `2026-08-14T03:55:38Z`
+- **Repository state:** Clean synchronized baseline `57fe35c3a397fb1d71caa466d32a62f84fd51802` is the immutable base for pipeline fix attempt 2. The owning issue has transitioned to `IN_PROGRESS`; this snapshot and checkpoint are the only additional pre-implementation record changes and will be committed before source edits.
+- **Evidence cutoff:** Structural-validator closure through `2026-08-11T03:01:36Z`; accepted pipeline authority through published `a6f2699`; immutable target and attempt-1 evidence through `2026-08-14T02:40:06Z`; independent review round 1, `CHANGES_REQUIRED`, and the attempt-2 `IN_PROGRESS` transition through `2026-08-14T03:55:38Z`.
+- **External checks:** At `2026-08-14T03:55:38Z`, local HEAD, cached `origin/main`, and direct remote `refs/heads/main` all equaled `57fe35c3a397fb1d71caa466d32a62f84fd51802`; fetch succeeded and confirmed no divergence before attempt 2.
 - **Stale when:** Checked-out revision/branch changes; dirty paths differ from the recorded review-outcome set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; accepted milestone JSON or its digest changes; validation output changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
 
 - **CONFIRMED — Objective:** Resolve the two reviewer-confirmed material findings against target `6c0a3bd` within the accepted scope of `MILESTONE-20260814T015817Z-authorized-pipeline-v1` and resubmit a new immutable target for fresh independent review. The accepted specification authorizes this fix/re-review loop without a new owner prompt; the implementation remains unaccepted.
 - **CONFIRMED — Authority:** Human technical owner `MattSureham` accepted the milestone authority clarification and root-dogfood-first implementation plan. [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md) defines compatible architecture; accepted root-adoption ADR remains unchanged.
-- **CONFIRMED — Runtime issue:** The issue is `IMPLEMENTING`; machine state is `CHANGES_REQUIRED`, attempt 1 by `agent:Codex-root`, base `a6f2699`, target `6c0a3bd`, and contract digest `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4`. Independent review round 1 (`2026-08-14T03:11:06Z`, `ClaudeCode/pipeline-review`) recorded disposition `CHANGES_REQUIRED` with two open material findings; the pipeline transition of `2026-08-14T03:18:19Z` by `agent:ClaudeCode-pipeline-review` parsed and accepted that round mechanically.
+- **CONFIRMED — Runtime issue:** The issue is `IMPLEMENTING`; machine state is `IN_PROGRESS`, attempt 2 by `agent:Codex-root-fix-2`, base `57fe35c`, no target yet, and contract digest `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4`. Independent review round 1 (`2026-08-14T03:11:06Z`, `ClaudeCode/pipeline-review`) remains `CHANGES_REQUIRED` with material findings `R1`/`R2`; the accepted fix loop requires no new owner approval.
 - **CONFIRMED — Related wording:** Both bounded wording issues hold scoped independent `APPROVED` rounds (zero open material findings within their change sets) on shared target `6c0a3bd`; they remain `REVIEW` pending coordinator closure verification, which must re-check the wording if the fix loop alters their change sets.
 - **CONFIRMED — Pipeline implementation:** `scripts/run_pipeline.py` exposes deterministic status and the accepted transition set; 39 configured tests reproduce at the extracted target. The independent reviewer reproduced implementor findings and confirmed `MEDIUM` `R1` (= `F1`, verification-command worktree mutation is not rechecked) and `MEDIUM` `R2` (= `F2`, a baseline root `EVIDENCE` symlink permits an escaping generated write and poisons subsequent operation) as material, and classified `R3` (= `F3`, activity-table rendering) `LOW` non-material. Exact resolution conditions are durable in the owning issue's review round.
 - **CONFIRMED — Prior milestone:** [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `CLOSED` on independently approved target `8690358d499aed20de6c620dc4dd4a81f1e1a126`.
@@ -55,7 +55,7 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
-| [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `IMPLEMENTING` | `MEDIUM` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Implement the accepted root-local milestone state-and-gate pipeline | Target `6c0a3bd` reviewed; machine state `CHANGES_REQUIRED`; two reviewer-confirmed material findings `R1`/`R2` plus non-material `R3`; resolution conditions in round 1 |
+| [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `IMPLEMENTING` | `MEDIUM` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Implement the accepted root-local milestone state-and-gate pipeline | Attempt 2 is `IN_PROGRESS` from base `57fe35c`; resolve reviewer findings `R1`/`R2` and non-material `R3`, then submit a new target |
 | [`ISSUE-20260811T030136Z-review-disposition-vocabulary`](ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md) | `REVIEW` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Require exact protocol vocabulary for session and durable review verdicts | Scoped `APPROVED` round on shared target `6c0a3bd`; coordinator closure verification pending |
 | [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `REVIEW` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Distinguish accepted milestone authority from external/inferred work pressure | Scoped `APPROVED` round on shared target `6c0a3bd`; coordinator closure verification pending |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define non-cooperating concurrent-writer guarantees | New owner-approved failure model and specification |
@@ -65,9 +65,21 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 ## Next Action
 
-Resume the authorized fix loop for `MILESTONE-20260814T015817Z-authorized-pipeline-v1`: record the pipeline transition `CHANGES_REQUIRED` → `IN_PROGRESS` (attempt 2), implement the `R1`/`R2` resolution conditions from the owning issue's independent review round of `2026-08-14T03:11:06Z` (post-command recheck of HEAD, worktree cleanliness including ignored-path behavior, and authority/issue source bytes; evidence-directory symlink/escape rejection during orientation and before writing; regression tests for both; optionally dispose non-material `R3`), verify, and submit a new immutable target for fresh independent review. No new owner approval is required within the accepted scope.
+Implement the authorized attempt-2 fixes for reviewer findings `R1`/`R2` and `R3`, run the complete deterministic verification, freeze an immutable target, and use the pipeline to submit it for fresh independent review without changing specification or architecture authority.
 
 ## Recent Activity
+
+### 2026-08-14T03:55:38Z — Codex/root-fix-2 — Pipeline Fix Implementor
+
+- **Task:** Resume the accepted milestone's within-scope fix loop from persisted independent disposition `CHANGES_REQUIRED` without requesting another owner approval.
+- **Context inspected:** Complete root BOOTSTRAP and accepted PROJECT_SPEC; both accepted ADRs; live HANDOFF/checkpoint; owning issue and independent review round 1; attempt-1 evidence; pipeline source/tests; clean local, cached, and direct remote Git state.
+- **Actions performed:** Reproduced the 39-test/structural baseline; confirmed direct remote equality at `57fe35c`; invoked the pipeline transition `CHANGES_REQUIRED` → `IN_PROGRESS` as `agent:Codex-root-fix-2`, creating attempt 2 from immutable base `57fe35c`; changed no source or authority artifact.
+- **Files modified:** Owning runtime issue, this HANDOFF, and `HUMAN_CHECKPOINT.md` only at the pre-implementation boundary.
+- **Findings:** `CONFIRMED` — accepted authority is sufficient; `R1`/`R2` are the material acceptance boundary and `R3` is an authorized non-material correction. `CONFIRMED` — no remote divergence or unrelated dirty work exists.
+- **Verification performed:** Read-only pipeline status reported `CHANGES_REQUIRED` before transition; structural validator passed; all 39 baseline tests passed; fetch/ancestry/direct-ref checks passed.
+- **Issues created or updated:** Runtime issue advanced to attempt-2 `IN_PROGRESS`; all other issue states remain unchanged.
+- **Remaining uncertainty:** Correctness of the fixes, immutable target identity, and fresh independent disposition.
+- **Recommended next action:** Perform exactly the implementation and target-submission action under Next Action; do not self-review or accept the milestone.
 
 ### 2026-08-14T03:19:38Z — ClaudeCode/pipeline-review — Independent Peer Reviewer
 

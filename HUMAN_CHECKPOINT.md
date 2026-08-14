@@ -4,11 +4,11 @@ This is a low-bandwidth synchronization point for the human technical owner. It 
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-14T02:40:06Z`
-- **Prepared by:** `Codex/root`
-- **Period covered:** Published closure baseline `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d` through immutable pipeline target `6c0a3bda06686635023e334a4e644fb176372b04` and its review handoff
+- **Generated UTC:** `2026-08-14T03:55:38Z`
+- **Prepared by:** `Codex/root-fix-2`
+- **Period covered:** Published closure baseline `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d` through independent pipeline review round 1 and the start of fix attempt 2 from `57fe35c3a397fb1d71caa466d32a62f84fd51802`
 - **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved Authorized milestone pipeline phase and preserved prior requirements
-- **Implementation/reference state:** Published target `6c0a3bda06686635023e334a4e644fb176372b04` passed its configured deterministic checks but has post-target implementor findings `F1`–`F3`, including two assessed material gate-boundary defects. The milestone is `AWAITING_PEER_REVIEW`; all three affected issues are `REVIEW`. No independent round exists, so the milestone is not accepted.
+- **Implementation/reference state:** Independent review of published target `6c0a3bda06686635023e334a4e644fb176372b04` returned `CHANGES_REQUIRED` with two material gate-boundary findings (`R1`/`R2`) and one non-material rendering finding (`R3`). The pipeline has entered attempt-2 `IN_PROGRESS` from base `57fe35c`; the milestone remains unaccepted, while the two bounded wording issues retain scoped `APPROVED` rounds.
 - **Prior checkpoint:** `2026-08-11T03:01:36Z` by `ClaudeCode/coordinator` (superseded by this authority record)
 
 ## System mental model
@@ -29,7 +29,7 @@ An explicit milestone in accepted `PROJECT_SPEC.md` is prior authorization to im
 | Resolve accepted-ADR review-state mismatch | Persist the owner's interpretation without rewriting acceptance-time history | No product or architecture change; additive ADR note and record reconciliation only | [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md), `CLOSED` after verification |
 | Implement the first executable codification slice | Replace repeated one-off structural harnesses without automating judgment | Root-only optional checker and tests; reusable package and authority hierarchy unchanged | Target `8690358`; [`EVIDENCE-20260811T020454Z-structural-validator-verification`](EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md); independent round `APPROVED`, issue `CLOSED` |
 | Authorize the root-local milestone pipeline | Remove redundant owner prompts for already-accepted scope while retaining human architecture/product authority | One accepted milestone, issue-embedded operational state, local Git/check execution, mandatory independent review; no package runtime | [`PROJECT_SPEC.md`](PROJECT_SPEC.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), authority analysis |
-| Implement the bounded pipeline target | Prove one accepted milestone can traverse deterministic gates without creating authority | Root-only Python state/gate CLI, isolated Git lifecycle suite, exact review vocabulary, and no runtime inside `protocol/` | Published target `6c0a3bd`; configured checks pass, but implementor `F1`/`F2` challenge gate completeness and `F3` challenges rendering; peer disposition pending |
+| Implement and independently challenge the bounded pipeline target | Prove one accepted milestone can traverse deterministic gates without creating authority | Root-only Python state/gate CLI, isolated Git lifecycle suite, exact review vocabulary, and no runtime inside `protocol/` | Published target `6c0a3bd`; independent round 1 returned `CHANGES_REQUIRED` on material `R1`/`R2`; attempt 2 is now authorized and `IN_PROGRESS` |
 
 ## Architecture decisions
 
@@ -75,9 +75,9 @@ No architecture proposal or disputed architectural decision awaits owner action.
 
 ## Confidence and verification
 
-- **What is directly verified:** Prior structural target/review remains valid; authority boundary `a6f2699` and immutable target `6c0a3bd` are published; package/contract checks and 39 target tests pass. Separate safe reproductions confirm `F1` and `F2`, so passing configured tests do not establish closure readiness.
+- **What is directly verified:** Prior structural target/review remains valid; authority boundary `a6f2699` and immutable target `6c0a3bd` are published; package/contract checks and 39 target tests pass. Independent reproductions confirm `R1` and `R2`, and pipeline state now records attempt-2 `IN_PROGRESS` from synchronized base `57fe35c`.
 - **What was independently reviewed:** The hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`, earlier protocol/migration/specification-evolution targets, and now structural-validator target `8690358` (round 1 `APPROVED`, five LOW findings accepted as residual risk).
-- **What was not run or remains unverified:** No independent disposition exists; dedicated Markdown linting is unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
+- **What was not run or remains unverified:** Attempt-2 implementation and fresh independent disposition do not yet exist; dedicated Markdown linting is unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
 - **Known regressions or unresolved risks:** `F1` permits advancement after an accepted command dirties the repository; `F2` permits generated evidence to escape through a baseline root symlink; `F3` can split the generated Activity table. Four deferred capability areas remain `BLOCKED`; ignored `protocol/.DS_Store` was previously moved to Trash.
 
 ## Human attention required

@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-06T01:39:07Z`
-- **Updated UTC:** `2026-08-14T03:18:19Z`
+- **Updated UTC:** `2026-08-14T03:55:38Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Authorized milestone pipeline phase and `MILESTONE-20260814T015817Z-authorized-pipeline-v1`; historical post-pilot hardening deferral retained as prior context
 - **ADRs:** [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** [`EVIDENCE-20260806T013907Z-post-pilot-audit`](../EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md); [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md); [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md); generated [`attempt-1 verification`](../EVIDENCE/EVIDENCE-20260814T023116Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-1.json)
@@ -61,11 +61,11 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260814T015817Z-authorized-pipeline-v1",
   "authority_digest": "36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4",
-  "state": "CHANGES_REQUIRED",
-  "attempt": 1,
-  "implementor": "agent:Codex-root",
-  "base_revision": "a6f2699a4bed2e1a08c9a506bad62204bd2d0086",
-  "target_revision": "6c0a3bda06686635023e334a4e644fb176372b04",
+  "state": "IN_PROGRESS",
+  "attempt": 2,
+  "implementor": "agent:Codex-root-fix-2",
+  "base_revision": "57fe35c3a397fb1d71caa466d32a62f84fd51802",
+  "target_revision": null,
   "verification_evidence": [
     "EVIDENCE/EVIDENCE-20260814T023116Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-1.json"
   ],
@@ -112,6 +112,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": "AWAITING_PEER_REVIEW",
       "to": "CHANGES_REQUIRED",
       "reason": "Independent review ISSUES/ISSUE-20260806T013907Z-runtime-automation.md#2026-08-14t031106z--claudecodepipeline-review recorded 2 open material finding(s); within-scope fixes are required."
+    },
+    {
+      "sequence": 6,
+      "utc": "2026-08-14T03:55:38Z",
+      "actor": "agent:Codex-root-fix-2",
+      "from": "CHANGES_REQUIRED",
+      "to": "IN_PROGRESS",
+      "reason": "Implementation attempt 2 began from immutable base 57fe35c3a397fb1d71caa466d32a62f84fd51802."
     }
   ]
 }
@@ -191,6 +199,8 @@ The authority-boundary statement that no implementation existed is preserved her
 | `2026-08-14T02:40:06Z` | `Codex/root` | `REVIEW` | `REVIEW` | Appended post-target self-audit findings `F1`–`F3` without changing implementation or inventing a peer disposition; independent classification remains required. |
 
 | `2026-08-14T03:18:19Z` | `agent:ClaudeCode-pipeline-review` | `REVIEW` | `IMPLEMENTING` | Pipeline AWAITING_PEER_REVIEW -> CHANGES_REQUIRED. Independent review ISSUES/ISSUE-20260806T013907Z-runtime-automation.md#2026-08-14t031106z--claudecodepipeline-review recorded 2 open material finding(s); within-scope fixes are required. |
+
+| `2026-08-14T03:55:38Z` | `agent:Codex-root-fix-2` | `IMPLEMENTING` | `IMPLEMENTING` | Pipeline CHANGES_REQUIRED -> IN_PROGRESS. Implementation attempt 2 began from immutable base 57fe35c3a397fb1d71caa466d32a62f84fd51802. |
 ## Closure checklist
 
 - [x] Expected behavior is tied to a higher-authority source.
