@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260811T030136Z-review-disposition-vocabulary`
 - **Title:** Review session verdict labels versus the three protocol dispositions
-- **Status:** `REVIEW`
+- **Status:** `CLOSED`
 - **Severity:** `LOW`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-11T03:01:36Z`
-- **Updated UTC:** `2026-08-14T03:11:06Z`
+- **Updated UTC:** `2026-08-14T05:03:21Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `PIPELINE-005`; root [`BOOTSTRAP.md`](../BOOTSTRAP.md) review requirements; and [`ISSUES/TEMPLATE.md`](TEMPLATE.md) review-round schema
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUE-20260811T013701Z-structural-protocol-validator.md) (owner-report note of `2026-08-11T02:38:34Z` and persisted independent round 1 of `2026-08-11T02:49:05Z`); [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md); [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md)
@@ -57,6 +57,7 @@ None introduced.
 | `2026-08-11T03:01:36Z` | `ClaudeCode/coordinator` | Coordinator closure verification of the validator milestone: target/tree/parent identity reproduction, post-target drift scope, validator and 21-test rerun, round-schema completeness check | All checks pass; details recorded in the validator issue activity history and HANDOFF | [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUE-20260811T013701Z-structural-protocol-validator.md) | The session output itself is not a repository artifact; the verbatim label survives only inside the persisted round |
 | `2026-08-14T02:24:27Z` | `Codex/root` | Inspect root/reusable BOOTSTRAP, both issue templates, independent-review prompt, and executable review-round rejection cases | Exact three-value vocabulary appears in all intended artifacts; tests reject informal, self-reviewed, target-mismatched, `BLOCKED`, and material-finding approval cases; 39 repository tests pass | Shared pipeline candidate worktree; immutable evidence pending | Implementor inspection cannot satisfy independent review or authenticate labels |
 | `2026-08-14T02:32:24Z` | `Codex/root` | Inspect published target `6c0a3bd`, generated transition evidence, review-template/prompt wording, and peer-gate test cases | Exact disposition contract and executable rejections pass at immutable target | [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md) | Independent semantic review and identity authentication remain pending/out of scope respectively |
+| `2026-08-14T05:03:21Z` | `ClaudeCode/coordinator` | Coordinator closure verification on the accepted target: `git diff` of this issue's wording change set (root/reusable BOOTSTRAP, both issue templates, reusable review prompt) between reviewed target `6c0a3bd` and accepted target `26d890f` is empty; post-target drift on `scripts/`, `tests/`, `protocol/`, and templates is record-only; re-inspected gate enforcement `DISPOSITIONS = {"APPROVED", "CHANGES_REQUIRED", "BLOCKED"}` at `scripts/run_pipeline.py:69`; reran full suite at HEAD | Wording bytes unchanged; executable rejection contract intact; 44 tests pass; structural validator `PASS` | This record; `scripts/run_pipeline.py` at accepted target | The independent round's scoped `APPROVED` is relied on for semantics; this verification confirms only that the fix loop did not alter the reviewed wording or the vocabulary gate |
 
 ## Self-review
 
@@ -102,7 +103,7 @@ The historical self-review above covered creation of the record only. Implemento
 
 ## Residual uncertainty
 
-- Exact wording correctness and independent disposition remain pending. The owner decision itself is no longer uncertain.
+- None blocking. The independent disposition is persisted and the reviewed wording is confirmed unchanged on the accepted target. Session-facing reporters may still improvise labels until they adopt the clarified prompts; the protocol records, rather than prevents, that behavior (residual risk owned by the independent round).
 
 ## Activity history
 
@@ -113,6 +114,7 @@ The historical self-review above covered creation of the record only. Implemento
 | `2026-08-14T02:06:16Z` | `Codex/root` | `INVESTIGATING` | `IMPLEMENTING` | Began exact-vocabulary wording and schema changes from committed authority boundary `a6f2699`; no new disposition is introduced |
 | `2026-08-14T02:32:24Z` | `Codex/root` | `IMPLEMENTING` | `VERIFYING` | Frozen shared target `6c0a3bd`; completed exact-vocabulary, schema, rejection-path, link, and full-suite verification |
 | `2026-08-14T02:32:24Z` | `Codex/root` | `VERIFYING` | `REVIEW` | Published immutable target and complete evidence; fresh independent review is the remaining gate |
+| `2026-08-14T05:03:21Z` | `ClaudeCode/coordinator` | `REVIEW` | `CLOSED` | Closure verification on the accepted target passed: scoped `APPROVED` round of `2026-08-14T03:11:06Z` persisted with zero open material findings, wording change set byte-identical between reviewed target `6c0a3bd` and accepted target `26d890f`, vocabulary gate enforcement intact, 44 tests and structural validator pass |
 
 ## Closure checklist
 
@@ -120,7 +122,7 @@ The historical self-review above covered creation of the record only. Implemento
 - [x] The wording change or resolution is recorded.
 - [x] Required verification ran and evidence is linked; unavailable checks remain explicit.
 - [x] If `Review: SELF`, the historical record-only Self-review outcome is `COMPLETE`; it does not satisfy the newly required independent review of governance wording.
-- [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
+- [x] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved (round of `2026-08-14T03:11:06Z` by `ClaudeCode/pipeline-review`, `FIRST ROUND` with zero open material findings; recorder confirmed the reviewed wording is byte-identical on the accepted target `26d890f` on `2026-08-14T05:03:21Z`).
 - [x] Required human authority is recorded in the accepted specification and compatible ADR.
 - [x] New complexity is covered, removed, or linked to an explicitly accepted open debt issue (none introduced).
 - [x] Residual uncertainty is absent or explicitly owned.

@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`
 - **Title:** External task pressure versus terminal owner-wait state in fresh-participant onboarding
-- **Status:** `REVIEW`
+- **Status:** `CLOSED`
 - **Severity:** `LOW`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-07T02:25:23Z`
-- **Updated UTC:** `2026-08-14T03:11:06Z`
+- **Updated UTC:** `2026-08-14T05:03:21Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) specification-evolution policy and Authorized milestone pipeline phase; reusable protocol freshness/onboarding requirements
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** Inline verification record below; [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md); [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md)
@@ -80,6 +80,7 @@ The preceding options are preserved as the original investigation. On `2026-08-1
 | `2026-08-07T02:25:23Z` | `ClaudeCode/pilot-1` | Procedures listed under Evidence or reproduction | All passed, exit `0`; snapshot claims CONFIRMED; no staleness trigger fired | Inline table above | Dedicated Markdown linters not run; single-participant observation |
 | `2026-08-14T02:24:27Z` | `Codex/root` | Inspect root/reusable BOOTSTRAP, reusable onboarding/resumption prompts, accepted milestone authority, and candidate structural/full unit checks | Explicit authority distinction is present in both normative documents and prompts; 39 repository tests pass | Shared pipeline candidate worktree; immutable evidence pending | Implementor inspection cannot satisfy independent review |
 | `2026-08-14T02:32:24Z` | `Codex/root` | Compare immutable target `6c0a3bd` with accepted owner wording; run complete shared-target validation and inspect generated pipeline evidence | Exact bounded clarification is present; target verification passes and is published | [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md) | Independent wording review remains pending |
+| `2026-08-14T05:03:21Z` | `ClaudeCode/coordinator` | Coordinator closure verification on the accepted target: `git diff` of this issue's change set (root/reusable BOOTSTRAP, reusable onboarding/resumption prompts, reusable README — all under `BOOTSTRAP.md` and `protocol/`) between reviewed target `6c0a3bd` and accepted target `26d890f` is empty; post-target drift on `scripts/`, `tests/`, and `protocol/` is record-only; reran full suite at HEAD | Wording bytes unchanged; 44 tests pass; structural validator `PASS` (package remains ten files, no runtime) | This record | The independent round's scoped `APPROVED` is relied on for semantics; this verification confirms only that the fix loop did not alter the reviewed wording |
 
 ## Self-review
 
@@ -119,7 +120,7 @@ The historical self-review above covered creation of the finding only. Implement
 ## Blocker
 
 - **Blocked from:** `NOT BLOCKED`
-- **Blocker:** `NONE` — the bounded owner decision is recorded; verification and independent review remain
+- **Blocker:** `NONE` — the bounded owner decision is recorded, independent review is `APPROVED`, and closure verification passed
 - **Unblock owner:** `NONE`
 - **Unblock condition:** `NONE`
 
@@ -135,7 +136,7 @@ This supersedes the earlier "do not modify at this time" direction only for that
 
 ## Residual uncertainty
 
-- Exact wording compatibility and independent disposition remain pending. The authority distinction itself is no longer uncertain.
+- None blocking. The independent disposition is persisted and the reviewed wording is confirmed unchanged on the accepted target. Wording cannot prevent a participant from rationalizing unauthorized work; it only removes the ambiguity the pilot exposed (residual risk owned by the independent round).
 
 ## Activity history
 
@@ -147,6 +148,7 @@ This supersedes the earlier "do not modify at this time" direction only for that
 | `2026-08-14T02:06:16Z` | `Codex/root` | `INVESTIGATING` | `IMPLEMENTING` | Began the exact root/reusable authority clarification from committed boundary `a6f2699`; broader onboarding changes remain excluded |
 | `2026-08-14T02:32:24Z` | `Codex/root` | `IMPLEMENTING` | `VERIFYING` | Frozen shared target `6c0a3bd`; completed deterministic wording, package, link, scope, and full-suite verification |
 | `2026-08-14T02:32:24Z` | `Codex/root` | `VERIFYING` | `REVIEW` | Published the immutable target and linked complete evidence; fresh independent review is the remaining gate |
+| `2026-08-14T05:03:21Z` | `ClaudeCode/coordinator` | `REVIEW` | `CLOSED` | Closure verification on the accepted target passed: scoped `APPROVED` round of `2026-08-14T03:11:06Z` persisted with zero open material findings, wording change set byte-identical between reviewed target `6c0a3bd` and accepted target `26d890f`, 44 tests and structural validator pass |
 
 ## Closure checklist
 
@@ -154,7 +156,7 @@ This supersedes the earlier "do not modify at this time" direction only for that
 - [x] The change or resolution is recorded.
 - [x] Required verification ran and evidence is linked; unavailable checks remain explicit.
 - [x] If `Review: SELF`, the historical record-only Self-review outcome is `COMPLETE`; it does not satisfy the newly required independent review of governance wording.
-- [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
+- [x] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved (round of `2026-08-14T03:11:06Z` by `ClaudeCode/pipeline-review`, `FIRST ROUND` with zero open material findings; recorder confirmed the reviewed wording is byte-identical on the accepted target `26d890f` on `2026-08-14T05:03:21Z`).
 - [x] Required human authority is recorded in the owning artifact: the accepted pipeline phase and compatible ADR.
 - [x] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
 - [x] Residual uncertainty is absent or explicitly owned.
