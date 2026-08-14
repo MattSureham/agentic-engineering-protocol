@@ -127,8 +127,6 @@ No independent review round has been recorded. Review begins after the first imm
 
 ## Activity history
 
-Append meaningful transitions and corrections; do not replace prior findings.
-
 | UTC time | Participant | From | To | Action, evidence, and reason |
 |---|---|---|---|---|
 | `2026-08-14T09:25:04Z` | `human:MattSureham` | `NONE` | `INVESTIGATING` | Owner direction authorized the host adapter and participant rotation phase; specification evolution, accepted ADR, probe evidence, and this owning issue recorded; pipeline state `AUTHORIZED` |
