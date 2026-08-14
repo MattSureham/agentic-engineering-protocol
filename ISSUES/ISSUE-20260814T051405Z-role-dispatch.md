@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-14T05:14:05Z`
-- **Updated UTC:** `2026-08-14T05:14:05Z`
+- **Updated UTC:** `2026-08-14T05:30:25Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Automated role dispatch phase and `MILESTONE-20260814T051405Z-role-dispatch-v1`
 - **ADRs:** [`ADR-20260814T051405Z-automated-role-dispatch`](../ADR/ADR-20260814T051405Z-automated-role-dispatch.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** `NONE YET`
@@ -73,7 +73,7 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260814T051405Z-role-dispatch-v1",
   "authority_digest": "afe725805d919f850e7d44017a2b4b63ba6b0f3453ec6bea84ece1ee265b638c",
-  "state": "AUTHORIZED",
+  "state": "READY",
   "attempt": 0,
   "implementor": null,
   "base_revision": null,
@@ -88,6 +88,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": null,
       "to": "AUTHORIZED",
       "reason": "Explicit Automated Role Dispatch / Rotation v1 owner direction accepted through specification evolution with a compatible accepted ADR."
+    },
+    {
+      "sequence": 2,
+      "utc": "2026-08-14T05:30:25Z",
+      "actor": "agent:ClaudeCode-dispatch",
+      "from": "AUTHORIZED",
+      "to": "READY",
+      "reason": "Validated transition AUTHORIZED to READY."
     }
   ]
 }
@@ -128,6 +136,7 @@ No independent review round has been recorded.
 |---|---|---|---|---|
 | `2026-08-14T05:14:05Z` | `ClaudeCode/root` | `NONE` | `OPEN` | Created from the explicit owner direction after verifying the first pipeline milestone is `ACCEPTED`, both wording issues are `CLOSED`, and the repository was in its terminal wait state |
 | `2026-08-14T05:14:05Z` | `ClaudeCode/root` | `OPEN` | `INVESTIGATING` | Recorded the accepted specification phase, compatible accepted ADR, contract digest `afe725805d919f850e7d44017a2b4b63ba6b0f3453ec6bea84ece1ee265b638c`, and execution-boundary decision before any implementation |
+| `2026-08-14T05:30:25Z` | `agent:ClaudeCode-dispatch` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 
 ## Closure checklist
 
