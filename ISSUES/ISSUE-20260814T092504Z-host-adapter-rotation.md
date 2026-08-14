@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-14T09:25:04Z`
-- **Updated UTC:** `2026-08-14T09:25:04Z`
+- **Updated UTC:** `2026-08-14T09:52:19Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Host adapter and participant rotation phase and `MILESTONE-20260814T092504Z-host-rotation-v1`
 - **ADRs:** [`ADR-20260814T092504Z-host-adapter-rotation`](../ADR/ADR-20260814T092504Z-host-adapter-rotation.md); [`ADR-20260814T051405Z-automated-role-dispatch`](../ADR/ADR-20260814T051405Z-automated-role-dispatch.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** [`EVIDENCE-20260814T092504Z-host-capability-probe`](../EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) (live host capability probes establishing the launch-interface boundary)
@@ -75,7 +75,7 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260814T092504Z-host-rotation-v1",
   "authority_digest": "a38bb7bfd1511045e8e09b4a0dc6af7893f24a8a833e9a3faa444660cc3b977b",
-  "state": "AUTHORIZED",
+  "state": "READY",
   "attempt": 0,
   "implementor": null,
   "base_revision": null,
@@ -90,6 +90,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": null,
       "to": "AUTHORIZED",
       "reason": "Explicit host adapter and automated participant rotation owner direction accepted through specification evolution with a compatible accepted ADR and live host-capability probe evidence."
+    },
+    {
+      "sequence": 2,
+      "utc": "2026-08-14T09:52:19Z",
+      "actor": "agent:ClaudeCode-rotation",
+      "from": "AUTHORIZED",
+      "to": "READY",
+      "reason": "Validated transition AUTHORIZED to READY."
     }
   ]
 }
@@ -130,6 +138,7 @@ No independent review round has been recorded. Review begins after the first imm
 | UTC time | Participant | From | To | Action, evidence, and reason |
 |---|---|---|---|---|
 | `2026-08-14T09:25:04Z` | `human:MattSureham` | `NONE` | `INVESTIGATING` | Owner direction authorized the host adapter and participant rotation phase; specification evolution, accepted ADR, probe evidence, and this owning issue recorded; pipeline state `AUTHORIZED` |
+| `2026-08-14T09:52:19Z` | `agent:ClaudeCode-rotation` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 
 ## Closure checklist
 
