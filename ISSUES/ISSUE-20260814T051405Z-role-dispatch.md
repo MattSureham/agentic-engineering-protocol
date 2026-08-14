@@ -10,10 +10,10 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-14T05:14:05Z`
-- **Updated UTC:** `2026-08-14T05:30:34Z`
+- **Updated UTC:** `2026-08-14T05:43:14Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Automated role dispatch phase and `MILESTONE-20260814T051405Z-role-dispatch-v1`
 - **ADRs:** [`ADR-20260814T051405Z-automated-role-dispatch`](../ADR/ADR-20260814T051405Z-automated-role-dispatch.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
-- **Evidence:** `NONE YET`
+- **Evidence:** Verification table below; pipeline-generated submission evidence under `EVIDENCE/` is recorded by the review-submission gate
 - **Milestone:** `MILESTONE-20260814T051405Z-role-dispatch-v1`
 
 Primary states are `OPEN`, `INVESTIGATING`, `IMPLEMENTING`, `VERIFYING`, `REVIEW`, and `CLOSED`. `BLOCKED` records a temporary side state. Code written is not closure.
@@ -62,6 +62,10 @@ The owner direction is recorded verbatim in HUMAN_CHECKPOINT and summarized unde
 | UTC time | Participant | Command or procedure | Result and exit status | Evidence | Limitations |
 |---|---|---|---|---|---|
 | `2026-08-14T05:14:05Z` | `ClaudeCode/root` | Authority-boundary recording only: parsed the updated two-milestone contract with the accepted pipeline parser; verified milestone-1 digest unchanged and milestone-2 digest computed | Contract parses; milestone-1 digest `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4` unchanged; milestone-2 digest `afe725805d919f850e7d44017a2b4b63ba6b0f3453ec6bea84ece1ee265b638c` | This issue and the accepted specification/ADR | No implementation exists yet; deterministic verification begins with the first attempt |
+| `2026-08-14T05:43:14Z` | `agent:ClaudeCode-dispatch` | `python3 -m unittest discover -s tests -v` | 63 tests `OK` (44 retained pipeline/structural tests plus 19 new dispatch tests), exit `0` | `tests/test_run_dispatch.py` and this row | Fixture-based; runs on the recorded Darwin/Python 3.9 environment only |
+| `2026-08-14T05:43:14Z` | `agent:ClaudeCode-dispatch` | `python3 scripts/validate_protocol.py` | `PASS structural protocol validation (package_files=10 handoffs=2)`, exit `0` | Inline | Structural invariants only; no semantic judgment |
+| `2026-08-14T05:43:14Z` | `agent:ClaudeCode-dispatch` | Live read-only check on this repository: `python3 scripts/run_dispatch.py --json` twice, compared byte-for-byte; `git status --porcelain` before and after | Byte-identical decision (role `implementer`, state `IN_PROGRESS`, milestone 2 selected); worktree status unchanged, confirming no mutation | Inline | Single live state exercised; the fixture suite covers every other state |
+| `2026-08-14T05:43:14Z` | `agent:ClaudeCode-dispatch` | Fixture coverage across every dispatch-relevant state: `AUTHORIZED`, `READY`, `IN_PROGRESS`, `AWAITING_PEER_REVIEW` (no round, stale-target round, `APPROVED` round, `CHANGES_REQUIRED` round, `BLOCKED` round), `CHANGES_REQUIRED`, `BLOCKED_HUMAN_AUTHORITY`, all-`ACCEPTED` terminal, and dependency-ordered selection | Each routes to exactly the one expected role with the expected eligibility constraints and commands; byte-identity, timestamp-free output, and no-mutation assertions pass | `tests/test_run_dispatch.py` (19 tests) | Semantic adequacy of routing wording remains reviewer judgment |
 
 ## Pipeline state
 
@@ -135,8 +139,9 @@ No independent review round has been recorded.
 
 ## Residual uncertainty
 
-- Exact dispatcher output shape and role-contract wording remain implementation decisions within the accepted scope; independent review of the immutable target is the remaining gate.
+- Dispatcher output shape and role-contract wording are now decided in `scripts/run_dispatch.py` and `ROLE_CONTRACTS.md`; independent review of the immutable target is the remaining gate for their adequacy.
 - Host launch capability remains unknown and out of scope; the adapter boundary is documented instead.
+- Broader platform portability beyond the recorded Darwin/Python 3.9 environment is unestablished, unchanged from the pipeline milestone.
 
 ## Activity history
 
@@ -146,15 +151,16 @@ No independent review round has been recorded.
 | `2026-08-14T05:14:05Z` | `ClaudeCode/root` | `OPEN` | `INVESTIGATING` | Recorded the accepted specification phase, compatible accepted ADR, contract digest `afe725805d919f850e7d44017a2b4b63ba6b0f3453ec6bea84ece1ee265b638c`, and execution-boundary decision before any implementation |
 | `2026-08-14T05:30:25Z` | `agent:ClaudeCode-dispatch` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 | `2026-08-14T05:30:34Z` | `agent:ClaudeCode-dispatch` | `INVESTIGATING` | `IMPLEMENTING` | Pipeline READY -> IN_PROGRESS. Implementation attempt 1 began from immutable base 10d9610f8d5d6167360b6f5fd4bfdf4392971ac4. |
+| `2026-08-14T05:43:14Z` | `agent:ClaudeCode-dispatch` | `IMPLEMENTING` | `IMPLEMENTING` | Implemented attempt 1 within the contract allowed paths: root `ROLE_CONTRACTS.md` (implementer, independent-reviewer, recorder/coordinator, human-escalation contracts plus the documented manual host adapter boundary), read-only `scripts/run_dispatch.py` reusing the accepted pipeline parsers, and 19-test `tests/test_run_dispatch.py` covering every dispatch-relevant state; `README.md` navigation updated; 63 tests and the structural validator pass; verification rows recorded above |
 
 ## Closure checklist
 
 - [x] Expected behavior is tied to a higher-authority source.
-- [ ] The change or resolution is recorded.
-- [ ] Required verification ran and evidence is linked; unavailable checks remain explicit.
-- [ ] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies.
+- [x] The change or resolution is recorded.
+- [x] Required verification ran and evidence is linked; unavailable checks remain explicit.
+- [x] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies. — `NOT_APPLICABLE`: review is `INDEPENDENT`.
 - [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
 - [x] Required human authority is recorded in the owning artifact: the accepted dispatch phase and compatible accepted ADR.
-- [ ] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
-- [ ] Residual uncertainty is absent or explicitly owned.
+- [x] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
+- [x] Residual uncertainty is absent or explicitly owned.
 - [ ] HANDOFF reflects the resulting current state and exactly one next action.
