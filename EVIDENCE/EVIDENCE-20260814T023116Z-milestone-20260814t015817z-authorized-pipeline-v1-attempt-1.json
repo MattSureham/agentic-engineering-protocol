@@ -1,0 +1,44 @@
+{
+  "authority_digest": "36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4",
+  "base_revision": "a6f2699a4bed2e1a08c9a506bad62204bd2d0086",
+  "checks": [
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "id": "repository-unit-tests",
+      "stderr": "test_contract_rejects_path_escape_dependency_order_and_digest_drift (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_draft_specification_is_not_authority_and_does_not_mutate (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_failed_check_preserves_evidence_without_advancing (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_full_lifecycle_accepts_reviewed_target (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_human_escalation_requires_durable_human_blocker (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_invalid_transition_and_invocation_do_not_mutate (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_issue_conflict_is_detected_before_atomic_replacement (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_malformed_duplicate_and_unsupported_contracts_fail_closed (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_material_findings_drive_fix_and_rereview (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_out_of_scope_target_is_rejected_without_evidence (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_post_target_implementation_drift_prevents_acceptance (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_review_gate_rejects_identity_target_vocabulary_and_material_mismatch (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_second_authorized_milestone_selected_after_acceptance (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_status_is_deterministic_read_only_and_machine_readable (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_structural_validator_is_reused (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_tampered_evidence_reference_fails_status (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_unavailable_and_timed_out_checks_are_failures_with_evidence (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_unchecked_closure_prevents_acceptance (test_run_pipeline.AuthorizedMilestonePipelineTests) ... ok\ntest_broken_and_escaping_links_fail (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_cli_usage_error_has_stable_summary (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_current_repository_passes (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_fenced_handoff_headings_do_not_affect_structure (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_handoff_section_shape_failures (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_handoff_snapshot_field_and_next_action_failures (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_indented_link_like_syntax_returns_unsupported (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_inline_code_does_not_span_blank_block_boundary (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_isolated_copy_with_spaces_is_deterministic_and_read_only (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_malformed_inline_link_returns_unsupported (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_markdown_byte_and_fence_invariants_fail (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_missing_and_symlinked_root_handoff_fail (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_missing_and_unexpected_entries_fail_manifest (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_missing_root_is_tool_error (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_non_regular_expected_entry_fails (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_reference_style_links_return_unsupported (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_supported_links_and_code_examples_pass (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_symlink_escape_fails (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_symlinked_bundle_root_fails_without_scanning_target (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_symlinked_package_entry_fails (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\ntest_unicode_space_and_parentheses_target_is_resolved (test_validate_protocol.StructuralProtocolValidatorTests) ... ok\n\n----------------------------------------------------------------------\nRan 39 tests in 14.013s\n\nOK\n",
+      "stderr_truncated": false,
+      "stdout": "",
+      "stdout_truncated": false,
+      "timed_out": false,
+      "timeout_seconds": 120
+    }
+  ],
+  "environment": {
+    "platform": "darwin",
+    "python": "3.9.6"
+  },
+  "id": "EVIDENCE-20260814T023116Z-milestone-20260814t015817z-authorized-pipeline-v1-attempt-1",
+  "limitations": [
+    "Participant labels are recorded assertions, not authenticated identities.",
+    "Passing deterministic checks does not establish semantic correctness or review adequacy."
+  ],
+  "milestone_id": "MILESTONE-20260814T015817Z-authorized-pipeline-v1",
+  "participant": "agent:Codex-root",
+  "recorded_utc": "2026-08-14T02:31:16Z",
+  "result": "PASS",
+  "schema": "aep-pipeline-verification/v1",
+  "structural_validator": {
+    "finding_count": 0,
+    "result": "PASS"
+  },
+  "target_revision": "6c0a3bda06686635023e334a4e644fb176372b04"
+}

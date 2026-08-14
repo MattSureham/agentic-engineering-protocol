@@ -4,16 +4,16 @@
 
 - **ID:** `ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`
 - **Title:** External task pressure versus terminal owner-wait state in fresh-participant onboarding
-- **Status:** `IMPLEMENTING`
+- **Status:** `REVIEW`
 - **Severity:** `LOW`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-07T02:25:23Z`
-- **Updated UTC:** `2026-08-14T02:24:27Z`
+- **Updated UTC:** `2026-08-14T02:32:24Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) specification-evolution policy and Authorized milestone pipeline phase; reusable protocol freshness/onboarding requirements
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
-- **Evidence:** Inline verification record below; [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md)
+- **Evidence:** Inline verification record below; [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md); [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md)
 
 Primary states are `OPEN`, `INVESTIGATING`, `IMPLEMENTING`, `VERIFYING`, `REVIEW`, and `CLOSED`. `BLOCKED` records a temporary side state. Code written is not closure.
 
@@ -79,6 +79,7 @@ The preceding options are preserved as the original investigation. On `2026-08-1
 |---|---|---|---|---|---|
 | `2026-08-07T02:25:23Z` | `ClaudeCode/pilot-1` | Procedures listed under Evidence or reproduction | All passed, exit `0`; snapshot claims CONFIRMED; no staleness trigger fired | Inline table above | Dedicated Markdown linters not run; single-participant observation |
 | `2026-08-14T02:24:27Z` | `Codex/root` | Inspect root/reusable BOOTSTRAP, reusable onboarding/resumption prompts, accepted milestone authority, and candidate structural/full unit checks | Explicit authority distinction is present in both normative documents and prompts; 39 repository tests pass | Shared pipeline candidate worktree; immutable evidence pending | Implementor inspection cannot satisfy independent review |
+| `2026-08-14T02:32:24Z` | `Codex/root` | Compare immutable target `6c0a3bd` with accepted owner wording; run complete shared-target validation and inspect generated pipeline evidence | Exact bounded clarification is present; target verification passes and is published | [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md) | Independent wording review remains pending |
 
 ## Self-review
 
@@ -92,7 +93,7 @@ The preceding options are preserved as the original investigation. On `2026-08-1
 - **Residual risks:** The owner may judge this finding out of scope; closure then requires only a recorded rationale
 - **Outcome:** `COMPLETE`
 
-The historical self-review above covered creation of the finding only. Implementor `Codex/root` inspected the bounded wording at `2026-08-14T02:24:27Z`; no broader onboarding behavior was added, and this preparatory check does not satisfy the now-required independent review.
+The historical self-review above covered creation of the finding only. Implementor `Codex/root` inspected the bounded wording at immutable target `6c0a3bda06686635023e334a4e644fb176372b04` through `2026-08-14T02:32:24Z`; no broader onboarding behavior was added, and this preparatory check does not satisfy the now-required independent review.
 
 ## Independent review rounds
 
@@ -127,12 +128,14 @@ This supersedes the earlier "do not modify at this time" direction only for that
 | `2026-08-07T02:31:47Z` | `ClaudeCode/pilot-1` | `OPEN` | `OPEN` | Recorded owner direction: keep the finding open, do not close, do not modify protocol source at that time; approved push of the pilot-resumption record `276e55491da800a4b37d52ae76842a4ec4c0a647` was completed and remote-verified |
 | `2026-08-14T01:58:17Z` | Human technical owner `MattSureham`, recorded by `Codex/root` | `OPEN` | `INVESTIGATING` | Current owner decision supersedes the prior hold only for the exact accepted-milestone versus inferred-scope clarification; wording implementation and independent review are now authorized |
 | `2026-08-14T02:06:16Z` | `Codex/root` | `INVESTIGATING` | `IMPLEMENTING` | Began the exact root/reusable authority clarification from committed boundary `a6f2699`; broader onboarding changes remain excluded |
+| `2026-08-14T02:32:24Z` | `Codex/root` | `IMPLEMENTING` | `VERIFYING` | Frozen shared target `6c0a3bd`; completed deterministic wording, package, link, scope, and full-suite verification |
+| `2026-08-14T02:32:24Z` | `Codex/root` | `VERIFYING` | `REVIEW` | Published the immutable target and linked complete evidence; fresh independent review is the remaining gate |
 
 ## Closure checklist
 
 - [x] Expected behavior is tied to a higher-authority source.
 - [x] The change or resolution is recorded.
-- [ ] Required verification ran and evidence is linked; unavailable checks remain explicit.
+- [x] Required verification ran and evidence is linked; unavailable checks remain explicit.
 - [x] If `Review: SELF`, the historical record-only Self-review outcome is `COMPLETE`; it does not satisfy the newly required independent review of governance wording.
 - [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
 - [x] Required human authority is recorded in the owning artifact: the accepted pipeline phase and compatible ADR.

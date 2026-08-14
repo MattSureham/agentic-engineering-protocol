@@ -4,16 +4,16 @@
 
 - **ID:** `ISSUE-20260811T030136Z-review-disposition-vocabulary`
 - **Title:** Review session verdict labels versus the three protocol dispositions
-- **Status:** `IMPLEMENTING`
+- **Status:** `REVIEW`
 - **Severity:** `LOW`
 - **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-11T03:01:36Z`
-- **Updated UTC:** `2026-08-14T02:24:27Z`
+- **Updated UTC:** `2026-08-14T02:32:24Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `PIPELINE-005`; root [`BOOTSTRAP.md`](../BOOTSTRAP.md) review requirements; and [`ISSUES/TEMPLATE.md`](TEMPLATE.md) review-round schema
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
-- **Evidence:** [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUE-20260811T013701Z-structural-protocol-validator.md) (owner-report note of `2026-08-11T02:38:34Z` and persisted independent round 1 of `2026-08-11T02:49:05Z`); [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md)
+- **Evidence:** [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUE-20260811T013701Z-structural-protocol-validator.md) (owner-report note of `2026-08-11T02:38:34Z` and persisted independent round 1 of `2026-08-11T02:49:05Z`); [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md); [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md)
 
 ## Problem
 
@@ -56,6 +56,7 @@ None introduced.
 |---|---|---|---|---|---|
 | `2026-08-11T03:01:36Z` | `ClaudeCode/coordinator` | Coordinator closure verification of the validator milestone: target/tree/parent identity reproduction, post-target drift scope, validator and 21-test rerun, round-schema completeness check | All checks pass; details recorded in the validator issue activity history and HANDOFF | [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUE-20260811T013701Z-structural-protocol-validator.md) | The session output itself is not a repository artifact; the verbatim label survives only inside the persisted round |
 | `2026-08-14T02:24:27Z` | `Codex/root` | Inspect root/reusable BOOTSTRAP, both issue templates, independent-review prompt, and executable review-round rejection cases | Exact three-value vocabulary appears in all intended artifacts; tests reject informal, self-reviewed, target-mismatched, `BLOCKED`, and material-finding approval cases; 39 repository tests pass | Shared pipeline candidate worktree; immutable evidence pending | Implementor inspection cannot satisfy independent review or authenticate labels |
+| `2026-08-14T02:32:24Z` | `Codex/root` | Inspect published target `6c0a3bd`, generated transition evidence, review-template/prompt wording, and peer-gate test cases | Exact disposition contract and executable rejections pass at immutable target | [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md) | Independent semantic review and identity authentication remain pending/out of scope respectively |
 
 ## Self-review
 
@@ -69,7 +70,7 @@ None introduced.
 - **Residual risks:** Future informal verdict labels may recur until the owner directs otherwise
 - **Outcome:** `COMPLETE`
 
-The historical self-review above covered creation of the record only. Implementor `Codex/root` inspected the owner-authorized wording and executable schema at `2026-08-14T02:24:27Z`; this preparatory check does not satisfy the now-required independent review.
+The historical self-review above covered creation of the record only. Implementor `Codex/root` inspected the owner-authorized wording and executable schema at immutable target `6c0a3bda06686635023e334a4e644fb176372b04` through `2026-08-14T02:32:24Z`; this preparatory check does not satisfy the now-required independent review.
 
 ## Independent review rounds
 
@@ -95,12 +96,14 @@ No independent review round has been recorded for the wording target.
 | `2026-08-11T03:01:36Z` | `ClaudeCode/coordinator` | `NONE` | `OPEN` | Recorded the review-reporting vocabulary friction surfaced during validator-milestone reconciliation; no protocol change proposed |
 | `2026-08-14T01:58:17Z` | Human technical owner `MattSureham`, recorded by `Codex/root` | `OPEN` | `INVESTIGATING` | Selected exact protocol vocabulary for all review verdict reporting; authorized bounded wording changes and independent review |
 | `2026-08-14T02:06:16Z` | `Codex/root` | `INVESTIGATING` | `IMPLEMENTING` | Began exact-vocabulary wording and schema changes from committed authority boundary `a6f2699`; no new disposition is introduced |
+| `2026-08-14T02:32:24Z` | `Codex/root` | `IMPLEMENTING` | `VERIFYING` | Frozen shared target `6c0a3bd`; completed exact-vocabulary, schema, rejection-path, link, and full-suite verification |
+| `2026-08-14T02:32:24Z` | `Codex/root` | `VERIFYING` | `REVIEW` | Published immutable target and complete evidence; fresh independent review is the remaining gate |
 
 ## Closure checklist
 
 - [x] Expected behavior is tied to a higher-authority source (root BOOTSTRAP review requirements and the issue template).
 - [x] The wording change or resolution is recorded.
-- [ ] Required verification ran and evidence is linked; unavailable checks remain explicit.
+- [x] Required verification ran and evidence is linked; unavailable checks remain explicit.
 - [x] If `Review: SELF`, the historical record-only Self-review outcome is `COMPLETE`; it does not satisfy the newly required independent review of governance wording.
 - [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
 - [x] Required human authority is recorded in the accepted specification and compatible ADR.
