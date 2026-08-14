@@ -10,8 +10,8 @@ The output should be a self-contained template/protocol that can later be copied
 
 - **Status:** `ACCEPTED`
 - **Human technical owner:** `MattSureham`
-- **Current accepted change:** Automated role dispatch phase approved before implementation on `2026-08-14`; the Authorized milestone pipeline phase and authority clarification approved on `2026-08-14` remain in force; prior accepted requirements remain in force except where explicitly superseded below
-- **Authority record:** [`ISSUE-20260814T051405Z-role-dispatch`](ISSUES/ISSUE-20260814T051405Z-role-dispatch.md), [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md), [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), and [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
+- **Current accepted change:** Host adapter and participant rotation phase approved before implementation on `2026-08-14`; the Automated role dispatch phase and the Authorized milestone pipeline phase approved on `2026-08-14` remain in force; prior accepted requirements remain in force except where explicitly superseded below
+- **Authority record:** [`ISSUE-20260814T092504Z-host-adapter-rotation`](ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md), [`ADR-20260814T092504Z-host-adapter-rotation`](ADR/ADR-20260814T092504Z-host-adapter-rotation.md), [`EVIDENCE-20260814T092504Z-host-capability-probe`](EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md), [`ISSUE-20260814T051405Z-role-dispatch`](ISSUES/ISSUE-20260814T051405Z-role-dispatch.md), [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md), [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), and [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
 
 # Goal
 
@@ -624,6 +624,47 @@ The JSON object between the exact markers is normative content of this accepted 
         }
       ],
       "review": "INDEPENDENT"
+    },
+    {
+      "id": "MILESTONE-20260814T092504Z-host-rotation-v1",
+      "order": 3,
+      "title": "Host adapter and participant rotation v1",
+      "issue": "ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md",
+      "depends_on": [
+        "MILESTONE-20260814T051405Z-role-dispatch-v1"
+      ],
+      "scope": [
+        "Codify the evidence-bounded host adapter boundary, participant registry, rotation ledger, and failure taxonomy in the root role-contract and adapter records.",
+        "Implement and verify one root-only participant-rotation runner that consumes dispatcher decisions, launches eligible participants through the verified host CLI interface, records every step in a durable append-only ledger, and never maps participant failure to human-authority escalation."
+      ],
+      "allowed_paths": [
+        "ROLE_CONTRACTS.md",
+        "ROTATION_PARTICIPANTS.json",
+        "ROTATION_LOG.jsonl",
+        "HANDOFF.md",
+        "HUMAN_CHECKPOINT.md",
+        "README.md",
+        "ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md",
+        "EVIDENCE/",
+        "scripts/run_rotation.py",
+        "tests/test_run_rotation.py"
+      ],
+      "acceptance_checks": [
+        {
+          "id": "repository-unit-tests",
+          "argv": [
+            "python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v"
+          ],
+          "timeout_seconds": 120
+        }
+      ],
+      "review": "INDEPENDENT"
     }
   ]
 }
@@ -675,6 +716,34 @@ The dispatch milestone is ready for peer review only when:
 5. The host adapter boundary is documented as an explicit non-implemented interface; no simulated invocation exists anywhere.
 6. A fresh independent participant reviews the immutable target. Only `APPROVED` with zero open material findings permits `ACCEPTED`; `CHANGES_REQUIRED` returns within-scope work to implementation, and `BLOCKED` cannot be mapped to approval.
 
+# Host adapter and participant rotation phase
+
+This phase closes the loop the dispatch phase left open: an emitted next-role decision is executed by launching an eligible participant through a host interface that has been verified by recorded evidence, so already-authorized milestones advance without routine human routing. Repository state remains the only authority: the dispatcher decides, the pipeline records transitions, and the rotation runner merely executes emitted decisions through the host adapter. Adapters MUST NOT redefine scope, eligibility, or state semantics. The dispatch phase's manual-adapter boundary is superseded only for the exact milestone defined below; all other deferrals remain binding.
+
+The execution boundary is established from evidence, not assumption. [`EVIDENCE-20260814T092504Z-host-capability-probe`](EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) verifies that this host's Claude Code CLI (`2.1.118`) supports programmatic headless sessions (`claude -p`) with structured JSON result envelopes, budget caps, a machine-readable budget-exhaustion failure class, and resumable session identity, and that no `paseo` binary or project exists on this host. Only probed behavior may be relied upon; no unverified session API may be invented.
+
+## Accepted rotation requirements
+
+- **ROTATE-001 — Dispatcher is the only routing authority:** The rotation runner MUST obtain its next action exclusively from `scripts/run_dispatch.py --json`. It MUST NOT re-derive role selection, milestone selection, eligibility, or scope from any other source, and MUST NOT execute transitions other than the emitted expected commands with a concrete eligible participant label substituted for the placeholder.
+- **ROTATE-002 — Evidence-bounded host interface:** Participant invocation MUST use only launch-interface behavior established by recorded probe evidence. Unprobed capabilities MUST NOT be assumed, simulated, or presented as real. If the verified interface is unavailable at run time, that is a participant/adapter failure, not an authority gap.
+- **ROTATE-003 — Participant registry and independence filtering:** Eligible participants MUST be declared in a durable root registry (`ROTATION_PARTICIPANTS.json`) with per-participant launch configuration. Before launch, the runner MUST filter registry candidates against the dispatcher's emitted eligibility constraints so the reviewer label differs from the attempt implementor label and the recorder label differs from both. When no registry participant satisfies the constraints, the runner MUST stop with an explicit no-eligible-participant outcome and MUST NOT escalate to human authority on that basis alone.
+- **ROTATE-004 — Failure taxonomy without false escalation:** Launch failure, quota/budget exhaustion (for example the probed `error_max_budget_usd` envelope), timeout, session error, and non-advancing completion are participant failures. They MUST be classified and recorded as such and MUST NOT produce a `BLOCKED_HUMAN_AUTHORITY` transition. Human escalation occurs only when repository authority is missing or exhausted, exactly as the accepted pipeline and dispatcher already determine.
+- **ROTATE-005 — Bounded retry and rotation:** On participant failure the runner MAY retry the same participant or select another eligible participant, within explicit per-invocation bounds (maximum attempts, maximum steps, maximum spend) declared in the registry or runner invocation. Exhausting a bound MUST stop the runner with a recorded reason; unbounded loops and unbounded spend are forbidden.
+- **ROTATE-006 — Durable ledger, repository-state recovery:** Every launch, outcome classification, retry, and rotation decision MUST be appended to a durable root ledger (`ROTATION_LOG.jsonl`) recording the participant label, session identity where reported, outcome class, and cost where reported. Recovery from interruption MUST re-read repository state through the dispatcher and reconcile against the ledger; the ledger records what was attempted but never overrides pipeline state, which remains authoritative.
+- **ROTATE-007 — Clean termination:** The runner MUST stop and report its reason when the dispatcher emits the terminal no-authorized-work decision, when a genuine human-authority decision is emitted, when no eligible participant exists, or when a declared bound is exhausted. It MUST NOT invent work, transitions, or milestones.
+- **ROTATE-008 — Bounded root-only slice:** The runner MUST be a Python 3.9-compatible, standard-library, root-only tool. It MUST NOT enter the reusable ten-file package, add a daemon, service, scheduler, database, web UI, or external tracker integration, or mutate Git beyond executing the dispatcher's emitted pipeline transition commands. The test suite MUST use a stub launcher and MUST NOT launch real agent sessions; real launches are operational use, not test behavior.
+
+## Rotation acceptance criteria
+
+The rotation milestone is ready for peer review only when:
+
+1. The runner consumes only the dispatcher's machine-readable decision, and tests prove routing changes when stubbed decisions change without any other state input.
+2. Every probed failure class — launch failure, budget exhaustion, timeout/session error, and non-advancing completion — is classified and handled by tests, and no participant failure produces a `BLOCKED_HUMAN_AUTHORITY` transition in any test scenario.
+3. Independence filtering is enforced pre-launch: tests prove that reviewer/recorder candidates equal to the attempt implementor (or approving reviewer) are excluded, and that an exhausted pool stops with an explicit no-eligible-participant outcome without human-authority escalation.
+4. Interruption recovery is covered by tests that truncate the run at each ledger step and prove a restarted runner resumes or stops deterministically from dispatcher state plus the ledger, with no duplicate transitions.
+5. The ledger is append-only, records participant label, session identity, outcome class, and cost for every stubbed step, and the runner writes no repository bytes other than the ledger, the emitted pipeline transitions, and the role-required issue/HANDOFF reconciliation records.
+6. A fresh independent participant reviews the immutable target. Only `APPROVED` with zero open material findings permits `ACCEPTED`; `CHANGES_REQUIRED` returns within-scope work to implementation, and `BLOCKED` cannot be mapped to approval.
+
 # Specification governance
 
 ## Specification evolution
@@ -704,3 +773,4 @@ Material requirement changes require human-owner authority. Keep exact proposed 
 | `2026-08-06T01:39:07Z` | Added accepted post-pilot hardening requirements, deferrals, acceptance criteria, and the approved specification-evolution policy | Resolve repository-verified dogfooding, record-separation, HANDOFF reliability, and evidence-portability gaps without expanding product runtime scope | Human technical owner (`MattSureham`) | [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md), [`EVIDENCE-20260806T013907Z-post-pilot-audit`](EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md), authority boundary `7dea545` |
 | `2026-08-14T01:58:17Z` | Accepted prior authorization for explicitly declared milestones and the bounded root-local automated pipeline phase | Allow deterministic implementation, verification, independent review, fix loops, and continuation without repeated human prompts while preserving explicit scope and escalation boundaries | Human technical owner (`MattSureham`) | [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md) |
 | `2026-08-14T05:14:05Z` | Accepted the automated role dispatch phase and a second contract milestone for role contracts, eligibility rules, and a deterministic read-only next-role dispatcher with an explicit host adapter boundary | Eliminate routine human intervention between already-authorized pipeline transitions while keeping the accepted pipeline as the single state machine and leaving host session invocation outside repository authority | Human technical owner (`MattSureham`) | [`ISSUE-20260814T051405Z-role-dispatch`](ISSUES/ISSUE-20260814T051405Z-role-dispatch.md), [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md) |
+| `2026-08-14T09:25:04Z` | Accepted the host adapter and participant rotation phase and a third contract milestone for an evidence-bounded host adapter, participant registry, append-only rotation ledger, failure taxonomy, and a bounded rotation runner executing dispatcher decisions | Close the participant-rotation loop using the host launch interface verified by live probe evidence while keeping repository state authoritative, adapters subordinate to dispatch decisions, and participant failures strictly distinct from human-authority escalation | Human technical owner (`MattSureham`) | [`ISSUE-20260814T092504Z-host-adapter-rotation`](ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md), [`ADR-20260814T092504Z-host-adapter-rotation`](ADR/ADR-20260814T092504Z-host-adapter-rotation.md), [`EVIDENCE-20260814T092504Z-host-capability-probe`](EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) |
