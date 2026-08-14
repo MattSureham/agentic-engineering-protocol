@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-14T09:25:04Z`
-- **Updated UTC:** `2026-08-14T09:52:19Z`
+- **Updated UTC:** `2026-08-14T10:03:49Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Host adapter and participant rotation phase and `MILESTONE-20260814T092504Z-host-rotation-v1`
 - **ADRs:** [`ADR-20260814T092504Z-host-adapter-rotation`](../ADR/ADR-20260814T092504Z-host-adapter-rotation.md); [`ADR-20260814T051405Z-automated-role-dispatch`](../ADR/ADR-20260814T051405Z-automated-role-dispatch.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** [`EVIDENCE-20260814T092504Z-host-capability-probe`](../EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) (live host capability probes establishing the launch-interface boundary)
@@ -64,6 +64,9 @@ The owner direction is recorded through specification evolution and summarized i
 |---|---|---|---|---|---|
 | `2026-08-14T09:25:04Z` | `ClaudeCode/root` | Authority-boundary recording only: parsed the updated three-milestone contract with the accepted pipeline parser; verified milestone-1 and milestone-2 digests unchanged and milestone-3 digest computed | Contract parses; milestone-1 digest `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4` unchanged; milestone-2 digest `afe725805d919f850e7d44017a2b4b63ba6b0f3453ec6bea84ece1ee265b638c` unchanged; milestone-3 digest `a38bb7bfd1511045e8e09b4a0dc6af7893f24a8a833e9a3faa444660cc3b977b` | This issue and the accepted specification/ADR | No implementation exists yet; deterministic verification begins with the first attempt |
 | `2026-08-14T09:25:04Z` | `ClaudeCode/root` | Live host capability probes in `/tmp/aep-host-probe` (launch, budget exhaustion, resume; presence probe for `paseo` and `claude`) | Launch exit `0` (`subtype: success`); budget exhaustion exit `1` (`subtype: error_max_budget_usd`); resume exit `0` with identical `session_id`; `paseo` absent; `claude` `2.1.118` | [`EVIDENCE-20260814T092504Z-host-capability-probe`](../EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) | Single host, single CLI version; rate limits and concurrency unprobed |
+| `2026-08-14T10:03:49Z` | `agent:ClaudeCode-rotation` | `python3 -m unittest discover -s tests -v` | 89 tests `OK` (63 retained pipeline/structural/dispatch tests plus 26 new rotation tests), exit `0` | `tests/test_run_rotation.py` and this row | Stub launcher only; no real session launched; recorded Darwin/Python 3.9 environment |
+| `2026-08-14T10:03:49Z` | `agent:ClaudeCode-rotation` | `python3 scripts/validate_protocol.py` | `PASS structural protocol validation (package_files=10 handoffs=2)`, exit `0` | Inline | Structural invariants only |
+| `2026-08-14T10:03:49Z` | `agent:ClaudeCode-rotation` | Rotation acceptance-criteria coverage: stubbed-decision routing; every probed failure class (launch failure, budget exhaustion, timeout, session error, non-advancing); pre-launch independence filtering for reviewer/recorder/bound-implementor; exhausted-pool stop without escalation; crash truncation with restart at ledger steps; append-only ledger fields; attempt/step/spend bounds; CLI end-to-end against the real dispatcher binary on a fixture repository in the terminal state | Each maps to the expected outcome class or stop reason with ledger records; no scenario produces a `BLOCKED_HUMAN_AUTHORITY` transition; unrecognized eligibility constraints and envelope shapes fail closed | `tests/test_run_rotation.py` (26 tests) | Live runner invocation against this repository deliberately not exercised: the live decision is this attempt's own implementer role, and a real launch is operational use, not verification |
 
 ## Pipeline state
 
@@ -140,6 +143,10 @@ No independent review round has been recorded. Review begins after the first imm
 ## Residual uncertainty
 
 - Host rate limits, concurrency, long-running session stability, authentication-mode variation, and CLI envelope stability across versions remain `UNKNOWN` and are owned by this issue's adapter fail-closed requirement; the owner accepts this residual risk within the authorized slice.
+- Participant-prompt wording and recovery-message wording are implementation decisions now frozen in the target; their semantic adequacy remains reviewer judgment, as recorded under Unverified complexity.
+- The runner interprets the dispatcher's emitted eligibility strings against the accepted dispatcher's exact stable templates and fails closed on any unrecognized phrasing; drift between the two tools' wording is caught by the dispatch milestone's byte-identity tests plus this suite's routing tests.
+- `ISSUES/TEMPLATE.md` carries a prose line under `## Activity history` that the accepted pipeline's activity-table gate rejects; the owning issue dropped that line to conform (commit `a9a7fb0`). The template itself is outside this milestone's allowed paths, so the template/tool drift is recorded here for owner visibility rather than fixed.
+- The runner executes no transitions itself; launched participants run the dispatcher-emitted commands and commit their record changes, because the pipeline's cleanliness gate rejects a dirty tree. This division is recorded in `ROLE_CONTRACTS.md` and remains reviewer judgment.
 
 ## Activity history
 
@@ -148,15 +155,16 @@ No independent review round has been recorded. Review begins after the first imm
 | `2026-08-14T09:25:04Z` | `human:MattSureham` | `NONE` | `INVESTIGATING` | Owner direction authorized the host adapter and participant rotation phase; specification evolution, accepted ADR, probe evidence, and this owning issue recorded; pipeline state `AUTHORIZED` |
 | `2026-08-14T09:52:19Z` | `agent:ClaudeCode-rotation` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 | `2026-08-14T09:52:19Z` | `agent:ClaudeCode-rotation` | `INVESTIGATING` | `IMPLEMENTING` | Pipeline READY -> IN_PROGRESS. Implementation attempt 1 began from immutable base a21997dabfcc555c2b82458789aa75871f787055. |
+| `2026-08-14T10:03:49Z` | `agent:ClaudeCode-rotation` | `IMPLEMENTING` | `IMPLEMENTING` | Implemented attempt 1 within the contract allowed paths: `scripts/run_rotation.py` (dispatcher-consuming bounded runner with stub-injectable launcher, probed-envelope taxonomy, independence filtering, recovery, append-only ledger), `ROTATION_PARTICIPANTS.json` registry, empty durable `ROTATION_LOG.jsonl`, 26-test `tests/test_run_rotation.py`, `ROLE_CONTRACTS.md` adapter/rotation guidance, `README.md` navigation; owning-issue activity section conformed to the pipeline table gate (`a9a7fb0`); 89 tests and the structural validator pass; verification rows recorded above |
 
 ## Closure checklist
 
-- [ ] Expected behavior is tied to a higher-authority source.
-- [ ] The change or resolution is recorded.
-- [ ] Required verification ran and evidence is linked; unavailable checks remain explicit.
-- [ ] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies.
+- [x] Expected behavior is tied to a higher-authority source.
+- [x] The change or resolution is recorded.
+- [x] Required verification ran and evidence is linked; unavailable checks remain explicit.
+- [x] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies. — `NOT_APPLICABLE`: review is `INDEPENDENT`.
 - [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
-- [ ] Required human authority is recorded in the owning artifact: product/contract in `PROJECT_SPEC.md`, architecture in an accepted ADR, or both for a mixed decision.
-- [ ] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
-- [ ] Residual uncertainty is absent or explicitly owned.
+- [x] Required human authority is recorded in the owning artifact: product/contract in `PROJECT_SPEC.md`, architecture in an accepted ADR, or both for a mixed decision.
+- [x] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
+- [x] Residual uncertainty is absent or explicitly owned.
 - [ ] HANDOFF reflects the resulting current state and exactly one next action.

@@ -1,0 +1,22 @@
+{
+  "schema": "rotation-participants/v1",
+  "defaults": {
+    "max_attempts_per_decision": 2,
+    "max_steps": 8,
+    "max_spend_usd": 5.0,
+    "timeout_seconds": 1800,
+    "max_budget_usd": 1.0,
+    "tools": ""
+  },
+  "participants": [
+    {
+      "label": "agent:rotation-alpha"
+    },
+    {
+      "label": "agent:rotation-beta"
+    },
+    {
+      "label": "agent:rotation-gamma"
+    }
+  ]
+}
