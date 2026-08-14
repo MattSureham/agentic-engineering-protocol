@@ -4,16 +4,16 @@
 
 - **ID:** `ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`
 - **Title:** External task pressure versus terminal owner-wait state in fresh-participant onboarding
-- **Status:** `OPEN`
+- **Status:** `INVESTIGATING`
 - **Severity:** `LOW`
-- **Owner:** `UNASSIGNED`
+- **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
-- **Review:** `SELF`
+- **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-07T02:25:23Z`
-- **Updated UTC:** `2026-08-07T02:31:47Z`
-- **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) post-pilot hardening requirements and specification-evolution policy; reusable protocol freshness/onboarding requirements
-- **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md) (governance context only)
-- **Evidence:** Inline verification record below; no separate evidence file
+- **Updated UTC:** `2026-08-14T01:58:17Z`
+- **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) specification-evolution policy and Authorized milestone pipeline phase; reusable protocol freshness/onboarding requirements
+- **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
+- **Evidence:** Inline verification record below; [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md)
 
 Primary states are `OPEN`, `INVESTIGATING`, `IMPLEMENTING`, `VERIFYING`, `REVIEW`, and `CLOSED`. `BLOCKED` records a temporary side state. Code written is not closure.
 
@@ -104,6 +104,12 @@ No implementation is proposed by this issue. Candidate owner options, recorded f
 
 `2026-08-07T02:31:47Z` — Human technical owner (`MattSureham`) directed: retain this finding `OPEN`; do not close it; do not modify the reusable `protocol/` package or root BOOTSTRAP at this time. This selects none of the three recorded options now; it preserves the finding as accepted open record-keeping with no authorized implementation. The decision queue in `HUMAN_CHECKPOINT.md` was updated accordingly.
 
+### 2026-08-14T01:58:17Z — Superseding bounded direction
+
+Human technical owner `MattSureham` explicitly authorized codification of the milestone authority model and approved the decision-complete implementation plan. The accepted rule now states that implementation momentum, participant preference, an external task prompt, or an inferred useful next step does not create scope authority, while an explicit milestone in an accepted specification is prior authorization within its bounds.
+
+This supersedes the earlier "do not modify at this time" direction only for that exact clarification in root and reusable BOOTSTRAP wording. It does not authorize broader onboarding changes or immediate closure. Because the wording changes governance semantics, this issue now requires independent review of the shared immutable pipeline target before closure.
+
 ## Residual uncertainty
 
 - Whether implicit protocol coverage of terminal owner-wait states is sufficient; owned by the human technical owner via the decision above.
@@ -113,16 +119,17 @@ No implementation is proposed by this issue. Candidate owner options, recorded f
 | UTC time | Participant | From | To | Action, evidence, and reason |
 |---|---|---|---|---|
 | `2026-08-07T02:25:23Z` | `ClaudeCode/pilot-1` | `NONE` | `OPEN` | Created from the first fresh-participant pilot session after verifying all snapshot staleness triggers; records the external-pressure/terminal-state tension and a positive finding on the self-referential closure-verification procedure |
-| `2026-08-07T02:31:47Z` | `ClaudeCode/pilot-1` | `OPEN` | `OPEN` | Recorded owner direction: keep the finding open, do not close, do not modify protocol source; approved push of the pilot-resumption record `276e55491da800a4b37d52ae76842a4ec4c0a647` was completed and remote-verified |
+| `2026-08-07T02:31:47Z` | `ClaudeCode/pilot-1` | `OPEN` | `OPEN` | Recorded owner direction: keep the finding open, do not close, do not modify protocol source at that time; approved push of the pilot-resumption record `276e55491da800a4b37d52ae76842a4ec4c0a647` was completed and remote-verified |
+| `2026-08-14T01:58:17Z` | Human technical owner `MattSureham`, recorded by `Codex/root` | `OPEN` | `INVESTIGATING` | Current owner decision supersedes the prior hold only for the exact accepted-milestone versus inferred-scope clarification; wording implementation and independent review are now authorized |
 
 ## Closure checklist
 
-- [ ] Expected behavior is tied to a higher-authority source.
+- [x] Expected behavior is tied to a higher-authority source.
 - [ ] The change or resolution is recorded.
 - [ ] Required verification ran and evidence is linked; unavailable checks remain explicit.
-- [x] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies.
+- [x] If `Review: SELF`, the historical record-only Self-review outcome is `COMPLETE`; it does not satisfy the newly required independent review of governance wording.
 - [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
-- [ ] Required human authority is recorded in the owning artifact: product/contract in `PROJECT_SPEC.md`, architecture in an accepted ADR, or both for a mixed decision.
+- [x] Required human authority is recorded in the owning artifact: the accepted pipeline phase and compatible ADR.
 - [x] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
-- [ ] Residual uncertainty is absent or explicitly owned.
-- [ ] HANDOFF reflects the resulting current state and exactly one next action.
+- [x] Residual uncertainty is absent or explicitly owned.
+- [x] HANDOFF reflects the resulting current state and exactly one next action.

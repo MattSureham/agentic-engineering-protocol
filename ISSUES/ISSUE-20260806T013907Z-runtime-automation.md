@@ -3,17 +3,17 @@
 ## Metadata
 
 - **ID:** `ISSUE-20260806T013907Z-runtime-automation`
-- **Title:** Evaluate optional runtime automation separately
-- **Status:** `BLOCKED`
-- **Severity:** `LOW`
-- **Owner:** `UNASSIGNED`
+- **Title:** Implement the authorized root-local milestone pipeline
+- **Status:** `INVESTIGATING`
+- **Severity:** `MEDIUM`
+- **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-06T01:39:07Z`
-- **Updated UTC:** `2026-08-06T01:39:07Z`
-- **Requirements:** Post-pilot hardening explicit deferral in root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md)
-- **ADRs:** `NONE`
-- **Evidence:** [`EVIDENCE-20260806T013907Z-post-pilot-audit`](../EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md)
+- **Updated UTC:** `2026-08-14T01:58:17Z`
+- **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Authorized milestone pipeline phase and `MILESTONE-20260814T015817Z-authorized-pipeline-v1`; historical post-pilot hardening deferral retained as prior context
+- **ADRs:** [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
+- **Evidence:** [`EVIDENCE-20260806T013907Z-post-pilot-audit`](../EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md); [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md)
 
 ## Problem
 
@@ -23,44 +23,98 @@ Some protocol checks could be automated, but a runtime, orchestrator, daemon, se
 
 The current package consists of ten Markdown files and intentionally requires no executable dependency. No accepted requirement asks for automation.
 
+The preceding sentence is preserved as the observation at creation time. On `2026-08-14`, the human technical owner explicitly accepted a bounded root-local pipeline capability while preserving the package's ten-file Markdown-only boundary. The accepted specification and ADR linked above now provide the requirement and architecture that were previously absent.
+
 ## Expected behavior
 
 Keep the current protocol runtime-free. Consider automation only under a separately accepted capability specification with portability, dependency, lifecycle, and failure requirements.
 
+That historical expected behavior remains applicable to the copy-ready package. The current accepted behavior is a root-only state-and-gate tool outside `protocol/`, with no adopter dependency, agent orchestration, service, database, network use, concurrent-writer guarantee, authenticated identity claim, or arbitrary scope expansion.
+
 ## Assumptions
 
-- **CONFIRMED:** Runtime automation is explicitly excluded from this hardening phase.
-- **UNKNOWN:** Whether future adopters need optional tools and which problems would justify them.
+- **CONFIRMED:** Runtime automation was explicitly excluded from the completed hardening phase; the accepted pipeline phase supersedes only that deferral for its exact root-local milestone.
+- **CONFIRMED:** The owner selected root dogfood first; no supported adopter runtime is authorized.
+- **UNKNOWN:** Whether future adopters need an optional distributed companion and which additional portability contract would be required.
 
 ## Investigation and decision
 
-No runtime component is adopted or prototyped.
+At creation, no runtime component was adopted or prototyped. The `2026-08-14` owner decision satisfies the recorded blocker through an accepted specification update and compatible accepted ADR. The selected design binds machine state to the canonical digest of the milestone entry, stores operational state inside this owning issue, reuses the structural validator, executes only accepted local argv checks with `shell=False`, and leaves judgment/review outside the tool.
+
+The implementation is independently reviewed because it changes governance semantics, introduces subprocess execution and Git coupling, and can mechanically advance issue state. Acceptance remains impossible until a fresh reviewer records `APPROVED` with zero open material findings on the immutable target.
 
 ## Change
 
-- **Files or components:** `NONE`
-- **Behavior changed:** `NONE`
-- **Out-of-scope work deliberately excluded:** CLI, daemon, service, database, orchestrator, generated automation.
-- **Rollback or recovery:** `NOT APPLICABLE`
+- **Files or components:** Root/reusable governance wording and templates; root-only pipeline script/tests; generated evidence; this issue/HANDOFF/checkpoint. Exact allowed paths are in the accepted milestone contract.
+- **Behavior changed:** Before, no runtime capability was authorized. After the reviewed target, already-authorized milestones can advance through deterministic local gates and independent review without repeated owner prompts.
+- **Out-of-scope work deliberately excluded:** Runtime inside `protocol/`; agent invocation; daemon/service/database/web UI; distributed scheduler; external tracker; multi-host coordination; authenticated identity; concurrent-writer guarantee; automatic Git commit/push/network action.
+- **Rollback or recovery:** Revert the implementation target and retain this authority/decision history; manual protocol operation remains valid because the reusable package has no runtime dependency.
+
+## Pipeline state
+
+The JSON block is operational state bound to the accepted milestone contract. It does not contain or override scope.
+
+<!-- AEP-PIPELINE-STATE-V1:BEGIN -->
+```json
+{
+  "schema": "aep-pipeline-state/v1",
+  "milestone_id": "MILESTONE-20260814T015817Z-authorized-pipeline-v1",
+  "authority_digest": "36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4",
+  "state": "AUTHORIZED",
+  "attempt": 0,
+  "implementor": null,
+  "base_revision": null,
+  "target_revision": null,
+  "verification_evidence": [],
+  "review_references": [],
+  "events": [
+    {
+      "sequence": 1,
+      "utc": "2026-08-14T01:58:17Z",
+      "actor": "human:MattSureham",
+      "from": null,
+      "to": "AUTHORIZED",
+      "reason": "Accepted PROJECT_SPEC milestone and compatible accepted ADR satisfy the prior blocker."
+    }
+  ]
+}
+```
+<!-- AEP-PIPELINE-STATE-V1:END -->
 
 ## Verification
 
-`NOT RUN` — no implementation or authorized contract exists.
+`NOT RUN` — no pipeline implementation exists at this authority boundary. Baseline recovery, remote publication, authority reconciliation, contract digest, and structural-validator observations are recorded in the linked authority analysis. Runtime verification will be appended after implementation.
+
+## Self-review
+
+- **Participant:** `Codex/root`
+- **Reviewed UTC:** `PENDING`
+- **Reviewed repository state:** `PENDING immutable target`
+- **Scope and authority references:** Accepted milestone, specification change, and pipeline ADR linked above
+- **Checks and evidence reviewed:** `PENDING`
+- **Findings and corrections:** `PENDING`
+- **Limitations:** Implementor self-review cannot satisfy this issue's independent-review gate.
+- **Residual risks:** `PENDING`
+- **Outcome:** `NOT_APPLICABLE`
 
 ## Independent review rounds
 
-- **Required:** `YES` if approved because dependencies and runtime lifecycle are meaningful architecture.
+- **Required:** `YES` — accepted implementation affects governance semantics, runtime lifecycle, subprocess execution, Git coupling, and automated acceptance gates.
+
+No independent review round has been recorded. A fresh participant must inspect the immutable target, accepted specification/ADR, implementation, tests, and evidence directly.
 
 ## Blocker
 
-- **Blocked from:** `OPEN`
-- **Blocker:** No accepted capability requirement or architecture.
-- **Unblock owner:** Human technical owner
-- **Unblock condition:** Separate specification approval and compatible accepted ADR.
+- **Blocked from:** `NOT BLOCKED` (historically blocked from `OPEN`)
+- **Blocker:** `NONE` — the previously recorded condition was satisfied on `2026-08-14T01:58:17Z`
+- **Unblock owner:** `NONE`
+- **Unblock condition:** `NONE`
 
 ## Residual uncertainty
 
-- Benefits, costs, portability, and maintenance burden of optional automation remain unknown.
+- Implementation correctness, immutable target identity, exact verification output, and independent disposition remain unknown until subsequent lifecycle stages.
+- Broader portability and any supported adopter distribution remain unknown and unclaimed.
+- Recorded label inequality cannot authenticate participant identity; concurrent writers remain outside the failure model.
 
 ## Activity history
 
@@ -68,3 +122,17 @@ No runtime component is adopted or prototyped.
 |---|---|---|---|---|
 | `2026-08-06T01:39:07Z` | `Codex/root` | `NONE` | `OPEN` | Recorded deferred capability without prototyping |
 | `2026-08-06T01:39:07Z` | `Codex/root` | `OPEN` | `BLOCKED` | Product-boundary change lacks approved scope |
+| `2026-08-14T01:58:17Z` | Human technical owner `MattSureham`, recorded by `Codex/root` | `BLOCKED` | `OPEN` | Explicit owner decision plus accepted specification and compatible accepted ADR satisfy the exact unblock condition; only the root-local milestone is authorized |
+| `2026-08-14T01:58:17Z` | `Codex/root` | `OPEN` | `INVESTIGATING` | Recorded the accepted contract digest, architecture, boundaries, failure model, and implementation/review gates before adding runtime behavior |
+
+## Closure checklist
+
+- [x] Expected behavior is tied to a higher-authority source.
+- [ ] The change or resolution is recorded.
+- [ ] Required verification ran and evidence is linked; unavailable checks remain explicit.
+- [x] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies (not applicable — `Review: INDEPENDENT`).
+- [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
+- [x] Required human authority is recorded in the owning artifact: the accepted specification and compatible accepted ADR.
+- [ ] New complexity is covered, removed, or linked to explicitly accepted residual debt.
+- [x] Residual uncertainty is absent or explicitly owned.
+- [ ] HANDOFF reflects the resulting current state and exactly one next action.

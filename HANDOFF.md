@@ -6,32 +6,34 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-11T03:01:36Z`
-- **Repository state:** Published review-persistence record `f06982573ae0743f5feb7c51858ff96822dc9714` is clean and synchronized on `main`. This closure record MUST be its direct child changing only `HANDOFF.md`, `HUMAN_CHECKPOINT.md`, `ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md`, and new record `ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md`; resolve the containing commit with `git rev-parse HEAD`, confirm the parent/path set, and require a clean worktree before relying on the snapshot.
-- **Evidence cutoff:** Exact-target validation and review-handoff publication through `2026-08-11T02:11:48Z`; complete independent round persisted `2026-08-11T02:49:05Z`; coordinator closure verification completed `2026-08-11T03:01:36Z`.
-- **External checks:** On `2026-08-11T02:49:05Z` through `2026-08-11T03:01:36Z`, local HEAD, cached `origin/main`, and direct remote `refs/heads/main` all equaled `f06982573ae0743f5feb7c51858ff96822dc9714`. The containing closure commit and its push must be verified on resumption because a commit cannot record its own hash.
-- **Stale when:** Checked-out revision/branch changes; dirty paths differ from the recorded closure set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; validation output changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
+- **Snapshot updated UTC:** `2026-08-14T02:02:50Z`
+- **Repository state:** Clean published baseline `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d` on `main` was synchronized with cached and direct `origin/main` before the current authority-record diff. The current intended dirty set is the accepted specification, new accepted pipeline ADR, authority evidence, three affected issues, this HANDOFF, and `HUMAN_CHECKPOINT.md`; no runtime source exists yet.
+- **Evidence cutoff:** Structural-validator closure through `2026-08-11T03:01:36Z`; baseline publication, owner-authority reconciliation, package-metadata recovery, and accepted pipeline boundary through `2026-08-14T02:02:50Z`.
+- **External checks:** At `2026-08-14T01:58:17Z`, fetch showed direct/cached remote `f06982573ae0743f5feb7c51858ff96822dc9714` with local direct child `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d`; normal push succeeded and all refs equaled `cb5e8d6`. The package validator then exited `0` after ignored `protocol/.DS_Store` was moved to the explicit recoverable Trash path recorded in authority evidence.
+- **Stale when:** Checked-out revision/branch changes; dirty paths differ from this authority boundary; newer issue/evidence/ADR changes a claim; cached or direct remote changes; accepted milestone JSON or its digest changes; validation output changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
 ### Current objective and state
 
-- **CONFIRMED — Objective:** Complete. [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `CLOSED`: independent round 1 by `ClaudeCode/validator-review` on immutable target `8690358d499aed20de6c620dc4dd4a81f1e1a126` is `APPROVED` (session label "APPROVED WITH FINDINGS" preserved verbatim in the round), its five LOW findings are accepted residual risk owned in the issue, and coordinator closure verification passed on `2026-08-11T03:01:36Z`. No authorized implementation work remains.
-- **CONFIRMED — Review vocabulary friction:** The informal session verdict required a persist-and-map cycle before closure; recorded as [`ISSUE-20260811T030136Z-review-disposition-vocabulary`](ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md), `OPEN`/`LOW`, `Authority: HUMAN`, no protocol change proposed.
-- **CONFIRMED — Authority:** Root [`PROJECT_SPEC.md`](PROJECT_SPEC.md) is `ACCEPTED`; [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md) is accepted at authority boundary `7dea5457828b6590f9ab2a643b58047b032e53d1`.
+- **CONFIRMED — Objective:** Implement only `MILESTONE-20260814T015817Z-authorized-pipeline-v1`, now explicitly accepted in root [`PROJECT_SPEC.md`](PROJECT_SPEC.md), through [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md). No repeated owner approval is required within that contract; implementation remains unaccepted until deterministic verification and fresh independent review succeed.
+- **CONFIRMED — Authority:** Human technical owner `MattSureham` accepted the milestone authority clarification and root-dogfood-first implementation plan. [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md) defines compatible architecture; accepted root-adoption ADR remains unchanged.
+- **CONFIRMED — Runtime issue:** The former runtime deferral's exact unblock condition is satisfied. The issue is `INVESTIGATING`; its state block is `AUTHORIZED` and bound to contract digest `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4`.
+- **CONFIRMED — Related wording:** The current owner decision authorizes the exact onboarding authority distinction and requires all review verdicts to use `APPROVED`, `CHANGES_REQUIRED`, or `BLOCKED`. Both related issues are `INVESTIGATING` and share the implementation target's independent-review gate.
+- **CONFIRMED — Prior milestone:** [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `CLOSED` on independently approved target `8690358d499aed20de6c620dc4dd4a81f1e1a126`.
 - **CONFIRMED — Implemented slice:** Root-only `scripts/validate_protocol.py` and its 21-test standard-library suite validate only manifest/file integrity, supported package links, and HANDOFF structure with stable exit semantics. Exact-target evidence confirms the package tree remains `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb`.
-- **INFERRED — Authority boundary:** The specification's tiny-helper allowance and executable-contract tier authorize this optional root test tooling. No executable entered `protocol/`; the blocked runtime-automation capability, source precedence, and Markdown authority remain unchanged pending fresh review of that interpretation.
+- **CONFIRMED — Distribution boundary:** The new pipeline is root-only dogfood. No executable enters `protocol/`; the reusable package remains exactly ten Markdown files and usable without automation.
 - **CONFIRMED — Root adoption:** Immutable target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb` defines the root as a separately governed protocol instance with the required seven-tier precedence and passed both implementor verification and fresh independent review.
 - **CONFIRMED — Record separation:** Durable root ADR, issue, evidence, template, and checkpoint artifacts exist. Five legacy closed issue IDs have migrated records; the full pre-compaction HANDOFF is preserved by immutable Git identity below.
 - **CONFIRMED — Pilot preservation:** Historical pilot content is byte-preserved at [`EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md`](EVIDENCE/EVIDENCE-20260805T035052Z-isolated-pilot.md), with compatibility pointer [`PILOT_EVIDENCE.md`](PILOT_EVIDENCE.md). Original pilot commits/tests remain absent from root Git and are not clone-reproducible.
 - **CONFIRMED — Reusable product scope:** Only `protocol/BOOTSTRAP.md` and `protocol/HANDOFF.md` were intentionally edited; the package remains exactly ten files and separately governed.
 - **CONFIRMED — Hardening review:** Independent review round 1 by `ClaudeCode/hardening-review` returned `APPROVED` on the immutable target with no material findings, and [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md) is `CLOSED`.
 - **CONFIRMED — ADR review-gate interpretation:** Human technical owner `MattSureham` determined on `2026-08-10T07:25:05Z` that the hardening issue's independent `APPROVED` round satisfies the ADR's substantive review intent. The ADR retains its original acceptance-time statement and adds an attributable status clarification; its architecture, rationale, and `ACCEPTED` status are unchanged.
-- **CONFIRMED — Pilot resumption:** On `2026-08-07T02:25:23Z` a fresh participant (`ClaudeCode/pilot-1`) resumed from repository state only, verified every snapshot staleness trigger including the previously unverified closure commit/push, and opened one `LOW` record-only finding, [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md). On `2026-08-07T02:31:47Z` the owner directed that finding to remain `OPEN` with no protocol-source modification; the current codification authorization does not alter it.
+- **CONFIRMED — Pilot resumption:** On `2026-08-07T02:25:23Z` a fresh participant opened [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md). The `2026-08-14` owner direction supersedes the prior no-wording-change hold only for the accepted-milestone versus inferred-scope clarification; broader onboarding change remains unauthorized.
 
 ### Constraints and uncertainty
 
-- Preserve the Markdown-first, runtime-, language-, framework-, vendor-, CI-, and version-control-agnostic product boundary.
-- Do not add a runtime, orchestrator, daemon/service, database, complex CLI, external tracker integration, concurrent-writer guarantee, authenticated-identity claim, or large-scale coordination claim.
-- Keep the optional checker outside `protocol/`; it may validate existing deterministic structure but cannot define semantics, authority, review, evidence sufficiency, or lifecycle closure.
+- Preserve the Markdown-first, language-, framework-, vendor-, CI-, and version-control-agnostic reusable-product boundary. The accepted root tool may depend on local Python and Git only within the exact milestone.
+- Do not add runtime inside `protocol/`, an agent orchestrator, daemon/service, database, web UI, distributed scheduler, external tracker integration, concurrent-writer guarantee, authenticated-identity claim, or large-scale coordination claim.
+- Reuse the optional checker outside `protocol/`; the pipeline may consume its findings but cannot redefine its structural rules or decide semantics, authority adequacy, review quality, or evidence truth.
 - Do not claim production-grade or universal portability from the isolated pilot.
 - Keep root and reusable BOOTSTRAP files separately governed; semantic alignment is reviewed, not assumed from byte identity.
 - Preserve the additive ADR clarification and original historical text; any later architectural decision change remains subject to human authority and independent review.
@@ -39,9 +41,9 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Unverified complexity
 
-- Separate root/product governance is justified by the accepted ADR and covered by planned semantic review; future divergence still requires participant judgment.
-- The optional Python development checker introduces a bounded parser and support surface; tests and independent review must cover false-pass and product-boundary risks.
-- All five deferred capability areas remain linked to `BLOCKED` issues and have no implementation.
+- Separate root/product governance remains justified by the accepted adoption ADR; new semantic divergence is bounded by the accepted pipeline requirements and must receive independent review.
+- The pipeline adds embedded JSON schemas, Git coupling, subprocess execution, and cooperative issue replacement. The accepted ADR records their failure modes and required coverage.
+- Four deferred capability areas remain linked to `BLOCKED` issues. Runtime automation alone is unblocked for the exact accepted milestone.
 
 ### Background tasks
 
@@ -51,19 +53,31 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
-| [`ISSUE-20260811T030136Z-review-disposition-vocabulary`](ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md) | `OPEN` | `LOW` | `UNASSIGNED` | `HUMAN` | `SELF` | Review session verdict labels versus the three protocol dispositions | Owner direction: clarify reporting guidance or keep current persistence discipline |
-| [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `OPEN` | `LOW` | `UNASSIGNED` | `HUMAN` | `SELF` | External task pressure versus terminal owner-wait state in fresh-participant onboarding | Owner directed `2026-08-07T02:31:47Z`: keep open, no protocol change; any future action needs a new owner decision |
+| [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `INVESTIGATING` | `MEDIUM` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Implement the accepted root-local milestone state-and-gate pipeline | Accepted spec/ADR and contract digest recorded; implementation target and review pending |
+| [`ISSUE-20260811T030136Z-review-disposition-vocabulary`](ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md) | `INVESTIGATING` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Require exact protocol vocabulary for session and durable review verdicts | Owner selected exact wording semantics; shared implementation/review target pending |
+| [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `INVESTIGATING` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Distinguish accepted milestone authority from external/inferred work pressure | Current owner direction supersedes the prior hold only for the exact clarification; shared target pending |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define non-cooperating concurrent-writer guarantees | New owner-approved failure model and specification |
 | [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define authenticated identity and approval | New owner-approved trust model, specification, and ADR |
-| [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `BLOCKED` | `LOW` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Evaluate optional runtime automation | New owner-approved capability specification and ADR |
 | [`ISSUE-20260806T013907Z-large-scale-coordination`](ISSUES/ISSUE-20260806T013907Z-large-scale-coordination.md) | `BLOCKED` | `LOW` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define and validate large-scale coordination claims | New owner-approved scale contract |
 | [`ISSUE-20260806T013907Z-external-tracker-integration`](ISSUES/ISSUE-20260806T013907Z-external-tracker-integration.md) | `BLOCKED` | `LOW` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Evaluate external tracker integration | New owner-approved authority/synchronization contract and ADR |
 
 ## Next Action
 
-Wait for the human technical owner. The structural-validator milestone is `CLOSED` with an independent `APPROVED` round; this closure record requires commit and owner-authorized publication, and the new vocabulary-friction issue awaits owner direction. No implementation work is authorized. A fresh participant must first verify this record's containing commit, its push, and remote HEAD per the snapshot metadata before doing anything else.
+Commit the accepted pipeline authority boundary without runtime source, then implement only `MILESTONE-20260814T015817Z-authorized-pipeline-v1` from that immutable base and advance its three owning issues toward one shared independently reviewable target.
 
 ## Recent Activity
+
+### 2026-08-14T02:02:50Z — Codex/root — Pipeline Authority Recorder
+
+- **Task:** Recover the published validator closure, reconcile the owner's milestone-authorization decision with the explicit runtime deferral, and establish durable product/architecture authority before runtime implementation.
+- **Context inspected:** Complete root specification/BOOTSTRAP/HANDOFF/checkpoint; accepted adoption ADR; all unresolved issues; reusable authority/review templates; structural validator/tests and recent evidence; local/cached/direct Git state.
+- **Actions performed:** Published recovered closure commit `cb5e8d6` after fetch/ancestry/path verification; moved ignored `protocol/.DS_Store` to a recoverable Trash path after it caused a real exact-manifest failure; reran the validator successfully; accepted the evidence-backed specification phase and compatible pipeline ADR; unblocked the runtime issue into `INVESTIGATING`; recorded bounded owner dispositions on the onboarding and review-vocabulary issues; updated this operational snapshot and checkpoint. No runtime source or test was added.
+- **Files modified:** `PROJECT_SPEC.md`; new pipeline ADR and authority evidence; three issue records; this HANDOFF; `HUMAN_CHECKPOINT.md`. The tracked reusable package and root/adopted BOOTSTRAP remain unchanged at this boundary.
+- **Findings:** `CONFIRMED` — the former runtime blocker is satisfied only for the exact accepted root-local milestone. `CONFIRMED` — package runtime remains out of scope. `CONFIRMED` — all four other capability deferrals remain blocked. `UNKNOWN` — implementation correctness, target identity, and independent disposition.
+- **Verification performed:** Baseline fetch/push/ref equality passed at `cb5e8d6`; post-recovery `python3 scripts/validate_protocol.py` exited `0`; milestone contract JSON parsed and canonical milestone digest is `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4`. Runtime tests are `NOT RUN` because no implementation exists.
+- **Issues created or updated:** Unblocked and advanced runtime automation to `INVESTIGATING`; advanced onboarding-authority and review-vocabulary issues to `INVESTIGATING`; all other issue states unchanged.
+- **Remaining uncertainty:** Authority-boundary commit identity; implementation and fresh independent review.
+- **Recommended next action:** Perform exactly the bounded implementation action under Next Action after committing this authority boundary.
 
 ### 2026-08-11T03:01:36Z — ClaudeCode/coordinator — Milestone Closure Verification Coordinator
 

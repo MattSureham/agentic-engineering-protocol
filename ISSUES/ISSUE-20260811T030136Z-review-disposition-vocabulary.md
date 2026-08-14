@@ -4,16 +4,16 @@
 
 - **ID:** `ISSUE-20260811T030136Z-review-disposition-vocabulary`
 - **Title:** Review session verdict labels versus the three protocol dispositions
-- **Status:** `OPEN`
+- **Status:** `INVESTIGATING`
 - **Severity:** `LOW`
-- **Owner:** `UNASSIGNED`
+- **Owner:** `Codex/root`
 - **Authority:** `HUMAN`
-- **Review:** `SELF`
+- **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-11T03:01:36Z`
-- **Updated UTC:** `2026-08-11T03:01:36Z`
-- **Requirements:** Root [`BOOTSTRAP.md`](../BOOTSTRAP.md) review requirements (dispositions are exactly `APPROVED`/`CHANGES_REQUIRED`/`BLOCKED`) and [`ISSUES/TEMPLATE.md`](TEMPLATE.md) review-round schema
-- **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
-- **Evidence:** [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUE-20260811T013701Z-structural-protocol-validator.md) (owner-report note of `2026-08-11T02:38:34Z` and persisted independent round 1 of `2026-08-11T02:49:05Z`)
+- **Updated UTC:** `2026-08-14T01:58:17Z`
+- **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `PIPELINE-005`; root [`BOOTSTRAP.md`](../BOOTSTRAP.md) review requirements; and [`ISSUES/TEMPLATE.md`](TEMPLATE.md) review-round schema
+- **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
+- **Evidence:** [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUE-20260811T013701Z-structural-protocol-validator.md) (owner-report note of `2026-08-11T02:38:34Z` and persisted independent round 1 of `2026-08-11T02:49:05Z`); [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md)
 
 ## Problem
 
@@ -37,14 +37,14 @@ The human technical owner decides whether any clarification is warranted — for
 
 ## Investigation and decision
 
-None yet. Awaiting owner direction, as with [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md).
+On `2026-08-14T01:58:17Z`, human technical owner `MattSureham` supplied the decision: reviewers MUST use exactly `APPROVED`, `CHANGES_REQUIRED`, or `BLOCKED`; informal session verdicts do not become additional dispositions. Descriptive qualifiers and non-blocking findings belong in the finding/residual-risk fields. The root and reusable instructions/templates will receive only this clarification and will share the pipeline target's independent-review gate.
 
 ## Change
 
-- **Files or components:** None; record-only issue.
-- **Behavior changed:** None.
-- **Out-of-scope work deliberately excluded:** Any edit to root BOOTSTRAP, the reusable protocol package, templates, or review gates.
-- **Rollback or recovery:** Close or retain per owner direction; the record remains accurate either way.
+- **Files or components:** Root/reusable BOOTSTRAP review wording, issue templates, review prompt, this issue, HANDOFF/checkpoint.
+- **Behavior changed:** Session-facing and durable review verdicts must both use the existing three protocol dispositions; findings remain separate data.
+- **Out-of-scope work deliberately excluded:** New dispositions, changed materiality rules, changed reviewer independence, or automatic judgment of finding severity.
+- **Rollback or recovery:** Revert the wording target while preserving this owner decision and original observation.
 
 ## Unverified complexity
 
@@ -70,9 +70,9 @@ None introduced.
 
 ## Independent review rounds
 
-- **Required:** `NO` — record-only observation with no implementation, contract, or authority impact; any resulting protocol wording change would separately require owner approval and independent review per the Human Authority Boundary.
+- **Required:** `YES` — the owner-authorized wording is now part of the shared governance/pipeline target and must be independently checked for compatibility with existing review semantics.
 
-No independent review round has been recorded.
+No independent review round has been recorded for the wording target.
 
 ## Blocker
 
@@ -83,22 +83,23 @@ No independent review round has been recorded.
 
 ## Residual uncertainty
 
-- Whether the owner wants a reporting-vocabulary clarification, and if so in which governed artifact; this issue stays `OPEN` until the owner directs a disposition.
+- Exact wording correctness and independent disposition remain pending. The owner decision itself is no longer uncertain.
 
 ## Activity history
 
 | UTC time | Participant | From | To | Action, evidence, and reason |
 |---|---|---|---|---|
 | `2026-08-11T03:01:36Z` | `ClaudeCode/coordinator` | `NONE` | `OPEN` | Recorded the review-reporting vocabulary friction surfaced during validator-milestone reconciliation; no protocol change proposed |
+| `2026-08-14T01:58:17Z` | Human technical owner `MattSureham`, recorded by `Codex/root` | `OPEN` | `INVESTIGATING` | Selected exact protocol vocabulary for all review verdict reporting; authorized bounded wording changes and independent review |
 
 ## Closure checklist
 
 - [x] Expected behavior is tied to a higher-authority source (root BOOTSTRAP review requirements and the issue template).
-- [x] The change or resolution is recorded (record-only; no change).
-- [x] Required verification ran and evidence is linked; unavailable checks remain explicit.
-- [x] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies.
-- [x] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved (not applicable — `Review: SELF`).
-- [ ] Required human authority is recorded in the owning artifact (pending owner direction; this issue remains `OPEN`).
+- [ ] The wording change or resolution is recorded.
+- [ ] Required verification ran and evidence is linked; unavailable checks remain explicit.
+- [x] If `Review: SELF`, the historical record-only Self-review outcome is `COMPLETE`; it does not satisfy the newly required independent review of governance wording.
+- [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
+- [x] Required human authority is recorded in the accepted specification and compatible ADR.
 - [x] New complexity is covered, removed, or linked to an explicitly accepted open debt issue (none introduced).
 - [x] Residual uncertainty is absent or explicitly owned.
 - [x] HANDOFF reflects the resulting current state and exactly one next action.

@@ -10,8 +10,8 @@ The output should be a self-contained template/protocol that can later be copied
 
 - **Status:** `ACCEPTED`
 - **Human technical owner:** `MattSureham`
-- **Current accepted change:** Post-pilot hardening requirements and specification-evolution policy approved before implementation on `2026-08-06`
-- **Authority record:** [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md) and [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
+- **Current accepted change:** Authorized milestone pipeline phase and authority clarification approved before implementation on `2026-08-14`; prior accepted requirements remain in force except where explicitly superseded below
+- **Authority record:** [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), and [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
 
 # Goal
 
@@ -502,6 +502,108 @@ The hardening target is ready for independent review only when:
 6. Unavailable tools and unperformed broader validation remain explicit.
 7. An immutable target commit is supplied to a fresh independent reviewer; only a recorded `APPROVED` disposition can satisfy the maturity gate.
 
+# Authorized milestone pipeline phase
+
+This phase adds a bounded executable proof without changing the authority of Markdown requirements or making automation mandatory for adopters. The historical post-pilot prohibition on runtime automation remains true for that completed hardening phase. It is superseded only for the root-local capability and exact milestone defined below; all other hardening deferrals remain binding.
+
+## Owner authority clarification
+
+A milestone explicitly defined in an `ACCEPTED` `PROJECT_SPEC.md` is prior human authorization to begin and continue that milestone. It MUST NOT require a new human approval merely because implementation begins, verification completes, review begins, a within-scope fix is required, or the next already-authorized milestone becomes ready.
+
+Autonomous continuation is permitted only while:
+
+- the work remains within the milestone's accepted scope;
+- the accepted specification and compatible accepted ADRs remain unchanged;
+- no unresolved product or architecture ambiguity requires a new decision;
+- no human checkpoint or blocked issue prevents the transition;
+- every required deterministic verification passes; and
+- a participant independent of the implementation instance reviews the immutable target before acceptance.
+
+Human authority is required when the specification must change, scope would expand, an accepted architecture or invariant must change, a human-gated issue must be resolved, review exposes an ambiguity not answerable from existing authority, evidence cannot establish authorization, or an irreversible/high-impact external action lacks prior authorization. Implementation momentum, participant preference, an external task prompt, or an inferred useful next step does not create scope authority.
+
+## Accepted pipeline requirements
+
+- **PIPELINE-001 — Authority separation:** The pipeline MUST distinguish authorization, execution, deterministic verification, independent peer review, acceptance, and human escalation. Runtime state MUST NOT create or modify requirements or architecture.
+- **PIPELINE-002 — Inspectable contracts:** Authorized milestones MUST be declared in the machine-readable contract below while the surrounding specification is `ACCEPTED`. The pipeline MUST reject missing, duplicate, malformed, unsupported, or digest-mismatched contracts rather than infer authorization.
+- **PIPELINE-003 — Lifecycle:** The supported milestone states are `AUTHORIZED`, `READY`, `IN_PROGRESS`, `AWAITING_PEER_REVIEW`, `CHANGES_REQUIRED`, `ACCEPTED`, and `BLOCKED_HUMAN_AUTHORITY`. Only the transitions defined by the compatible accepted ADR are permitted.
+- **PIPELINE-004 — Verification:** Orientation and submission MUST reuse the existing structural validator. Every milestone acceptance command MUST pass without a shell, with bounded runtime, and produce durable evidence. Failed or unavailable checks MUST NOT advance the milestone.
+- **PIPELINE-005 — Peer review:** The reviewer label MUST differ from the recorded implementor label, the reviewed immutable target MUST match the verified target, and the disposition MUST be exactly `APPROVED`, `CHANGES_REQUIRED`, or `BLOCKED`. `APPROVED` requires zero open material findings. This label comparison is an operational check, not authenticated identity.
+- **PIPELINE-006 — Fix and continuation:** Material findings MUST prevent acceptance and MAY return the milestone to implementation without human approval when their resolution remains within accepted scope. After acceptance, the pipeline MAY select the next dependency-satisfied milestone already present in this accepted contract without another human gate.
+- **PIPELINE-007 — Durable resumability:** Machine state MUST be repository-resident, attributable, append-only in history, bound to the milestone contract digest, and recoverable without conversational memory. Human-readable issue and HANDOFF records MUST remain synchronized with it.
+- **PIPELINE-008 — Bounded first slice:** The first implementation MUST be a Python 3.9-compatible, standard-library, root-only development tool. It MUST NOT enter the reusable ten-file package, invoke agents, commit or push, use the network, add a daemon/service/database/web UI, coordinate multiple hosts, integrate an external tracker, or claim cryptographic identity or concurrent-writer safety.
+
+## Authorized milestone contract
+
+The JSON object between the exact markers is normative content of this accepted specification. List order is milestone selection order. `scope` and `allowed_paths` bound work; runtime state may reference their canonical SHA-256 digest but MUST NOT copy or override them. `acceptance_checks` are owner-authorized local argv arrays executed with `shell=False`. An edit to this block is a material specification change.
+
+<!-- AEP-AUTHORIZED-MILESTONES-V1:BEGIN -->
+```json
+{
+  "schema": "aep-authorized-milestones/v1",
+  "milestones": [
+    {
+      "id": "MILESTONE-20260814T015817Z-authorized-pipeline-v1",
+      "order": 1,
+      "title": "Root-local authorized milestone pipeline v1",
+      "issue": "ISSUES/ISSUE-20260806T013907Z-runtime-automation.md",
+      "depends_on": [],
+      "scope": [
+        "Codify the accepted milestone-authorization, review-loop, and human-escalation semantics in the root protocol and reusable Markdown templates.",
+        "Implement and verify one root-only local state-and-gate pipeline capable of advancing authorized milestones without creating scope authority."
+      ],
+      "allowed_paths": [
+        "BOOTSTRAP.md",
+        "HANDOFF.md",
+        "HUMAN_CHECKPOINT.md",
+        "README.md",
+        "ISSUES/ISSUE-20260806T013907Z-runtime-automation.md",
+        "ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md",
+        "ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md",
+        "ISSUES/TEMPLATE.md",
+        "EVIDENCE/",
+        "scripts/",
+        "tests/",
+        "protocol/BOOTSTRAP.md",
+        "protocol/ISSUES/TEMPLATE.md",
+        "protocol/PROJECT_SPEC.md",
+        "protocol/PROMPTS.md",
+        "protocol/README.md"
+      ],
+      "acceptance_checks": [
+        {
+          "id": "repository-unit-tests",
+          "argv": [
+            "python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v"
+          ],
+          "timeout_seconds": 120
+        }
+      ],
+      "review": "INDEPENDENT"
+    }
+  ]
+}
+```
+<!-- AEP-AUTHORIZED-MILESTONES-V1:END -->
+
+## Pipeline acceptance criteria
+
+The authorized milestone is ready for peer review only when:
+
+1. The accepted specification, accepted pipeline ADR, owning issue, machine state, and implementation agree on the milestone ID and contract digest.
+2. The root-only tool exposes deterministic human- and machine-readable status plus validated state transitions without changing specification or ADR content.
+3. Tests exercise the complete lifecycle, material-finding fix loop, reviewer-label separation, dependency-based next selection, human escalation, failure non-advancement, and stale-authority refusal.
+4. The existing structural validator is reused rather than reimplemented, and the exact ten-file reusable bundle remains Markdown-only and copy-ready.
+5. Verification evidence identifies the immutable target and records exact commands, outputs, limits, and unavailable checks.
+6. A fresh independent participant reviews the immutable target. Only `APPROVED` with zero open material findings permits `ACCEPTED`; `CHANGES_REQUIRED` returns within-scope work to implementation, and `BLOCKED` cannot be mapped to approval.
+
+No second real repository milestone is authorized by this phase. Multi-milestone continuation MUST be demonstrated with isolated fixtures; after this milestone is accepted, absence of another contract is a valid terminal result rather than permission to invent work.
+
 # Specification governance
 
 ## Specification evolution
@@ -529,3 +631,4 @@ Material requirement changes require human-owner authority. Keep exact proposed 
 |---|---|---|---|---|
 | `2026-08-05` | Accepted the initial standalone reusable protocol requirements | Establish the product contract | Human technical owner (`MattSureham`) | Pre-hardening specification at Git revision `e6beeb2cb730183ca2ac13795ad367ad9d9e1099`, SHA-256 `13169319e2be028c470ca96925002b25c000c58ba3a4c5420e652d291df139dd` |
 | `2026-08-06T01:39:07Z` | Added accepted post-pilot hardening requirements, deferrals, acceptance criteria, and the approved specification-evolution policy | Resolve repository-verified dogfooding, record-separation, HANDOFF reliability, and evidence-portability gaps without expanding product runtime scope | Human technical owner (`MattSureham`) | [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md), [`EVIDENCE-20260806T013907Z-post-pilot-audit`](EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md), authority boundary `7dea545` |
+| `2026-08-14T01:58:17Z` | Accepted prior authorization for explicitly declared milestones and the bounded root-local automated pipeline phase | Allow deterministic implementation, verification, independent review, fix loops, and continuation without repeated human prompts while preserving explicit scope and escalation boundaries | Human technical owner (`MattSureham`) | [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md) |
