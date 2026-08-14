@@ -4,16 +4,16 @@ This is a low-bandwidth synchronization point for the human technical owner. It 
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-14T05:05:00Z`
-- **Prepared by:** `Codex/root-fix-2`; acceptance reconciliation by `ClaudeCode/coordinator`
-- **Period covered:** Published closure baseline `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d` through published pipeline fix target `26d890f6e27ad181265ee5417a45637d867aa2dc`, its attempt-2 review handoff, fresh independent round 2, milestone acceptance, both wording-issue closures, and publication of the full record chain through `c2223fbfa36b3da048d685646cc4a1684e3088b7` (local/cached/direct remote equality verified)
-- **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved Authorized milestone pipeline phase and preserved prior requirements
-- **Implementation/reference state:** Published target `26d890f6e27ad181265ee5417a45637d867aa2dc` implements the recorded `R1`/`R2` conditions and `R3` correction. Pipeline and extracted-target runs pass 44 tests; fresh independent round 2 of `2026-08-14T04:41:08Z` is `APPROVED` with zero open material findings, and the milestone transitioned to `ACCEPTED` on `2026-08-14T04:54:43Z` with the owning issue `CLOSED`. The two bounded wording issues retained scoped `APPROVED` rounds because their reviewed bytes were unchanged; coordinator closure verification re-confirmed byte identity on the accepted target and both issues are now `CLOSED`.
-- **Prior checkpoint:** `2026-08-11T03:01:36Z` by `ClaudeCode/coordinator` (superseded by this authority record)
+- **Generated UTC:** `2026-08-14T05:14:05Z`
+- **Prepared by:** `ClaudeCode/root`
+- **Period covered:** Publication of the full pipeline record chain through `c2223fbfa36b3da048d685646cc4a1684e3088b7` (local/cached/direct remote equality verified) through the Automated Role Dispatch / Rotation v1 owner direction of `2026-08-14T05:14:05Z` and its authority recording: accepted dispatch phase, compatible accepted ADR, and owning issue with contract digest `afe725805d919f850e7d44017a2b4b63ba6b0f3453ec6bea84ece1ee265b638c`
+- **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved Authorized milestone pipeline phase and the owner-approved Automated role dispatch phase
+- **Implementation/reference state:** Published target `26d890f6e27ad181265ee5417a45637d867aa2dc` implements the recorded `R1`/`R2` conditions and `R3` correction; the pipeline milestone is `ACCEPTED` and its owning issue and both wording issues are `CLOSED`. The dispatch milestone is authorized but not yet implemented; no dispatcher, role-contract artifact, or dispatch test exists yet.
+- **Prior checkpoint:** `2026-08-14T05:05:00Z` by `Codex/root-fix-2` and `ClaudeCode/coordinator` (superseded by this authority record)
 
 ## System mental model
 
-This repository produces a ten-file, Markdown-first reusable engineering protocol under `protocol/`. The root repository adopts a separate root-specific instance and now has accepted scope for one root-local milestone state-and-gate pipeline outside the reusable package. Root requirements, accepted architecture, tests/contracts, evidence, operational state, implementation, and inference retain distinct precedence and ownership.
+This repository produces a ten-file, Markdown-first reusable engineering protocol under `protocol/`. The root repository adopts a separate root-specific instance and now has accepted scope for a root-local milestone state-and-gate pipeline plus an authorized read-only role dispatcher, both outside the reusable package. Root requirements, accepted architecture, tests/contracts, evidence, operational state, implementation, and inference retain distinct precedence and ownership.
 
 Agents are replaceable participants. HANDOFF is a compact continuity index, not canonical truth. Product edits do not automatically rewrite root governance, and root governance edits do not automatically change the copy-ready product; material semantic divergence is reviewed explicitly.
 
@@ -30,6 +30,7 @@ An explicit milestone in accepted `PROJECT_SPEC.md` is prior authorization to im
 | Implement the first executable codification slice | Replace repeated one-off structural harnesses without automating judgment | Root-only optional checker and tests; reusable package and authority hierarchy unchanged | Target `8690358`; [`EVIDENCE-20260811T020454Z-structural-validator-verification`](EVIDENCE/EVIDENCE-20260811T020454Z-structural-validator-verification.md); independent round `APPROVED`, issue `CLOSED` |
 | Authorize the root-local milestone pipeline | Remove redundant owner prompts for already-accepted scope while retaining human architecture/product authority | One accepted milestone, issue-embedded operational state, local Git/check execution, mandatory independent review; no package runtime | [`PROJECT_SPEC.md`](PROJECT_SPEC.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), authority analysis |
 | Correct and resubmit the bounded pipeline target | Satisfy independent round-1 gate findings without changing accepted authority | Target `26d890f` adds post-command repository conditions, evidence-boundary checks, and rendering-safe record insertion; no runtime enters `protocol/` | Generated/full attempt-2 evidence passes; fresh independent round 2 `APPROVED`; milestone `ACCEPTED` and owning issue `CLOSED` |
+| Authorize automated role dispatch / rotation v1 | Eliminate routine human routing between already-authorized pipeline transitions | Accepted dispatch phase (`DISPATCH-001`–`DISPATCH-008`), role contracts, deterministic read-only next-role dispatcher, host invocation left as an explicit non-simulated adapter boundary | Owner direction `2026-08-14T05:14:05Z`; [`PROJECT_SPEC.md`](PROJECT_SPEC.md) dispatch phase; [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md); [`ISSUE-20260814T051405Z-role-dispatch`](ISSUES/ISSUE-20260814T051405Z-role-dispatch.md); independent review still required before acceptance |
 
 ## Architecture decisions
 
@@ -39,10 +40,11 @@ An explicit milestone in accepted `PROJECT_SPEC.md` is prior authorization to im
 |---|---|---|---|
 | [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md) | `ACCEPTED` | Adopt a separately governed root protocol instance and compact record architecture | Human-approved post-pilot hardening plan; authority boundary `7dea545` |
 | [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md) | `ACCEPTED` | Bind autonomous milestone transitions to accepted spec contracts while keeping operational state subordinate | Explicit `2026-08-14` owner decision and approved decision-complete plan; independent target review completed and milestone accepted |
+| [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md) | `ACCEPTED` | Deterministic repository-native next-role dispatch with durable role contracts; host session invocation stays an explicit, non-simulated adapter boundary | Explicit `2026-08-14T05:14:05Z` owner direction recorded through specification evolution; independent review of the immutable dispatch target still pending |
 
 ### Proposed or disputed
 
-No architecture proposal or disputed architectural decision awaits owner action. The pipeline architecture is accepted, and its implementation passed fresh independent review; the milestone is `ACCEPTED`.
+No architecture proposal or disputed architectural decision awaits owner action. The pipeline and dispatch architectures are accepted; the pipeline milestone is `ACCEPTED`, and the dispatch milestone awaits implementation and independent review.
 
 ## Complexity and architecture drift
 
@@ -54,6 +56,7 @@ No architecture proposal or disputed architectural decision awaits owner action.
 | Live HANDOFF archival burden retired | Restore compact operational continuity | Migrated issue/evidence records and immutable Git provenance | None; independently verified |
 | Optional root Python structural checker | Make stable package/HANDOFF invariants repeatable | Standard-library tests plus completed independent review; five LOW findings accepted as residual risk | Full CommonMark, semantic correctness, portability, and shipped automation remain outside scope |
 | Root-local milestone state/gate engine | Mechanically enforce stable authorization, verification, review, and escalation transitions | Accepted contract/ADR plus 23 pipeline tests and 21 retained structural tests at target `26d890f`; exact-target and generated evidence pass; fresh independent round 2 `APPROVED` and milestone `ACCEPTED` | Python/Git portability, unauthenticated labels, cooperative-only writers, and semantic safety of owner-authorized commands |
+| Root role-contract artifact and read-only dispatcher (authorized, not yet implemented) | Remove routine human routing between already-authorized transitions without a competing state machine | Accepted dispatch phase and ADR; dispatch acceptance criteria; independent review of the immutable target still required | Prose/tool drift must be caught by review and tests; label-based eligibility remains an operational assertion, not authentication |
 
 ### Drift assessment
 
@@ -84,7 +87,7 @@ No architecture proposal or disputed architectural decision awaits owner action.
 
 No decision is required for [`ISSUE-20260810T060455Z-adr-review-record-mismatch`](ISSUES/ISSUE-20260810T060455Z-adr-review-record-mismatch.md). Human technical owner `MattSureham` selected disposition 1; additive reconciliation passed verification and the issue is `CLOSED`.
 
-No owner decision is currently pending. The owner resolved the runtime, onboarding-authority, and review-vocabulary questions for the bounded milestone. New product scope, package runtime distribution, architecture changes, human-blocker resolution, concurrent-writer guarantees, authenticated identity, large-scale coordination, or tracker integration still require new owner authority.
+No owner decision is currently pending. On `2026-08-14T05:14:05Z` the owner authorized Automated Role Dispatch / Rotation v1; that direction is recorded in the accepted dispatch phase, the compatible accepted dispatch ADR, and the owning issue. New product scope beyond that milestone, package runtime distribution, host-invocation adapter implementation, human-blocker resolution, concurrent-writer guarantees, authenticated identity, large-scale coordination, or tracker integration still require new owner authority.
 
 ## No human attention required
 
@@ -94,4 +97,4 @@ No owner decision is currently pending. The owner resolved the runtime, onboardi
 ## Next checkpoint trigger
 
 - **Trigger:** Material independent-review ambiguity, missing/exhausted milestone authority, proposed scope/architecture change, or owner request
-- **Expected owner action before then:** `NONE`; implement and independently review the accepted milestone without another routine approval
+- **Expected owner action before then:** `NONE`; implement, verify, and independently review the authorized dispatch milestone without another routine approval

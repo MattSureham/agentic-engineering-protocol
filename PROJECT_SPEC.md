@@ -10,8 +10,8 @@ The output should be a self-contained template/protocol that can later be copied
 
 - **Status:** `ACCEPTED`
 - **Human technical owner:** `MattSureham`
-- **Current accepted change:** Authorized milestone pipeline phase and authority clarification approved before implementation on `2026-08-14`; prior accepted requirements remain in force except where explicitly superseded below
-- **Authority record:** [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), and [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
+- **Current accepted change:** Automated role dispatch phase approved before implementation on `2026-08-14`; the Authorized milestone pipeline phase and authority clarification approved on `2026-08-14` remain in force; prior accepted requirements remain in force except where explicitly superseded below
+- **Authority record:** [`ISSUE-20260814T051405Z-role-dispatch`](ISSUES/ISSUE-20260814T051405Z-role-dispatch.md), [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md), [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), and [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
 
 # Goal
 
@@ -585,6 +585,45 @@ The JSON object between the exact markers is normative content of this accepted 
         }
       ],
       "review": "INDEPENDENT"
+    },
+    {
+      "id": "MILESTONE-20260814T051405Z-role-dispatch-v1",
+      "order": 2,
+      "title": "Automated role dispatch and rotation v1",
+      "issue": "ISSUES/ISSUE-20260814T051405Z-role-dispatch.md",
+      "depends_on": [
+        "MILESTONE-20260814T015817Z-authorized-pipeline-v1"
+      ],
+      "scope": [
+        "Codify implementer, independent-reviewer, and recorder/coordinator role contracts plus participant-eligibility and reviewer-independence rules in a durable root artifact.",
+        "Implement and verify one root-only read-only dispatcher that derives the next required role decision from the accepted milestone contract and issue-embedded pipeline state, leaving host session invocation as an explicit adapter boundary."
+      ],
+      "allowed_paths": [
+        "ROLE_CONTRACTS.md",
+        "HANDOFF.md",
+        "HUMAN_CHECKPOINT.md",
+        "README.md",
+        "ISSUES/ISSUE-20260814T051405Z-role-dispatch.md",
+        "EVIDENCE/",
+        "scripts/run_dispatch.py",
+        "tests/test_run_dispatch.py"
+      ],
+      "acceptance_checks": [
+        {
+          "id": "repository-unit-tests",
+          "argv": [
+            "python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v"
+          ],
+          "timeout_seconds": 120
+        }
+      ],
+      "review": "INDEPENDENT"
     }
   ]
 }
@@ -603,6 +642,38 @@ The authorized milestone is ready for peer review only when:
 6. A fresh independent participant reviews the immutable target. Only `APPROVED` with zero open material findings permits `ACCEPTED`; `CHANGES_REQUIRED` returns within-scope work to implementation, and `BLOCKED` cannot be mapped to approval.
 
 No second real repository milestone is authorized by this phase. Multi-milestone continuation MUST be demonstrated with isolated fixtures; after this milestone is accepted, absence of another contract is a valid terminal result rather than permission to invent work.
+
+# Automated role dispatch phase
+
+This phase removes routine human intervention between already-authorized pipeline transitions by making the next required role, participant eligibility, and role contract deterministically decidable from durable repository state. It reuses the accepted milestone pipeline as the single state machine; it adds no new milestone states, no competing orchestration, and no host-specific session invocation. The pipeline phase's terminal note about the absence of a second contract is superseded only for the exact milestone defined below; all other deferrals remain binding.
+
+The target lifecycle is: authorized work → implementer → verify → independent reviewer → fix/re-review when required → recorder/accept → next authorized milestone → repeat. Human escalation occurs only when existing repository authority is insufficient.
+
+## Execution boundary
+
+Repository-native dispatch ends at an emitted, deterministic next-role decision with its role contract. Host-specific participant or session invocation is an explicit adapter boundary outside this milestone's implementation. If the current host exposes no durable programmatic launch interface, the adapter remains a documented manual step and MUST NOT be simulated.
+
+## Accepted dispatch requirements
+
+- **DISPATCH-001 — Role contracts:** Implementer, independent reviewer, and recorder/coordinator role contracts MUST be codified in a durable root artifact stating each role's required inputs, permitted actions, required durable outputs, and completion conditions. The contracts MUST agree with root `BOOTSTRAP.md` and the accepted pipeline requirements and ADRs; runtime tools remain subordinate to them.
+- **DISPATCH-002 — Eligibility and independence:** Participant eligibility MUST be deterministic from durable state. The independent-reviewer label MUST differ from the implementor label of the attempt under review, and the recorder/acceptance label MUST differ from both. No participant may review or accept its own implementation. Labels remain unauthenticated operational assertions, not identity.
+- **DISPATCH-003 — Deterministic next-role decision:** Given only repository state, the dispatcher MUST select the next dependency-satisfied milestone through the existing pipeline and emit exactly one next-role decision — implementer, independent reviewer, recorder, human escalation, or terminal no-authorized-work — with the role contract reference, the eligibility constraints that bind the next participant, and the concrete records or commands that participant is expected to produce. Identical repository state MUST produce an identical decision.
+- **DISPATCH-004 — Read-only decisions, durable transitions:** The dispatcher MUST NOT mutate repository state, create scope, or advance milestones. Decisions are derived on demand from durable state; transitions and their attribution remain recorded exclusively through the existing pipeline transitions and issue/HANDOFF records.
+- **DISPATCH-005 — Interruption and resumption:** A fresh participant without conversational memory MUST be able to obtain the current dispatch decision in one read-only invocation, in human-readable and machine-readable form.
+- **DISPATCH-006 — Integration, not competition:** The dispatcher MUST consume the accepted milestone contract and issue-embedded pipeline state through the existing pipeline implementation. It MUST NOT introduce a second state machine, duplicate authority sources, new milestone states, or a shadow issue database.
+- **DISPATCH-007 — Host adapter boundary:** v1 MUST NOT assume a durable programmatic launch interface, invoke agents, or simulate invocation. The adapter boundary MUST be documented explicitly so a host with a genuine launch interface can implement it later without changing repository-native dispatch.
+- **DISPATCH-008 — Bounded slice:** The dispatcher MUST be a Python 3.9-compatible, standard-library, root-only tool. It MUST NOT enter the reusable ten-file package, use the network, commit or push, mutate Git, or add a daemon, service, scheduler, database, web UI, or external tracker integration.
+
+## Dispatch acceptance criteria
+
+The dispatch milestone is ready for peer review only when:
+
+1. The role-contract artifact covers implementer, independent reviewer, and recorder/coordinator and is consistent with root `BOOTSTRAP.md`, the accepted pipeline requirements and ADR, and the accepted pipeline issue's recorded lifecycle.
+2. Dispatch decisions for every pipeline state — authorized/ready, in-progress, awaiting peer review, the fix/re-review loop, human escalation, post-acceptance continuation, and the terminal no-authorized-work case — are covered by deterministic tests, and repeated invocations over unchanged state produce byte-identical machine-readable output.
+3. Eligibility and independence rules appear in emitted decisions and agree with the executable pipeline gates.
+4. Dispatcher invocation changes no repository bytes, including issue, HANDOFF, specification, evidence, and Git state.
+5. The host adapter boundary is documented as an explicit non-implemented interface; no simulated invocation exists anywhere.
+6. A fresh independent participant reviews the immutable target. Only `APPROVED` with zero open material findings permits `ACCEPTED`; `CHANGES_REQUIRED` returns within-scope work to implementation, and `BLOCKED` cannot be mapped to approval.
 
 # Specification governance
 
@@ -632,3 +703,4 @@ Material requirement changes require human-owner authority. Keep exact proposed 
 | `2026-08-05` | Accepted the initial standalone reusable protocol requirements | Establish the product contract | Human technical owner (`MattSureham`) | Pre-hardening specification at Git revision `e6beeb2cb730183ca2ac13795ad367ad9d9e1099`, SHA-256 `13169319e2be028c470ca96925002b25c000c58ba3a4c5420e652d291df139dd` |
 | `2026-08-06T01:39:07Z` | Added accepted post-pilot hardening requirements, deferrals, acceptance criteria, and the approved specification-evolution policy | Resolve repository-verified dogfooding, record-separation, HANDOFF reliability, and evidence-portability gaps without expanding product runtime scope | Human technical owner (`MattSureham`) | [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md), [`EVIDENCE-20260806T013907Z-post-pilot-audit`](EVIDENCE/EVIDENCE-20260806T013907Z-post-pilot-audit.md), authority boundary `7dea545` |
 | `2026-08-14T01:58:17Z` | Accepted prior authorization for explicitly declared milestones and the bounded root-local automated pipeline phase | Allow deterministic implementation, verification, independent review, fix loops, and continuation without repeated human prompts while preserving explicit scope and escalation boundaries | Human technical owner (`MattSureham`) | [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md) |
+| `2026-08-14T05:14:05Z` | Accepted the automated role dispatch phase and a second contract milestone for role contracts, eligibility rules, and a deterministic read-only next-role dispatcher with an explicit host adapter boundary | Eliminate routine human intervention between already-authorized pipeline transitions while keeping the accepted pipeline as the single state machine and leaving host session invocation outside repository authority | Human technical owner (`MattSureham`) | [`ISSUE-20260814T051405Z-role-dispatch`](ISSUES/ISSUE-20260814T051405Z-role-dispatch.md), [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md) |
