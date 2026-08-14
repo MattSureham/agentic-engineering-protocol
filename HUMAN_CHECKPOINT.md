@@ -4,11 +4,11 @@ This is a low-bandwidth synchronization point for the human technical owner. It 
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-14T03:55:38Z`
+- **Generated UTC:** `2026-08-14T04:02:07Z`
 - **Prepared by:** `Codex/root-fix-2`
 - **Period covered:** Published closure baseline `cb5e8d6c059b4f268e7c0a93cf3cb185b6853e7d` through independent pipeline review round 1 and the start of fix attempt 2 from `57fe35c3a397fb1d71caa466d32a62f84fd51802`
 - **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the owner-approved Authorized milestone pipeline phase and preserved prior requirements
-- **Implementation/reference state:** Independent review of published target `6c0a3bda06686635023e334a4e644fb176372b04` returned `CHANGES_REQUIRED` with two material gate-boundary findings (`R1`/`R2`) and one non-material rendering finding (`R3`). The pipeline has entered attempt-2 `IN_PROGRESS` from base `57fe35c`; the milestone remains unaccepted, while the two bounded wording issues retain scoped `APPROVED` rounds.
+- **Implementation/reference state:** Independent review of target `6c0a3bd` returned `CHANGES_REQUIRED` on material `R1`/`R2`. Attempt-2 candidate code now covers those resolution conditions plus non-material `R3` under 44 passing tests, but no new immutable target or fresh independent disposition exists yet. The milestone remains `IN_PROGRESS` and unaccepted; the two bounded wording issues retain scoped `APPROVED` rounds because their bytes are unchanged.
 - **Prior checkpoint:** `2026-08-11T03:01:36Z` by `ClaudeCode/coordinator` (superseded by this authority record)
 
 ## System mental model
@@ -53,7 +53,7 @@ No architecture proposal or disputed architectural decision awaits owner action.
 | Separate root/product protocol governance | Prevent silent authority coupling | Accepted ADR, semantic/link validation, independent review | Future divergence still requires judgment and review |
 | Live HANDOFF archival burden retired | Restore compact operational continuity | Migrated issue/evidence records and immutable Git provenance | None; independently verified |
 | Optional root Python structural checker | Make stable package/HANDOFF invariants repeatable | Standard-library tests plus completed independent review; five LOW findings accepted as residual risk | Full CommonMark, semantic correctness, portability, and shipped automation remain outside scope |
-| Root-local milestone state/gate engine | Mechanically enforce stable authorization, verification, review, and escalation transitions | Accepted contract/ADR plus 18 isolated pipeline tests and 21 retained structural tests at immutable target; post-target negative reproductions expose missing coverage | `F1`: command-side-effect recheck; `F2`: evidence-directory escape; `F3`: activity-table rendering; plus Python/Git portability, unauthenticated labels, and concurrent writers |
+| Root-local milestone state/gate engine | Mechanically enforce stable authorization, verification, review, and escalation transitions | Accepted contract/ADR plus 23 isolated pipeline tests and 21 retained structural tests in attempt-2 candidate; exact target/review pending | Candidate covers `R1`/`R2`/`R3`; remaining limits are Python/Git portability, unauthenticated labels, cooperative-only writers, and semantic safety of owner-authorized commands |
 
 ### Drift assessment
 
@@ -78,7 +78,7 @@ No architecture proposal or disputed architectural decision awaits owner action.
 - **What is directly verified:** Prior structural target/review remains valid; authority boundary `a6f2699` and immutable target `6c0a3bd` are published; package/contract checks and 39 target tests pass. Independent reproductions confirm `R1` and `R2`, and pipeline state now records attempt-2 `IN_PROGRESS` from synchronized base `57fe35c`.
 - **What was independently reviewed:** The hardening target `5eceae0f7d45fdcbe0fad7a7aa965a16e0e537fb`, earlier protocol/migration/specification-evolution targets, and now structural-validator target `8690358` (round 1 `APPROVED`, five LOW findings accepted as residual risk).
 - **What was not run or remains unverified:** Attempt-2 implementation and fresh independent disposition do not yet exist; dedicated Markdown linting is unavailable; broader platform portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
-- **Known regressions or unresolved risks:** `F1` permits advancement after an accepted command dirties the repository; `F2` permits generated evidence to escape through a baseline root symlink; `F3` can split the generated Activity table. Four deferred capability areas remain `BLOCKED`; ignored `protocol/.DS_Store` was previously moved to Trash.
+- **Known regressions or unresolved risks:** Attempt-2 candidate fixes the observed `R1`/`R2`/`R3` behaviors, but they remain acceptance findings until fresh independent review of an immutable target. Four deferred capability areas remain `BLOCKED`; ignored root and prior package `.DS_Store` artifacts were moved to recoverable Trash locations rather than admitted into validation.
 
 ## Human attention required
 

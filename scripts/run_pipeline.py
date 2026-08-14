@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 import re
+import stat
 import subprocess
 import sys
 import tempfile
@@ -109,6 +110,8 @@ class Context:
     milestones: List[Milestone]
     states: Dict[str, Dict[str, Any]]
     issue_texts: Dict[str, str]
+    specification_bytes: bytes
+    issue_bytes: Dict[str, bytes]
 
 
 @dataclass(frozen=True)
@@ -178,13 +181,20 @@ def _extract_json_block(text: str, begin: str, end: str, path: str) -> Any:
     return _json_load(match.group("json"), path)
 
 
-def _read_text(path: Path, display: str) -> str:
+def _read_bytes(path: Path, display: str) -> bytes:
     if path.is_symlink() or not path.is_file():
         raise PipelineError("AEP-PIPE-IO", display, "expected a regular non-symlink file", 2)
     try:
-        return path.read_text(encoding="utf-8")
-    except (OSError, UnicodeError) as error:
-        raise PipelineError("AEP-PIPE-IO", display, "cannot read UTF-8 text: {}".format(error), 2)
+        return path.read_bytes()
+    except OSError as error:
+        raise PipelineError("AEP-PIPE-IO", display, "cannot read file: {}".format(error), 2)
+
+
+def _read_text(path: Path, display: str) -> str:
+    try:
+        return _read_bytes(path, display).decode("utf-8")
+    except UnicodeError as error:
+        raise PipelineError("AEP-PIPE-IO", display, "cannot decode UTF-8 text: {}".format(error), 2)
 
 
 def _metadata(text: str, path: str) -> Dict[str, str]:
@@ -448,6 +458,27 @@ def _resolve_owned_path(root: Path, relative: str) -> Path:
     return resolved
 
 
+def _evidence_directory(root: Path) -> Path:
+    root_resolved = root.resolve()
+    candidate = root_resolved / "EVIDENCE"
+    try:
+        metadata = candidate.lstat()
+    except OSError as error:
+        raise PipelineError("AEP-PIPE-IO", "EVIDENCE", "evidence directory is unavailable: {}".format(error), 2)
+    if stat.S_ISLNK(metadata.st_mode):
+        raise PipelineError("AEP-PIPE-SCOPE", "EVIDENCE", "evidence directory must not be a symlink", 2)
+    if not stat.S_ISDIR(metadata.st_mode):
+        raise PipelineError("AEP-PIPE-IO", "EVIDENCE", "evidence path must be a directory", 2)
+    try:
+        resolved = candidate.resolve(strict=True)
+        resolved.relative_to(root_resolved)
+    except (OSError, ValueError) as error:
+        raise PipelineError("AEP-PIPE-SCOPE", "EVIDENCE", "evidence directory escapes repository: {}".format(error), 2)
+    if resolved != candidate:
+        raise PipelineError("AEP-PIPE-SCOPE", "EVIDENCE", "evidence directory does not resolve to its owned path", 2)
+    return resolved
+
+
 def _structural_gate(root: Path) -> None:
     findings = validate_repository(root)
     if not findings:
@@ -466,13 +497,23 @@ def _load_context(root: Path) -> Context:
         raise PipelineError("AEP-PIPE-IO", str(root), "repository root is not a directory", 2)
     root = root.resolve()
     _structural_gate(root)
-    spec_text = _read_text(root / "PROJECT_SPEC.md", "PROJECT_SPEC.md")
+    _evidence_directory(root)
+    specification_bytes = _read_bytes(root / "PROJECT_SPEC.md", "PROJECT_SPEC.md")
+    try:
+        spec_text = specification_bytes.decode("utf-8")
+    except UnicodeError as error:
+        raise PipelineError("AEP-PIPE-IO", "PROJECT_SPEC.md", "cannot decode UTF-8 text: {}".format(error), 2)
     milestones = _parse_contract_text(spec_text, "PROJECT_SPEC.md")
     states: Dict[str, Dict[str, Any]] = {}
     issue_texts: Dict[str, str] = {}
+    issue_bytes: Dict[str, bytes] = {}
     for milestone in milestones:
         issue_path = _resolve_owned_path(root, milestone.issue)
-        issue_text = _read_text(issue_path, milestone.issue)
+        raw_issue = _read_bytes(issue_path, milestone.issue)
+        try:
+            issue_text = raw_issue.decode("utf-8")
+        except UnicodeError as error:
+            raise PipelineError("AEP-PIPE-IO", milestone.issue, "cannot decode UTF-8 text: {}".format(error), 2)
         metadata = _metadata(issue_text, milestone.issue)
         expected_id = PurePosixPath(milestone.issue).stem
         if metadata.get("ID") != expected_id:
@@ -492,7 +533,15 @@ def _load_context(root: Path) -> Context:
             )
         states[milestone.milestone_id] = state
         issue_texts[milestone.milestone_id] = issue_text
-    return Context(root=root, milestones=milestones, states=states, issue_texts=issue_texts)
+        issue_bytes[milestone.milestone_id] = raw_issue
+    return Context(
+        root=root,
+        milestones=milestones,
+        states=states,
+        issue_texts=issue_texts,
+        specification_bytes=specification_bytes,
+        issue_bytes=issue_bytes,
+    )
 
 
 def _dependencies_satisfied(context: Context, milestone: Milestone) -> bool:
@@ -560,11 +609,31 @@ def _validate_revision_references(root: Path, milestone: Milestone, state: Mappi
             raise PipelineError("AEP-PIPE-STATE", milestone.issue, "{} does not resolve to a local commit".format(field))
 
 
-def _require_clean(root: Path) -> None:
-    output = _git(root, ["status", "--porcelain", "--untracked-files=all"]).stdout
-    if output:
-        paths = sorted(line[3:] for line in output.splitlines() if len(line) >= 4)
-        raise PipelineError("AEP-PIPE-GIT", ".git", "working tree is not clean: {}".format(", ".join(paths[:8])))
+def _worktree_paths(root: Path, include_ignored: bool = False) -> Tuple[List[str], List[str]]:
+    output = _git(
+        root,
+        ["status", "--porcelain=v1", "-z", "--untracked-files=all", "--no-renames"],
+    ).stdout
+    changed = sorted(entry[3:] for entry in output.split("\0") if len(entry) >= 4)
+    ignored: List[str] = []
+    if include_ignored:
+        ignored_output = _git(
+            root,
+            ["ls-files", "--others", "--ignored", "--exclude-standard", "-z"],
+        ).stdout
+        ignored = sorted(entry for entry in ignored_output.split("\0") if entry)
+    return changed, ignored
+
+
+def _require_clean(root: Path, include_ignored: bool = False) -> None:
+    changed, ignored = _worktree_paths(root, include_ignored=include_ignored)
+    if changed:
+        raise PipelineError("AEP-PIPE-GIT", ".git", "working tree is not clean: {}".format(", ".join(changed[:8])))
+    if ignored:
+        raise PipelineError(
+            "AEP-PIPE-GIT", ".git",
+            "review submission contains ignored paths: {}".format(", ".join(ignored[:8])),
+        )
 
 
 def _target_revision(root: Path, supplied: str) -> str:
@@ -655,8 +724,65 @@ def _run_checks(root: Path, milestone: Milestone) -> Tuple[List[Dict[str, Any]],
     return records, all_passed
 
 
+def _repository_postconditions(context: Context, milestone: Milestone, target: str) -> Tuple[List[Dict[str, str]], bool]:
+    records: List[Dict[str, str]] = []
+
+    def record(check_id: str, path: str, passed: bool, detail: str) -> None:
+        records.append({
+            "id": check_id,
+            "path": path,
+            "result": "PASS" if passed else "FAIL",
+            "detail": detail,
+        })
+
+    try:
+        observed_head = _head(context.root)
+        record(
+            "head-unchanged", ".git", observed_head == target,
+            "HEAD matches submitted target" if observed_head == target else "HEAD changed after accepted commands",
+        )
+    except PipelineError as error:
+        record("head-unchanged", error.path, False, error.message)
+
+    try:
+        changed, ignored = _worktree_paths(context.root, include_ignored=True)
+        clean = not changed and not ignored
+        detail = "working tree has no tracked, untracked, or ignored artifacts"
+        if not clean:
+            portions = []
+            if changed:
+                portions.append("changed={}".format(", ".join(changed[:8])))
+            if ignored:
+                portions.append("ignored={}".format(", ".join(ignored[:8])))
+            detail = "; ".join(portions)
+        record("worktree-clean", ".git", clean, detail)
+    except PipelineError as error:
+        record("worktree-clean", error.path, False, error.message)
+
+    try:
+        specification_bytes = _read_bytes(context.root / "PROJECT_SPEC.md", "PROJECT_SPEC.md")
+        unchanged = specification_bytes == context.specification_bytes
+        record(
+            "authority-source-unchanged", "PROJECT_SPEC.md", unchanged,
+            "authority source bytes are unchanged" if unchanged else "authority source bytes changed during accepted commands",
+        )
+    except PipelineError as error:
+        record("authority-source-unchanged", error.path, False, error.message)
+
+    try:
+        issue_bytes = _read_bytes(context.root / milestone.issue, milestone.issue)
+        unchanged = issue_bytes == context.issue_bytes[milestone.milestone_id]
+        record(
+            "issue-source-unchanged", milestone.issue, unchanged,
+            "owning issue bytes are unchanged" if unchanged else "owning issue bytes changed during accepted commands",
+        )
+    except PipelineError as error:
+        record("issue-source-unchanged", error.path, False, error.message)
+
+    return records, all(item["result"] == "PASS" for item in records)
+
+
 def _atomic_write(path: Path, data: bytes, replace: bool) -> None:
-    path.parent.mkdir(parents=False, exist_ok=True)
     if not replace and path.exists():
         raise PipelineError("AEP-PIPE-IO", path.as_posix(), "refusing to overwrite existing evidence", 2)
     old_mode = path.stat().st_mode & 0o777 if replace and path.exists() else 0o644
@@ -695,6 +821,7 @@ def _write_verification_evidence(
     target: str,
     actor: str,
     checks: List[Dict[str, Any]],
+    repository_postconditions: List[Dict[str, str]],
     passed: bool,
     utc: str,
 ) -> str:
@@ -716,6 +843,7 @@ def _write_verification_evidence(
         },
         "structural_validator": {"result": "PASS", "finding_count": 0},
         "checks": checks,
+        "repository_postconditions": repository_postconditions,
         "result": "PASS" if passed else "FAIL",
         "limitations": [
             "Participant labels are recorded assertions, not authenticated identities.",
@@ -723,7 +851,8 @@ def _write_verification_evidence(
         ],
     }
     encoded = (json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
-    _atomic_write(context.root / relative, encoded, replace=False)
+    evidence_directory = _evidence_directory(context.root)
+    _atomic_write(evidence_directory / name, encoded, replace=False)
     return relative
 
 
@@ -742,21 +871,37 @@ def _replace_state_block(text: str, state: Mapping[str, Any], path: str) -> str:
     return text[:start] + replacement + text[finish:]
 
 
-def _append_section_line(text: str, heading: str, line: str, path: str) -> str:
+def _section_bounds(text: str, heading: str, path: str) -> Tuple[int, int]:
     marker = "## " + heading
-    start = text.find(marker)
-    if start < 0 or text.find(marker, start + 1) >= 0:
+    matches = list(re.finditer(r"^" + re.escape(marker) + r"[ \t]*$", text, re.MULTILINE))
+    if len(matches) != 1:
         raise PipelineError("AEP-PIPE-SCHEMA", path, "section {!r} must appear exactly once".format(heading), 2)
-    next_heading = text.find("\n## ", start + len(marker))
-    end = len(text) if next_heading < 0 else next_heading
-    body = text[start:end].rstrip()
-    return text[:start] + body + "\n\n" + line + "\n" + text[end:].lstrip("\n")
+    body_start = matches[0].end()
+    if body_start < len(text) and text[body_start] == "\n":
+        body_start += 1
+    next_heading = re.search(r"^## ", text[body_start:], re.MULTILINE)
+    end = len(text) if next_heading is None else body_start + next_heading.start()
+    return body_start, end
+
+
+def _append_prose_line(text: str, heading: str, line: str, path: str) -> str:
+    _, end = _section_bounds(text, heading, path)
+    prefix = text[:end].rstrip()
+    suffix = text[end:].lstrip("\n")
+    separator = "\n\n" if suffix else "\n"
+    return prefix + "\n\n" + line + separator + suffix
 
 
 def _append_activity(text: str, utc: str, actor: str, source: str, target: str, reason: str, path: str) -> str:
     safe_reason = reason.replace("|", "\\|").replace("\n", " ")
     line = "| `{}` | `{}` | `{}` | `{}` | {} |".format(utc, actor, source, target, safe_reason)
-    return _append_section_line(text, "Activity history", line, path)
+    body_start, end = _section_bounds(text, "Activity history", path)
+    rows = [candidate for candidate in text[body_start:end].splitlines() if candidate.strip()]
+    if not rows or any(not candidate.startswith("|") for candidate in rows):
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "Activity history must contain only a Markdown table", 2)
+    suffix = text[end:].lstrip("\n")
+    separator = "\n\n" if suffix else "\n"
+    return text[:body_start] + "\n" + "\n".join(rows + [line]) + separator + suffix
 
 
 def _updated_issue_text(
@@ -779,7 +924,7 @@ def _updated_issue_text(
         line = "- **Pipeline verification `{}`:** [`{}`](../{}) — deterministic structural and accepted-command gates passed for `{}`.".format(
             utc, evidence, evidence, state["target_revision"]
         )
-        text = _append_section_line(text, "Verification", line, milestone.issue)
+        text = _append_prose_line(text, "Verification", line, milestone.issue)
     if blocker is not None:
         blocker_path, condition = blocker
         replacements = {
@@ -901,9 +1046,12 @@ def _commit_issue(context: Context, milestone: Milestone, text: str) -> None:
     # Recheck the source bytes immediately before replacement. This detects
     # cooperating writers without claiming a general concurrent-writer lock.
     path = context.root / milestone.issue
-    current = _read_text(path, milestone.issue)
-    if current != context.issue_texts[milestone.milestone_id]:
+    current = _read_bytes(path, milestone.issue)
+    if current != context.issue_bytes[milestone.milestone_id]:
         raise PipelineError("AEP-PIPE-CONFLICT", milestone.issue, "owning issue changed during transition")
+    authority = _read_bytes(context.root / "PROJECT_SPEC.md", "PROJECT_SPEC.md")
+    if authority != context.specification_bytes:
+        raise PipelineError("AEP-PIPE-CONFLICT", "PROJECT_SPEC.md", "authority source changed during transition")
     _atomic_write(path, text.encode("utf-8"), replace=True)
 
 
@@ -942,14 +1090,24 @@ def _transition(context: Context, arguments: argparse.Namespace) -> str:
     elif target_state == "AWAITING_PEER_REVIEW":
         if arguments.target is None:
             raise PipelineError("AEP-PIPE-CLI", "command", "--target is required for AWAITING_PEER_REVIEW", 2)
-        _require_clean(context.root)
+        _require_clean(context.root, include_ignored=True)
         target = _target_revision(context.root, arguments.target)
         _verify_target_scope(context, milestone, state, target)
         _structural_gate(context.root)
-        checks, passed = _run_checks(context.root, milestone)
-        evidence = _write_verification_evidence(context, milestone, state, target, actor, checks, passed, utc)
+        checks, commands_passed = _run_checks(context.root, milestone)
+        postconditions, repository_passed = _repository_postconditions(context, milestone, target)
+        passed = commands_passed and repository_passed
+        evidence = _write_verification_evidence(
+            context, milestone, state, target, actor, checks, postconditions, passed, utc,
+        )
         if not passed:
-            raise PipelineError("AEP-PIPE-VERIFY", evidence, "accepted verification command failed; state did not advance")
+            failed_postconditions = [item["id"] for item in postconditions if item["result"] == "FAIL"]
+            reason_parts = []
+            if not commands_passed:
+                reason_parts.append("accepted verification command failed")
+            if failed_postconditions:
+                reason_parts.append("repository postconditions failed: {}".format(", ".join(failed_postconditions)))
+            raise PipelineError("AEP-PIPE-VERIFY", evidence, "{}; state did not advance".format("; ".join(reason_parts)))
         state["target_revision"] = target
         state["verification_evidence"].append(evidence)
         reason = "Immutable target {} passed structural and accepted deterministic checks; evidence {}.".format(target, evidence)

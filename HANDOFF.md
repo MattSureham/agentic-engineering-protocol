@@ -6,9 +6,9 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-08-14T03:55:38Z`
-- **Repository state:** Clean synchronized baseline `57fe35c3a397fb1d71caa466d32a62f84fd51802` is the immutable base for pipeline fix attempt 2. The owning issue has transitioned to `IN_PROGRESS`; this snapshot and checkpoint are the only additional pre-implementation record changes and will be committed before source edits.
-- **Evidence cutoff:** Structural-validator closure through `2026-08-11T03:01:36Z`; accepted pipeline authority through published `a6f2699`; immutable target and attempt-1 evidence through `2026-08-14T02:40:06Z`; independent review round 1, `CHANGES_REQUIRED`, and the attempt-2 `IN_PROGRESS` transition through `2026-08-14T03:55:38Z`.
+- **Snapshot updated UTC:** `2026-08-14T04:02:07Z`
+- **Repository state:** Attempt-2 boundary commit `87cf4ac` is a clean child of synchronized base `57fe35c`. The current worktree contains only the bounded pipeline source/test corrections and synchronized runtime-issue/HANDOFF/checkpoint records; no specification, ADR, BOOTSTRAP, reusable-package, or unrelated issue change is present.
+- **Evidence cutoff:** Structural-validator closure through `2026-08-11T03:01:36Z`; accepted pipeline authority through published `a6f2699`; attempt-1 target/review through `2026-08-14T03:19:38Z`; attempt-2 transition and candidate verification through `2026-08-14T04:02:07Z`.
 - **External checks:** At `2026-08-14T03:55:38Z`, local HEAD, cached `origin/main`, and direct remote `refs/heads/main` all equaled `57fe35c3a397fb1d71caa466d32a62f84fd51802`; fetch succeeded and confirmed no divergence before attempt 2.
 - **Stale when:** Checked-out revision/branch changes; dirty paths differ from the recorded review-outcome set; newer issue/evidence/ADR changes a claim; cached or direct remote changes; accepted milestone JSON or its digest changes; validation output changes; a non-terminal task appears; or a higher-precedence source conflicts with this snapshot.
 
@@ -18,7 +18,7 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is a compact op
 - **CONFIRMED — Authority:** Human technical owner `MattSureham` accepted the milestone authority clarification and root-dogfood-first implementation plan. [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md) defines compatible architecture; accepted root-adoption ADR remains unchanged.
 - **CONFIRMED — Runtime issue:** The issue is `IMPLEMENTING`; machine state is `IN_PROGRESS`, attempt 2 by `agent:Codex-root-fix-2`, base `57fe35c`, no target yet, and contract digest `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4`. Independent review round 1 (`2026-08-14T03:11:06Z`, `ClaudeCode/pipeline-review`) remains `CHANGES_REQUIRED` with material findings `R1`/`R2`; the accepted fix loop requires no new owner approval.
 - **CONFIRMED — Related wording:** Both bounded wording issues hold scoped independent `APPROVED` rounds (zero open material findings within their change sets) on shared target `6c0a3bd`; they remain `REVIEW` pending coordinator closure verification, which must re-check the wording if the fix loop alters their change sets.
-- **CONFIRMED — Pipeline implementation:** `scripts/run_pipeline.py` exposes deterministic status and the accepted transition set; 39 configured tests reproduce at the extracted target. The independent reviewer reproduced implementor findings and confirmed `MEDIUM` `R1` (= `F1`, verification-command worktree mutation is not rechecked) and `MEDIUM` `R2` (= `F2`, a baseline root `EVIDENCE` symlink permits an escaping generated write and poisons subsequent operation) as material, and classified `R3` (= `F3`, activity-table rendering) `LOW` non-material. Exact resolution conditions are durable in the owning issue's review round.
+- **CONFIRMED — Pipeline implementation:** Attempt-2 candidate adds post-command HEAD/worktree/ignored-path/source-byte gates with failure evidence, rejects unsafe `EVIDENCE/` ownership boundaries at orientation and pre-write, and separates table/prose record insertion. The full candidate suite passes 44 tests, including every `R1`/`R2` reproduction class and `R3` continuity; immutable target verification and fresh independent disposition remain pending.
 - **CONFIRMED — Prior milestone:** [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUES/ISSUE-20260811T013701Z-structural-protocol-validator.md) is `CLOSED` on independently approved target `8690358d499aed20de6c620dc4dd4a81f1e1a126`.
 - **CONFIRMED — Prior structural slice:** Root-only `scripts/validate_protocol.py` and its 21-test standard-library suite validate only manifest/file integrity, supported package links, and HANDOFF structure with stable exit semantics. Its earlier approved target used package tree `4e79dd41eda4bac91329cf2fa8a88cd96bd168cb`; the current pipeline target intentionally evolves package guidance to tree `70cf91821a3ae7651b2eea2644aea2a62d29aaf6` under the accepted milestone.
 - **CONFIRMED — Distribution boundary:** The new pipeline is root-only dogfood. No executable enters `protocol/`; the reusable package remains exactly ten Markdown files and usable without automation.
@@ -55,7 +55,7 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
-| [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `IMPLEMENTING` | `MEDIUM` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Implement the accepted root-local milestone state-and-gate pipeline | Attempt 2 is `IN_PROGRESS` from base `57fe35c`; resolve reviewer findings `R1`/`R2` and non-material `R3`, then submit a new target |
+| [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md) | `IMPLEMENTING` | `MEDIUM` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Implement the accepted root-local milestone state-and-gate pipeline | Attempt-2 candidate resolves `R1`/`R2` and `R3` under 44 tests; exact target, generated evidence, and fresh review remain |
 | [`ISSUE-20260811T030136Z-review-disposition-vocabulary`](ISSUES/ISSUE-20260811T030136Z-review-disposition-vocabulary.md) | `REVIEW` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Require exact protocol vocabulary for session and durable review verdicts | Scoped `APPROVED` round on shared target `6c0a3bd`; coordinator closure verification pending |
 | [`ISSUE-20260807T022523Z-pilot-onboarding-authority-friction`](ISSUES/ISSUE-20260807T022523Z-pilot-onboarding-authority-friction.md) | `REVIEW` | `LOW` | `Codex/root` | `HUMAN` | `INDEPENDENT` | Distinguish accepted milestone authority from external/inferred work pressure | Scoped `APPROVED` round on shared target `6c0a3bd`; coordinator closure verification pending |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Define non-cooperating concurrent-writer guarantees | New owner-approved failure model and specification |
@@ -65,9 +65,21 @@ No `QUEUED` or `RUNNING` task is recorded. Historical terminal task details are 
 
 ## Next Action
 
-Implement the authorized attempt-2 fixes for reviewer findings `R1`/`R2` and `R3`, run the complete deterministic verification, freeze an immutable target, and use the pipeline to submit it for fresh independent review without changing specification or architecture authority.
+Complete the attempt-2 release matrix, freeze the bounded candidate as an immutable target, then use the pipeline to generate attempt-2 evidence and advance only to `AWAITING_PEER_REVIEW` for a fresh independent participant.
 
 ## Recent Activity
+
+### 2026-08-14T04:02:07Z — Codex/root-fix-2 — Pipeline Fix Implementor
+
+- **Task:** Implement the exact `R1`/`R2` resolution conditions and dispose non-material `R3` inside accepted milestone scope.
+- **Context inspected:** Independent review round 1 and reproductions; complete pipeline implementation and fixture harness; Git ignored-path behavior; evidence/reference ownership checks; generated issue Markdown bytes.
+- **Actions performed:** Added exact source-byte snapshots, strict review-submission ignored-path detection, four ordered post-command repository checks, machine-readable failure evidence, real/contained `EVIDENCE/` validation at orientation and pre-write, and specialized prose/table insertion; moved one real ignored root `.DS_Store` to recoverable Trash path `/Users/matthew/.Trash/agentic-engineering-protocol-root-DS_Store-20260814T035900Z`; normalized only blank lines that split the owning issue's activity table.
+- **Files modified:** `scripts/run_pipeline.py`, `tests/test_run_pipeline.py`, owning runtime issue, this HANDOFF, and `HUMAN_CHECKPOINT.md`; no authority source or reusable-package file.
+- **Findings:** `CONFIRMED` — ordinary Git cleanliness hid a real root `.DS_Store`, and the new strict submission check detects this class. `CONFIRMED` — unsafe evidence directories fail before any outside write. `INFERRED` — candidate fixes satisfy the recorded conditions; peer confirmation remains mandatory.
+- **Verification performed:** Full suite `44` tests `OK`; 23 targeted pipeline tests `OK`; structural validator `PASS`; live status reports `IN_PROGRESS`; `git diff --check` passes.
+- **Issues created or updated:** Runtime issue only; wording issues retain their byte-scoped approvals and all four deferrals remain blocked.
+- **Remaining uncertainty:** Exact-target gate result, fresh independent disposition, broader portability/CommonMark, identity, and concurrent-writer behavior.
+- **Recommended next action:** Perform the exact target-freeze and submission action under Next Action; do not approve the candidate.
 
 ### 2026-08-14T03:55:38Z — Codex/root-fix-2 — Pipeline Fix Implementor
 

@@ -245,6 +245,12 @@ No independent review round has been recorded.
         self._write_issue(self.milestones[0])
         self.commit("configure acceptance check")
 
+    def failure_evidence(self) -> Dict[str, Any]:
+        records = list((self.root / "EVIDENCE").glob("*.json"))
+        if len(records) != 1:
+            raise AssertionError("expected one evidence record, found {}".format(len(records)))
+        return json.loads(records[0].read_text(encoding="utf-8"))
+
     def state(self, index: int = 0) -> Dict[str, Any]:
         text = self.issue_path(index).read_text(encoding="utf-8")
         return pipeline._extract_json_block(text, pipeline.STATE_BEGIN, pipeline.STATE_END, self.milestones[index]["issue"])
@@ -508,6 +514,153 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
         self.assertEqual(len(evidence_paths), 1)
         self.assertEqual(json.loads(evidence_paths[0].read_text(encoding="utf-8"))["result"], "FAIL")
         self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+
+    def test_repository_mutations_fail_with_evidence_without_advancing(self) -> None:
+        cases = (
+            (
+                "untracked",
+                [sys.executable, "-c", "from pathlib import Path; Path('work/check-side-effect.txt').write_text('changed\\n')"],
+                "worktree-clean",
+            ),
+            (
+                "ignored",
+                [sys.executable, "-c", "from pathlib import Path; Path('.DS_Store').write_text('ignored\\n')"],
+                "worktree-clean",
+            ),
+            (
+                "head",
+                ["git", "commit", "--allow-empty", "-m", "accepted-check-side-effect"],
+                "head-unchanged",
+            ),
+            (
+                "authority bytes",
+                [
+                    sys.executable,
+                    "-c",
+                    "from pathlib import Path; import subprocess; p=Path('PROJECT_SPEC.md'); p.write_text(p.read_text()+'\\n'); subprocess.run(['git','update-index','--skip-worktree','PROJECT_SPEC.md'],check=True)",
+                ],
+                "authority-source-unchanged",
+            ),
+            (
+                "issue bytes",
+                [],
+                "issue-source-unchanged",
+            ),
+        )
+        for label, argv, expected_failure in cases:
+            with self.subTest(case=label):
+                fixture = PipelineRepository()
+                try:
+                    if label == "ignored":
+                        (fixture.root / ".gitignore").write_text(".DS_Store\n__pycache__/\n", encoding="utf-8")
+                    if label == "issue bytes":
+                        issue = fixture.milestones[0]["issue"]
+                        argv = [
+                            sys.executable,
+                            "-c",
+                            "from pathlib import Path; import subprocess; p=Path({!r}); p.write_text(p.read_text()+'\\n'); subprocess.run(['git','update-index','--skip-worktree',{!r}],check=True)".format(issue, issue),
+                        ]
+                    fixture.configure_check(argv)
+                    fixture.begin()
+                    target = fixture.make_target()
+                    result = fixture.submit(target)
+                    self.assertEqual(result.returncode, 1, result.stderr)
+                    self.assertIn("AEP-PIPE-VERIFY", result.stderr)
+                    self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                    evidence = fixture.failure_evidence()
+                    self.assertEqual(evidence["result"], "FAIL")
+                    postconditions = {item["id"]: item["result"] for item in evidence["repository_postconditions"]}
+                    self.assertEqual(postconditions[expected_failure], "FAIL")
+                    self.assertEqual(
+                        list(postconditions),
+                        ["head-unchanged", "worktree-clean", "authority-source-unchanged", "issue-source-unchanged"],
+                    )
+                finally:
+                    fixture.cleanup()
+
+    def test_review_submission_refuses_preexisting_ignored_artifact(self) -> None:
+        fixture = self.fixture()
+        (fixture.root / ".gitignore").write_text(".DS_Store\n", encoding="utf-8")
+        fixture.commit("ignore local metadata")
+        fixture.begin()
+        target = fixture.make_target()
+        issue_before = fixture.issue_path().read_bytes()
+        (fixture.root / ".DS_Store").write_text("preexisting ignored metadata\n", encoding="utf-8")
+        result = fixture.submit(target)
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("AEP-PIPE-GIT", result.stderr)
+        self.assertIn(".DS_Store", result.stderr)
+        self.assertEqual(issue_before, fixture.issue_path().read_bytes())
+        self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+        self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+
+    def test_evidence_directory_must_be_an_owned_real_directory(self) -> None:
+        for case in ("missing", "regular", "symlink"):
+            with self.subTest(case=case):
+                fixture = PipelineRepository()
+                try:
+                    evidence = fixture.root / "EVIDENCE"
+                    evidence.rmdir()
+                    outside = Path(fixture.temporary.name) / "outside evidence"
+                    outside.mkdir()
+                    if case == "regular":
+                        evidence.write_text("not a directory\n", encoding="utf-8")
+                    elif case == "symlink":
+                        try:
+                            evidence.symlink_to(outside, target_is_directory=True)
+                        except OSError as error:
+                            self.skipTest("symlinks unavailable: {}".format(error))
+                    before = self.snapshot(fixture.root)
+                    result = fixture.run("status")
+                    self.assertEqual(result.returncode, 2, result.stderr)
+                    self.assertIn("AEP-PIPE-", result.stderr)
+                    self.assertEqual(before, self.snapshot(fixture.root))
+                    self.assertEqual(list(outside.iterdir()), [])
+                finally:
+                    fixture.cleanup()
+
+    def test_transition_time_evidence_symlink_is_rejected_before_write(self) -> None:
+        fixture = self.fixture()
+        outside = Path(fixture.temporary.name) / "outside transition evidence"
+        outside.mkdir()
+        command = (
+            "from pathlib import Path; "
+            "p=Path('EVIDENCE'); p.rmdir(); p.symlink_to(Path({!r}), target_is_directory=True)"
+        ).format(str(outside))
+        fixture.configure_check([sys.executable, "-c", command])
+        fixture.begin()
+        target = fixture.make_target()
+        before_issue = fixture.issue_path().read_bytes()
+        result = fixture.submit(target)
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn("AEP-PIPE-SCOPE", result.stderr)
+        self.assertEqual(before_issue, fixture.issue_path().read_bytes())
+        self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+        self.assertEqual(list(outside.iterdir()), [])
+
+    def test_generated_issue_markdown_keeps_tables_and_headings_separated(self) -> None:
+        fixture = self.fixture()
+        issue = fixture.issue_path()
+        text = issue.read_text(encoding="utf-8")
+        text = text.replace(
+            "|---|---|---|---|---|\n| `2026-08-14T03:00:00Z`",
+            "|---|---|---|---|---|\n\n| `2026-08-14T03:00:00Z`",
+        )
+        issue.write_text(text, encoding="utf-8")
+        fixture.commit("legacy split table")
+        fixture.begin()
+        target = fixture.make_target()
+        result = fixture.submit(target)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        updated = issue.read_text(encoding="utf-8")
+        activity = updated.split("## Activity history\n", 1)[1].split("\n## Closure checklist", 1)[0]
+        self.assertNotIn("\n\n|", activity)
+        self.assertTrue(all(not line or line.startswith("|") for line in activity.splitlines()))
+        self.assertIn("| `agent:implementor` | `IMPLEMENTING` | `REVIEW` |", activity)
+        self.assertIn("\n\n## Closure checklist", updated)
+        verification = updated.split("## Verification\n", 1)[1].split("\n## Pipeline state", 1)[0]
+        self.assertIn("**Pipeline verification", verification)
+        self.assertIn("\n\n## Pipeline state", updated)
 
     def test_unavailable_and_timed_out_checks_are_failures_with_evidence(self) -> None:
         cases = (
