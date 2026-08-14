@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-11T03:01:36Z`
-- **Updated UTC:** `2026-08-14T02:32:24Z`
+- **Updated UTC:** `2026-08-14T03:11:06Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `PIPELINE-005`; root [`BOOTSTRAP.md`](../BOOTSTRAP.md) review requirements; and [`ISSUES/TEMPLATE.md`](TEMPLATE.md) review-round schema
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** [`ISSUE-20260811T013701Z-structural-protocol-validator`](ISSUE-20260811T013701Z-structural-protocol-validator.md) (owner-report note of `2026-08-11T02:38:34Z` and persisted independent round 1 of `2026-08-11T02:49:05Z`); [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md); [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md)
@@ -76,7 +76,22 @@ The historical self-review above covered creation of the record only. Implemento
 
 - **Required:** `YES` — the owner-authorized wording is now part of the shared governance/pipeline target and must be independently checked for compatibility with existing review semantics.
 
-No independent review round has been recorded for the wording target.
+### 2026-08-14T03:11:06Z — ClaudeCode/pipeline-review
+
+- **Reviewed repository state:** Immutable shared target `6c0a3bda06686635023e334a4e644fb176372b04` (parent `a6f2699a4bed2e1a08c9a506bad62204bd2d0086`), extracted via `git archive` into a fresh temporary directory; post-target records through `d85223b95de7564567316087efbb86d80d76597c`
+- **Reviewed target:** `6c0a3bda06686635023e334a4e644fb176372b04`
+- **Open material findings:** `0`
+- **Scope:** This issue's change set only — root and reusable BOOTSTRAP review-requirements wording, both issue templates' review-round schema, the reusable independent-review prompt, and the executable review-gate rejection cases at the shared target
+- **Commands or procedures:** Full read of the target-range wording diffs; comparison against the owner decision recorded at `2026-08-14T01:58:17Z`; reproduction of the complete suite at the extracted target (`Ran 39 tests ... OK`), including executable rejection of the informal label `APPROVED WITH FINDINGS`, same-label review, target mismatch, `BLOCKED`, and approval with material findings
+- **Specification compliance:** The exact three-value vocabulary appears in every intended artifact and no fourth disposition is introduced anywhere; `PIPELINE-005`, both BOOTSTRAP review sections, and both template schemas agree; the owner decision is implemented without scope growth
+- **Correctness and regression findings:** `NONE` within this issue's scope
+- **Architecture and complexity findings:** `NONE`; no new complexity introduced
+- **Material findings and resolution conditions:** `NONE` within this issue's wording scope. The shared target carries two material pipeline-gate findings (`R1`/`R2`) recorded in [`ISSUE-20260806T013907Z-runtime-automation`](ISSUE-20260806T013907Z-runtime-automation.md); they do not touch this issue's change set
+- **Limitations:** This round approves only the disposition-vocabulary wording and schema at the shared target; it does not accept the milestone. If the authorized fix loop alters any file in this issue's change set, closure verification must re-check the wording on the accepted target
+- **Residual risks:** Session-facing reporters may still improvise labels until they adopt the clarified prompts; the protocol records, rather than prevents, that behavior
+- **Evidence:** Target-range diffs; the extracted-target suite run; the runtime-automation issue's review round of `2026-08-14T03:11:06Z`
+- **Disposition:** `APPROVED`
+- **Prior-round resolution:** `FIRST ROUND`
 
 ## Blocker
 

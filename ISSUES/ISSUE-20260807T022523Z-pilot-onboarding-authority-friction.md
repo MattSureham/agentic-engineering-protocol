@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-07T02:25:23Z`
-- **Updated UTC:** `2026-08-14T02:32:24Z`
+- **Updated UTC:** `2026-08-14T03:11:06Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) specification-evolution policy and Authorized milestone pipeline phase; reusable protocol freshness/onboarding requirements
 - **ADRs:** [`ADR-20260806T013907Z-root-protocol-adoption`](../ADR/ADR-20260806T013907Z-root-protocol-adoption.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** Inline verification record below; [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](../EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md); [`EVIDENCE-20260814T023224Z-authorized-pipeline-verification`](../EVIDENCE/EVIDENCE-20260814T023224Z-authorized-pipeline-verification.md)
@@ -97,7 +97,24 @@ The historical self-review above covered creation of the finding only. Implement
 
 ## Independent review rounds
 
-- **Required:** `NO` — record-only finding with no change to external behavior, contracts, dependencies, persistent state, security/trust, concurrency, background processes, cross-module coupling, or governance architecture. If the owner approves option 2 or 3 under Investigation and decision, the resulting wording change is a separate meaningful change with its own review gate.
+- **Required:** `YES` — the owner-authorized wording is part of the shared governance/pipeline target and was independently checked for compatibility with existing onboarding and authority semantics.
+
+### 2026-08-14T03:11:06Z — ClaudeCode/pipeline-review
+
+- **Reviewed repository state:** Immutable shared target `6c0a3bda06686635023e334a4e644fb176372b04` (parent `a6f2699a4bed2e1a08c9a506bad62204bd2d0086`), extracted via `git archive` into a fresh temporary directory; post-target records through `d85223b95de7564567316087efbb86d80d76597c`
+- **Reviewed target:** `6c0a3bda06686635023e334a4e644fb176372b04`
+- **Open material findings:** `0`
+- **Scope:** This issue's change set only — the accepted-milestone versus inferred-scope authority clarification in root and reusable BOOTSTRAP, the reusable onboarding/resumption prompts, and the reusable README workflow wording at the shared target
+- **Commands or procedures:** Full read of the target-range wording diffs; comparison against the superseding bounded owner direction of `2026-08-14T01:58:17Z`; reproduction of the complete suite at the extracted target (`Ran 39 tests ... OK`); confirmation that the reusable package remains ten Markdown files with no runtime
+- **Specification compliance:** Both normative documents and the prompts now state that an explicit milestone in an accepted specification is prior authorization within its exact bounds and that external prompts, implementation momentum, participant preference, and inferred useful work are not; the terminal no-authorized-work state is explicitly valid. The wording implements exactly the bounded owner direction and no broader onboarding redesign
+- **Correctness and regression findings:** `NONE` within this issue's scope
+- **Architecture and complexity findings:** `NONE`; the clarification removes an interpretation hazard without adding state, process, or coupling
+- **Material findings and resolution conditions:** `NONE` within this issue's wording scope. The shared target carries two material pipeline-gate findings (`R1`/`R2`) recorded in [`ISSUE-20260806T013907Z-runtime-automation`](ISSUE-20260806T013907Z-runtime-automation.md); they do not touch this issue's change set
+- **Limitations:** This round approves only the authority-clarification wording at the shared target; it does not accept the milestone and does not close the four still-`BLOCKED` capability deferrals. If the authorized fix loop alters any file in this issue's change set, closure verification must re-check the wording on the accepted target
+- **Residual risks:** Wording cannot prevent a participant from rationalizing unauthorized work; it only removes the ambiguity the pilot exposed
+- **Evidence:** Target-range diffs; the extracted-target suite run; the runtime-automation issue's review round of `2026-08-14T03:11:06Z`
+- **Disposition:** `APPROVED`
+- **Prior-round resolution:** `FIRST ROUND`
 
 ## Blocker
 
