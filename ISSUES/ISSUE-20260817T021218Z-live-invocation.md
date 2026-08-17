@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260817T021218Z-live-invocation`
 - **Title:** Implement the authorized live participant invocation capability milestone
-- **Status:** `INVESTIGATING`
+- **Status:** `IMPLEMENTING`
 - **Severity:** `MEDIUM`
 - **Owner:** `ClaudeCode/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-17T02:12:18Z`
-- **Updated UTC:** `2026-08-17T02:31:39Z`
+- **Updated UTC:** `2026-08-17T02:31:47Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Product-level autonomy objective, Live invocation and autonomy demonstration phase (`LIVE-001`–`LIVE-004`), and `MILESTONE-20260817T021218Z-live-invocation-v1`
 - **ADRs:** [`ADR-20260817T021218Z-autonomy-end-state`](../ADR/ADR-20260817T021218Z-autonomy-end-state.md); [`ADR-20260814T092504Z-host-adapter-rotation`](../ADR/ADR-20260814T092504Z-host-adapter-rotation.md)
 - **Evidence:** [`EVIDENCE-20260814T092504Z-host-capability-probe`](../EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) (original launch-interface probes); new live-profile probe evidence to be recorded under `EVIDENCE/` by this milestone
@@ -73,10 +73,10 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260817T021218Z-live-invocation-v1",
   "authority_digest": "36f862db0345ff9667b7a3469fbc6a25750c8ef9e300324de181dc1f57659cea",
-  "state": "READY",
-  "attempt": 0,
-  "implementor": null,
-  "base_revision": null,
+  "state": "IN_PROGRESS",
+  "attempt": 1,
+  "implementor": "agent:ClaudeCode-live",
+  "base_revision": "8b1c13269f12df583a98f09c74bcc185143999a8",
   "target_revision": null,
   "verification_evidence": [],
   "review_references": [],
@@ -96,6 +96,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": "AUTHORIZED",
       "to": "READY",
       "reason": "Validated transition AUTHORIZED to READY."
+    },
+    {
+      "sequence": 3,
+      "utc": "2026-08-17T02:31:47Z",
+      "actor": "agent:ClaudeCode-live",
+      "from": "READY",
+      "to": "IN_PROGRESS",
+      "reason": "Implementation attempt 1 began from immutable base 8b1c13269f12df583a98f09c74bcc185143999a8."
     }
   ]
 }
@@ -137,6 +145,7 @@ No independent review round has been recorded. Review begins after the first imm
 |---|---|---|---|---|
 | `2026-08-17T02:12:18Z` | `human:MattSureham` | `NONE` | `INVESTIGATING` | Owner direction authorized the product-level autonomy objective and this capability milestone; specification evolution, accepted ADR, and this owning issue recorded; pipeline state `AUTHORIZED` |
 | `2026-08-17T02:31:39Z` | `agent:ClaudeCode-live` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
+| `2026-08-17T02:31:47Z` | `agent:ClaudeCode-live` | `INVESTIGATING` | `IMPLEMENTING` | Pipeline READY -> IN_PROGRESS. Implementation attempt 1 began from immutable base 8b1c13269f12df583a98f09c74bcc185143999a8. |
 
 ## Closure checklist
 
