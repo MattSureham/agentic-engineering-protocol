@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260817T021218Z-live-invocation`
 - **Title:** Implement the authorized live participant invocation capability milestone
-- **Status:** `REVIEW`
+- **Status:** `CLOSED`
 - **Severity:** `MEDIUM`
 - **Owner:** `ClaudeCode/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-17T02:12:18Z`
-- **Updated UTC:** `2026-08-17T06:27:00Z`
+- **Updated UTC:** `2026-08-17T06:27:41Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Product-level autonomy objective, Live invocation and autonomy demonstration phase (`LIVE-001`–`LIVE-004`), and `MILESTONE-20260817T021218Z-live-invocation-v1`
 - **ADRs:** [`ADR-20260817T021218Z-autonomy-end-state`](../ADR/ADR-20260817T021218Z-autonomy-end-state.md); [`ADR-20260814T092504Z-host-adapter-rotation`](../ADR/ADR-20260814T092504Z-host-adapter-rotation.md)
 - **Evidence:** [`EVIDENCE-20260814T092504Z-host-capability-probe`](../EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) (original launch-interface probes); [`EVIDENCE-20260817T023721Z-live-profile-probe`](../EVIDENCE/EVIDENCE-20260817T023721Z-live-profile-probe.md) (minimal tool-enabled profile and headless permission behavior)
@@ -80,7 +80,7 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260817T021218Z-live-invocation-v1",
   "authority_digest": "36f862db0345ff9667b7a3469fbc6a25750c8ef9e300324de181dc1f57659cea",
-  "state": "AWAITING_PEER_REVIEW",
+  "state": "ACCEPTED",
   "attempt": 1,
   "implementor": "agent:ClaudeCode-live",
   "base_revision": "8b1c13269f12df583a98f09c74bcc185143999a8",
@@ -88,7 +88,9 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "verification_evidence": [
     "EVIDENCE/EVIDENCE-20260817T025124Z-milestone-20260817t021218z-live-invocation-v1-attempt-1.json"
   ],
-  "review_references": [],
+  "review_references": [
+    "ISSUES/ISSUE-20260817T021218Z-live-invocation.md#2026-08-17t032754z--claudecodelive-review"
+  ],
   "events": [
     {
       "sequence": 1,
@@ -121,6 +123,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": "IN_PROGRESS",
       "to": "AWAITING_PEER_REVIEW",
       "reason": "Immutable target 83838e0b1a579f13706b4728da3c3219ed73a8e9 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260817T025124Z-milestone-20260817t021218z-live-invocation-v1-attempt-1.json."
+    },
+    {
+      "sequence": 5,
+      "utc": "2026-08-17T06:27:41Z",
+      "actor": "agent:ClaudeCode-live-record",
+      "from": "AWAITING_PEER_REVIEW",
+      "to": "ACCEPTED",
+      "reason": "Independent review ISSUES/ISSUE-20260817T021218Z-live-invocation.md#2026-08-17t032754z--claudecodelive-review approved the verified target with zero open material findings."
     }
   ]
 }
@@ -185,6 +195,7 @@ The JSON block is operational state bound to the accepted milestone contract. It
 | `2026-08-17T02:51:24Z` | `agent:ClaudeCode-live` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target 83838e0b1a579f13706b4728da3c3219ed73a8e9 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260817T025124Z-milestone-20260817t021218z-live-invocation-v1-attempt-1.json. |
 | `2026-08-17T03:27:54Z` | `ClaudeCode/live-review` | `REVIEW` | `REVIEW` | Independent review round 1 persisted: extracted-target verification (97 tests `OK`, validator `PASS`, five digests recomputed and matching), base ancestry and eight-path allowed scope confirmed, record-only post-target drift confirmed, and an eight-scenario adverse harness (`TOTAL 8 FAILED 0`) covering real-decision constraint parsing with registry-participant independence filtering, original raw-envelope classification, probed denial/budget shapes, malformed-denial fail-closed behavior, exact launcher argv for the committed profile, registry v2 validation boundaries, denial-then-advance end-to-end without escalation, and crash recovery without duplicate transition. Disposition `APPROVED`, zero open material findings; no pipeline transition (approval leaves `AWAITING_PEER_REVIEW` for the recorder) |
 | `2026-08-17T06:27:00Z` | `ClaudeCode/live-record` | `REVIEW` | `REVIEW` | Recorder verification before acceptance, without re-review: dispatcher routes to the recorder role and this label differs from both prior labels; the persisted round is mechanically parseable with disposition `APPROVED` and zero open material findings on the exact verified target `83838e0b1a579f13706b4728da3c3219ed73a8e9`; reviewer/implementor label inequality holds; base ancestry reproduced; post-target drift through `6c6bab7` is record-only; local HEAD, cached `origin/main`, and direct remote are equal with a clean worktree; completed the two evidence-supported closure-checklist items. |
+| `2026-08-17T06:27:41Z` | `agent:ClaudeCode-live-record` | `REVIEW` | `CLOSED` | Pipeline AWAITING_PEER_REVIEW -> ACCEPTED. Independent review ISSUES/ISSUE-20260817T021218Z-live-invocation.md#2026-08-17t032754z--claudecodelive-review approved the verified target with zero open material findings. |
 
 ## Closure checklist
 
