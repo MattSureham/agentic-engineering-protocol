@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-17T02:12:18Z`
-- **Updated UTC:** `2026-08-17T02:12:18Z`
+- **Updated UTC:** `2026-08-17T02:31:39Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Product-level autonomy objective, Live invocation and autonomy demonstration phase (`LIVE-001`–`LIVE-004`), and `MILESTONE-20260817T021218Z-live-invocation-v1`
 - **ADRs:** [`ADR-20260817T021218Z-autonomy-end-state`](../ADR/ADR-20260817T021218Z-autonomy-end-state.md); [`ADR-20260814T092504Z-host-adapter-rotation`](../ADR/ADR-20260814T092504Z-host-adapter-rotation.md)
 - **Evidence:** [`EVIDENCE-20260814T092504Z-host-capability-probe`](../EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) (original launch-interface probes); new live-profile probe evidence to be recorded under `EVIDENCE/` by this milestone
@@ -73,7 +73,7 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260817T021218Z-live-invocation-v1",
   "authority_digest": "36f862db0345ff9667b7a3469fbc6a25750c8ef9e300324de181dc1f57659cea",
-  "state": "AUTHORIZED",
+  "state": "READY",
   "attempt": 0,
   "implementor": null,
   "base_revision": null,
@@ -88,6 +88,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": null,
       "to": "AUTHORIZED",
       "reason": "Explicit product-level autonomy owner direction accepted through specification evolution with a compatible accepted ADR."
+    },
+    {
+      "sequence": 2,
+      "utc": "2026-08-17T02:31:39Z",
+      "actor": "agent:ClaudeCode-live",
+      "from": "AUTHORIZED",
+      "to": "READY",
+      "reason": "Validated transition AUTHORIZED to READY."
     }
   ]
 }
@@ -128,6 +136,7 @@ No independent review round has been recorded. Review begins after the first imm
 | UTC time | Participant | From | To | Action, evidence, and reason |
 |---|---|---|---|---|
 | `2026-08-17T02:12:18Z` | `human:MattSureham` | `NONE` | `INVESTIGATING` | Owner direction authorized the product-level autonomy objective and this capability milestone; specification evolution, accepted ADR, and this owning issue recorded; pipeline state `AUTHORIZED` |
+| `2026-08-17T02:31:39Z` | `agent:ClaudeCode-live` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 
 ## Closure checklist
 
