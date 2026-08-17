@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260814T092504Z-host-adapter-rotation`
 - **Title:** Implement the authorized host adapter and participant rotation milestone
-- **Status:** `REVIEW`
+- **Status:** `CLOSED`
 - **Severity:** `MEDIUM`
 - **Owner:** `ClaudeCode/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-14T09:25:04Z`
-- **Updated UTC:** `2026-08-17T01:52:00Z`
+- **Updated UTC:** `2026-08-17T01:50:59Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Host adapter and participant rotation phase and `MILESTONE-20260814T092504Z-host-rotation-v1`
 - **ADRs:** [`ADR-20260814T092504Z-host-adapter-rotation`](../ADR/ADR-20260814T092504Z-host-adapter-rotation.md); [`ADR-20260814T051405Z-automated-role-dispatch`](../ADR/ADR-20260814T051405Z-automated-role-dispatch.md); [`ADR-20260814T015817Z-authorized-milestone-pipeline`](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md)
 - **Evidence:** [`EVIDENCE-20260814T092504Z-host-capability-probe`](../EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) (live host capability probes establishing the launch-interface boundary)
@@ -80,7 +80,7 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260814T092504Z-host-rotation-v1",
   "authority_digest": "a38bb7bfd1511045e8e09b4a0dc6af7893f24a8a833e9a3faa444660cc3b977b",
-  "state": "AWAITING_PEER_REVIEW",
+  "state": "ACCEPTED",
   "attempt": 1,
   "implementor": "agent:ClaudeCode-rotation",
   "base_revision": "a21997dabfcc555c2b82458789aa75871f787055",
@@ -88,7 +88,9 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "verification_evidence": [
     "EVIDENCE/EVIDENCE-20260814T101357Z-milestone-20260814t092504z-host-rotation-v1-attempt-1.json"
   ],
-  "review_references": [],
+  "review_references": [
+    "ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md#2026-08-17t014005z--claudecoderotation-review"
+  ],
   "events": [
     {
       "sequence": 1,
@@ -121,6 +123,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": "IN_PROGRESS",
       "to": "AWAITING_PEER_REVIEW",
       "reason": "Immutable target d6471f54b7e75f255b308d44885146762642b261 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260814T101357Z-milestone-20260814t092504z-host-rotation-v1-attempt-1.json."
+    },
+    {
+      "sequence": 5,
+      "utc": "2026-08-17T01:50:59Z",
+      "actor": "agent:ClaudeCode-rotation-record",
+      "from": "AWAITING_PEER_REVIEW",
+      "to": "ACCEPTED",
+      "reason": "Independent review ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md#2026-08-17t014005z--claudecoderotation-review approved the verified target with zero open material findings."
     }
   ]
 }
@@ -187,6 +197,7 @@ The JSON block is operational state bound to the accepted milestone contract. It
 | `2026-08-14T10:13:57Z` | `agent:ClaudeCode-rotation` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target d6471f54b7e75f255b308d44885146762642b261 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260814T101357Z-milestone-20260814t092504z-host-rotation-v1-attempt-1.json. |
 | `2026-08-17T01:40:05Z` | `ClaudeCode/rotation-review` | `REVIEW` | `REVIEW` | Independent review round 1 persisted: target `d6471f54b7e75f255b308d44885146762642b261`, disposition `APPROVED`, zero open material findings, after extracted-target verification and an eight-scenario adverse reproduction including real-dispatcher constraint parsing, real probe-envelope classification, end-to-end stub-participant advancement, failure-taxonomy non-escalation, and crash recovery without duplicate transitions. |
 | `2026-08-17T01:52:00Z` | `ClaudeCode/rotation-record` | `REVIEW` | `REVIEW` | Recorder verification before acceptance, without re-review: dispatcher routes to the recorder role and this label differs from both prior labels; the persisted round is mechanically parseable with disposition `APPROVED` and zero open material findings on the exact verified target `d6471f54b7e75f255b308d44885146762642b261`; reviewer/implementor label inequality holds; base ancestry reproduced; post-target drift through `1be3a2c` is record-only; local HEAD, cached `origin/main`, and direct remote are equal with a clean worktree; completed the two evidence-supported closure-checklist items. |
+| `2026-08-17T01:50:59Z` | `agent:ClaudeCode-rotation-record` | `REVIEW` | `CLOSED` | Pipeline AWAITING_PEER_REVIEW -> ACCEPTED. Independent review ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md#2026-08-17t014005z--claudecoderotation-review approved the verified target with zero open material findings. |
 
 ## Closure checklist
 
