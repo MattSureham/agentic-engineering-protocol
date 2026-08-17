@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260817T021218Z-live-invocation`
 - **Title:** Implement the authorized live participant invocation capability milestone
-- **Status:** `IMPLEMENTING`
+- **Status:** `REVIEW`
 - **Severity:** `MEDIUM`
 - **Owner:** `ClaudeCode/root`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-17T02:12:18Z`
-- **Updated UTC:** `2026-08-17T02:45:09Z`
+- **Updated UTC:** `2026-08-17T02:51:24Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Product-level autonomy objective, Live invocation and autonomy demonstration phase (`LIVE-001`–`LIVE-004`), and `MILESTONE-20260817T021218Z-live-invocation-v1`
 - **ADRs:** [`ADR-20260817T021218Z-autonomy-end-state`](../ADR/ADR-20260817T021218Z-autonomy-end-state.md); [`ADR-20260814T092504Z-host-adapter-rotation`](../ADR/ADR-20260814T092504Z-host-adapter-rotation.md)
 - **Evidence:** [`EVIDENCE-20260814T092504Z-host-capability-probe`](../EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) (original launch-interface probes); [`EVIDENCE-20260817T023721Z-live-profile-probe`](../EVIDENCE/EVIDENCE-20260817T023721Z-live-profile-probe.md) (minimal tool-enabled profile and headless permission behavior)
@@ -68,6 +68,8 @@ The owner direction is recorded through specification evolution and summarized i
 | `2026-08-17T02:45:09Z` | `agent:ClaudeCode-live` | `python3 scripts/validate_protocol.py` | `PASS structural protocol validation (package_files=10 handoffs=2)`, exit `0` | Inline | Structural invariants only |
 | `2026-08-17T02:45:09Z` | `agent:ClaudeCode-live` | `LIVE-001`–`LIVE-004` conformance: probe-before-reliance evidence recorded for every relied-upon behavior; minimal profile (`Read,Edit,Write,Bash` + matching grant, no network tool, no permission-mode flags) pinned in registry v2; launcher emits `--allowedTools` only when non-empty (stub-captured argv tests); classifier maps non-empty `permission_denials` to the new `permission_denied` participant failure and malformed denial fields to `session_error`; budget class re-probed unchanged; suite remains stub-only (ROTATE-008 unchanged); no live runner invocation against this repository | Each requirement maps to probe evidence or stub-suite tests; denial shapes never produce a `BLOCKED_HUMAN_AUTHORITY` transition; v1 registries and unrecognized envelope fields fail closed | `tests/test_run_rotation.py` (8 new tests), [`EVIDENCE-20260817T023721Z-live-profile-probe`](../EVIDENCE/EVIDENCE-20260817T023721Z-live-profile-probe.md) | Live runner operation begins only with milestone 5's demonstration; semantic adequacy of the profile for real role work is demonstrated there, not here |
 
+- **Pipeline verification `2026-08-17T02:51:24Z`:** [`EVIDENCE/EVIDENCE-20260817T025124Z-milestone-20260817t021218z-live-invocation-v1-attempt-1.json`](../EVIDENCE/EVIDENCE-20260817T025124Z-milestone-20260817t021218z-live-invocation-v1-attempt-1.json) — deterministic structural and accepted-command gates passed for `83838e0b1a579f13706b4728da3c3219ed73a8e9`.
+
 ## Pipeline state
 
 The JSON block is operational state bound to the accepted milestone contract. It does not contain or override scope.
@@ -78,12 +80,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260817T021218Z-live-invocation-v1",
   "authority_digest": "36f862db0345ff9667b7a3469fbc6a25750c8ef9e300324de181dc1f57659cea",
-  "state": "IN_PROGRESS",
+  "state": "AWAITING_PEER_REVIEW",
   "attempt": 1,
   "implementor": "agent:ClaudeCode-live",
   "base_revision": "8b1c13269f12df583a98f09c74bcc185143999a8",
-  "target_revision": null,
-  "verification_evidence": [],
+  "target_revision": "83838e0b1a579f13706b4728da3c3219ed73a8e9",
+  "verification_evidence": [
+    "EVIDENCE/EVIDENCE-20260817T025124Z-milestone-20260817t021218z-live-invocation-v1-attempt-1.json"
+  ],
   "review_references": [],
   "events": [
     {
@@ -109,6 +113,14 @@ The JSON block is operational state bound to the accepted milestone contract. It
       "from": "READY",
       "to": "IN_PROGRESS",
       "reason": "Implementation attempt 1 began from immutable base 8b1c13269f12df583a98f09c74bcc185143999a8."
+    },
+    {
+      "sequence": 4,
+      "utc": "2026-08-17T02:51:24Z",
+      "actor": "agent:ClaudeCode-live",
+      "from": "IN_PROGRESS",
+      "to": "AWAITING_PEER_REVIEW",
+      "reason": "Immutable target 83838e0b1a579f13706b4728da3c3219ed73a8e9 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260817T025124Z-milestone-20260817t021218z-live-invocation-v1-attempt-1.json."
     }
   ]
 }
@@ -155,6 +167,7 @@ No independent review round has been recorded. Review begins after the first imm
 | `2026-08-17T02:31:39Z` | `agent:ClaudeCode-live` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 | `2026-08-17T02:31:47Z` | `agent:ClaudeCode-live` | `INVESTIGATING` | `IMPLEMENTING` | Pipeline READY -> IN_PROGRESS. Implementation attempt 1 began from immutable base 8b1c13269f12df583a98f09c74bcc185143999a8. |
 | `2026-08-17T02:45:09Z` | `agent:ClaudeCode-live` | `IMPLEMENTING` | `IMPLEMENTING` | Implemented attempt 1 within the contract allowed paths: five live probes recorded in `EVIDENCE-20260817T023721Z-live-profile-probe.md` (minimal profile `Read,Edit,Write,Bash` + matching grant; silent success-shaped permission denial machine-readable via `permission_denials`; budget class unchanged); registry evolved to schema `rotation-participants/v2` with `allowed_tools`; launcher emits `--allowedTools` only when non-empty; classifier gains the `permission_denied` participant-failure class with fail-closed malformed-field handling; 8 new stub-launcher tests (97 total `OK`); `ROLE_CONTRACTS.md` and `README.md` conformed; verification rows recorded above |
+| `2026-08-17T02:51:24Z` | `agent:ClaudeCode-live` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target 83838e0b1a579f13706b4728da3c3219ed73a8e9 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260817T025124Z-milestone-20260817t021218z-live-invocation-v1-attempt-1.json. |
 
 ## Closure checklist
 
