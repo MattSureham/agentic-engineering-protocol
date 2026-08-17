@@ -10,10 +10,10 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-17T02:12:18Z`
-- **Updated UTC:** `2026-08-17T02:31:47Z`
+- **Updated UTC:** `2026-08-17T02:45:09Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Product-level autonomy objective, Live invocation and autonomy demonstration phase (`LIVE-001`–`LIVE-004`), and `MILESTONE-20260817T021218Z-live-invocation-v1`
 - **ADRs:** [`ADR-20260817T021218Z-autonomy-end-state`](../ADR/ADR-20260817T021218Z-autonomy-end-state.md); [`ADR-20260814T092504Z-host-adapter-rotation`](../ADR/ADR-20260814T092504Z-host-adapter-rotation.md)
-- **Evidence:** [`EVIDENCE-20260814T092504Z-host-capability-probe`](../EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) (original launch-interface probes); new live-profile probe evidence to be recorded under `EVIDENCE/` by this milestone
+- **Evidence:** [`EVIDENCE-20260814T092504Z-host-capability-probe`](../EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) (original launch-interface probes); [`EVIDENCE-20260817T023721Z-live-profile-probe`](../EVIDENCE/EVIDENCE-20260817T023721Z-live-profile-probe.md) (minimal tool-enabled profile and headless permission behavior)
 - **Milestone:** `MILESTONE-20260817T021218Z-live-invocation-v1`
 
 Primary states are `OPEN`, `INVESTIGATING`, `IMPLEMENTING`, `VERIFYING`, `REVIEW`, and `CLOSED`. `BLOCKED` records a temporary side state. Code written is not closure.
@@ -37,7 +37,8 @@ Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) `LIVE-001`–`LIVE-004` define the 
 - **CONFIRMED:** The accepted runner's launcher is stub-injectable and flag-driven; conforming it to a verified widened profile is a bounded change within the allowed paths.
 - **CONFIRMED:** The reusable ten-file package is out of scope; all changes are root-only.
 - **INFERRED:** The minimal profile includes file read/edit, shell execution for checks and Git, and no network tools beyond what the host session itself manages. Facts: role contracts require reading, editing within allowed paths, running checks, committing, and recording transitions; the demonstration milestone needs exactly those.
-- **UNKNOWN:** Headless permission behavior with tools enabled (prompts, denials, exit envelopes), long-running session stability, and rate limits. Resolution path: this milestone's probe evidence; anything unprobed stays prohibited and fails closed.
+- **CONFIRMED:** Headless permission behavior with tools enabled is probed and machine-readable: denial arrives as a success-shaped envelope with a non-empty `permission_denials` array and absent work product ([`EVIDENCE-20260817T023721Z-live-profile-probe`](../EVIDENCE/EVIDENCE-20260817T023721Z-live-profile-probe.md)).
+- **UNKNOWN:** Long-running session stability, rate limits, envelope stability across CLI versions, and any tool outside the four probed. Resolution path: anything unprobed stays prohibited and fails closed.
 
 ## Investigation and decision
 
@@ -46,7 +47,7 @@ The owner direction is recorded through specification evolution and summarized i
 ## Change
 
 - **Files or components:** New probe evidence under `EVIDENCE/`; `scripts/run_rotation.py`; `tests/test_run_rotation.py`; `ROTATION_PARTICIPANTS.json`; `ROLE_CONTRACTS.md`; `README.md`; this issue; `HANDOFF.md`; `HUMAN_CHECKPOINT.md`.
-- **Behavior changed:** Real launches use a minimal probe-verified tool-enabled profile; the stub-only test suite and the failure taxonomy are preserved and extended to any newly observed behavior.
+- **Behavior changed:** Real launches use the minimal probe-verified tool-enabled profile (`--tools "Read,Edit,Write,Bash"` with the matching `--allowedTools` grant, registry schema `rotation-participants/v2`); the failure taxonomy gains the probed `permission_denied` participant-failure class; the stub-only test suite is preserved and extended to the profile handling and denial shapes.
 - **Out-of-scope work deliberately excluded:** The autonomy demonstration itself (milestone 5); changes to the accepted pipeline or dispatcher tools; the reusable package; any unprobed capability; the four still-`BLOCKED` capability deferrals.
 - **Rollback or recovery:** Revert the immutable target while preserving the owner direction, accepted specification/ADR records, and probe evidence.
 
@@ -62,6 +63,10 @@ The owner direction is recorded through specification evolution and summarized i
 | UTC time | Participant | Command or procedure | Result and exit status | Evidence | Limitations |
 |---|---|---|---|---|---|
 | `2026-08-17T02:12:18Z` | `ClaudeCode/root` | Authority-boundary recording only: parsed the updated five-milestone contract with the accepted pipeline parser; verified milestones 1–3 digests unchanged and milestone 4 digest computed | Contract parses; milestone-1 `36fba5d84569105f11c8a6c2052c54dfdd4efe8f3ad63279be4b051c263ca7d4`, milestone-2 `afe725805d919f850e7d44017a2b4b63ba6b0f3453ec6bea84ece1ee265b638c`, milestone-3 `a38bb7bfd1511045e8e09b4a0dc6af7893f24a8a833e9a3faa444660cc3b977b` unchanged; milestone-4 digest `36f862db0345ff9667b7a3469fbc6a25750c8ef9e300324de181dc1f57659cea` | This issue and the accepted specification/ADR | No implementation exists yet; deterministic verification begins with the first attempt |
+| `2026-08-17T02:37:21Z` | `agent:ClaudeCode-live` | Five live headless probes in `/tmp/aep-live-probe` (read without grant; edit+shell without grant; edit+shell with grant; write with grant; budget exhaustion under the widened profile), all with `--max-budget-usd` caps, zero-byte stderr, and on-disk side-effect checks | Read without grant: exit `0`, `subtype: success`, `permission_denials: []`; edit+shell without grant: exit `0`, `subtype: success`, **`permission_denials` non-empty, fixture unchanged** (silent denial, machine-readable only via the field); edit+shell with grant: exit `0`, denials empty, fixture edited and `wc` output returned; write with grant: exit `0`, `created.txt` created; budget probe: exit `1`, `subtype: error_max_budget_usd`, `is_error: true` | [`EVIDENCE-20260817T023721Z-live-profile-probe`](../EVIDENCE/EVIDENCE-20260817T023721Z-live-profile-probe.md) | Single host, single CLI version `2.1.118`; long-running stability, `--resume` under the widened profile, and rate limits unprobed; total probe spend under $0.15 |
+| `2026-08-17T02:45:09Z` | `agent:ClaudeCode-live` | `python3 -m unittest discover -s tests -v` | 97 tests `OK` (89 retained pipeline/structural/dispatch/rotation tests plus 8 new live-profile conformance tests), exit `0` | `tests/test_run_rotation.py` and this row | Stub launcher only; no real session launched by the suite; recorded Darwin/Python 3.9 environment |
+| `2026-08-17T02:45:09Z` | `agent:ClaudeCode-live` | `python3 scripts/validate_protocol.py` | `PASS structural protocol validation (package_files=10 handoffs=2)`, exit `0` | Inline | Structural invariants only |
+| `2026-08-17T02:45:09Z` | `agent:ClaudeCode-live` | `LIVE-001`–`LIVE-004` conformance: probe-before-reliance evidence recorded for every relied-upon behavior; minimal profile (`Read,Edit,Write,Bash` + matching grant, no network tool, no permission-mode flags) pinned in registry v2; launcher emits `--allowedTools` only when non-empty (stub-captured argv tests); classifier maps non-empty `permission_denials` to the new `permission_denied` participant failure and malformed denial fields to `session_error`; budget class re-probed unchanged; suite remains stub-only (ROTATE-008 unchanged); no live runner invocation against this repository | Each requirement maps to probe evidence or stub-suite tests; denial shapes never produce a `BLOCKED_HUMAN_AUTHORITY` transition; v1 registries and unrecognized envelope fields fail closed | `tests/test_run_rotation.py` (8 new tests), [`EVIDENCE-20260817T023721Z-live-profile-probe`](../EVIDENCE/EVIDENCE-20260817T023721Z-live-profile-probe.md) | Live runner operation begins only with milestone 5's demonstration; semantic adequacy of the profile for real role work is demonstrated there, not here |
 
 ## Pipeline state
 
@@ -137,7 +142,10 @@ No independent review round has been recorded. Review begins after the first imm
 
 ## Residual uncertainty
 
-- Headless permission behavior with tools enabled, long-running session stability, and host rate limits remain `UNKNOWN` pending this milestone's probe evidence; anything unprobed remains prohibited and fails closed.
+- Long-running session stability, host rate limits, envelope stability across CLI versions, and behavior under other authentication modes remain `UNKNOWN` and are owned by this issue's fail-closed requirement; the owner accepts this residual risk within the authorized slice.
+- `--resume` under the widened profile was not re-probed; the runner's current launch path does not use `--resume`, so this gap is inert but recorded.
+- Ambient host settings participated in the no-grant probes (Read permitted ambiently, Edit denied); only the explicit-grant profile is relied upon, and behavior under different host settings may differ.
+- Whether the minimal profile is semantically sufficient for real role work (prompt adequacy, multi-turn task completion) is demonstrated by milestone 5's gated dogfood run, not by this milestone's probes; the dependency ordering in the accepted ADR keeps that demonstration's evidence clean if this profile proves insufficient.
 
 ## Activity history
 
@@ -146,15 +154,16 @@ No independent review round has been recorded. Review begins after the first imm
 | `2026-08-17T02:12:18Z` | `human:MattSureham` | `NONE` | `INVESTIGATING` | Owner direction authorized the product-level autonomy objective and this capability milestone; specification evolution, accepted ADR, and this owning issue recorded; pipeline state `AUTHORIZED` |
 | `2026-08-17T02:31:39Z` | `agent:ClaudeCode-live` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 | `2026-08-17T02:31:47Z` | `agent:ClaudeCode-live` | `INVESTIGATING` | `IMPLEMENTING` | Pipeline READY -> IN_PROGRESS. Implementation attempt 1 began from immutable base 8b1c13269f12df583a98f09c74bcc185143999a8. |
+| `2026-08-17T02:45:09Z` | `agent:ClaudeCode-live` | `IMPLEMENTING` | `IMPLEMENTING` | Implemented attempt 1 within the contract allowed paths: five live probes recorded in `EVIDENCE-20260817T023721Z-live-profile-probe.md` (minimal profile `Read,Edit,Write,Bash` + matching grant; silent success-shaped permission denial machine-readable via `permission_denials`; budget class unchanged); registry evolved to schema `rotation-participants/v2` with `allowed_tools`; launcher emits `--allowedTools` only when non-empty; classifier gains the `permission_denied` participant-failure class with fail-closed malformed-field handling; 8 new stub-launcher tests (97 total `OK`); `ROLE_CONTRACTS.md` and `README.md` conformed; verification rows recorded above |
 
 ## Closure checklist
 
-- [ ] Expected behavior is tied to a higher-authority source.
-- [ ] The change or resolution is recorded.
-- [ ] Required verification ran and evidence is linked; unavailable checks remain explicit.
-- [ ] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies.
+- [x] Expected behavior is tied to a higher-authority source.
+- [x] The change or resolution is recorded.
+- [x] Required verification ran and evidence is linked; unavailable checks remain explicit.
+- [x] If `Review: SELF`, the Self-review outcome is `COMPLETE` and no independent-review risk category applies. — `NOT_APPLICABLE`: review is `INDEPENDENT`.
 - [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved.
-- [ ] Required human authority is recorded in the owning artifact: product/contract in `PROJECT_SPEC.md`, architecture in an accepted ADR, or both for a mixed decision.
-- [ ] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
-- [ ] Residual uncertainty is absent or explicitly owned.
+- [x] Required human authority is recorded in the owning artifact: product/contract in `PROJECT_SPEC.md`, architecture in an accepted ADR, or both for a mixed decision.
+- [x] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
+- [x] Residual uncertainty is absent or explicitly owned.
 - [ ] HANDOFF reflects the resulting current state and exactly one next action.

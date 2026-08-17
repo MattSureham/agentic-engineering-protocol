@@ -7,12 +7,12 @@ participant from the durable registry (ROTATION_PARTICIPANTS.json) after
 independence filtering, launches it through the probed `claude -p` interface,
 classifies the result envelope, and appends every step to the append-only
 ledger (ROTATION_LOG.jsonl). Participant failures — launch failure, quota
-exhaustion, timeout, session error, non-advancing completion — are operational
-outcomes with bounded retry/rotation and never become BLOCKED_HUMAN_AUTHORITY
-transitions. The runner executes no pipeline transitions itself: launched
-participants receive the dispatcher-emitted commands with their own label
-substituted. Recovery re-reads the dispatcher and reconciles against the
-ledger; pipeline state remains authoritative.
+exhaustion, timeout, session error, permission denial, non-advancing
+completion — are operational outcomes with bounded retry/rotation and never
+become BLOCKED_HUMAN_AUTHORITY transitions. The runner executes no pipeline
+transitions itself: launched participants receive the dispatcher-emitted
+commands with their own label substituted. Recovery re-reads the dispatcher
+and reconciles against the ledger; pipeline state remains authoritative.
 """
 
 import argparse
@@ -28,14 +28,14 @@ from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 from run_pipeline import ACTOR_RE, PipelineError
 
 
-REGISTRY_SCHEMA = "rotation-participants/v1"
+REGISTRY_SCHEMA = "rotation-participants/v2"
 LEDGER_SCHEMA = "rotation-log/v1"
 REGISTRY_PATH = "ROTATION_PARTICIPANTS.json"
 LEDGER_PATH = "ROTATION_LOG.jsonl"
 
 OUTCOMES = {
     "success_advancing", "launch_failure", "quota_exhausted",
-    "session_error", "timeout", "non_advancing",
+    "session_error", "timeout", "non_advancing", "permission_denied",
 }
 STOP_REASONS = {
     "terminal_no_authorized_work", "human_authority_required",
@@ -45,9 +45,9 @@ STOP_REASONS = {
 
 DEFAULTS_KEYS = {
     "max_attempts_per_decision", "max_steps", "max_spend_usd",
-    "timeout_seconds", "max_budget_usd", "tools",
+    "timeout_seconds", "max_budget_usd", "tools", "allowed_tools",
 }
-PARTICIPANT_KEYS = {"label", "max_budget_usd", "tools"}
+PARTICIPANT_KEYS = {"label", "max_budget_usd", "tools", "allowed_tools"}
 
 BOUND_IMPLEMENTOR_RE = re.compile(
     r"^Attempt \d+ is bound to implementor label (?P<label>\S+); that participant continues it\.$"
@@ -120,6 +120,8 @@ def load_registry(root: Path) -> Dict[str, Any]:
             raise RotationError("AEP-ROTATE-SCHEMA", REGISTRY_PATH, "default {} must be a positive number".format(key))
     if not isinstance(defaults["tools"], str):
         raise RotationError("AEP-ROTATE-SCHEMA", REGISTRY_PATH, "default tools must be a string")
+    if not isinstance(defaults["allowed_tools"], str):
+        raise RotationError("AEP-ROTATE-SCHEMA", REGISTRY_PATH, "default allowed_tools must be a string")
     participants = registry.get("participants")
     if not isinstance(participants, list) or not participants:
         raise RotationError("AEP-ROTATE-SCHEMA", REGISTRY_PATH, "registry must declare at least one participant")
@@ -136,6 +138,8 @@ def load_registry(root: Path) -> Dict[str, Any]:
                 raise RotationError("AEP-ROTATE-SCHEMA", REGISTRY_PATH, "participant {} must be a positive number".format(key))
         if "tools" in entry and not isinstance(entry["tools"], str):
             raise RotationError("AEP-ROTATE-SCHEMA", REGISTRY_PATH, "participant tools must be a string")
+        if "allowed_tools" in entry and not isinstance(entry["allowed_tools"], str):
+            raise RotationError("AEP-ROTATE-SCHEMA", REGISTRY_PATH, "participant allowed_tools must be a string")
     if len(set(labels)) != len(labels):
         raise RotationError("AEP-ROTATE-SCHEMA", REGISTRY_PATH, "participant labels must be unique")
     return registry
@@ -190,12 +194,15 @@ def default_decide(root: Path) -> Dict[str, Any]:
 def default_launch(prompt: str, participant: Dict[str, Any], defaults: Dict[str, Any]) -> LaunchResult:
     budget = participant.get("max_budget_usd", defaults["max_budget_usd"])
     tools = participant.get("tools", defaults["tools"])
+    allowed_tools = participant.get("allowed_tools", defaults["allowed_tools"])
     command = [
         "claude", "-p", prompt,
         "--output-format", "json",
         "--tools", tools,
         "--max-budget-usd", str(budget),
     ]
+    if allowed_tools:
+        command.extend(["--allowedTools", allowed_tools])
     try:
         result = subprocess.run(
             command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
@@ -288,14 +295,19 @@ def classify(result: LaunchResult) -> Tuple[str, Optional[str], Optional[float]]
     is_error = envelope.get("is_error")
     session_id = envelope.get("session_id")
     cost = envelope.get("total_cost_usd")
+    denials = envelope.get("permission_denials")
     if not isinstance(subtype, str) or not isinstance(is_error, bool):
         return "session_error", None, None
     if session_id is not None and not isinstance(session_id, str):
         return "session_error", None, None
     if cost is not None and (not isinstance(cost, (int, float)) or isinstance(cost, bool)):
         return "session_error", None, None
+    if denials is not None and not isinstance(denials, list):
+        return "session_error", None, None
     if subtype == "error_max_budget_usd" and is_error:
         return "quota_exhausted", session_id, cost
+    if denials:
+        return "permission_denied", session_id, cost
     if subtype == "success" and not is_error and result.returncode == 0:
         return "success", session_id, cost
     return "session_error", session_id, cost

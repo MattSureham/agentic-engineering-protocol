@@ -40,7 +40,7 @@ def make_decision(
     }
 
 
-def envelope(subtype: str, is_error: bool, cost: float = 0.01, session: str = "sess-1", returncode: int = 0) -> rotation.LaunchResult:
+def envelope(subtype: str, is_error: bool, cost: float = 0.01, session: str = "sess-1", returncode: int = 0, denials: Optional[List[Any]] = None) -> rotation.LaunchResult:
     payload = {
         "type": "result",
         "subtype": subtype,
@@ -49,6 +49,8 @@ def envelope(subtype: str, is_error: bool, cost: float = 0.01, session: str = "s
         "total_cost_usd": cost,
         "result": "OK" if not is_error else None,
     }
+    if denials is not None:
+        payload["permission_denials"] = denials
     return rotation.LaunchResult("completed", returncode, json.dumps(payload), "")
 
 
@@ -67,6 +69,7 @@ class RotationHarness:
                 "timeout_seconds": 5,
                 "max_budget_usd": 0.25,
                 "tools": "",
+                "allowed_tools": "",
             },
             "participants": [{"label": label} for label in labels],
         }
@@ -259,6 +262,22 @@ class RotationFailureTaxonomyTests(unittest.TestCase):
         self._failure_then_advance(envelope("success", False))
         self.assertEqual(self.harness.outcomes()[0], "non_advancing")
 
+    def test_permission_denials_are_a_participant_failure(self) -> None:
+        reason = self._failure_then_advance(envelope("success", False, denials=[{"tool_name": "Edit", "tool_input": {"file_path": "x"}}]))
+        self.assertEqual(reason, "terminal_no_authorized_work")
+        self.assertEqual(self.harness.outcomes(), ["permission_denied", "success_advancing"])
+        self.assertEqual(self.harness.launches, ["agent:p1", "agent:p2"])
+        self.assertNotIn("BLOCKED", json.dumps(self.harness.ledger()))
+
+    def test_malformed_permission_denials_fail_closed(self) -> None:
+        payload = {
+            "type": "result", "subtype": "success", "is_error": False,
+            "session_id": "sess-1", "total_cost_usd": 0.01,
+            "permission_denials": "Edit",
+        }
+        self._failure_then_advance(rotation.LaunchResult("completed", 0, json.dumps(payload), ""))
+        self.assertEqual(self.harness.outcomes()[0], "session_error")
+
     def test_retry_rotates_to_the_next_eligible_participant(self) -> None:
         self._failure_then_advance(envelope("success", False))
         self.assertEqual(self.harness.launches, ["agent:p1", "agent:p2"])
@@ -422,11 +441,75 @@ class RotationRegistryTests(unittest.TestCase):
         with self.assertRaises(rotation.RotationError):
             self.harness.run()
 
+    def test_v1_schema_rejected(self) -> None:
+        self.harness.registry["schema"] = "rotation-participants/v1"
+        self.harness.write_registry(self.harness.registry)
+        with self.assertRaises(rotation.RotationError):
+            self.harness.run()
+
+    def test_missing_allowed_tools_default_rejected(self) -> None:
+        del self.harness.registry["defaults"]["allowed_tools"]
+        self.harness.write_registry(self.harness.registry)
+        with self.assertRaises(rotation.RotationError):
+            self.harness.run()
+
+    def test_non_string_allowed_tools_rejected(self) -> None:
+        self.harness.registry["participants"][0]["allowed_tools"] = ["Read"]
+        self.harness.write_registry(self.harness.registry)
+        with self.assertRaises(rotation.RotationError):
+            self.harness.run()
+
     def test_empty_participants_rejected(self) -> None:
         self.harness.registry["participants"] = []
         self.harness.write_registry(self.harness.registry)
         with self.assertRaises(rotation.RotationError):
             self.harness.run()
+
+
+class RotationLauncherTests(unittest.TestCase):
+    def _capture(self, defaults: Dict[str, Any], participant: Optional[Dict[str, Any]] = None) -> List[str]:
+        captured: Dict[str, Any] = {}
+
+        class Result:
+            returncode = 0
+            stdout = json.dumps({
+                "type": "result", "subtype": "success", "is_error": False,
+                "session_id": "sess-1", "total_cost_usd": 0.01,
+            })
+            stderr = ""
+
+        def fake_run(command: List[str], **kwargs: Any) -> Result:
+            captured["command"] = command
+            captured["timeout"] = kwargs.get("timeout")
+            return Result()
+
+        original = rotation.subprocess.run
+        rotation.subprocess.run = fake_run
+        try:
+            rotation.default_launch("prompt", participant or {}, defaults)
+        finally:
+            rotation.subprocess.run = original
+        return captured["command"]
+
+    def _defaults(self, allowed_tools: str) -> Dict[str, Any]:
+        return {
+            "max_budget_usd": 0.5, "tools": "Read,Edit,Write,Bash",
+            "allowed_tools": allowed_tools, "timeout_seconds": 5,
+        }
+
+    def test_launch_includes_allowed_tools_when_set(self) -> None:
+        command = self._capture(self._defaults("Read,Edit,Write,Bash"))
+        self.assertEqual(command[command.index("--tools") + 1], "Read,Edit,Write,Bash")
+        self.assertEqual(command[command.index("--allowedTools") + 1], "Read,Edit,Write,Bash")
+        self.assertEqual(command[command.index("--max-budget-usd") + 1], "0.5")
+
+    def test_launch_omits_allowed_tools_when_empty(self) -> None:
+        command = self._capture(self._defaults(""))
+        self.assertNotIn("--allowedTools", command)
+
+    def test_participant_allowed_tools_override_the_default(self) -> None:
+        command = self._capture(self._defaults("Read,Edit,Write,Bash"), participant={"allowed_tools": "Read"})
+        self.assertEqual(command[command.index("--allowedTools") + 1], "Read")
 
 
 class RotationCliTests(unittest.TestCase):

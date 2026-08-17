@@ -1,12 +1,13 @@
 {
-  "schema": "rotation-participants/v1",
+  "schema": "rotation-participants/v2",
   "defaults": {
     "max_attempts_per_decision": 2,
     "max_steps": 8,
     "max_spend_usd": 5.0,
     "timeout_seconds": 1800,
     "max_budget_usd": 1.0,
-    "tools": ""
+    "tools": "Read,Edit,Write,Bash",
+    "allowed_tools": "Read,Edit,Write,Bash"
   },
   "participants": [
     {
