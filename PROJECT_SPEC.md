@@ -10,8 +10,8 @@ The output should be a self-contained template/protocol that can later be copied
 
 - **Status:** `ACCEPTED`
 - **Human technical owner:** `MattSureham`
-- **Current accepted change:** Host adapter and participant rotation phase approved before implementation on `2026-08-14`; the Automated role dispatch phase and the Authorized milestone pipeline phase approved on `2026-08-14` remain in force; prior accepted requirements remain in force except where explicitly superseded below
-- **Authority record:** [`ISSUE-20260814T092504Z-host-adapter-rotation`](ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md), [`ADR-20260814T092504Z-host-adapter-rotation`](ADR/ADR-20260814T092504Z-host-adapter-rotation.md), [`EVIDENCE-20260814T092504Z-host-capability-probe`](EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md), [`ISSUE-20260814T051405Z-role-dispatch`](ISSUES/ISSUE-20260814T051405Z-role-dispatch.md), [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md), [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), and [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
+- **Current accepted change:** Product-level autonomy objective plus the live invocation capability and unattended autonomy demonstration milestones approved before implementation on `2026-08-17`; the Host adapter and participant rotation phase, the Automated role dispatch phase, and the Authorized milestone pipeline phase approved on `2026-08-14` remain in force; prior accepted requirements remain in force except where explicitly superseded below
+- **Authority record:** [`ISSUE-20260817T021218Z-autonomy-demonstration`](ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md), [`ISSUE-20260817T021218Z-live-invocation`](ISSUES/ISSUE-20260817T021218Z-live-invocation.md), [`ADR-20260817T021218Z-autonomy-end-state`](ADR/ADR-20260817T021218Z-autonomy-end-state.md), [`ISSUE-20260814T092504Z-host-adapter-rotation`](ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md), [`ADR-20260814T092504Z-host-adapter-rotation`](ADR/ADR-20260814T092504Z-host-adapter-rotation.md), [`EVIDENCE-20260814T092504Z-host-capability-probe`](EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md), [`ISSUE-20260814T051405Z-role-dispatch`](ISSUES/ISSUE-20260814T051405Z-role-dispatch.md), [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md), [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), and [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
 
 # Goal
 
@@ -31,6 +31,17 @@ The protocol must treat agents as replaceable participants.
 No participant should need access to previous chat sessions.
 
 Repository state + protocol artifacts must be sufficient to continue work.
+
+# Product-level autonomy objective
+
+This section states the product-level end state for root automation. It is a top-level requirement: it governs the interpretation of every automation phase below, and no component milestone acceptance satisfies it.
+
+- **AUTONOMY-001 — End state:** Given one or more milestones already authorized in this specification, the system MUST be capable of progressing them through implementation, verification, independent peer review, authorized fix/re-review loops, recording/acceptance, and continuation to subsequent authorized milestones without the owner manually: deciding which participant acts next; copying role prompts between participants; launching each routine participant; approving routine transitions; recovering interrupted work; or retrying quota-exhausted or otherwise unavailable participants.
+- **AUTONOMY-002 — Stop conditions:** The system MAY stop for the owner only when genuine new human authority is required, when bounded recovery is exhausted according to this specification, or when no authorized work remains. Participant failure — launch failure, quota exhaustion, timeout, session error, or non-advancing completion — is never, by itself, new human authority.
+- **AUTONOMY-003 — Repository authority:** Repository state remains authoritative. The accepted milestone pipeline remains the only lifecycle mutation path, dispatcher decisions remain the only routing source, and automation components execute and record; they never create scope, redefine eligibility, or override durable records.
+- **AUTONOMY-004 — Acceptance boundary:** Component milestones (structural validation, pipeline, dispatch, rotation, and any later enabling milestone) are enabling capabilities only. This objective is established exclusively by a real end-to-end unattended dogfood run, on this repository, using the verified host invocation capability, in which multiple distinct participant roles — at minimum implementer, independent reviewer, and recorder, under distinct participant labels — progress at least one real authorized milestone from `AUTHORIZED` to `ACCEPTED` after a single bounded runner invocation. Stub-only or simulated participant execution is insufficient to establish this objective.
+- **AUTONOMY-005 — Objective evidence:** The demonstration MUST leave durable, independently checkable evidence: the append-only rotation ledger recording every launch, outcome classification, retry, rotation, and stop; the demonstrated milestone's pipeline events naming launched participant labels as transition actors; an independent review round persisted by a launched reviewer; the `ACCEPTED` transition recorded by a launched recorder; and the reconciliation records. The evidence MUST make any owner or operator routing action between runner start and terminal stop visible; the autonomy claim requires that there were none.
+- **AUTONOMY-006 — Terminal-idle interpretation:** A terminal no-authorized-work dispatch decision is a valid idle state of the contract model, not evidence that this objective is met. Until the AUTONOMY-004 demonstration exists and is accepted, reaching `ROLE none` MUST NOT be reported or recorded as automation completion.
 
 # Core principle
 
@@ -665,6 +676,85 @@ The JSON object between the exact markers is normative content of this accepted 
         }
       ],
       "review": "INDEPENDENT"
+    },
+    {
+      "id": "MILESTONE-20260817T021218Z-live-invocation-v1",
+      "order": 4,
+      "title": "Live participant invocation capability",
+      "issue": "ISSUES/ISSUE-20260817T021218Z-live-invocation.md",
+      "depends_on": [
+        "MILESTONE-20260814T092504Z-host-rotation-v1"
+      ],
+      "scope": [
+        "Establish by recorded live probe evidence the minimal tool-enabled headless launch profile that lets a launched participant perform the role contracts, including headless permission behavior, and record that profile as the verified capability boundary.",
+        "Conform the rotation runner, participant registry, role contracts, and stub-launcher tests to the verified live profile so real launches use exactly probed behavior and unrecognized behavior fails closed through the existing taxonomy."
+      ],
+      "allowed_paths": [
+        "EVIDENCE/",
+        "scripts/run_rotation.py",
+        "tests/test_run_rotation.py",
+        "ROTATION_PARTICIPANTS.json",
+        "ROLE_CONTRACTS.md",
+        "README.md",
+        "HANDOFF.md",
+        "HUMAN_CHECKPOINT.md",
+        "ISSUES/ISSUE-20260817T021218Z-live-invocation.md"
+      ],
+      "acceptance_checks": [
+        {
+          "id": "repository-unit-tests",
+          "argv": [
+            "python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v"
+          ],
+          "timeout_seconds": 120
+        }
+      ],
+      "review": "INDEPENDENT"
+    },
+    {
+      "id": "MILESTONE-20260817T021218Z-autonomy-demonstration-v1",
+      "order": 5,
+      "title": "Unattended autonomy demonstration",
+      "issue": "ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md",
+      "depends_on": [
+        "MILESTONE-20260817T021218Z-live-invocation-v1"
+      ],
+      "scope": [
+        "Implement the bounded vehicle change: conform the root ISSUES/TEMPLATE.md activity-history section to the accepted pipeline's table-only gate, leaving the reusable package untouched.",
+        "Execute this milestone's own implementation, independent review, and acceptance as the AUTONOMY-004 unattended dogfood run: one bounded runner invocation launches distinct participants for the implementer, independent-reviewer, and recorder roles, and the durable ledger, pipeline events, review round, and reconciliation records prove the absence of owner or operator routing."
+      ],
+      "allowed_paths": [
+        "ISSUES/TEMPLATE.md",
+        "ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md",
+        "EVIDENCE/",
+        "ROTATION_LOG.jsonl",
+        "ROTATION_PARTICIPANTS.json",
+        "HANDOFF.md",
+        "HUMAN_CHECKPOINT.md",
+        "README.md"
+      ],
+      "acceptance_checks": [
+        {
+          "id": "repository-unit-tests",
+          "argv": [
+            "python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v"
+          ],
+          "timeout_seconds": 120
+        }
+      ],
+      "review": "INDEPENDENT"
     }
   ]
 }
@@ -744,6 +834,28 @@ The rotation milestone is ready for peer review only when:
 5. The ledger is append-only, records participant label, session identity, outcome class, and cost for every stubbed step, and the runner writes no repository bytes other than the ledger, the emitted pipeline transitions, and the role-required issue/HANDOFF reconciliation records.
 6. A fresh independent participant reviews the immutable target. Only `APPROVED` with zero open material findings permits `ACCEPTED`; `CHANGES_REQUIRED` returns within-scope work to implementation, and `BLOCKED` cannot be mapped to approval.
 
+# Live invocation and autonomy demonstration phase
+
+This phase closes the gap between accepted automation components and the product-level autonomy objective. It exists because the prior phases authorized and accepted components — pipeline, dispatcher, rotation runner — whose acceptance criteria were component-local and stub-only, so the system reached the terminal `ROLE none` idle state with every milestone `ACCEPTED` while a real participant had never been launched and no unattended progression had ever occurred. This phase makes the objective itself the gated deliverable. The rotation phase's stub-only verification boundary is superseded only to the extent stated below; every other accepted constraint remains binding.
+
+## Accepted live-invocation requirements
+
+- **LIVE-001 — Probe before reliance:** The committed rotation registry pins `tools` to the probed empty value, which cannot perform file-editing roles. Any launch configuration beyond the originally probed profile MUST be established by new recorded probe evidence — exact commands, captured envelopes, exit codes, and observed behavior — before the runner relies on it. This includes tool-enabled operation and headless permission behavior.
+- **LIVE-002 — Minimal verified profile:** The participant launch profile MUST be the smallest tool and permission set that lets a launched participant perform the role contracts (read, edit within allowed paths, run checks, commit, and record transitions). The profile and its probe evidence are durable records; unprobed capabilities remain prohibited.
+- **LIVE-003 — Adapter conformance:** The runner, registry, and role contracts MUST be conformed to the verified profile so real launches use exactly probed behavior. The test suite continues to use a stub launcher exclusively (ROTATE-008 is unchanged); live launches occur only as deliberate, recorded probe or operational acts.
+- **LIVE-004 — Fail-closed continuity:** Any behavior outside the verified profile — permission prompts, unrecognized envelope fields or subtypes, unexpected exit codes — MUST classify through the existing failure taxonomy and fail closed. No participant-side failure creates a new escalation path to human authority.
+
+## Demonstration acceptance criteria
+
+The autonomy demonstration milestone is ready for peer review only when:
+
+1. The vehicle change — the root `ISSUES/TEMPLATE.md` activity-history conformance fix — is implemented inside the milestone's allowed paths, the accepted checks pass, and the reusable package is untouched.
+2. The milestone's own lifecycle from `AUTHORIZED` to the review submission is executed entirely by participants launched by one bounded runner invocation: a launched implementer records `READY` and `IN_PROGRESS`, performs the vehicle change, verifies, and submits; a launched independent reviewer with a distinct label persists the review round; a launched recorder with a third distinct label completes closure and records `ACCEPTED`. Any authorized fix/re-review loops are likewise executed by launched participants within declared bounds.
+3. The append-only ledger records every launch, outcome classification, retry, rotation, and stop for the run, and the demonstrated milestone's pipeline events name the launched participant labels as transition actors.
+4. The durable evidence makes any owner or operator routing action between runner start and terminal stop visible, and records that there were none: no manual participant selection, no copied role prompts, no manual routine launches, no routine transition approvals, no manual recovery, no manual retries.
+5. The demonstration evidence record assembles the ledger, pipeline events, review round, acceptance transition, and reconciliation records into one independently checkable account; the recorder verifies the implementer and reviewer legs from durable records at closure, and the complete account remains auditable after acceptance.
+6. A fresh independent participant — itself launched by the runner — reviews the immutable target. Only `APPROVED` with zero open material findings permits `ACCEPTED`; `CHANGES_REQUIRED` returns within-scope work to implementation, and `BLOCKED` cannot be mapped to approval.
+
 # Specification governance
 
 ## Specification evolution
@@ -774,3 +886,4 @@ Material requirement changes require human-owner authority. Keep exact proposed 
 | `2026-08-14T01:58:17Z` | Accepted prior authorization for explicitly declared milestones and the bounded root-local automated pipeline phase | Allow deterministic implementation, verification, independent review, fix loops, and continuation without repeated human prompts while preserving explicit scope and escalation boundaries | Human technical owner (`MattSureham`) | [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`EVIDENCE-20260814T015817Z-pipeline-authority-analysis`](EVIDENCE/EVIDENCE-20260814T015817Z-pipeline-authority-analysis.md) |
 | `2026-08-14T05:14:05Z` | Accepted the automated role dispatch phase and a second contract milestone for role contracts, eligibility rules, and a deterministic read-only next-role dispatcher with an explicit host adapter boundary | Eliminate routine human intervention between already-authorized pipeline transitions while keeping the accepted pipeline as the single state machine and leaving host session invocation outside repository authority | Human technical owner (`MattSureham`) | [`ISSUE-20260814T051405Z-role-dispatch`](ISSUES/ISSUE-20260814T051405Z-role-dispatch.md), [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md) |
 | `2026-08-14T09:25:04Z` | Accepted the host adapter and participant rotation phase and a third contract milestone for an evidence-bounded host adapter, participant registry, append-only rotation ledger, failure taxonomy, and a bounded rotation runner executing dispatcher decisions | Close the participant-rotation loop using the host launch interface verified by live probe evidence while keeping repository state authoritative, adapters subordinate to dispatch decisions, and participant failures strictly distinct from human-authority escalation | Human technical owner (`MattSureham`) | [`ISSUE-20260814T092504Z-host-adapter-rotation`](ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md), [`ADR-20260814T092504Z-host-adapter-rotation`](ADR/ADR-20260814T092504Z-host-adapter-rotation.md), [`EVIDENCE-20260814T092504Z-host-capability-probe`](EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) |
+| `2026-08-17T02:12:18Z` | Accepted the top-level product-level autonomy objective (`AUTONOMY-001`–`AUTONOMY-006`) and two further contract milestones: live participant invocation capability, then the unattended autonomy demonstration whose own lifecycle is the gated end-to-end dogfood run | Component milestone acceptance had been reachable while the owner's actual automation objective was unmet; make unattended multi-role progression the explicit product requirement and acceptance boundary, with intermediate milestones preserved as enabling capabilities that cannot be mistaken for completion | Human technical owner (`MattSureham`) | [`ISSUE-20260817T021218Z-live-invocation`](ISSUES/ISSUE-20260817T021218Z-live-invocation.md), [`ISSUE-20260817T021218Z-autonomy-demonstration`](ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md), [`ADR-20260817T021218Z-autonomy-end-state`](ADR/ADR-20260817T021218Z-autonomy-end-state.md) |
