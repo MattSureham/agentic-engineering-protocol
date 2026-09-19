@@ -1,111 +1,76 @@
 # Human Checkpoint
 
-This is a low-bandwidth synchronization point for the human technical owner. It is a summary and decision queue, not project truth. Read [`BOOTSTRAP.md`](BOOTSTRAP.md) for rules; accepted product requirements live in [`PROJECT_SPEC.md`](PROJECT_SPEC.md), and accepted architecture lives in [`ADR/`](ADR/).
+This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-08-17T06:32:00Z`
-- **Prepared by:** `ClaudeCode/live-record`
-- **Period covered:** Implementation, verification, independent review, and pipeline-validated acceptance of `MILESTONE-20260817T021218Z-live-invocation-v1` (attempt-1 target `83838e0b1a579f13706b4728da3c3219ed73a8e9`), from the authority record of `2026-08-17T02:12:18Z` through the recorder reconciliation of `2026-08-17T06:32:00Z`
-- **Specification status reviewed:** Root `PROJECT_SPEC.md` is `ACCEPTED`, including the top-level Product-level autonomy objective (`AUTONOMY-001`–`AUTONOMY-006`) and the Live invocation and autonomy demonstration phase (`LIVE-001`–`LIVE-004` plus six demonstration acceptance criteria) with contract milestones 4 and 5; milestones 1–3 contract digests are unchanged
-- **Implementation/reference state:** Milestones 1–4 are `ACCEPTED` with owning issues `CLOSED` (pipeline target `26d890f6e27ad181265ee5417a45637d867aa2dc`, dispatch target `4a2601f04db9cf8b0f2e909fd4ca8f45666fe8c8`, rotation target `d6471f54b7e75f255b308d44885146762642b261`, live-invocation target `83838e0b1a579f13706b4728da3c3219ed73a8e9`). The minimal probe-verified tool-enabled headless profile (`Read,Edit,Write,Bash` with matching grant) is established by evidence and the runner/registry/role contracts are conformed to it. Milestone 5 (`MILESTONE-20260817T021218Z-autonomy-demonstration-v1`, digest `f0a1700f00500125d42e832a236077b0d42e87ebc4ade284a33335e8794c0284`) is `AUTHORIZED` with its dependency satisfied — the dispatcher selects it and emits `ROLE implementer`. No demonstration work has begun.
-- **Prior checkpoint:** `2026-08-17T02:22:21Z` by `ClaudeCode/root` (superseded by this acceptance record)
+- **Generated UTC:** `2026-09-19T21:37:43Z` (resumed authority finalization; deterministic validation complete)
+- **Prepared by:** `agent:Codex-discovery-finalize`, preserving the preceding `agent:Codex-discovery-authority` decisions
+- **Period covered:** Owner-approved prompt-independent discovery requirement evolution from clean synchronized `58fa281ee6cb93abc2fea81dd46f8ddef2d8612b`
+- **Specification status reviewed:** `ACCEPTED`; DISCOVERY-001–006 and the discovery milestone are authorized, not implemented or independently accepted
+- **Implementation/reference state:** Tooling and ten-file reusable package unchanged; four accepted milestones retained; discovery order 5 and demonstration order 6 are AUTHORIZED at attempt 0
+- **Prior checkpoint:** Exact prior owner summary remains recoverable with `git show 58fa281:HUMAN_CHECKPOINT.md`; prior accepted decisions/reviews are not rewritten
 
 ## System mental model
 
-This repository produces a ten-file, Markdown-first reusable engineering protocol under `protocol/`. The root repository adopts a separate root-specific instance with an accepted root-local milestone state-and-gate pipeline, an authorized read-only role dispatcher, and an evidence-bounded host adapter for automated participant rotation, all outside the reusable package. Root requirements, accepted architecture, tests/contracts, evidence, operational state, implementation, and inference retain distinct precedence and ownership.
+The product remains a Markdown-first, repository-native engineering protocol. Its root development instance is separately governed from the reusable ten-file package. The seven-tier truth hierarchy, authority/review distinction, evidence ownership, lifecycle and role separation remain unchanged.
 
-Agents are replaceable participants. HANDOFF is a compact continuity index, not canonical truth. Product edits do not automatically rewrite root governance, and root governance edits do not automatically change the copy-ready product; material semantic divergence is reviewed explicitly.
-
-An explicit milestone in accepted `PROJECT_SPEC.md` is prior authorization to implement, verify, fix, review, and continue within its declared bounds. Runtime state cannot create scope. Human escalation occurs when authority is missing or exhausted, not merely because a lifecycle stage changes — and participant failures (launch failure, quota exhaustion, timeout, non-advancing completion) are operational events that must never be escalated as authority gaps.
-
-Autonomy is now a product-level acceptance boundary, not a milestone property: accepted component milestones are enabling capabilities only, and the dispatcher's terminal `ROLE none` idle state is never evidence that the objective is met. The objective is established exclusively by a demonstrated real unattended end-to-end run.
-
-## Owner direction report (six points)
-
-1. **Why the previous specification allowed premature terminal `ROLE none` states.** Each phase scoped its acceptance criteria to component behavior; the pipeline phase explicitly made the absence of a further contract "a valid terminal result"; the rotation phase required stub-only tests; and no top-level requirement distinguished "components accepted" from "objective met". The terminal idle state was correct contract behavior — it prevents scope invention — but nothing prevented it from being read as completion. This was a structural specification gap, not an implementation defect.
-2. **The exact normative requirement now recorded.** Root `PROJECT_SPEC.md`, "Product-level autonomy objective": `AUTONOMY-001` (unattended progression of already-authorized milestones through implementation, verification, independent review, fix loops, and acceptance with no owner routing, prompt copying, participant launching, routine transition approval, interruption recovery, or participant retrying); `AUTONOMY-002` (stops only for genuine new HUMAN authority, exhausted declared bounds, or absence of authorized work); `AUTONOMY-003` (repository records are the sole authority); `AUTONOMY-004` (acceptance boundary: one bounded runner invocation producing a real unattended dogfood run with at least three distinct launched participant roles progressing a real authorized milestone `AUTHORIZED` → `ACCEPTED`; stub-only or simulated execution is insufficient); `AUTONOMY-005` (objective evidence: the append-only ledger, pipeline events, review round, and reconciliation records, auditable after acceptance); `AUTONOMY-006` (component acceptance and terminal idle states are never presented as objective completion).
-3. **Capabilities already satisfied (enabling, accepted, history preserved).** Milestone pipeline (`26d890f`), deterministic read-only role dispatcher (`4a2601f`), and bounded participant-rotation runner with registry and append-only ledger (`d6471f5`) — all `ACCEPTED` with owning issues `CLOSED`; probed host launch interface (headless JSON envelopes, budget caps, machine-readable budget exhaustion, session resume).
-4. **Capabilities remaining unsatisfied.** No real participant session has ever been launched by the system (the now-accepted profile conformance is verified by probes and stub tests only); no milestone has ever progressed without manual routing; no demonstration evidence exists. Headless permission behavior with tools enabled is now probe-established and the runner is conformed to the verified live profile (milestone 4 `ACCEPTED`).
-5. **The milestone dependency chain.** Milestone 4 `MILESTONE-20260817T021218Z-live-invocation-v1` (probe and verify the minimal tool-enabled headless profile; conform runner/registry/role contracts; preserve stub-only tests; fail-closed on anything unprobed) → milestone 5 `MILESTONE-20260817T021218Z-autonomy-demonstration-v1` (the gated dogfood: its own lifecycle is the unattended run, carrying the root `ISSUES/TEMPLATE.md` activity-gate conformance fix as its vehicle). The dependency ordering ensures a live-operation failure is absorbed by milestone 4's fix loop, keeping the demonstration's acceptance evidence clean.
-6. **The objective evidence that will prove the end state.** The append-only `ROTATION_LOG.jsonl` naming the launched participant labels; the demonstration issue's pipeline events naming those same labels across implementer, independent-reviewer, and recorder legs; the launched fresh reviewer's `APPROVED` round with zero open material findings on the immutable target; the recorder's closure verification of all legs from durable records; the assembled demonstration evidence record under `EVIDENCE/`; and the durable account showing no owner or operator routing occurred.
+Discovery is a new **entry** requirement: a supported fresh participant must find the adopted protocol from normal repository startup/interaction with only an ordinary work request. Discovery never grants implementation authority. Pipeline/dispatcher/rotation are existing root execution mechanisms after recovery, not a substitute for entry discovery.
 
 ## Material changes since the prior checkpoint
 
-| Change | Why | Product/architecture effect | Evidence and review |
-|---|---|---|---|
-| Authorize the product-level autonomy objective | Intermediate automation milestones reached `ACCEPTED` while the owner's actual automation objective remained unmet | Top-level `AUTONOMY-001`–`AUTONOMY-006`; component milestones reclassified as enabling capabilities; terminal idle can no longer be read as completion | Explicit owner direction `2026-08-17`; [`PROJECT_SPEC.md`](PROJECT_SPEC.md) change record `2026-08-17T02:12:18Z`; [`ADR-20260817T021218Z-autonomy-end-state`](ADR/ADR-20260817T021218Z-autonomy-end-state.md) |
-| Authorize the live-invocation capability milestone | Real roles require a probe-verified tool-enabled launch profile before the demonstration can run | Milestone 4 contract (`LIVE-001`–`LIVE-004`); probe-before-reliance, minimal verified profile, adapter conformance, fail-closed continuity | [`ISSUE-20260817T021218Z-live-invocation`](ISSUES/ISSUE-20260817T021218Z-live-invocation.md); independent review completed `APPROVED` before acceptance |
-| Implement and accept the live-invocation capability milestone | Establish the minimal tool-enabled headless profile by evidence and conform the adapter to it | Five-probe evidence record; registry schema `rotation-participants/v2` with `allowed_tools`; launcher emits `--allowedTools` only when non-empty; new probed `permission_denied` failure class; stub-only suite preserved (97 tests) | Attempt-1 target `83838e0`; [`EVIDENCE-20260817T023721Z-live-profile-probe`](EVIDENCE/EVIDENCE-20260817T023721Z-live-profile-probe.md); generated submission evidence `PASS`; independent round 1 `APPROVED` with zero open material findings after extracted-target verification and an eight-scenario adverse reproduction; pipeline-validated `ACCEPTED` transition `2026-08-17T06:27:41Z`; owning issue `CLOSED` |
-| Authorize the autonomy demonstration milestone | The objective requires a mandatory real unattended dogfood run as its acceptance boundary | Milestone 5 contract; six demonstration acceptance criteria; self-vehicle change (root `ISSUES/TEMPLATE.md` gate conformance); depends on milestone 4 | [`ISSUE-20260817T021218Z-autonomy-demonstration`](ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md), pipeline state `AUTHORIZED` |
-| Repair operator-facing demonstration documentation | Owner-provided fresh-operator audit found the documentation insufficient to safely start the demonstration and a HANDOFF Next Action that conflicted with demonstration criterion 2 | Documentation-only repair under existing authority (no specification or ADR change): canonical live command, effects, bounds, stop/recovery, and completion meaning documented in [`README.md`](README.md); `ROLE_CONTRACTS.md` `--resume` misstatement corrected; HANDOFF Next Action now directs the operator to start the bounded runner | Owner audit evidence `2026-08-18`; HANDOFF reconciliation entry `2026-08-18T09:40:29Z`; facts read from the accepted implementation and probe evidence |
-
-(Prior milestone history — adoption, hardening, structural validator, pipeline, dispatch, rotation — is unchanged and indexed in the immutable Git record and the superseded checkpoints.)
+| Change | Reason and authority | Consequence |
+|---|---|---|
+| DISCOVERY-001–006 plus explicit onboarding/plug-and-play supersession | Owner reports real usage failure and approved the requirement/authority plan; [gap analysis](EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md) distinguishes verified repository gaps from the unreproduced external incident | Onboarding prompt becomes fallback/diagnostic, not a normal supported-host prerequisite; no retroactive support claim |
+| Four-layer discovery boundary | [Accepted ADR](ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md), owner-approved before implementation | Repository-native authority → scoped adoption signal → subordinate host adapter; unsupported hosts retain manual fallback |
+| First implementation/conformance scope | Owner selected Codex CLI plus Claude Code | Both require real fresh-session evidence; neither is currently certified by this record |
+| Discovery-first scheduling | Owner explicitly chose new work before the unstarted demonstration | New order-5 contract; demonstration order 5→6 and digest rebinding only; first four accepted entries/digests and all old ADR originals remain unchanged |
 
 ## Architecture decisions
 
-### Accepted, rejected, or superseded
-
-| ADR | Status | Decision and consequence | Owner authority evidence |
-|---|---|---|---|
-| [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md) | `ACCEPTED` | Adopt a separately governed root protocol instance and compact record architecture | Human-approved post-pilot hardening plan; authority boundary `7dea545` |
-| [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md) | `ACCEPTED` | Bind autonomous milestone transitions to accepted spec contracts while keeping operational state subordinate | Explicit `2026-08-14` owner decision and approved decision-complete plan; independent target review completed and milestone accepted |
-| [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md) | `ACCEPTED` | Deterministic repository-native next-role dispatch with durable role contracts; host session invocation stays an explicit, non-simulated adapter boundary | Explicit `2026-08-14T05:14:05Z` owner direction; independent round 1 `APPROVED`; milestone accepted |
-| [`ADR-20260814T092504Z-host-adapter-rotation`](ADR/ADR-20260814T092504Z-host-adapter-rotation.md) | `ACCEPTED` | Execute dispatcher decisions through the probe-verified host CLI interface with a participant registry, append-only rotation ledger, failure taxonomy without false escalation, and declared bounds | Explicit `2026-08-14` owner direction with live probe evidence; independent round 1 `APPROVED`; milestone accepted |
-| [`ADR-20260817T021218Z-autonomy-end-state`](ADR/ADR-20260817T021218Z-autonomy-end-state.md) | `ACCEPTED` | Autonomy is a product-level acceptance boundary proven only by a demonstrated unattended run; terminal idle is not completion; live launches use a minimal probe-verified profile; the demonstration milestone is its own vehicle; human authority is unchanged; dependency ordering prevents premature completion readings | Explicit product-level autonomy owner direction of `2026-08-17` recorded through specification evolution |
-
-### Proposed or disputed
-
-No architecture proposal or disputed architectural decision awaits owner action.
+- **Accepted now:** `ADR-20260918T064510Z-protocol-discovery-boundary` defines responsibilities and compatibility. It does not make AGENTS.md, CLAUDE.md, a hook, a skill or any other host convention normative protocol authority.
+- **Retained:** Root adoption, authorized pipeline, dispatch, rotation and autonomy ADRs; source precedence and role/state-machine interfaces.
+- **Implementation boundary:** Thin repository-local entry bridges, necessary root/package adoption/onboarding guidance, deterministic/real conformance tests and durable records. Ten Markdown core files remain self-contained; peripheral host artifacts preserve existing instructions. No global personal configuration or new infrastructure is required.
+- **Escalation boundary:** A needed security/trust, dependency, scope or architecture change not covered by this contract requires owner authority. Routine work within the accepted milestone does not.
+- **Proposed/disputed decisions:** None pending within the accepted slice. Specific host loading details must be verified before reliance, not invented.
 
 ## Complexity and architecture drift
 
-### New or retired complexity
+New complexity is limited to scoped adoption declarations, profile-specific loading/migration and maintained conformance evidence, owned by the [discovery issue](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md). No runtime/interface change has been made.
 
-| Cost | Why introduced/removed | Coverage | Residual debt |
-|---|---|---|---|
-| Separate root/product protocol governance | Prevent silent authority coupling | Accepted ADR, semantic/link validation, independent review | Future divergence still requires judgment and review |
-| Optional root Python structural checker | Make stable package/HANDOFF invariants repeatable | Standard-library tests plus completed independent review; five LOW findings accepted as residual risk | Full CommonMark, semantic correctness, portability, and shipped automation remain outside scope |
-| Root-local milestone state/gate engine | Mechanically enforce stable authorization, verification, review, and escalation transitions | Accepted contract/ADR plus pipeline tests at target `26d890f`; independent round 2 `APPROVED`; milestone `ACCEPTED` | Python/Git portability, unauthenticated labels, cooperative-only writers, semantic safety of owner-authorized commands |
-| Root role-contract artifact and read-only dispatcher | Remove routine human routing between already-authorized transitions | Accepted dispatch phase/ADR; 19 dispatch tests; independent round 1 `APPROVED`; milestone `ACCEPTED` | Prose/tool drift must be caught by review and tests; label-based eligibility remains an operational assertion |
-| Host adapter, participant registry, and rotation ledger | Execute dispatcher decisions through the verified host interface | Accepted rotation phase/ADR and probe evidence; 26 stub-launcher tests; independent round 1 `APPROVED`; milestone `ACCEPTED` | Real quota spend by tooling; host rate limits, concurrency, envelope stability unprobed |
-| Live tool-enabled launch profile (milestone 4) | Real roles require file and shell capability | Five-probe evidence record plus 8 stub-suite conformance tests; independent round 1 `APPROVED` with zero open material findings; milestone `ACCEPTED` | Long-running stability, rate limits, cross-version envelope stability, and `--resume` under the widened profile remain unprobed |
-| Self-demonstrating acceptance evidence (milestone 5, authorized not implemented) | The dogfood needs real authorized work; the milestone's own lifecycle is the smallest real vehicle | Demonstration acceptance criteria plus recorder closure verification | Post-hoc assembly completeness remains reviewer judgment |
-
-### Drift assessment
-
-- **Last independent drift review:** Independent round 1 of the rotation target `d6471f5` completed `2026-08-17T01:40:05Z` with disposition `APPROVED` and zero open material findings; prior rounds as recorded in the superseded checkpoint.
-- **Classification:** No new drift. The autonomy evolution adds requirements and milestones; it modifies no accepted component behavior and rewrites no milestone history.
-- **Owner-relevant differences:** None outstanding. The rotation ADR's probed-interface boundary is narrowed only by extending the probe record to the minimal tool-enabled profile under milestone 4.
-- **Codification boundary:** The checker remains a lower-tier structural observer; pipeline, dispatcher, and rotation runner are unchanged by this authority record; the reusable package remains runtime-free.
+The current reusable package still requires explicit onboarding. That mismatch with the newly accepted target behavior is an explicit implementation gap, not silently fixed semantics or an approval claim. The next immutable target requires independent review including this authority boundary and root/product alignment.
 
 ## Assumptions and uncertainty that changed
 
-| Certainty | Earlier understanding | Current understanding | Consequence and evidence |
-|---|---|---|---|
-| `CONFIRMED` | Accepted component milestones could be read as automation completion | Component milestones are enabling capabilities only; the objective requires a demonstrated unattended run | Owner direction `2026-08-17`; `AUTONOMY-004`/`AUTONOMY-006` |
-| `CONFIRMED` | Terminal `ROLE none` ended the automation program | Terminal idle is a correct idle state, never autonomy evidence | `AUTONOMY-006`; ADR decision 2 |
-| `CONFIRMED` | The probed `tools ""` launch profile sufficed for rotation acceptance | It cannot perform file-editing roles; a minimal tool-enabled profile must be probe-verified before reliance | [`ISSUE-20260817T021218Z-live-invocation`](ISSUES/ISSUE-20260817T021218Z-live-invocation.md) problem statement |
-| `UNKNOWN` | Headless permission behavior with tools enabled, long-running session stability, host rate limits | Still unestablished; milestone 4's probes resolve or fail closed | Owned by the live-invocation issue |
-| `UNKNOWN` | Whether the first unattended run completes within declared bounds | Still unestablished; bound exhaustion is a recorded stop, never an authority escalation | Owned by the autonomy-demonstration issue |
+| Certainty | Statement | Consequence |
+|---|---|---|
+| CONFIRMED | Existing onboarding/launcher prompts contain explicit protocol reminders | Their success does not establish task-independent discovery |
+| CONFIRMED | Owner approved initial two-harness scope and discovery-first order | Requirements, ADR and contracts now carry durable authority |
+| UNKNOWN | Exact external incident reproduction | Report is attributed to owner; no trace or external repository evidence fabricated |
+| UNKNOWN | Candidate profiles actually activate reliably | Required real fresh-session acceptance is NOT RUN; supported profiles cannot yet be claimed |
+| UNKNOWN | Unattended AUTONOMY-004 demonstration | Still unperformed; component acceptance and discovery conformance cannot substitute for it |
 
 ## Confidence and verification
 
-- **What is directly verified:** The five-milestone contract parses with the accepted pipeline parser; milestones 1–3 digests are unchanged (`36fba5d8…`, `afe72580…`, `a38bb7bf…`); milestone 4 is `ACCEPTED` on verified target `83838e0` with digest `36f862db0345ff9667b7a3469fbc6a25750c8ef9e300324de181dc1f57659cea`; milestone 5 digest `f0a1700f00500125d42e832a236077b0d42e87ebc4ade284a33335e8794c0284` matches its owning issue's state block and is now the selected milestone; the dispatcher emits `ROLE implementer` for milestone 5 with the exact READY command; the structural validator passes; the full suite passes 97 tests; the five live-profile probes are recorded with exact commands, exit codes, envelope fields, and side-effect checks.
-- **What was independently reviewed:** Prior targets as recorded in the superseded checkpoints (hardening, wording, structural validator, pipeline, dispatch, rotation — all `APPROVED`), plus live-invocation attempt-1 target `83838e0b1a579f13706b4728da3c3219ed73a8e9` (round 1 `APPROVED` with zero open material findings, including an eight-scenario adverse reproduction). The demonstration milestone's immutable target will require fresh independent review before acceptance; the demonstration's reviewer is itself launched by the runner per demonstration criterion 6.
-- **What was not run or remains unverified:** No runner-launched real participant session has occurred; live runner invocation against this repository remains deliberately unexercised until milestone 5's demonstration; `--resume` under the widened profile, long-running stability, rate limits, and cross-version envelope stability are unprobed; ambient host settings participated in the no-grant probes. Dedicated Markdown linting remains unavailable; broader portability, CommonMark conformance, concurrency guarantees, authenticated identity, and large-scale coordination remain unverified.
-- **Known regressions or unresolved risks:** None blocking. Four deferred capability areas remain `BLOCKED`.
+- Baseline Git recovery and owner approval are recorded; the resumed full suite passes all 97 tests (23.916s, exit `0`) on Darwin arm64/Python 3.9.6.
+- [Persisted authority audit](EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md) passes: six contracts, four accepted digests unchanged, demonstration order-only/digest-only rebinding, discovery AUTHORIZED attempt 0, deterministic implementer dispatch, 58 Markdown documents/relative paths, history and protected-tree preservation, isolated ten-file copy and whitespace checks.
+- This checkpoint is a pre-commit publication snapshot for `docs: authorize prompt-independent discovery` directly after `58fa281`. A normal push and equality of local/cached/direct remote refs must be established from Git before the next participant consumes it; the containing commit supplies its own immutable identity.
+- No adapter, instruction shim, reusable-package change, live probe, rotation run, implementation attempt, independent review or recorder acceptance is performed in this phase.
+- Dedicated Markdown linters are unavailable; full CommonMark, external URLs and fragment targets are outside the performed structural checks. Live discovery acceptance is NOT RUN. Cross-host/version reliability, original incident reproduction, authenticated identity, concurrent writers, scale and production readiness are not established.
 
 ## Human attention required
 
-No owner decision is currently pending. The owner direction of `2026-08-17` is fully recorded: the accepted specification carries the product-level autonomy objective and the two-milestone decomposition, the compatible ADR is accepted, milestone 4 is `ACCEPTED`, and milestone 5 holds `AUTHORIZED` pipeline state with its dependency satisfied. The owner-provided fresh-operator audit of `2026-08-18` was resolved as a documentation-only repair under existing authority (no specification or ADR change): [`README.md`](README.md) now documents the canonical live demonstration command `python3 scripts/run_rotation.py`, its real effects, bounds, stop/recovery procedure, and completion meaning; the `ROLE_CONTRACTS.md` `--resume` misstatement is corrected; HANDOFF's Next Action now directs an operator to start the bounded runner rather than manually record `READY` (which would invalidate demonstration criterion 2). New owner authority is still required for scope beyond the accepted milestones, package runtime distribution, unprobed host APIs, human-blocker resolution, concurrent-writer guarantees, authenticated identity, large-scale coordination, or tracker integration.
+No further routine decision is required to implement the accepted discovery milestone. The owner has approved the requirement and abstract architecture, two-harness initial scope, priority change and phase stop boundary. Escalate only if implementation exposes authority not covered by those records; do not convert a failed probe or ordinary fix/re-review loop into redundant human approval.
+
+Four prior deferrals remain BLOCKED: concurrent-writer guarantees, authenticated identity/approval, large-scale coordination and external tracker integration. Nothing here resolves or expands them.
 
 ## No human attention required
 
-- Implementation, deterministic verification, fix/re-review cycles, and transitions within milestones 4 and 5 need no new owner prompt while every accepted gate remains satisfied.
-- The demonstration run's participant launches, rotations, retries within declared bounds, and recoveries are operational events governed by the accepted failure taxonomy; exhaustion stops are recorded, never escalated as authority gaps.
+The next implementation participant may follow the existing dispatcher and role contract through the accepted discovery scope, deterministic verification and independent fix/re-review loop. It must preserve real conformance evidence and must not certify its own target. The present authority participant stops before READY.
+
+The demonstration retains its original lifecycle acceptance conditions: when selected later, runner-launched participants must perform the complete lifecycle; no manual transition is authorized as a shortcut to its evidence.
 
 ## Next checkpoint trigger
 
-- **Trigger:** Material independent-review ambiguity, missing/exhausted milestone authority, proposed scope/architecture change, participant-failure patterns the accepted taxonomy cannot classify, demonstration-run completion or bound exhaustion, or owner request
-- **Expected owner action before then:** `NONE` beyond the operator decision to start the demonstration; milestone 5 is authorized and selected, and the documented canonical command `python3 scripts/run_rotation.py` starts the unattended run
+- **Trigger:** Missing authority, material review ambiguity, proposed boundary expansion, conformance evidence unable to support the intended contract, or milestone acceptance
+- **Expected owner action before then:** NONE; after authority-record validation/publication, the next participant follows the discovery implementer decision. No live runner invocation occurs in this owner/specification phase.

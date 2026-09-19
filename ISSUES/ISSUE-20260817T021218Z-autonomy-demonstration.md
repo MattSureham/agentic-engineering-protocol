@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-08-17T02:12:18Z`
-- **Updated UTC:** `2026-08-17T02:12:18Z`
+- **Updated UTC:** `2026-09-18T06:45:10Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), Product-level autonomy objective (`AUTONOMY-001`–`AUTONOMY-006`), Live invocation and autonomy demonstration phase (demonstration acceptance criteria), and `MILESTONE-20260817T021218Z-autonomy-demonstration-v1`
 - **ADRs:** [`ADR-20260817T021218Z-autonomy-end-state`](../ADR/ADR-20260817T021218Z-autonomy-end-state.md); [`ADR-20260814T092504Z-host-adapter-rotation`](../ADR/ADR-20260814T092504Z-host-adapter-rotation.md)
 - **Evidence:** To be produced by the run itself: the append-only [`ROTATION_LOG.jsonl`](../ROTATION_LOG.jsonl), this issue's pipeline events, the launched reviewer's round, and a demonstration evidence record under `EVIDENCE/`
@@ -45,6 +45,14 @@ The owner direction is recorded through specification evolution and summarized i
 
 ## Change
 
+### Owner-authorized priority amendment — 2026-09-18T06:45:10Z
+
+Human technical owner `MattSureham` approved **discovery first** in the [discovery requirement/authority plan](ISSUE-20260918T064510Z-prompt-independent-discovery.md). The accepted specification now places that milestone at order 5 and this still-unstarted demonstration at order 6. This contract changes **only** `order`: ID, scope, allowed paths, dependency, checks and review mode are unchanged. The compatible [discovery ADR](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md) adds no change to the original autonomy architecture.
+
+Canonical contract digest changes from `f0a1700f00500125d42e832a236077b0d42e87ebc4ade284a33335e8794c0284` to `2a86a8a5bb83a4bc2e5657e092894f7c28dddadb2ded2e529fd5654a1ee90254`. The operational projection is explicitly rebound to that owner-approved contract. State stays `AUTHORIZED`, attempt stays 0, nullable target/implementor fields and empty evidence/review references stay unchanged, and the entire original event array is preserved. There is no fictitious AUTHORIZED-to-AUTHORIZED machine event, runtime transition, failed attempt or demonstration completion. Historical five-milestone references below describe the prior boundary and are retained.
+
+The demonstration's eventual lifecycle still requires runner-launched participants throughout; this prospective authority migration is not its implementation. Discovery activation proof does not satisfy AUTONOMY-004, and the demonstration's prompt-injected runner does not satisfy discovery acceptance.
+
 - **Files or components:** Root `ISSUES/TEMPLATE.md` (vehicle fix); this issue; `EVIDENCE/` (demonstration evidence); `ROTATION_LOG.jsonl` (append-only run ledger); `ROTATION_PARTICIPANTS.json` (only if the live-invocation milestone's verified profile requires registry entries here); `HANDOFF.md`; `HUMAN_CHECKPOINT.md`; `README.md`.
 - **Behavior changed:** The root issue template conforms to the pipeline's table-only activity gate; the repository gains its first unattended full-lifecycle run as durable evidence.
 - **Out-of-scope work deliberately excluded:** Any tooling change (runner, dispatcher, pipeline); the reusable package; new milestones beyond the demonstration; the four still-`BLOCKED` capability deferrals.
@@ -72,7 +80,7 @@ The JSON block is operational state bound to the accepted milestone contract. It
 {
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260817T021218Z-autonomy-demonstration-v1",
-  "authority_digest": "f0a1700f00500125d42e832a236077b0d42e87ebc4ade284a33335e8794c0284",
+  "authority_digest": "2a86a8a5bb83a4bc2e5657e092894f7c28dddadb2ded2e529fd5654a1ee90254",
   "state": "AUTHORIZED",
   "attempt": 0,
   "implementor": null,
@@ -128,6 +136,7 @@ No independent review round has been recorded. Review begins after the launched 
 | UTC time | Participant | From | To | Action, evidence, and reason |
 |---|---|---|---|---|
 | `2026-08-17T02:12:18Z` | `human:MattSureham` | `NONE` | `INVESTIGATING` | Owner direction authorized the product-level autonomy objective and this demonstration milestone; specification evolution, accepted ADR, and this owning issue recorded; pipeline state `AUTHORIZED` |
+| `2026-09-18T06:45:10Z` | `human:MattSureham`, recorded by `agent:Codex-discovery-authority` | `INVESTIGATING` | `INVESTIGATING` | Owner-selected discovery priority moves this unstarted contract from order 5 to 6; old/new digest recorded in the additive amendment above; state, attempt and all original machine events preserved |
 
 ## Closure checklist
 

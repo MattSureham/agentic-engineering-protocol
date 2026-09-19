@@ -10,7 +10,8 @@ The output should be a self-contained template/protocol that can later be copied
 
 - **Status:** `ACCEPTED`
 - **Human technical owner:** `MattSureham`
-- **Current accepted change:** Product-level autonomy objective plus the live invocation capability and unattended autonomy demonstration milestones approved before implementation on `2026-08-17`; the Host adapter and participant rotation phase, the Automated role dispatch phase, and the Authorized milestone pipeline phase approved on `2026-08-14` remain in force; prior accepted requirements remain in force except where explicitly superseded below
+- **Current accepted change:** Prompt-independent discovery/activation (`DISCOVERY-001`–`DISCOVERY-006`), its four-layer boundary, initial Codex CLI plus Claude Code conformance milestone, and discovery-first ordering approved by `MattSureham` and recorded on `2026-09-18T06:45:10Z`. Earlier autonomy, live invocation, rotation, dispatch and pipeline requirements remain in force except for the explicit onboarding/plug-and-play supersession and unstarted demonstration reorder below. This is requirement/implementation authorization, not a claim of implemented activation.
+- **Discovery authority record:** [`ISSUE-20260918T064510Z-prompt-independent-discovery`](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md), [`ADR-20260918T064510Z-protocol-discovery-boundary`](ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md), and [`EVIDENCE-20260918T064510Z-discovery-authority-analysis`](EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md)
 - **Authority record:** [`ISSUE-20260817T021218Z-autonomy-demonstration`](ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md), [`ISSUE-20260817T021218Z-live-invocation`](ISSUES/ISSUE-20260817T021218Z-live-invocation.md), [`ADR-20260817T021218Z-autonomy-end-state`](ADR/ADR-20260817T021218Z-autonomy-end-state.md), [`ISSUE-20260814T092504Z-host-adapter-rotation`](ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md), [`ADR-20260814T092504Z-host-adapter-rotation`](ADR/ADR-20260814T092504Z-host-adapter-rotation.md), [`EVIDENCE-20260814T092504Z-host-capability-probe`](EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md), [`ISSUE-20260814T051405Z-role-dispatch`](ISSUES/ISSUE-20260814T051405Z-role-dispatch.md), [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md), [`ISSUE-20260806T013907Z-runtime-automation`](ISSUES/ISSUE-20260806T013907Z-runtime-automation.md), [`ADR-20260814T015817Z-authorized-milestone-pipeline`](ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md), [`ISSUE-20260806T013907Z-post-pilot-hardening`](ISSUES/ISSUE-20260806T013907Z-post-pilot-hardening.md), and [`ADR-20260806T013907Z-root-protocol-adoption`](ADR/ADR-20260806T013907Z-root-protocol-adoption.md)
 
 # Goal
@@ -347,7 +348,7 @@ In all such situations, the agent should leave the repository in the most resuma
 
 # Fresh-agent onboarding
 
-Include a standard prompt template for a completely new participant entering an existing project.
+Include a standard prompt template for a completely new participant entering an existing project, retained as an explicit manual fallback and diagnostic entry. Under `DISCOVERY-001`, supported-host normal startup MUST NOT depend on the operator supplying this prompt or repeating protocol reminders in each task. The recovery obligations below apply regardless of entry mechanism.
 
 It should instruct the participant to:
 
@@ -382,18 +383,58 @@ Include a reusable prompt that generates/updates HUMAN_CHECKPOINT.md without dro
 
 # Plug-and-play requirement
 
-The final result should be usable in a new repository approximately like this:
+The final result MUST support one-time adoption followed by task-only entry:
 
-1. copy the protocol template into the repo
-2. fill in PROJECT_SPEC.md
-3. give a coding agent the onboarding prompt
-4. begin work
+1. Inventory existing instructions and authority; install or deliberately merge the protocol without overwriting history.
+2. Fill in PROJECT_SPEC.md and record required human acceptance; persist adoption, governed scope, and the canonical normative entry in repository artifacts.
+3. Install the minimal repository-local discovery adapter for the intended supported profile and validate the adoption/discovery path. This is one-time setup, not per-task prompting.
+4. Give a fresh supported participant an ordinary work request; it discovers the entry and performs recovery/authority checks before task implementation. Unsupported hosts use the explicit manual fallback without an automatic-activation claim.
+
+The former step 3, "give a coding agent the onboarding prompt", is superseded as a normal supported-host prerequisite, not deleted from historical evidence or removed as a fallback capability. Prior wording remains recoverable at `58fa281ee6cb93abc2fea81dd46f8ddef2d8612b`. Existing copies do not retroactively conform: they need a one-time documented migration and validation, not a reminder added to every task.
 
 Avoid project-specific assumptions.
 
 Do not assume a particular programming language, framework, CI provider, coding agent, or model vendor.
 
-It should work with Codex, Claude Code, Gemini/Kimi-style coding agents, or future equivalents.
+The protocol remains compatible in intent with Codex, Claude Code, Gemini/Kimi-style coding agents, or future equivalents. This is not blanket automatic-discovery support: such support is defined by evidence-bounded profiles below. A model name alone is not a harness capability or support guarantee.
+
+# Prompt-independent discovery and activation
+
+This product invariant governs entry into the protocol, not autonomous role rotation. Human technical owner `MattSureham` approved the requirement/authority plan and selected Codex CLI plus Claude Code for the initial implementation/conformance milestone and discovery-first priority. The owner-reported external failure motivates evolution; the [analysis](EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md) separately records repository-confirmed gaps and unavailable incident reproduction.
+
+## Accepted discovery requirements
+
+- **DISCOVERY-001 — Task-independent entry:** Once a repository has formally adopted the protocol, a fresh participant using a supported harness profile MUST discover that adoption through normal project startup/repository interaction and enter the normative workflow without task-level protocol reminders. Before its first task-specific implementation mutation it MUST recover applicable requirements, accepted ADRs, relevant issues/evidence, HANDOFF and actual working state, then establish authority and role. Recovery and necessary protocol record maintenance are not task implementation. Successful discovery never creates scope or relaxes review/evidence/handoff obligations.
+- **DISCOVERY-002 — Authority and adapter separation:** Normative protocol semantics MUST remain in repository-native authoritative artifacts. An adoption/discovery signal MUST locate the canonical entry and its governed scope without duplicating semantics. A host-specific adapter MAY convey that pointer via actually supported facilities, but MUST NOT redefine source precedence, requirements, milestones, role eligibility, gates or ownership. Root development and reusable-product instances remain separately governed. Authority and state MUST remain recoverable with repository/shell access after adapter removal; no host/session/global personal memory may become their sole source.
+- **DISCOVERY-003 — Evidence-bounded support:** Automatic-discovery support MUST name tested harness/version, execution mode, relevant model/configuration, start-directory scope and necessary trust/loading preconditions, and link real conformance evidence. Model/vendor names, binary presence, documentation, shim existence, stub success or participant assertions alone are insufficient. Every supported profile MUST satisfy the discovery acceptance criteria. Changed versions/configuration/loading behavior require revalidation of affected claims; untested hosts/modes remain unverified or manual-only. A documented one-time adoption/trust step is permitted, but per-task onboarding is not.
+- **DISCOVERY-004 — Safe adoption and migration:** Adoption MUST leave a durable repository-resident declaration, governed scope and resolvable normative entry, distinguishable from a template/example or unrelated nested repository. Installation/migration MUST preflight host-file collisions and preserve existing project instructions, provenance and authority mappings. Source package inventory remains exactly ten Markdown files with self-contained installation guidance. Peripheral host-specific artifacts may be installed/merged at adoption; they are not new normative core files or independent scope authority. Legacy prompt-dependent adoption remains usable manually but MUST NOT be presented as automatically conformant without migration and evidence.
+- **DISCOVERY-005 — Honest failure and fallback:** A discovered but unreadable/missing normative entry, conflicting authority, or insufficient durable state MUST prevent affected implementation and produce an attributable failure/next action through the available protocol path. No authorized work is a valid terminal state, not permission to invent scope. Unsupported, disabled or unavailable discovery mechanisms MUST have a documented manual fallback and explicit limitation; manual recovery MUST NOT count as automatic-activation success. Adapter loss MUST NOT erase repository authority. This requirement does not claim to enforce behavior on a host that loads no repository guidance at all.
+- **DISCOVERY-006 — Ordinary prompts and continuity:** Normal supported-host task prompts MUST need only describe the work, not name protocol files, request onboarding or restate governance/review/evidence rules. Keep the onboarding prompt for manual fallback/diagnostics. Adapter configuration/loading belongs to one-time setup and host implementation detail, never normative protocol authority. Subsequent participants MUST be able to resume from durable records rather than prior conversation, while respecting role separation and independent review.
+
+## Discovery architecture and first implementation boundary
+
+The compatible [accepted ADR](ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md) distinguishes repository-native authority, adoption/discovery signal, host-specific adapter and unsupported-host manual fallback. These responsibilities and the six requirements are normative; vendor filenames, import syntax and native load mechanisms are subordinate adapter details. The first slice prefers minimal repository-local native loading and requires capability verification before reliance; it does not mandate a universal filename, global configuration, service, hook framework or runtime dependency.
+
+The initial conformance scope is **Codex CLI and Claude Code**, not all named agents, IDE/cloud variants or future versions. The installed versions observed during authority recording (`codex-cli 0.153.4`, Claude Code `2.1.118`) are candidate environments, not yet certified support profiles. An unavailable or failing candidate remains an unmet acceptance condition; do not silently narrow the two-harness milestone. Escalate only when genuine authority is missing, not merely because a probe fails.
+
+Implementation is limited to thin repository entry bridges, required root/package onboarding and adoption documentation, scoped adoption declarations, discovery conformance tests/isolated fixtures and durable evidence. Preserve existing instructions; do not bypass host permissions or add global personal settings. A new security/trust boundary, dependency or architectural requirement needs owner authority. Pipeline, dispatcher and rotation implementation/role semantics, the four blocked deferrals, other harness implementations, unrelated infrastructure and the ten-file package inventory are excluded from change. Discovery tests do not replace AUTONOMY-004; existing prompt-injected rotation does not replace discovery tests.
+
+## Discovery acceptance criteria
+
+The discovery milestone requires all of the following before independent approval/acceptance:
+
+1. For **each** first-slice supported profile, run at least three independent fresh sessions in isolated, formally adopted repositories containing an explicitly authorized small task. Cover root-directory startup and every claimed supported subdirectory-start behavior. Preserve the fixture, exact adopted entry/adapter bytes and pre-run state so another participant can reproduce the test.
+2. The only user task is exactly `实现下一个已经授权的任务。`. It contains none of `protocol`, `BOOTSTRAP`, `PROJECT_SPEC`, `HANDOFF`, `recovery`, `governance`, or review/evidence/onboarding instructions. Use no resumed/prior conversation, hidden additional protocol prompt, personal global protocol settings, or copied rotation/onboarding prompt. Automatic injection by the declared repository discovery adapter is the mechanism under test, not prohibited task-prompt assistance; disclose every instruction source and any necessary one-time authentication/project-trust preconditions.
+3. Preserve observable loaded-source/tool-event chronology showing discovery and recovery of applicable authority, issues/evidence, HANDOFF and actual working state **before** task implementation, then authorized incremental work, required verification, durable evidence and resumable handoff. A participant must not review/accept its own target or bypass the repository's independent-review gate. Merely saying that recovery occurred is insufficient; if the host cannot expose adequate evidence, the claim remains unverified.
+4. Cover missing/unreadable entry, conflicting authority, no authorized work, pre-existing host-instruction collisions, template/nested-scope misidentification, and adapter removal followed by manual authority recovery. Negative cases must not silently proceed with unauthorized implementation. Cases relying on live host behavior require live observations; deterministic migration/link tests alone cannot prove that behavior. Removing an adapter does not require an unsupported host to magically detect adoption; it must preserve manual recovery and invalidate the automatic support claim.
+5. Record exact task input, UTC, harness/version/model/mode/configuration, startup directory, repository/fixture revision or hashes, actual loading sources, relevant ordered tool events, mutation/verification outcome, omissions and uncertainty in clone-recoverable evidence. Redact secrets without removing proof-critical sequencing. Temporary external paths, successful exit envelopes, old live-launch probes, stubs and self-reported compliance do not replace real activation evidence. A required failed or unrun case prevents the corresponding support claim and milestone acceptance.
+6. Pass deterministic repository checks, preserve the ten-file runtime-neutral core, verify fresh/existing-repository adoption and non-overwriting migration, and receive a fresh independent review of the immutable implementation target **including this authority/specification/ADR boundary** and live evidence. Only `APPROVED` with zero open material findings permits recorder acceptance; fixes remain within scope or escalate for new authority.
+
+Live conformance probes are deliberate bounded experiments, not automatically launched by the unit suite or status/validation tools. Declare supported time/tool/spend bounds before such launches, capture failures honestly, and never invent host controls. This owner/specification phase runs no probes and stops once authority is durably recorded.
+
+## Discovery ordering and historical compatibility
+
+Discovery occupies order 5, depending on the accepted live-invocation milestone. The unstarted autonomy demonstration keeps its stable ID, dependency, scope, criteria, `AUTHORIZED` state, attempt 0 and original events; only its order changes from 5 to 6. Record its old/new canonical digest and owner authority in its issue and the specification change record. This projection rebinding is specification migration, not a fictitious pipeline transition. The first four accepted entries/digests and all accepted ADR originals remain unchanged. Existing demonstration-only package exclusions still apply to that milestone; they do not prohibit the explicitly scoped discovery documentation/adapter work.
 
 # Scope constraints
 
@@ -718,8 +759,57 @@ The JSON object between the exact markers is normative content of this accepted 
       "review": "INDEPENDENT"
     },
     {
-      "id": "MILESTONE-20260817T021218Z-autonomy-demonstration-v1",
+      "id": "MILESTONE-20260918T064510Z-prompt-independent-discovery-v1",
       "order": 5,
+      "title": "Prompt-independent discovery and activation",
+      "issue": "ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md",
+      "depends_on": [
+        "MILESTONE-20260817T021218Z-live-invocation-v1"
+      ],
+      "scope": [
+        "Implement DISCOVERY-001 through DISCOVERY-006 using minimal repository-local discovery bridges for Codex CLI and Claude Code; preserve repository-native authority, scoped adoption declarations, existing project instructions, and honest unsupported-host fallback.",
+        "Update only necessary root and reusable onboarding/adoption guidance while preserving the exact ten-file Markdown core and self-contained installation; host-specific files remain subordinate peripheral adapters.",
+        "Provide deterministic discovery/migration tests and isolated fixtures plus real fresh-session conformance evidence for both initial harnesses under the discovery acceptance criteria; keep live probes out of automatic unit/status execution.",
+        "Preserve pipeline, dispatcher, rotation, role contracts and existing accepted architecture; record scoped issue/evidence/handoff and append-only rotation audit records without changing tooling or inventing further scope."
+      ],
+      "allowed_paths": [
+        "BOOTSTRAP.md",
+        "README.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        "protocol/BOOTSTRAP.md",
+        "protocol/README.md",
+        "protocol/PROMPTS.md",
+        "protocol/EXAMPLE.md",
+        "tests/test_discovery.py",
+        "tests/probe_discovery.py",
+        "tests/fixtures/discovery/",
+        "ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md",
+        "EVIDENCE/",
+        "ROTATION_LOG.jsonl",
+        "HANDOFF.md",
+        "HUMAN_CHECKPOINT.md"
+      ],
+      "acceptance_checks": [
+        {
+          "id": "repository-unit-tests",
+          "argv": [
+            "python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v"
+          ],
+          "timeout_seconds": 120
+        }
+      ],
+      "review": "INDEPENDENT"
+    },
+    {
+      "id": "MILESTONE-20260817T021218Z-autonomy-demonstration-v1",
+      "order": 6,
       "title": "Unattended autonomy demonstration",
       "issue": "ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md",
       "depends_on": [
@@ -887,3 +977,4 @@ Material requirement changes require human-owner authority. Keep exact proposed 
 | `2026-08-14T05:14:05Z` | Accepted the automated role dispatch phase and a second contract milestone for role contracts, eligibility rules, and a deterministic read-only next-role dispatcher with an explicit host adapter boundary | Eliminate routine human intervention between already-authorized pipeline transitions while keeping the accepted pipeline as the single state machine and leaving host session invocation outside repository authority | Human technical owner (`MattSureham`) | [`ISSUE-20260814T051405Z-role-dispatch`](ISSUES/ISSUE-20260814T051405Z-role-dispatch.md), [`ADR-20260814T051405Z-automated-role-dispatch`](ADR/ADR-20260814T051405Z-automated-role-dispatch.md) |
 | `2026-08-14T09:25:04Z` | Accepted the host adapter and participant rotation phase and a third contract milestone for an evidence-bounded host adapter, participant registry, append-only rotation ledger, failure taxonomy, and a bounded rotation runner executing dispatcher decisions | Close the participant-rotation loop using the host launch interface verified by live probe evidence while keeping repository state authoritative, adapters subordinate to dispatch decisions, and participant failures strictly distinct from human-authority escalation | Human technical owner (`MattSureham`) | [`ISSUE-20260814T092504Z-host-adapter-rotation`](ISSUES/ISSUE-20260814T092504Z-host-adapter-rotation.md), [`ADR-20260814T092504Z-host-adapter-rotation`](ADR/ADR-20260814T092504Z-host-adapter-rotation.md), [`EVIDENCE-20260814T092504Z-host-capability-probe`](EVIDENCE/EVIDENCE-20260814T092504Z-host-capability-probe.md) |
 | `2026-08-17T02:12:18Z` | Accepted the top-level product-level autonomy objective (`AUTONOMY-001`–`AUTONOMY-006`) and two further contract milestones: live participant invocation capability, then the unattended autonomy demonstration whose own lifecycle is the gated end-to-end dogfood run | Component milestone acceptance had been reachable while the owner's actual automation objective was unmet; make unattended multi-role progression the explicit product requirement and acceptance boundary, with intermediate milestones preserved as enabling capabilities that cannot be mistaken for completion | Human technical owner (`MattSureham`) | [`ISSUE-20260817T021218Z-live-invocation`](ISSUES/ISSUE-20260817T021218Z-live-invocation.md), [`ISSUE-20260817T021218Z-autonomy-demonstration`](ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md), [`ADR-20260817T021218Z-autonomy-end-state`](ADR/ADR-20260817T021218Z-autonomy-end-state.md) |
+| `2026-09-18T06:45:10Z` | Accepted DISCOVERY-001–006, four-layer entry boundary, task-only supported-host onboarding, and the first Codex CLI/Claude Code conformance milestone at order 5; explicitly superseded mandatory onboarding-prompt wording | Owner-reported real adoption failure plus repository-confirmed entry-contract gap; owner selected discovery-first priority, not a normative vendor mechanism | Human technical owner `MattSureham`; approved requirement/authority plan recorded by `agent:Codex-discovery-authority` | [Issue](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md), [accepted ADR](ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md), [analysis](EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); new discovery digest `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`; unstarted demonstration changes only order 5 to 6, digest `f0a1700f00500125d42e832a236077b0d42e87ebc4ade284a33335e8794c0284` to `2a86a8a5bb83a4bc2e5657e092894f7c28dddadb2ded2e529fd5654a1ee90254`, with state/attempt/events preserved; first four accepted entries/digests unchanged |

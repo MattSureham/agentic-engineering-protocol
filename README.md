@@ -32,11 +32,13 @@ The bounded participant-rotation runner is invoked with `python3 scripts/run_rot
 
 ## Running the authorized autonomy demonstration (live)
 
-The currently authorized demonstration is `MILESTONE-20260817T021218Z-autonomy-demonstration-v1`. The canonical operator command is:
+The authorized demonstration is `MILESTONE-20260817T021218Z-autonomy-demonstration-v1`, now order 6. **The runner is not pinned to that milestone:** it always follows the current dispatcher decision. The owner-approved [discovery milestone](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) has priority at order 5 and is currently `AUTHORIZED`; no discovery adapter or automatic-activation support has yet been established. Check `python3 scripts/run_dispatch.py --json` and HANDOFF before any live invocation. The owner/specification phase does not start the runner; the next implementation participant follows the discovery decision and existing role contract.
+
+When the dispatcher selects the demonstration, its canonical operator command remains:
 
     python3 scripts/run_rotation.py
 
-**This is live execution, not a dry run; there is no dry-run mode.** The runner launches real headless participant sessions that read, edit, and write files, run shell commands (including Git), and commit record changes on this repository; the recorder role's emitted records include a normal non-force push to the shared remote. Every launch consumes real quota and budget. Do not run the command unless you intend the demonstration to act on this repository.
+**This is live execution, not a dry run; there is no dry-run mode.** The runner launches real headless participant sessions that read, edit, and write files, run shell commands (including Git), and commit record changes on this repository; the recorder role's emitted records include a normal non-force push to the shared remote. Every launch consumes real quota and budget. Do not run the command unless you intend the currently selected authorized work to act on this repository. Never manually start the demonstration's READY transition: its own unattended-run criteria still require runner-launched participants throughout. Rotation's injected role prompts are not prompt-independent discovery evidence.
 
 - **`--root`:** selects the repository root and defaults to the parent of `scripts/` — this repository — so the canonical command needs no flag in a normal checkout.
 - **Bounds:** one invocation performs at most `max_steps` launches (registry default `8`), at most `max_attempts_per_decision` launches per dispatcher decision (default `2`, counted durably in the ledger across restarts), and stops before the next launch once reported spend reaches `max_spend_usd` (default `5.0` per invocation). `--max-steps`, `--max-attempts`, and `--max-spend-usd` override these per invocation. Each single launch is capped host-side at `max_budget_usd` (default `1.0`, passed as `--max-budget-usd`) and `timeout_seconds` (default `1800`). The canonical command uses the accepted registry defaults.
