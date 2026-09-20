@@ -4,7 +4,7 @@
 
 - **ID:** `ISSUE-20260918T064510Z-prompt-independent-discovery`
 - **Title:** Make supported fresh participants discover and activate adopted protocol without task-level reminders
-- **Status:** `INVESTIGATING`
+- **Status:** `IMPLEMENTING`
 - **Severity:** `HIGH`
 - **Owner:** `agent:Codex-discovery-authority`
 - **Authority:** `HUMAN`
@@ -76,10 +76,10 @@ Initial operational projection of the accepted contract; this block does not aut
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260918T064510Z-prompt-independent-discovery-v1",
   "authority_digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
-  "state": "READY",
-  "attempt": 0,
-  "implementor": null,
-  "base_revision": null,
+  "state": "IN_PROGRESS",
+  "attempt": 1,
+  "implementor": "agent:ClaudeCode-discovery",
+  "base_revision": "d140634673439a0853dc6a931e5de1fa835a4f19",
   "target_revision": null,
   "verification_evidence": [],
   "review_references": [],
@@ -99,6 +99,14 @@ Initial operational projection of the accepted contract; this block does not aut
       "from": "AUTHORIZED",
       "to": "READY",
       "reason": "Validated transition AUTHORIZED to READY."
+    },
+    {
+      "sequence": 3,
+      "utc": "2026-09-20T07:43:11Z",
+      "actor": "agent:ClaudeCode-discovery",
+      "from": "READY",
+      "to": "IN_PROGRESS",
+      "reason": "Implementation attempt 1 began from immutable base d140634673439a0853dc6a931e5de1fa835a4f19."
     }
   ]
 }
@@ -148,6 +156,7 @@ No round is recorded. Owner acceptance of requirements is not peer approval of i
 | `2026-09-18T06:45:10Z` | `agent:Codex-discovery-authority` | `INVESTIGATING` | `INVESTIGATING` | Persisted DISCOVERY-001–006, compatible accepted ADR, order-5 contract and initial AUTHORIZED projection; deterministic authority validation follows before handoff; no implementation or runtime transition |
 | `2026-09-19T21:37:43Z` | `agent:Codex-discovery-finalize` | `INVESTIGATING` | `INVESTIGATING` | Resumed interrupted final verification: 97 tests and persisted authority audit pass; linked evidence/HANDOFF/checkpoint reconciled for publication; no machine event added, implementation attempted, review recorded or issue closed |
 | `2026-09-20T07:43:11Z` | `agent:ClaudeCode-discovery` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
+| `2026-09-20T07:43:11Z` | `agent:ClaudeCode-discovery` | `INVESTIGATING` | `IMPLEMENTING` | Pipeline READY -> IN_PROGRESS. Implementation attempt 1 began from immutable base d140634673439a0853dc6a931e5de1fa835a4f19. |
 
 ## Closure checklist
 
