@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-18T06:45:10Z`
-- **Updated UTC:** `2026-09-19T21:37:43Z`
+- **Updated UTC:** `2026-09-20T07:43:11Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance and order-5 contract
 - **ADRs:** Accepted [four-layer discovery boundary](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [Authority/gap analysis](../EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); [authority validation](../EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md)
@@ -76,7 +76,7 @@ Initial operational projection of the accepted contract; this block does not aut
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260918T064510Z-prompt-independent-discovery-v1",
   "authority_digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
-  "state": "AUTHORIZED",
+  "state": "READY",
   "attempt": 0,
   "implementor": null,
   "base_revision": null,
@@ -91,6 +91,14 @@ Initial operational projection of the accepted contract; this block does not aut
       "from": null,
       "to": "AUTHORIZED",
       "reason": "Owner approved prompt-independent discovery requirements, four-layer architecture, Codex CLI plus Claude Code first slice, and discovery-first order through specification evolution."
+    },
+    {
+      "sequence": 2,
+      "utc": "2026-09-20T07:43:11Z",
+      "actor": "agent:ClaudeCode-discovery",
+      "from": "AUTHORIZED",
+      "to": "READY",
+      "reason": "Validated transition AUTHORIZED to READY."
     }
   ]
 }
@@ -139,6 +147,7 @@ No round is recorded. Owner acceptance of requirements is not peer approval of i
 | `2026-09-18T06:45:10Z` | `human:MattSureham`, recorded by `agent:Codex-discovery-authority` | `OPEN` | `INVESTIGATING` | Owner approved requirement evolution, four-layer boundary, two-harness first slice, discovery-first ordering, and authority-only stop boundary |
 | `2026-09-18T06:45:10Z` | `agent:Codex-discovery-authority` | `INVESTIGATING` | `INVESTIGATING` | Persisted DISCOVERY-001–006, compatible accepted ADR, order-5 contract and initial AUTHORIZED projection; deterministic authority validation follows before handoff; no implementation or runtime transition |
 | `2026-09-19T21:37:43Z` | `agent:Codex-discovery-finalize` | `INVESTIGATING` | `INVESTIGATING` | Resumed interrupted final verification: 97 tests and persisted authority audit pass; linked evidence/HANDOFF/checkpoint reconciled for publication; no machine event added, implementation attempted, review recorded or issue closed |
+| `2026-09-20T07:43:11Z` | `agent:ClaudeCode-discovery` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 
 ## Closure checklist
 
