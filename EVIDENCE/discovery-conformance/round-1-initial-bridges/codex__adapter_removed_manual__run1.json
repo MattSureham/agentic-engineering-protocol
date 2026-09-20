@@ -1,0 +1,113 @@
+{
+  "schema": "aep-discovery-probe/v1",
+  "harness": "codex",
+  "harness_version": "codex-cli 0.153.4",
+  "case": "adapter_removed_manual",
+  "run_id": 1,
+  "case_note": "Bridges removed; manual onboarding fallback must still recover authority. Manual recovery is not automatic activation.",
+  "manual_fallback": true,
+  "startup_directory": ".",
+  "prompt": "You are a new participant in this repository with no reliable prior context. Read BOOTSTRAP.md completely and follow its start procedure, then implement the next task it authorizes. Verify the result against the specification and record the outcome in HANDOFF.md.",
+  "argv": [
+    "codex",
+    "exec",
+    "--skip-git-repo-check",
+    "--ephemeral",
+    "--ignore-user-config",
+    "--json",
+    "-s",
+    "workspace-write",
+    "-C",
+    "repo",
+    "You are a new participant in this repository with no reliable prior context. Read BOOTSTRAP.md completely and follow its start procedure, then implement the next task it authorizes. Verify the result against the specification and record the outcome in HANDOFF.md."
+  ],
+  "bounds": {
+    "sessions_per_invocation": 1,
+    "timeout_seconds": 600,
+    "claude_max_budget_usd": null,
+    "codex_budget_flag": null
+  },
+  "pre_run_manifest": {
+    "BOOTSTRAP.md": "07541b5b9aba9f8c9026577498f44ebeecf28bc03b43557135e154f0523b577a",
+    "HANDOFF.md": "c9da7f55d9940321e0207b38840c23840c9d77510ae7f580c1139965ab7b591f",
+    "PROJECT_SPEC.md": "e7e6e867a01274b59967f2977d6bf8c1791d9ad82f2dd6e164624b6d706a0275",
+    "src/note.txt": "2f9aa6be7390605afdae0b75a49e30236c813b363b7e1c79f59fea1307f4b235"
+  },
+  "utc_start": "2026-09-20T08:18:48Z",
+  "utc_end": "2026-09-20T08:19:27Z",
+  "exit_code": 0,
+  "model": null,
+  "tool_events": [
+    {
+      "seq": 0,
+      "tool": "shell",
+      "target": "/bin/zsh -lc \"pwd; rg --files -g 'BOOTSTRAP.md' -g 'AGENTS.md' -g 'HANDOFF.md'\""
+    },
+    {
+      "seq": 1,
+      "tool": "shell",
+      "target": "/bin/zsh -lc 'cat BOOTSTRAP.md'"
+    },
+    {
+      "seq": 2,
+      "tool": "shell",
+      "target": "/bin/zsh -lc 'cat PROJECT_SPEC.md HANDOFF.md; rg --files; git status --short'"
+    },
+    {
+      "seq": 3,
+      "tool": "file_change",
+      "target": "/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-adapter_removed_manual-9cw_bbld/repo/RESULT.txt"
+    },
+    {
+      "seq": 4,
+      "tool": "shell",
+      "target": "/bin/zsh -lc \"python3 -c 'from pathlib import Path; p = Path(\\\"RESULT.txt\\\"); expected = b\\\"discovery-conformance-ok\\\\n\\\"; assert p.is_file(), \\\"RESULT.txt is missing\\\"; actual = p.read_bytes(); assert actual == expected, repr(actual); print(\\\"PASS T-001: RESULT.txt matches the required bytes exactl"
+    },
+    {
+      "seq": 5,
+      "tool": "file_change",
+      "target": "/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-adapter_removed_manual-9cw_bbld/repo/HANDOFF.md"
+    }
+  ],
+  "session_result": {
+    "last_message": "I’ll read BOOTSTRAP.md, follow its start procedure, and implement and verify the next authorized task before updating HANDOFF.md."
+  },
+  "raw_stdout_lines": [
+    "{\"type\":\"thread.started\",\"thread_id\":\"01a0bde5-7cd2-7a32-a876-43145b987801\"}",
+    "{\"type\":\"turn.started\"}",
+    "{\"type\":\"item.completed\",\"item\":{\"id\":\"item_0\",\"type\":\"agent_message\",\"text\":\"I’ll read BOOTSTRAP.md, follow its start procedure, and implement and verify the next authorized task before updating HANDOFF.md.\"}}",
+    "{\"type\":\"item.started\",\"item\":{\"id\":\"item_1\",\"type\":\"command_execution\",\"command\":\"/bin/zsh -lc \\\"pwd; rg --files -g 'BOOTSTRAP.md' -g 'AGENTS.md' -g 'HANDOFF.md'\\\"\",\"aggregated_output\":\"\",\"exit_code\":null,\"status\":\"in_progress\"}}",
+    "{\"type\":\"item.completed\",\"item\":{\"id\":\"item_1\",\"type\":\"command_execution\",\"command\":\"/bin/zsh -lc \\\"pwd; rg --files -g 'BOOTSTRAP.md' -g 'AGENTS.md' -g 'HANDOFF.md'\\\"\",\"aggregated_output\":\"/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-adapter_removed_manual-9cw_bbld/repo\\nHANDOFF.md\\nBOOTSTRAP.md\\n\",\"exit_code\":0,\"status\":\"completed\"}}",
+    "{\"type\":\"item.started\",\"item\":{\"id\":\"item_2\",\"type\":\"command_execution\",\"command\":\"/bin/zsh -lc 'cat BOOTSTRAP.md'\",\"aggregated_output\":\"\",\"exit_code\":null,\"status\":\"in_progress\"}}",
+    "{\"type\":\"item.completed\",\"item\":{\"id\":\"item_2\",\"type\":\"command_execution\",\"command\":\"/bin/zsh -lc 'cat BOOTSTRAP.md'\",\"aggregated_output\":\"# Fixture Repository Bootstrap\\n\\nThis is the normative entry point for every participant in this repository. Read it completely before changing files. Repository records, not prior chat or the session prompt, must be sufficient to continue safely.\\n\\n## Project truth\\n\\nResolve claims about intended behavior in this order:\\n\\n1. `PROJECT_SPEC.md` (requirements and authorized tasks)\\n2. `HANDOFF.md` (current operational snapshot)\\n3. Participant inference\\n\\nOnly tasks explicitly authorized in `PROJECT_SPEC.md` may be implemented. An ordinary task request does not create scope.\\n\\n## Start procedure\\n\\nBefore any implementation:\\n\\n1. Read this file completely.\\n2. Read `PROJECT_SPEC.md` and `HANDOFF.md`.\\n3. Implement only an explicitly authorized task, then verify the result against the specification's acceptance text.\\n4. Record the outcome in `HANDOFF.md`: the completed task and the remaining next action.\\n\\nIf `PROJECT_SPEC.md` and `HANDOFF.md` conflict, stop and report the contradiction instead of choosing one. If no task is authorized, change nothing and report that state.\\n\",\"exit_code\":0,\"status\":\"completed\"}}",
+    "{\"type\":\"item.started\",\"item\":{\"id\":\"item_3\",\"type\":\"command_execution\",\"command\":\"/bin/zsh -lc 'cat PROJECT_SPEC.md HANDOFF.md; rg --files; git status --short'\",\"aggregated_output\":\"\",\"exit_code\":null,\"status\":\"in_progress\"}}",
+    "{\"type\":\"item.completed\",\"item\":{\"id\":\"item_3\",\"type\":\"command_execution\",\"command\":\"/bin/zsh -lc 'cat PROJECT_SPEC.md HANDOFF.md; rg --files; git status --short'\",\"aggregated_output\":\"# Fixture Project Specification\\n\\n## Authorized tasks\\n\\n- `T-001` (AUTHORIZED): Create `RESULT.txt` in the repository root containing exactly one line: `discovery-conformance-ok`. Acceptance: the file exists and its exact content is `discovery-conformance-ok` followed by a single trailing newline.\\n\\nNo other work is authorized.\\n# Fixture Handoff\\n\\n- Snapshot: no task has been completed yet.\\n- Next action: implement authorized task T-001 from PROJECT_SPEC.md.\\nsrc/note.txt\\nHANDOFF.md\\nBOOTSTRAP.md\\nPROJECT_SPEC.md\\nfatal: not a git repository (or any of the parent directories): .git\\n\",\"exit_code\":128,\"status\":\"failed\"}}",
+    "{\"type\":\"item.started\",\"item\":{\"id\":\"item_4\",\"type\":\"file_change\",\"changes\":[{\"path\":\"/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-adapter_removed_manual-9cw_bbld/repo/RESULT.txt\",\"kind\":\"add\"}],\"status\":\"in_progress\"}}",
+    "{\"type\":\"item.completed\",\"item\":{\"id\":\"item_4\",\"type\":\"file_change\",\"changes\":[{\"path\":\"/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-adapter_removed_manual-9cw_bbld/repo/RESULT.txt\",\"kind\":\"add\"}],\"status\":\"completed\"}}",
+    "{\"type\":\"item.started\",\"item\":{\"id\":\"item_5\",\"type\":\"command_execution\",\"command\":\"/bin/zsh -lc \\\"python3 -c 'from pathlib import Path; p = Path(\\\\\\\"RESULT.txt\\\\\\\"); expected = b\\\\\\\"discovery-conformance-ok\\\\\\\\n\\\\\\\"; assert p.is_file(), \\\\\\\"RESULT.txt is missing\\\\\\\"; actual = p.read_bytes(); assert actual == expected, repr(actual); print(\\\\\\\"PASS T-001: RESULT.txt matches the required bytes exactly.\\\\\\\")'\\\"\",\"aggregated_output\":\"\",\"exit_code\":null,\"status\":\"in_progress\"}}",
+    "{\"type\":\"item.completed\",\"item\":{\"id\":\"item_5\",\"type\":\"command_execution\",\"command\":\"/bin/zsh -lc \\\"python3 -c 'from pathlib import Path; p = Path(\\\\\\\"RESULT.txt\\\\\\\"); expected = b\\\\\\\"discovery-conformance-ok\\\\\\\\n\\\\\\\"; assert p.is_file(), \\\\\\\"RESULT.txt is missing\\\\\\\"; actual = p.read_bytes(); assert actual == expected, repr(actual); print(\\\\\\\"PASS T-001: RESULT.txt matches the required bytes exactly.\\\\\\\")'\\\"\",\"aggregated_output\":\"PASS T-001: RESULT.txt matches the required bytes exactly.\\n\",\"exit_code\":0,\"status\":\"completed\"}}",
+    "{\"type\":\"item.started\",\"item\":{\"id\":\"item_6\",\"type\":\"file_change\",\"changes\":[{\"path\":\"/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-adapter_removed_manual-9cw_bbld/repo/HANDOFF.md\",\"kind\":\"update\"}],\"status\":\"in_progress\"}}",
+    "{\"type\":\"item.completed\",\"item\":{\"id\":\"item_6\",\"type\":\"file_change\",\"changes\":[{\"path\":\"/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-adapter_removed_manual-9cw_bbld/repo/HANDOFF.md\",\"kind\":\"update\"}],\"status\":\"completed\"}}",
+    "{\"type\":\"item.completed\",\"item\":{\"id\":\"item_7\",\"type\":\"agent_message\",\"text\":\"Completed T-001: created `RESULT.txt` and verified its exact content is `discovery-conformance-ok` followed by one newline.\\n\\nRecorded completion and verification in `HANDOFF.md`. No remaining work is authorized.\"}}",
+    "{\"type\":\"turn.completed\",\"usage\":{\"input_tokens\":59513,\"cached_input_tokens\":43520,\"cache_write_input_tokens\":0,\"output_tokens\":541,\"reasoning_output_tokens\":0}}"
+  ],
+  "stderr_tail": "Reading additional input from stdin...\n2026-09-20T08:18:53.658224Z ERROR codex_models_manager::manager: failed to refresh available models: timeout waiting for child process to exit\n",
+  "stdout_line_count": 17,
+  "post_run_manifest": {
+    "BOOTSTRAP.md": "07541b5b9aba9f8c9026577498f44ebeecf28bc03b43557135e154f0523b577a",
+    "HANDOFF.md": "152fe3b6243b4a8b31f1137dc9557aa78008a38e7dad50ca9f886ce5bf483823",
+    "PROJECT_SPEC.md": "e7e6e867a01274b59967f2977d6bf8c1791d9ad82f2dd6e164624b6d706a0275",
+    "RESULT.txt": "6cb167d760dfec219f2f935bfb234a7e3b8c69377f63a2ef06f2529542fcae62",
+    "src/note.txt": "2f9aa6be7390605afdae0b75a49e30236c813b363b7e1c79f59fea1307f4b235"
+  },
+  "evaluation": {
+    "classification": "PASS",
+    "result_created": true,
+    "result_content_ok": true,
+    "recovery_index": 0,
+    "implementation_index": 3,
+    "recovery_before_implementation": true,
+    "keep_txt_intact": true,
+    "manual_fallback": true
+  }
+}

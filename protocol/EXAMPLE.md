@@ -100,4 +100,4 @@ The public result for empty or whitespace-only input is UNKNOWN. Choosing an err
 
 ## First participant invocation
 
-The owner supplies the Fresh implementor prompt from [`PROMPTS.md`](PROMPTS.md), scoped to REQ-KEY-001. The participant still reads [`BOOTSTRAP.md`](BOOTSTRAP.md), inspects the real repository, and replaces all synthetic facts with evidence. It does not copy this example's approvals, timestamps, or issue IDs into a live project.
+The owner completed one-time adoption, including the discovery bridge from the guide's "Discovery bridges" section, and gives the fresh participant only the ordinary task scoped to REQ-KEY-001. Loaded through the bridge, the participant reads [`BOOTSTRAP.md`](BOOTSTRAP.md), inspects the real repository, and replaces all synthetic facts with evidence. On a host without a verified bridge the owner instead supplies the Fresh implementor prompt from [`PROMPTS.md`](PROMPTS.md) as the manual fallback. Either way the participant does not copy this example's approvals, timestamps, or issue IDs into a live project.

@@ -1,0 +1,1 @@
+Subdirectory-start fixture marker. Sessions launched in this directory still operate on the enclosing adopted repository.

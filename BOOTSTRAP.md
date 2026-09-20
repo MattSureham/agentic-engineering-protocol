@@ -40,6 +40,7 @@ Use these labels for material claims:
 - `HANDOFF.md` owns only the current operational snapshot, compact unresolved-issue index, non-terminal background-task state, one next action, recent activity, and an archive index.
 - `HUMAN_CHECKPOINT.md` is a low-bandwidth owner summary and decision queue. It cannot override the specification or accepted ADRs.
 - `README.md` is repository navigation. Files under `protocol/` are the reusable product, governed by the root specification but not a replacement for root development records.
+- `AGENTS.md` and `CLAUDE.md` are host-specific discovery bridges that point a fresh participant to this file as the canonical entry. They are peripheral adapter artifacts with no protocol authority; their loss never erases repository authority or durable state, and manual recovery with repository access remains possible.
 
 The live HANDOFF is not an issue database, decision log, evidence archive, terminal-task ledger, or chronological diary. Put durable detail in its owning artifact and link it from HANDOFF only while operationally relevant.
 

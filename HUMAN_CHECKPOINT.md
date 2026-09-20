@@ -4,12 +4,12 @@ This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BO
 
 ## Checkpoint metadata
 
-- **Generated UTC:** `2026-09-19T21:37:43Z` (resumed authority finalization; deterministic validation complete)
-- **Prepared by:** `agent:Codex-discovery-finalize`, preserving the preceding `agent:Codex-discovery-authority` decisions
-- **Period covered:** Owner-approved prompt-independent discovery requirement evolution from clean synchronized `58fa281ee6cb93abc2fea81dd46f8ddef2d8612b`
-- **Specification status reviewed:** `ACCEPTED`; DISCOVERY-001–006 and the discovery milestone are authorized, not implemented or independently accepted
-- **Implementation/reference state:** Tooling and ten-file reusable package unchanged; four accepted milestones retained; discovery order 5 and demonstration order 6 are AUTHORIZED at attempt 0
-- **Prior checkpoint:** Exact prior owner summary remains recoverable with `git show 58fa281:HUMAN_CHECKPOINT.md`; prior accepted decisions/reviews are not rewritten
+- **Generated UTC:** `2026-09-20T08:44:32Z` (discovery attempt 1 implemented and verified; independent review pending)
+- **Prepared by:** `agent:ClaudeCode-discovery`, preserving all prior authority decisions
+- **Period covered:** Discovery milestone attempt 1 implementation and live conformance from published `25a78bc`
+- **Specification status reviewed:** `ACCEPTED`; DISCOVERY-001–006 unchanged — implementation now exists and awaits independent review, not yet accepted
+- **Implementation/reference state:** Root discovery bridges (`AGENTS.md`/`CLAUDE.md`), evolved package adoption guidance, deterministic tests, live probe harness and fixture added within the milestone's allowed paths; ten-file reusable package inventory unchanged; demonstration remains AUTHORIZED attempt 0 at order 6
+- **Prior checkpoint:** Exact prior owner summary remains recoverable with `git show 25a78bc:HUMAN_CHECKPOINT.md`; prior accepted decisions/reviews are not rewritten
 
 ## System mental model
 
@@ -25,6 +25,8 @@ Discovery is a new **entry** requirement: a supported fresh participant must fin
 | Four-layer discovery boundary | [Accepted ADR](ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md), owner-approved before implementation | Repository-native authority → scoped adoption signal → subordinate host adapter; unsupported hosts retain manual fallback |
 | First implementation/conformance scope | Owner selected Codex CLI plus Claude Code | Both require real fresh-session evidence; neither is currently certified by this record |
 | Discovery-first scheduling | Owner explicitly chose new work before the unstarted demonstration | New order-5 contract; demonstration order 5→6 and digest rebinding only; first four accepted entries/digests and all old ADR originals remain unchanged |
+| Discovery attempt 1 implementation | Accepted milestone scope; executed by `agent:ClaudeCode-discovery` | Root `AGENTS.md`/`CLAUDE.md` thin bridges with a governed-scope rule; package quick start installs a one-time bridge and demotes the onboarding prompt to manual fallback; deterministic tests plus bounded live harness and fixture |
+| First live conformance evidence | [Live conformance evidence](EVIDENCE/EVIDENCE-20260920T080830Z-discovery-live-conformance.md): 57 bounded fresh sessions | Claude Code `2.1.118` passed root and subdirectory starts plus all negative cases; Codex CLI `0.153.4` passed root start and negatives but not subdirectory start reliably (2/3), which is not claimed; a nested-scope failure found in round 1 was repaired by the bridge scope sentence and re-verified |
 
 ## Architecture decisions
 
@@ -36,9 +38,9 @@ Discovery is a new **entry** requirement: a supported fresh participant must fin
 
 ## Complexity and architecture drift
 
-New complexity is limited to scoped adoption declarations, profile-specific loading/migration and maintained conformance evidence, owned by the [discovery issue](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md). No runtime/interface change has been made.
+New complexity is limited to the two thin root bridges, scoped adoption guidance, the deterministic/live discovery test pair with its fixture, and maintained conformance evidence, owned by the [discovery issue](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md). No pipeline, dispatcher, rotation, or runtime interface change was made.
 
-The current reusable package still requires explicit onboarding. That mismatch with the newly accepted target behavior is an explicit implementation gap, not silently fixed semantics or an approval claim. The next immutable target requires independent review including this authority boundary and root/product alignment.
+The reusable package no longer requires per-task onboarding on verified profiles: adoption installs a one-time bridge, and the onboarding prompt remains as documented manual fallback. The attempt-1 target awaits independent review including the authority boundary and root/product alignment; nothing is accepted yet.
 
 ## Assumptions and uncertainty that changed
 
@@ -46,17 +48,18 @@ The current reusable package still requires explicit onboarding. That mismatch w
 |---|---|---|
 | CONFIRMED | Existing onboarding/launcher prompts contain explicit protocol reminders | Their success does not establish task-independent discovery |
 | CONFIRMED | Owner approved initial two-harness scope and discovery-first order | Requirements, ADR and contracts now carry durable authority |
+| CONFIRMED | Claude Code root/subdirectory and Codex CLI root activation are demonstrated on the probed host with final fixture bytes | Support claims are bounded to those tested profiles; Codex subdirectory start is explicitly not claimed |
 | UNKNOWN | Exact external incident reproduction | Report is attributed to owner; no trace or external repository evidence fabricated |
-| UNKNOWN | Candidate profiles actually activate reliably | Required real fresh-session acceptance is NOT RUN; supported profiles cannot yet be claimed |
+| UNKNOWN | Cross-host/version reliability | Changed versions or loading behavior require revalidation before claims move |
 | UNKNOWN | Unattended AUTONOMY-004 demonstration | Still unperformed; component acceptance and discovery conformance cannot substitute for it |
 
 ## Confidence and verification
 
-- Baseline Git recovery and owner approval are recorded; the resumed full suite passes all 97 tests (23.916s, exit `0`) on Darwin arm64/Python 3.9.6.
-- [Persisted authority audit](EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md) passes: six contracts, four accepted digests unchanged, demonstration order-only/digest-only rebinding, discovery AUTHORIZED attempt 0, deterministic implementer dispatch, 58 Markdown documents/relative paths, history and protected-tree preservation, isolated ten-file copy and whitespace checks.
-- This checkpoint is a pre-commit publication snapshot for `docs: authorize prompt-independent discovery` directly after `58fa281`. A normal push and equality of local/cached/direct remote refs must be established from Git before the next participant consumes it; the containing commit supplies its own immutable identity.
-- No adapter, instruction shim, reusable-package change, live probe, rotation run, implementation attempt, independent review or recorder acceptance is performed in this phase.
-- Dedicated Markdown linters are unavailable; full CommonMark, external URLs and fragment targets are outside the performed structural checks. Live discovery acceptance is NOT RUN. Cross-host/version reliability, original incident reproduction, authenticated identity, concurrent writers, scale and production readiness are not established.
+- The full deterministic suite passes 124 tests (exit `0`) and `validate_protocol.py` passes on Darwin arm64/Python 3.9.6.
+- [Live conformance evidence](EVIDENCE/EVIDENCE-20260920T080830Z-discovery-live-conformance.md) records 57 bounded fresh sessions with per-run JSON records, fixture manifests and tool-event chronologies; the 28-run final matrix used identical final fixture bytes.
+- This checkpoint accompanies the attempt-1 implementation target; publication equality of local/cached/direct remote refs must be established from Git.
+- No independent review or recorder acceptance exists for this target; the implementer stopped at the review boundary and made no self-approval.
+- Dedicated Markdown linters are unavailable; full CommonMark, external URLs and fragment targets are outside the performed structural checks. Original incident reproduction, authenticated identity, concurrent writers, scale and production readiness are not established.
 
 ## Human attention required
 
@@ -66,11 +69,11 @@ Four prior deferrals remain BLOCKED: concurrent-writer guarantees, authenticated
 
 ## No human attention required
 
-The next implementation participant may follow the existing dispatcher and role contract through the accepted discovery scope, deterministic verification and independent fix/re-review loop. It must preserve real conformance evidence and must not certify its own target. The present authority participant stops before READY.
+The independent reviewer follows the dispatcher and role contract for the frozen attempt-1 target; fixes stay within the accepted scope or escalate. The implementer has stopped at the review boundary.
 
 The demonstration retains its original lifecycle acceptance conditions: when selected later, runner-launched participants must perform the complete lifecycle; no manual transition is authorized as a shortcut to its evidence.
 
 ## Next checkpoint trigger
 
 - **Trigger:** Missing authority, material review ambiguity, proposed boundary expansion, conformance evidence unable to support the intended contract, or milestone acceptance
-- **Expected owner action before then:** NONE; after authority-record validation/publication, the next participant follows the discovery implementer decision. No live runner invocation occurs in this owner/specification phase.
+- **Expected owner action before then:** NONE; the next participant is the independent reviewer of the attempt-1 target, followed by the recorder lifecycle per the existing contract.

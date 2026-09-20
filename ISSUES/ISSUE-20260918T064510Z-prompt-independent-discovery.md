@@ -35,7 +35,7 @@ An adopted repository MUST be discovered and its authority/durable state recover
 
 - **CONFIRMED:** The owner approved the decision-complete requirement/authority-recording plan before this record; no adapter implementation is part of this participant's task.
 - **INFERRED:** Native project instruction loading can provide a small host-specific bridge; official capability descriptions alone cannot establish behavioral conformance.
-- **UNKNOWN:** Concrete profile configurations and their demonstrated reliability; later live acceptance evidence must resolve them.
+- **CONFIRMED (2026-09-20):** Concrete first-slice profiles and their demonstrated reliability are now recorded in the [live conformance evidence](../EVIDENCE/EVIDENCE-20260920T080830Z-discovery-live-conformance.md): Claude Code `2.1.118` root and subdirectory start; Codex CLI `0.153.4` root start only.
 
 ## Investigation and decision
 
@@ -65,10 +65,12 @@ The approved phase persists specification, compatible accepted ADR, a bounded im
 | `2026-09-18T06:45:10Z` | `agent:Codex-discovery-authority` | Git recovery, complete root BOOTSTRAP read, source/spec/ADR/issue inspection; `git ls-remote origin refs/heads/main` | Clean main at `58fa281`; direct remote equals local/cached baseline; exit `0` | Baseline Git and this record | No live activation test; authority recording not yet complete |
 | `2026-09-19T21:37:43Z` | `agent:Codex-discovery-finalize` | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v`; execute the persisted authority audit | 97 tests in 23.916s, `OK`, exit `0`; audit `PASS`, exit `0` | Linked authority validation, including exact reproduction procedure | Deterministic authority checks only; Darwin arm64/Python 3.9.6; dedicated Markdown linter unavailable; real activation NOT RUN |
 | `2026-09-19T21:37:43Z` | `agent:Codex-discovery-finalize` | Fetch/direct-remote recovery and protected-byte/history audit against `58fa281` | Local/cached/direct baseline equal; exactly nine record paths; all other baseline bytes unchanged; original activity retained | Linked authority validation and containing commit diff | Publication equality must be verified from Git; no implementation transition, review or acceptance |
+| `2026-09-20T08:44:32Z` | `agent:ClaudeCode-discovery` | `python3 -m unittest discover -s tests -v`; `python3 scripts/validate_protocol.py`; `git diff --check` | 124 tests `OK`, exit `0`; validator `PASS`; clean diff | This record and the immutable target commit | Darwin arm64/Python 3.9.6; deterministic checks only |
+| `2026-09-20T08:44:32Z` | `agent:ClaudeCode-discovery` | Live conformance program: 57 bounded headless sessions (2 capability, 25 initial, 2 validation, 28 final) launched via `tests/probe_discovery.py` against isolated fixture copies, exact task prompt `实现下一个已经授权的任务。` | Final matrix (identical final fixture bytes): Claude Code 12 PASS + manual-fallback PASS + 1 OBSERVE, root and subdirectory start; Codex CLI 12 PASS + manual-fallback PASS + 1 OBSERVE at root, subdirectory start 2/3 and not claimed; all negative cases behaved | [Live conformance evidence](../EVIDENCE/EVIDENCE-20260920T080830Z-discovery-live-conformance.md) with per-run JSON records, manifests and event chronologies | Single host/model per harness; Codex model and cost not exposed; loader internals inferred from tool chronology |
 
 ## Pipeline state
 
-Initial operational projection of the accepted contract; this block does not authorize scope. No READY transition, implementation attempt, target, review, or acceptance has occurred. New digest: `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`.
+Operational projection of the accepted contract; this block does not authorize scope. Attempt 1 implementation and live conformance are complete at the frozen target; independent review and acceptance have not occurred. New digest: `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`.
 
 <!-- AEP-PIPELINE-STATE-V1:BEGIN -->
 ```json
@@ -144,7 +146,7 @@ No round is recorded. Owner acceptance of requirements is not peer approval of i
 
 ## Residual uncertainty
 
-- This issue owns the missing first-slice activation evidence and migration/conformance work. Unsupported hosts remain manual-only/unverified, not implicitly supported.
+- First-slice activation evidence now exists (see Verification): Claude Code `2.1.118` root and subdirectory start, Codex CLI `0.153.4` root start, on the probed host configuration. Codex subdirectory start passed only 2 of 3 final runs (and 1 of 2 initial runs) and is not claimed. Unsupported hosts, other models/versions, and this host after upgrades remain manual-only or unverified, not implicitly supported.
 - No production-grade reliability, authenticated identity, concurrent-writer safety, or autonomous-demonstration completion is claimed.
 
 ## Activity history
@@ -157,6 +159,7 @@ No round is recorded. Owner acceptance of requirements is not peer approval of i
 | `2026-09-19T21:37:43Z` | `agent:Codex-discovery-finalize` | `INVESTIGATING` | `INVESTIGATING` | Resumed interrupted final verification: 97 tests and persisted authority audit pass; linked evidence/HANDOFF/checkpoint reconciled for publication; no machine event added, implementation attempted, review recorded or issue closed |
 | `2026-09-20T07:43:11Z` | `agent:ClaudeCode-discovery` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 | `2026-09-20T07:43:11Z` | `agent:ClaudeCode-discovery` | `INVESTIGATING` | `IMPLEMENTING` | Pipeline READY -> IN_PROGRESS. Implementation attempt 1 began from immutable base d140634673439a0853dc6a931e5de1fa835a4f19. |
+| `2026-09-20T08:44:32Z` | `agent:ClaudeCode-discovery` | `IMPLEMENTING` | `IMPLEMENTING` | Implemented the authorized slice within contract allowed paths: root `AGENTS.md`/`CLAUDE.md` adoption-declaration bridges with an explicit governed-scope rule; package onboarding/adoption documentation evolution (one-time bridge installation, onboarding prompt demoted to manual fallback); `tests/test_discovery.py` deterministic coverage, `tests/probe_discovery.py` bounded live harness and `tests/fixtures/discovery/`; 57-session live conformance program with per-run durable records under `EVIDENCE/discovery-conformance/`. One nested-scope misidentification finding was repaired via the bridge scope sentence and re-verified before the final matrix. |
 
 ## Closure checklist
 

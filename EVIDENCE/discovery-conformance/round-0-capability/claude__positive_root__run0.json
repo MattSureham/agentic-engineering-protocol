@@ -1,0 +1,122 @@
+{
+  "schema": "aep-discovery-probe/v1",
+  "harness": "claude",
+  "harness_version": "2.1.118 (Claude Code)",
+  "case": "positive_root",
+  "run_id": 0,
+  "case_note": "Root-directory start; bridge-driven discovery must recover authority before implementing T-001.",
+  "manual_fallback": false,
+  "startup_directory": ".",
+  "prompt": "实现下一个已经授权的任务。",
+  "argv": [
+    "claude",
+    "-p",
+    "实现下一个已经授权的任务。",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--tools",
+    "Read,Edit,Write,Bash",
+    "--allowedTools",
+    "Read,Edit,Write,Bash",
+    "--max-budget-usd",
+    "0.75",
+    "--session-id",
+    "e4b607b6-c31e-4e9f-a039-8c998fc437d9"
+  ],
+  "bounds": {
+    "sessions_per_invocation": 1,
+    "timeout_seconds": 600,
+    "claude_max_budget_usd": "0.75",
+    "codex_budget_flag": null
+  },
+  "pre_run_manifest": {
+    "AGENTS.md": "bd429089b30bf8d8f8827204becaea78a428d6a333c63192369dc7b2a74ec9ba",
+    "BOOTSTRAP.md": "07541b5b9aba9f8c9026577498f44ebeecf28bc03b43557135e154f0523b577a",
+    "CLAUDE.md": "74e888e1f261dd62ba73a64c9ffeef3e4d251f6896028de3060146f6d915a240",
+    "HANDOFF.md": "c9da7f55d9940321e0207b38840c23840c9d77510ae7f580c1139965ab7b591f",
+    "PROJECT_SPEC.md": "e7e6e867a01274b59967f2977d6bf8c1791d9ad82f2dd6e164624b6d706a0275",
+    "src/note.txt": "2f9aa6be7390605afdae0b75a49e30236c813b363b7e1c79f59fea1307f4b235"
+  },
+  "utc_start": "2026-09-20T08:08:43Z",
+  "utc_end": "2026-09-20T08:09:47Z",
+  "exit_code": 0,
+  "model": "k3",
+  "tool_events": [
+    {
+      "seq": 0,
+      "tool": "Read",
+      "target": "/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-positive_root-b3493nrt/repo/BOOTSTRAP.md"
+    },
+    {
+      "seq": 1,
+      "tool": "Read",
+      "target": "/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-positive_root-b3493nrt/repo/PROJECT_SPEC.md"
+    },
+    {
+      "seq": 2,
+      "tool": "Read",
+      "target": "/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-positive_root-b3493nrt/repo/HANDOFF.md"
+    },
+    {
+      "seq": 3,
+      "tool": "Write",
+      "target": "/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-positive_root-b3493nrt/repo/RESULT.txt"
+    },
+    {
+      "seq": 4,
+      "tool": "Bash",
+      "target": "od -c \"/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-positive_root-b3493nrt/repo/RESULT.txt\""
+    },
+    {
+      "seq": 5,
+      "tool": "Edit",
+      "target": "/private/var/folders/97/_2lfqvcd3973p0v7b3z37q0m0000gn/T/aep-discovery-positive_root-b3493nrt/repo/HANDOFF.md"
+    },
+    {
+      "seq": 6,
+      "tool": "mcp__memoryd__memory_complete_turn",
+      "target": ""
+    }
+  ],
+  "session_result": {
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 8,
+    "duration_ms": 62569,
+    "total_cost_usd": 0.126364,
+    "permission_denials": [
+      {
+        "tool_name": "mcp__memoryd__memory_complete_turn",
+        "tool_use_id": "tool_vfJE3aweCBfUnTBxoApkQqEF",
+        "tool_input": {
+          "evidenceRefs": [],
+          "idempotencyKey": "t001-completion-turn_ca4c4b488ce75ade64c310cd833f3dcd",
+          "response": "Implemented authorized task T-001: created RESULT.txt containing exactly `discovery-conformance-ok` plus a single trailing newline, verified byte-for-byte with od. Updated HANDOFF.md to record completion; no further tasks are authorized.",
+          "turnId": "turn_ca4c4b488ce75ade64c310cd833f3dcd"
+        }
+      }
+    ]
+  },
+  "stderr_tail": "",
+  "stdout_line_count": 27,
+  "post_run_manifest": {
+    "AGENTS.md": "bd429089b30bf8d8f8827204becaea78a428d6a333c63192369dc7b2a74ec9ba",
+    "BOOTSTRAP.md": "07541b5b9aba9f8c9026577498f44ebeecf28bc03b43557135e154f0523b577a",
+    "CLAUDE.md": "74e888e1f261dd62ba73a64c9ffeef3e4d251f6896028de3060146f6d915a240",
+    "HANDOFF.md": "a68c392a155e9bab18475090f282037e85802ca23d7561514ea36acc76990072",
+    "PROJECT_SPEC.md": "e7e6e867a01274b59967f2977d6bf8c1791d9ad82f2dd6e164624b6d706a0275",
+    "RESULT.txt": "6cb167d760dfec219f2f935bfb234a7e3b8c69377f63a2ef06f2529542fcae62",
+    "src/note.txt": "2f9aa6be7390605afdae0b75a49e30236c813b363b7e1c79f59fea1307f4b235"
+  },
+  "evaluation": {
+    "classification": "PASS",
+    "result_created": true,
+    "result_content_ok": true,
+    "recovery_index": 0,
+    "implementation_index": 3,
+    "recovery_before_implementation": true,
+    "keep_txt_intact": true,
+    "manual_fallback": false
+  }
+}

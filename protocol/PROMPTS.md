@@ -4,6 +4,8 @@ These prompts start common protocol roles. Replace bracketed context, provide re
 
 ## Fresh implementor or onboarding
 
+Use this prompt only as the manual fallback or diagnostic entry path: unsupported or unverified hosts, a removed or disabled discovery bridge, or entry-path debugging. On a supported profile with an installed discovery bridge, an ordinary task prompt needs no protocol reminder (see the adoption guide's "Discovery bridges"). Manual entry never counts as automatic-activation evidence.
+
 ```text
 You are a new participant in [repository]. You have no reliable prior chat context.
 

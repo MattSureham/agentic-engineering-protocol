@@ -153,11 +153,40 @@ The exact operational rules and truth hierarchy live in [`BOOTSTRAP.md`](BOOTSTR
 
 4. If any destination other than the application `README.md` exists, stop before copying or editing anything. Do not install a non-conflicting subset. Preserve the existing files, authorship, and history; record the collision and contradiction under the target repository's current process; and obtain its human technical owner's accepted mapping or merge decision. A non-canonical mapping is not valid merely because links resolve: update every affected guide, prompt, template, and entry-point reference, and verify that each canonical role points to the owner-approved content before resuming installation.
 5. Replace the placeholders in `PROJECT_SPEC.md`. The human technical owner records acceptance before agents implement affected product behavior.
-6. Give a fresh participant the **Fresh implementor or onboarding** prompt from `PROMPTS.md`.
+6. Install the one-time discovery bridge for each supported host so a fresh participant receiving only an ordinary task request can locate `BOOTSTRAP.md` without a protocol reminder; see "Discovery bridges" below. On hosts without a verified bridge, keep supplying the **Fresh implementor or onboarding** prompt from `PROMPTS.md` as the documented manual fallback.
 7. The participant inspects the repository, replaces the template HANDOFF snapshot with evidence-backed state, identifies active work, and begins from one bounded safe action.
 8. Keep the protocol files in version control when available. Git is useful but not required; record hashes or other durable file state when commits are unavailable.
 
 See [`EXAMPLE.md`](EXAMPLE.md) for a small filled-in illustration.
+
+## Discovery bridges
+
+Adoption is complete only when a fresh participant can find the protocol from an ordinary task request. For hosts that natively load a repository instruction file at project startup, install a thin discovery bridge at the repository root during the one-time adoption step:
+
+- Hosts loading `AGENTS.md` (for example Codex CLI): create or merge `AGENTS.md`.
+- Hosts loading `CLAUDE.md` (for example Claude Code): create or merge `CLAUDE.md`.
+
+A bridge is a peripheral adapter artifact, not an eleventh core file. It declares that the repository has adopted this protocol, points to `BOOTSTRAP.md` as the canonical normative entry, requires reading that entry completely and following its start-or-resume procedure before any task implementation, directs the participant to stop and report when the entry is missing or unreadable, and states that its adoption governs the repository rooted at its own directory — a nested repository's bridge never authorizes work at an outer scope. It must not restate the protocol's rules, precedence, roles, or gates; those live only in the installed files. The development repository's own `AGENTS.md` and `CLAUDE.md` are the reference bridge content.
+
+Preflight collisions before writing: an existing `AGENTS.md` or `CLAUDE.md` holds the project's current instructions and must be preserved; merge the pointer into it instead of overwriting. Bridge installation is one-time adapter setup, never a per-task prompt. Use this create-or-merge procedure with quoted operands:
+
+```sh
+repository_target="/path/to/your-repository"
+bridge_reference="/path/to/agentic-engineering-protocol"  # reference bridge content lives at its root
+
+for name in AGENTS.md CLAUDE.md; do
+  destination="$repository_target/$name"
+  if [ -e "$destination" ] || [ -L "$destination" ]; then
+    printf 'collision: %s exists; merge the bridge pointer into it, preserving its content\n' "$name" >&2
+  else
+    cp "$bridge_reference/$name" "$destination"
+  fi
+done
+```
+
+A collision is not an error to force through: merge the bridge pointer text into the existing file by hand and confirm its prior content is intact.
+
+A filename or an installed bridge is not a support claim. Automatic activation is supported only for harness, version, and mode profiles backed by recorded fresh-session conformance evidence; every other host enters manually through the `PROMPTS.md` onboarding prompt, and manual entry is not automatic-activation evidence.
 
 ## Expected workflow
 
@@ -193,7 +222,7 @@ Independent reviewers should challenge the premise of a change, not just its mec
 - Record unresolved contradictions instead of choosing a source silently.
 - Start HANDOFF as a present snapshot with links; do not paste an entire historical changelog into it.
 - Keep external issue trackers or CI systems if useful, but preserve enough durable repository context that an agent without those sessions can identify and safely resume work.
-- Add model- or tool-specific instruction shims only as optional pointers to `BOOTSTRAP.md`; do not fork the normative rules across vendors.
+- Add model- or tool-specific instruction shims only as optional pointers to `BOOTSTRAP.md`; do not fork the normative rules across vendors. Install discovery bridges per "Discovery bridges"; merge with, never overwrite, pre-existing host instruction files.
 
 ## Limitations
 

@@ -14,6 +14,8 @@ The root files govern development of this repository and are distinct from the r
 
 Root truth precedence is `PROJECT_SPEC → accepted ADRs → contracts/tests → evidence → HANDOFF → implementation → inference`. README is navigation only. Do not treat the root BOOTSTRAP as the reusable deliverable or assume a change to either BOOTSTRAP automatically changes the other; material semantic divergence is reviewed explicitly.
 
+Fresh participants on hosts that natively load repository instruction files enter through the [`AGENTS.md`](AGENTS.md) or [`CLAUDE.md`](CLAUDE.md) discovery bridges, which point to BOOTSTRAP. The bridges are peripheral adapter artifacts: they carry no protocol authority, and their removal never erases repository authority or durable state.
+
 ## Reusable package
 
 The copy-ready protocol lives under [`protocol/`](protocol/). Its full philosophy, quick start, workflow, roles, and limitations are documented in [`protocol/README.md`](protocol/README.md).
