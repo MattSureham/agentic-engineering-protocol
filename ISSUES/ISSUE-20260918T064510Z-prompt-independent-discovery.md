@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260918T064510Z-prompt-independent-discovery`
 - **Title:** Make supported fresh participants discover and activate adopted protocol without task-level reminders
-- **Status:** `IMPLEMENTING`
+- **Status:** `REVIEW`
 - **Severity:** `HIGH`
 - **Owner:** `agent:Codex-discovery-authority`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-18T06:45:10Z`
-- **Updated UTC:** `2026-09-20T07:43:11Z`
+- **Updated UTC:** `2026-09-20T09:35:35Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance and order-5 contract
 - **ADRs:** Accepted [four-layer discovery boundary](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [Authority/gap analysis](../EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); [authority validation](../EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md)
@@ -68,6 +68,8 @@ The approved phase persists specification, compatible accepted ADR, a bounded im
 | `2026-09-20T08:44:32Z` | `agent:ClaudeCode-discovery` | `python3 -m unittest discover -s tests -v`; `python3 scripts/validate_protocol.py`; `git diff --check` | 124 tests `OK`, exit `0`; validator `PASS`; clean diff | This record and the immutable target commit | Darwin arm64/Python 3.9.6; deterministic checks only |
 | `2026-09-20T08:44:32Z` | `agent:ClaudeCode-discovery` | Live conformance program: 57 bounded headless sessions (2 capability, 25 initial, 2 validation, 28 final) launched via `tests/probe_discovery.py` against isolated fixture copies, exact task prompt `实现下一个已经授权的任务。` | Final matrix (identical final fixture bytes): Claude Code 12 PASS + manual-fallback PASS + 1 OBSERVE, root and subdirectory start; Codex CLI 12 PASS + manual-fallback PASS + 1 OBSERVE at root, subdirectory start 2/3 and not claimed; all negative cases behaved | [Live conformance evidence](../EVIDENCE/EVIDENCE-20260920T080830Z-discovery-live-conformance.md) with per-run JSON records, manifests and event chronologies | Single host/model per harness; Codex model and cost not exposed; loader internals inferred from tool chronology |
 
+- **Pipeline verification `2026-09-20T09:35:35Z`:** [`EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json`](../EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json) — deterministic structural and accepted-command gates passed for `074678d080fc6c1d57d2912314ae21296b618612`.
+
 ## Pipeline state
 
 Operational projection of the accepted contract; this block does not authorize scope. Attempt 1 implementation and live conformance are complete at the frozen target; independent review and acceptance have not occurred. New digest: `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`.
@@ -78,12 +80,14 @@ Operational projection of the accepted contract; this block does not authorize s
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260918T064510Z-prompt-independent-discovery-v1",
   "authority_digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
-  "state": "IN_PROGRESS",
+  "state": "AWAITING_PEER_REVIEW",
   "attempt": 1,
   "implementor": "agent:ClaudeCode-discovery",
   "base_revision": "d140634673439a0853dc6a931e5de1fa835a4f19",
-  "target_revision": null,
-  "verification_evidence": [],
+  "target_revision": "074678d080fc6c1d57d2912314ae21296b618612",
+  "verification_evidence": [
+    "EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json"
+  ],
   "review_references": [],
   "events": [
     {
@@ -109,6 +113,14 @@ Operational projection of the accepted contract; this block does not authorize s
       "from": "READY",
       "to": "IN_PROGRESS",
       "reason": "Implementation attempt 1 began from immutable base d140634673439a0853dc6a931e5de1fa835a4f19."
+    },
+    {
+      "sequence": 4,
+      "utc": "2026-09-20T09:35:35Z",
+      "actor": "agent:ClaudeCode-discovery",
+      "from": "IN_PROGRESS",
+      "to": "AWAITING_PEER_REVIEW",
+      "reason": "Immutable target 074678d080fc6c1d57d2912314ae21296b618612 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json."
     }
   ]
 }
@@ -160,6 +172,7 @@ No round is recorded. Owner acceptance of requirements is not peer approval of i
 | `2026-09-20T07:43:11Z` | `agent:ClaudeCode-discovery` | `INVESTIGATING` | `INVESTIGATING` | Pipeline AUTHORIZED -> READY. Validated transition AUTHORIZED to READY. |
 | `2026-09-20T07:43:11Z` | `agent:ClaudeCode-discovery` | `INVESTIGATING` | `IMPLEMENTING` | Pipeline READY -> IN_PROGRESS. Implementation attempt 1 began from immutable base d140634673439a0853dc6a931e5de1fa835a4f19. |
 | `2026-09-20T08:44:32Z` | `agent:ClaudeCode-discovery` | `IMPLEMENTING` | `IMPLEMENTING` | Implemented the authorized slice within contract allowed paths: root `AGENTS.md`/`CLAUDE.md` adoption-declaration bridges with an explicit governed-scope rule; package onboarding/adoption documentation evolution (one-time bridge installation, onboarding prompt demoted to manual fallback); `tests/test_discovery.py` deterministic coverage, `tests/probe_discovery.py` bounded live harness and `tests/fixtures/discovery/`; 57-session live conformance program with per-run durable records under `EVIDENCE/discovery-conformance/`. One nested-scope misidentification finding was repaired via the bridge scope sentence and re-verified before the final matrix. |
+| `2026-09-20T09:35:35Z` | `agent:ClaudeCode-discovery` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target 074678d080fc6c1d57d2912314ae21296b618612 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json. |
 
 ## Closure checklist
 
