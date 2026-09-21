@@ -2,6 +2,16 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Reviewer update — 2026-09-21T01:31:25Z
+
+Prepared by `agent:Codex-discovery-review-20260921` to reconcile the completed independent review, not to record milestone acceptance. The implementation-phase checkpoint below remains historical; its pending-review and support-confidence statements are superseded by this update and the [owning issue](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md).
+
+- Round 1 on immutable target `074678d080fc6c1d57d2912314ae21296b618612` is **CHANGES_REQUIRED**, with three open material findings: R1 HIGH (full delivered protocol/bridge not verified by live evidence), R2 HIGH (oracle false positives), R3 MEDIUM (installation not self-contained/incorrect mapping). [Reviewer evidence](EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md) preserves the completed checks and resolution conditions.
+- Deterministic target checks passed 124 tests and the structural validator; these results do not establish discovery acceptance. Final fixture bytes are consistent across the matrix but differ from the distributed reference bridges.
+- Non-material corrections: final Codex subdirectory run 3 hit a writable-scope denial, not the summary's memory-diversion cause; HANDOFF's issue/live-session fields were stale; two discarded misconfigured runs remain an explicit evidence gap. Codex's root-only boundary is compatible with its subdirectory 2/3 result, but does not resolve the material findings.
+- Machine state is still AWAITING_PEER_REVIEW until the reviewer commits this round and invokes the supported CHANGES_REQUIRED transition. No fix, closure, acceptance or next-role action has occurred.
+- No new product/architecture authority is requested for bounded fixes under the existing milestone. The four deferrals and unstarted autonomy demonstration remain unchanged. This reviewer publishes only review-owned governance/evidence records, then stops.
+
 ## Checkpoint metadata
 
 - **Generated UTC:** `2026-09-20T08:44:32Z` (discovery attempt 1 implemented and verified; independent review pending)

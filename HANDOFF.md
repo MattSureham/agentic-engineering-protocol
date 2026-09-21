@@ -6,43 +6,43 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is an operation
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-09-20T08:44:32Z` (discovery attempt 1 implementation complete; live conformance evidence recorded)
-- **Repository state:** Implementation target for `MILESTONE-20260918T064510Z-prompt-independent-discovery-v1` attempt 1 on `main`, built on `e0234d3` (READY/IN_PROGRESS transitions) over published `25a78bc`. Scope is exactly the milestone's allowed paths: root `AGENTS.md`/`CLAUDE.md` bridges, root `BOOTSTRAP.md`/`README.md` notes, package `README`/`PROMPTS`/`EXAMPLE`/`BOOTSTRAP` documentation, `tests/test_discovery.py`, `tests/probe_discovery.py`, `tests/fixtures/discovery/`, `EVIDENCE/discovery-conformance/` plus the summary record, and the owning continuity records. Identify the frozen target from Git and require a clean tree and matching upstream before consuming the next action.
-- **Evidence cutoff:** [Live conformance evidence](EVIDENCE/EVIDENCE-20260920T080830Z-discovery-live-conformance.md), `2026-09-20`: 57 bounded fresh sessions (28-run final matrix on identical fixture bytes); deterministic suite 124 tests `OK`; validator `PASS`. Earlier [authority validation](EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md) and [gap analysis](EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md) remain linked from the owning issue.
-- **External checks:** `git fetch origin main` and direct remote lookup on `2026-09-19` confirmed local baseline/cached/direct `main` at `58fa281`; publication is a normal push to `https://github.com/MattSureham/agentic-engineering-protocol.git`. Verify publication from Git: local HEAD, `origin/main` and direct `refs/heads/main` must equal the containing authority commit. No future network result is assumed by this pre-commit snapshot.
+- **Snapshot updated UTC:** `2026-09-21T01:31:25Z` (independent review round 1 persisted; pipeline transition pending clean-tree commit)
+- **Repository state:** Reviewer-owned governance/evidence records on `main`, based on published `e6fda49be42cbc523faacb4ed86fd0e80267619d`. Immutable discovery target remains `074678d080fc6c1d57d2912314ae21296b618612`, attempt 1; no implementation, tests, specification or ADR bytes changed. This snapshot accompanies the review-record commit; recover its exact revision from Git and reconcile any dirty or upstream state before acting.
+- **Evidence cutoff:** [Independent review round 1](EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md), persisted `2026-09-21T01:31:25Z`: completed frozen-target suite 124 tests OK and validator PASS; three open material findings R1–R3. Original [live evidence](EVIDENCE/EVIDENCE-20260920T080830Z-discovery-live-conformance.md) is retained with attributable corrections in the reviewer record, not treated as delivered-protocol certification.
+- **External checks:** At persistence recovery `2026-09-21T01:31:25Z`, local HEAD, `origin/main` and direct remote `refs/heads/main` all equaled `e6fda49be42cbc523faacb4ed86fd0e80267619d`; tree clean. Normal reviewer-record publication is authorized by the current user direction. Verify containing-commit publication from fresh Git refs; no future push result is assumed here.
 - **Stale when:** Revision/branch/upstream or dirty paths change; new specification/ADR/issue/evidence changes a claim; contract digest or dispatcher selection changes; live work appears; validation changes; external capability/version/configuration changes. Reconcile claims, not just timestamps.
 
 ### Current objective and state
 
 - **CONFIRMED — Owner decision:** `MattSureham` approved prompt-independent discovery as a product invariant, the four-layer authority/discovery/adapter/fallback boundary, Codex CLI plus Claude Code as the first conformance scope, and discovery-first scheduling. [PROJECT_SPEC](PROJECT_SPEC.md), [accepted ADR](ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md) and the [owning issue](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) persist it.
-- **CONFIRMED — Implementation:** Discovery attempt 1 is implemented within the contract's allowed paths: thin root `AGENTS.md`/`CLAUDE.md` adoption-declaration bridges (pointer only, explicit governed-scope rule, no restated semantics), package onboarding/adoption documentation evolved so the onboarding prompt is the manual fallback, deterministic tests plus the bounded live harness `tests/probe_discovery.py` and fixture, and durable per-run live evidence.
-- **CONFIRMED — Conformance:** Claude Code `2.1.118` (model `k3`) passed 3/3 root and 3/3 subdirectory fresh sessions plus every negative case; Codex CLI `0.153.4` passed 3/3 root sessions and every negative case, but subdirectory start passed only 2/3 and is **not claimed**. Automatic-activation support is bounded to these tested profiles/configurations on the probed host.
-- **CONFIRMED — Milestone state:** `MILESTONE-20260918T064510Z-prompt-independent-discovery-v1`, order 5, digest `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`, attempt 1 by `agent:ClaudeCode-discovery`, submitted `AWAITING_PEER_REVIEW` at the frozen target recorded in the owning issue. The implementer does not review or accept it.
+- **CONFIRMED — Implementation:** Attempt 1 exists within allowed paths at `074678d`; independent review found no post-target implementation drift. R1 HIGH (delivered protocol/bridge not established by live evidence), R2 HIGH (oracle false positives), and R3 MEDIUM (non-self-contained installation/incorrect mapping) remain open. No reviewer fix was made.
+- **UNKNOWN — Delivered conformance:** The 28 final manifests match the target fixture, not the different root installation bridges or full protocol. Codex subdirectory 2/3 remains outside the explicitly root-only claim; the final failure is a writable-scope denial, not the summary's memory-diversion explanation. Original observations remain available; approval and milestone acceptance are not established.
+- **CONFIRMED — Milestone state:** `MILESTONE-20260918T064510Z-prompt-independent-discovery-v1`, order 5, digest `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`, attempt 1 by `agent:ClaudeCode-discovery`, remains `AWAITING_PEER_REVIEW` until the reviewer records the supported transition after committing this round.
 - **CONFIRMED — Preserved work:** Milestones 1–4 remain `ACCEPTED`. The [demonstration](ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md) remains `AUTHORIZED` attempt 0 at order 6, digest `2a86a8a5bb83a4bc2e5657e092894f7c28dddadb2ded2e529fd5654a1ee90254`.
-- **UNKNOWN — Review:** No independent review of the discovery target exists yet; claims stand on implementer-run evidence only.
+- **CONFIRMED — Review:** Round 1 by `agent:Codex-discovery-review-20260921` records `CHANGES_REQUIRED` and three open material findings on the exact verified target. The preceding read-only review is now persisted, not repeated. Non-material N1–N3 cover failure attribution, stale continuity fields and discarded-run evidence limits.
 - **UNKNOWN — Autonomy:** AUTONOMY-004 remains unmet; no demonstration run is claimed. Discovery conformance and prompt-injected rotation prove different things.
 - **CONFIRMED — Continuity:** Prior accepted targets/reviews and detailed history remain in the owning records and Git; recent authored activity below is preserved.
 
 ### Constraints and uncertainty
 
-- Stop this participant at the peer-review boundary: no self-review, no acceptance, no merge of the discovery outcome into claims beyond the recorded evidence.
+- Reviewer stops after persisting the round, recording CHANGES_REQUIRED, reconciling reviewer records and publishing them. No implementation repair, acceptance, closure-checklist completion or next-role execution is authorized for this participant.
 - Preserve seven-tier precedence, root/product separation, the exact ten-file runtime-neutral package, existing accepted ADR originals, tool interfaces, and the four blocked deferrals.
-- Conformance claims are bounded to the probed host, versions, and configurations; Codex subdirectory start and all other hosts/modes remain unverified or manual-only.
+- Full delivered-protocol conformance is unapproved; the simplified-fixture observations cannot resolve R1–R3. Codex subdirectory and other unverified hosts/modes remain unclaimed. Bounded fixes stay within the accepted milestone; no routine owner reapproval is required.
 - Dedicated Markdown linters are unavailable; supported structural checks pass, not full CommonMark conformance or external URL/fragment availability.
 
 ### Unverified complexity
 
-Adoption signals, per-profile loading/migration and real conformance evidence are owned by the discovery issue and ADR. Existing pipeline/dispatcher/rotation limitations and independent-review evidence remain in their closed issues; this authority change does not expand those guarantees.
+Adoption fidelity, oracle sufficiency and portable bridge installation remain uncovered by acceptance-quality evidence (R1–R3 in the discovery issue). Existing automation limitations and the four blocked deferrals remain unchanged.
 
 ### Background tasks
 
-No non-terminal background task is recorded or launched by this phase. No live agent/rotation session was started.
+No non-terminal background task is recorded or launched by this reviewer. The implementation did launch probes (57 retained run records and two reported discarded misconfigured runs); the earlier no-live-session assertion was stale. The completed read-only review is captured in its evidence record, not left as an unqueryable running task.
 
 ## Active Issues
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
-| [`ISSUE-20260918T064510Z-prompt-independent-discovery`](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) | `IMPLEMENTING` | `HIGH` | `agent:ClaudeCode-discovery` | `HUMAN` | `INDEPENDENT` | Task-independent supported-host entry; attempt 1 implemented and verified, awaiting independent review | Order 5, `AWAITING_PEER_REVIEW` attempt 1 at the frozen target; [live conformance evidence](EVIDENCE/EVIDENCE-20260920T080830Z-discovery-live-conformance.md); reviewer label must differ from `agent:ClaudeCode-discovery` |
+| [`ISSUE-20260918T064510Z-prompt-independent-discovery`](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) | `REVIEW` | `HIGH` | `agent:Codex-discovery-authority` | `HUMAN` | `INDEPENDENT` | Round 1 requires changes; three open material findings R1–R3 | Attempt 1 at `074678d`, machine AWAITING_PEER_REVIEW pending reviewer transition; [review evidence](EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md) |
 | [`ISSUE-20260817T021218Z-autonomy-demonstration`](ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md) | `INVESTIGATING` | `HIGH` | `ClaudeCode/root` | `HUMAN` | `INDEPENDENT` | Unattended demonstration retained, not started | Order 6 after discovery; AUTHORIZED attempt 0, original lifecycle evidence conditions unchanged |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Non-cooperating concurrent writers | New owner-approved failure model/specification |
 | [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Authenticated identity/approval | New owner-approved trust model/specification/ADR |
@@ -51,9 +51,17 @@ No non-terminal background task is recorded or launched by this phase. No live a
 
 ## Next Action
 
-An independent reviewer whose participant label differs from `agent:ClaudeCode-discovery` reviews the frozen discovery attempt-1 target recorded in the [owning issue](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) — including the accepted authority/specification/ADR boundary, the allowed-paths diff, deterministic results, and the live conformance evidence — per `ROLE_CONTRACTS.md` and the dispatcher decision; the implementer stops at this boundary.
+The reviewer commits the persisted round and records the pipeline's CHANGES_REQUIRED transition for discovery attempt 1, then reconciles/publishes this review boundary and stops without executing the implementer role.
 
 ## Recent Activity
+
+### 2026-09-21T01:31:25Z — agent:Codex-discovery-review-20260921 — Independent Review Round 1 Persistence
+
+- **Recovery:** Clean published `e6fda49`; dispatcher independent-reviewer, AWAITING_PEER_REVIEW attempt 1, verified target `074678d`; authority digest unchanged. No new review was performed.
+- **Result:** Persisted the already-completed CHANGES_REQUIRED review with R1 HIGH, R2 HIGH and R3 MEDIUM, exact commands/observations and non-material N1–N3 in [review evidence](EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md) and the owning issue.
+- **Prior verification:** Immutable-target 124 tests OK, validator PASS; five adverse oracle false positives and two installed-bridge link failures; 28 final fixture manifests verified, but fixture/delivery fidelity remains a material gap.
+- **Correction:** Shared current fields now distinguish failed review from implementation completion; historical authored activity and original live evidence are unchanged. Earlier Plan-mode restriction is no longer active.
+- **Boundary:** Reviewer-only durable records, supported changes-required transition and user-authorized publication; no implementation repair, acceptance or next-role action. Transition and governance-validation evidence will be appended after execution.
 
 ### 2026-09-20T08:44:32Z — ClaudeCode/discovery — Discovery Attempt 1 Implementation
 
