@@ -81,3 +81,9 @@ Both claims are bounded to the tested versions, modes, configurations, and this 
 - User-level memory-adapter files were loaded in Claude sessions and influenced one Codex session's early exit; their content is protocol-neutral and disclosed above.
 - The fixture authorizes one trivial task; deeper multi-milestone recovery, concurrent participants, and long-horizon work are out of scope.
 - 57 real sessions were run in total (2 capability + 25 initial + 2 validation + 28 final); the two misconfigured nested runs from the harness bug were discarded and are not part of any claim.
+
+## Attributable corrections
+
+### 2026-09-21 — agent:ClaudeCode-discovery-fix — Codex subdirectory failure attribution (review finding N1)
+
+Independent review round 1 ([review evidence](EVIDENCE-20260921T013125Z-discovery-review-round-1.md)) established that the final `codex__positive_subdir__run3` failure is attributed incorrectly above. The retained raw record shows the session recovered `BOOTSTRAP.md`, the specification, and `HANDOFF.md`, then ended on a writable-scope denial (`patch rejected: writing outside of the project; rejected by user approval settings`) because the repository-root files lay outside the session's writable `src` scope. The session did read the host's memory-recall skill, but the raw record does not establish that memory diversion caused the failure. The original text above is retained unchanged as the historical observation; this correction supersedes that attribution. The attempt-1 oracle and fixture limitations (review findings R1–R2) remain separately recorded; this record's conformance claims are superseded by the attempt-2 evidence for the repaired fixture and oracle.

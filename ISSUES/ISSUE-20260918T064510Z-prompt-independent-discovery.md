@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-18T06:45:10Z`
-- **Updated UTC:** `2026-09-21T01:38:51Z`
+- **Updated UTC:** `2026-09-21T09:06:56Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance and order-5 contract
 - **ADRs:** Accepted [four-layer discovery boundary](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [Authority/gap analysis](../EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); [authority validation](../EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md); [independent review round 1](../EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md)
@@ -67,6 +67,8 @@ The approved phase persists specification, compatible accepted ADR, a bounded im
 | `2026-09-19T21:37:43Z` | `agent:Codex-discovery-finalize` | Fetch/direct-remote recovery and protected-byte/history audit against `58fa281` | Local/cached/direct baseline equal; exactly nine record paths; all other baseline bytes unchanged; original activity retained | Linked authority validation and containing commit diff | Publication equality must be verified from Git; no implementation transition, review or acceptance |
 | `2026-09-20T08:44:32Z` | `agent:ClaudeCode-discovery` | `python3 -m unittest discover -s tests -v`; `python3 scripts/validate_protocol.py`; `git diff --check` | 124 tests `OK`, exit `0`; validator `PASS`; clean diff | This record and the immutable target commit | Darwin arm64/Python 3.9.6; deterministic checks only |
 | `2026-09-20T08:44:32Z` | `agent:ClaudeCode-discovery` | Live conformance program: 57 bounded headless sessions (2 capability, 25 initial, 2 validation, 28 final) launched via `tests/probe_discovery.py` against isolated fixture copies, exact task prompt `实现下一个已经授权的任务。` | Final matrix (identical final fixture bytes): Claude Code 12 PASS + manual-fallback PASS + 1 OBSERVE, root and subdirectory start; Codex CLI 12 PASS + manual-fallback PASS + 1 OBSERVE at root, subdirectory start 2/3 and not claimed; all negative cases behaved | [Live conformance evidence](../EVIDENCE/EVIDENCE-20260920T080830Z-discovery-live-conformance.md) with per-run JSON records, manifests and event chronologies | Single host/model per harness; Codex model and cost not exposed; loader internals inferred from tool chronology |
+| `2026-09-21T11:20:00Z` | `agent:ClaudeCode-discovery-fix` | `python3 -m unittest discover -s tests`; `python3 scripts/validate_protocol.py` | 151 tests `OK`, exit `0`; validator `PASS` (package_files=10, handoffs=2), zero findings across 75 tracked Markdown files | This record and the attempt-2 immutable target commit | Darwin arm64/Python 3.9.6; deterministic checks only |
+| `2026-09-21T11:20:00Z` | `agent:ClaudeCode-discovery-fix` | Live conformance program attempt 2: 34 bounded headless sessions (3 capability, 28 matrix, 3 characterization reruns) via the hardened `tests/probe_discovery.py` (schema `aep-discovery-probe/v2`) against the rebuilt faithful fixture; uniform frozen-oracle re-evaluation of every retained record | Codex CLI root start 3/3 PASS with all negative cases PASS (root-only claim supported); Codex subdirectory 1/3 (both failures writable-scope denials, not claimed); Claude Code positive_root 3/3 PASS and positive_subdir 3/4 evaluated PASS, but `negative_conflicting_authority` and `negative_nested` FAIL 2/2 each — systematic behavioral failures, Claude profile claim NOT established | [Attempt-2 live conformance evidence](../EVIDENCE/EVIDENCE-20260921T110848Z-discovery-live-conformance-attempt-2.md) with per-run JSON records, manifests, event chronologies, launch-vs-frozen classification table | Single host/model per harness; Codex model/cost not exposed; two mid-matrix oracle corrections disclosed in the evidence |
 
 - **Pipeline verification `2026-09-20T09:35:35Z`:** [`EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json`](../EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json) — deterministic structural and accepted-command gates passed for `074678d080fc6c1d57d2912314ae21296b618612`.
 
@@ -74,7 +76,7 @@ The approved phase persists specification, compatible accepted ADR, a bounded im
 
 ## Pipeline state
 
-Operational projection of the accepted contract; this block does not authorize scope. Attempt 1 remains bound to frozen target `074678d080fc6c1d57d2912314ae21296b618612`. Round 1 was committed at `d8a7f0b7c148342fd8f19ae5c3b0acbc872f9745`; the reviewer then recorded CHANGES_REQUIRED through the pipeline at `2026-09-21T01:38:51Z`, with three open material findings. The issue's IMPLEMENTING status is the pipeline's fix-required lifecycle mapping; attempt 2 has not begun. No acceptance or implementation repair occurred. Digest remains `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`.
+Operational projection of the accepted contract; this block does not authorize scope. Attempt 1 remains bound to frozen target `074678d080fc6c1d57d2912314ae21296b618612`. Round 1 was committed at `d8a7f0b7c148342fd8f19ae5c3b0acbc872f9745`; the reviewer then recorded CHANGES_REQUIRED through the pipeline at `2026-09-21T01:38:51Z`, with three open material findings. Attempt 2 began from immutable base `bd3e00f2dc5c261b12653ddb3912eb834c92645c` at `2026-09-21T09:06:56Z`; the implementor recorded R1–R3 resolutions and attempt-2 verification above and submitted a new immutable target for fresh independent review. No acceptance occurred. Digest remains `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`.
 
 <!-- AEP-PIPELINE-STATE-V1:BEGIN -->
 ```json
@@ -82,11 +84,11 @@ Operational projection of the accepted contract; this block does not authorize s
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260918T064510Z-prompt-independent-discovery-v1",
   "authority_digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
-  "state": "CHANGES_REQUIRED",
-  "attempt": 1,
-  "implementor": "agent:ClaudeCode-discovery",
-  "base_revision": "d140634673439a0853dc6a931e5de1fa835a4f19",
-  "target_revision": "074678d080fc6c1d57d2912314ae21296b618612",
+  "state": "IN_PROGRESS",
+  "attempt": 2,
+  "implementor": "agent:ClaudeCode-discovery-fix",
+  "base_revision": "bd3e00f2dc5c261b12653ddb3912eb834c92645c",
+  "target_revision": null,
   "verification_evidence": [
     "EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json"
   ],
@@ -133,6 +135,14 @@ Operational projection of the accepted contract; this block does not authorize s
       "from": "AWAITING_PEER_REVIEW",
       "to": "CHANGES_REQUIRED",
       "reason": "Independent review ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-21t013125z--agentcodex-discovery-review-20260921 recorded 3 open material finding(s); within-scope fixes are required."
+    },
+    {
+      "sequence": 6,
+      "utc": "2026-09-21T09:06:56Z",
+      "actor": "agent:ClaudeCode-discovery-fix",
+      "from": "CHANGES_REQUIRED",
+      "to": "IN_PROGRESS",
+      "reason": "Implementation attempt 2 began from immutable base bd3e00f2dc5c261b12653ddb3912eb834c92645c."
     }
   ]
 }
@@ -180,9 +190,11 @@ The preceding no-round statement is retained as the initial authority-phase obse
 
 | Finding | Severity / materiality | State | Evidence and required resolution |
 |---|---|---|---|
-| R1 — Live evidence does not verify the delivered full protocol / bridge | HIGH / material | OPEN | Final records bind the simplified three-tier fixture and different bridge bytes, not the installation references or complete recovery/role/review obligations. Use delivered bytes and a faithful adopted protocol, preserve applicable durable records and exact candidate/configuration provenance, and establish the accepted real-session criteria for both first-slice harnesses. |
-| R2 — Probe classifier/oracle admits reproducible false positives | HIGH / material | OPEN | Five adverse inputs return PASS, including filename-only recovery, missing recovery/verification evidence, deleted KEEP.txt and unauthorized other-file mutation. Make evidence classification fail closed, verify successful recovery/verification/handoff and complete relevant state changes, add adverse regressions, and re-evaluate/rerun affected conformance evidence. |
-| R3 — Bridge installation is not self-contained and maps scope incorrectly | MEDIUM / material | OPEN | Ten-file-only installation exits 1 for absent bridge sources; full-reference installation produces two missing protocol/ links and development-specific scope. Supply complete portable bridge content inside existing package guidance and validate installed references, canonical mappings and non-overwriting collision behavior. |
+| R1 — Live evidence does not verify the delivered full protocol / bridge | HIGH / material | IMPLEMENTOR-RESOLVED `2026-09-21` — pending review | Attempt 2 rebuilt `tests/fixtures/discovery/adopted_repo` as a faithful adopted instance of the delivered ten-file package (verbatim `BOOTSTRAP.md`/`PROMPTS.md`/`EXAMPLE.md`/`README.md`/`HUMAN_CHECKPOINT.md`/templates; filled spec/HANDOFF/issue), and generated the fixture bridges by executing the delivered `protocol/README.md` installation snippet so tested bytes equal shipped bytes. 34 fresh sessions ran against it; recovery obligations are oracle-enforced. See [attempt-2 evidence](../EVIDENCE/EVIDENCE-20260921T110848Z-discovery-live-conformance-attempt-2.md). |
+| R2 — Probe classifier/oracle admits reproducible false positives | HIGH / material | IMPLEMENTOR-RESOLVED `2026-09-21` — pending review | Oracle rewritten fail-closed (schema `aep-discovery-probe/v2`): successful-read chronology for `BOOTSTRAP.md`/`PROJECT_SPEC.md`/issue/`HANDOFF.md` before first mutation, shell unwrapping with read whitelist and write-idiom detection, full manifest diff, exact result bytes, post-mutation verification read, handoff/issue update checks, KEEP.txt byte check, UNVERIFIED on gaps. The reviewer's five adverse inputs are regression tests and classify non-PASS; 151 unit tests pass. Every attempt-2 record re-evaluated uniformly with the frozen oracle (SHA-256 `46263f3a…` in the evidence). |
+| R3 — Bridge installation is not self-contained and maps scope incorrectly | MEDIUM / material | IMPLEMENTOR-RESOLVED `2026-09-21` — pending review | `protocol/README.md` now embeds the canonical bridge body in a create-or-merge installer whose only input is the adopting repository path; deterministic tests prove package-only installation (cwd inside a copied `protocol/`, no external reference), collision preservation of existing instruction files, canonical-byte equality, and zero `_validate_markdown_file` findings on installed bridges. The development-scope note remains only on this repository's root bridges. |
+
+Non-material findings handled in attempt 2: N1 corrected by an attributable correction appended to the [attempt-1 evidence](../EVIDENCE/EVIDENCE-20260920T080830Z-discovery-live-conformance.md) (original text retained); N2 continuity fields reconciled in HANDOFF during attempt-2 submission; N3 preserved as an explicit limitation in the attempt-2 evidence (no records discarded in attempt 2; attempt-1 discarded runs remain unreconstructible).
 
 ## Blocker
 
@@ -193,8 +205,8 @@ The preceding no-round statement is retained as the initial authority-phase obse
 
 ## Residual uncertainty
 
-- **Reviewer correction `2026-09-21T01:31:25Z`:** The following historical profile observations do not certify the delivered protocol. R1–R3 remain open; N1 corrects the final Codex subdirectory failure attribution, and N3 preserves the discarded-run limitation. See the round and linked reviewer evidence above.
-- First-slice activation evidence now exists (see Verification): Claude Code `2.1.118` root and subdirectory start, Codex CLI `0.153.4` root start, on the probed host configuration. Codex subdirectory start passed only 2 of 3 final runs (and 1 of 2 initial runs) and is not claimed. Unsupported hosts, other models/versions, and this host after upgrades remain manual-only or unverified, not implicitly supported.
+- **Attempt-2 live result `2026-09-21T11:20:00Z`:** Codex CLI `0.153.4` root-start profile satisfies the acceptance criteria on this host (3/3 positives, all negatives PASS, manual fallback PASS). The Claude Code `2.1.118` profile does NOT: `negative_conflicting_authority` and `negative_nested` failed 2/2 sessions each (systematic; participant resolves the conflict per the truth hierarchy and implements, and descends into an adopted nested repository from an unadopted outer root, respectively). Per acceptance criterion 5 the Claude support claim is not established and milestone acceptance is prevented unless a fresh independent review adjudicates otherwise. Remediation may cross the Human Authority Boundary (normative-text semantics); this issue takes no position.
+- Attempt-1 historical profile observations do not certify the delivered protocol; they are superseded for conformance by the attempt-2 evidence.
 - No production-grade reliability, authenticated identity, concurrent-writer safety, or autonomous-demonstration completion is claimed.
 
 ## Activity history
@@ -211,6 +223,8 @@ The preceding no-round statement is retained as the initial authority-phase obse
 | `2026-09-20T09:35:35Z` | `agent:ClaudeCode-discovery` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target 074678d080fc6c1d57d2912314ae21296b618612 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json. |
 | `2026-09-21T01:31:25Z` | `agent:Codex-discovery-review-20260921` | `REVIEW` | `REVIEW` | Persisted the already-completed independent round: CHANGES_REQUIRED, three open material findings R1 HIGH/R2 HIGH/R3 MEDIUM, non-material N1–N3 and exact reproduction evidence. Earlier read-only platform restriction prevented persistence; no re-review, implementation fix, acceptance or next-role action. Commit this round before the reviewer invokes the pipeline transition. |
 | `2026-09-21T01:38:51Z` | `agent:Codex-discovery-review-20260921` | `REVIEW` | `IMPLEMENTING` | Pipeline AWAITING_PEER_REVIEW -> CHANGES_REQUIRED. Independent review ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-21t013125z--agentcodex-discovery-review-20260921 recorded 3 open material finding(s); within-scope fixes are required. |
+| `2026-09-21T09:06:56Z` | `agent:ClaudeCode-discovery-fix` | `IMPLEMENTING` | `IMPLEMENTING` | Pipeline CHANGES_REQUIRED -> IN_PROGRESS. Implementation attempt 2 began from immutable base bd3e00f2dc5c261b12653ddb3912eb834c92645c. |
+| `2026-09-21T11:20:00Z` | `agent:ClaudeCode-discovery-fix` | `IMPLEMENTING` | `IMPLEMENTING` | Attempt-2 implementation within contract allowed paths: R3 self-contained portable bridge installer in `protocol/README.md`; R2 fail-closed oracle rewrite (schema v2, adverse regressions); R1 faithful adopted fixture bound to delivered bytes; N1 attributable correction appended to attempt-1 evidence; 34-session live program with frozen-oracle re-evaluation. Result: Codex root profile satisfies the acceptance criteria; Claude profile does not (systematic `negative_conflicting_authority` and `negative_nested` failures, 2/2 each), recorded honestly in the attempt-2 evidence without claiming support. 151 unit tests and validator pass. |
 
 ## Closure checklist
 
