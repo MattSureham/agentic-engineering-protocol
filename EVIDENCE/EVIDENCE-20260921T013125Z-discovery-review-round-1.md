@@ -193,3 +193,98 @@ At `2026-09-21T01:31:25Z`, recovery commands confirmed clean `main`, local/track
 - Existing `_validate_markdown_file` applied to every tracked/new Markdown file: 67 documents, zero findings. Existing validator checked the five HANDOFF sections and single Next Action.
 - Git diff/untracked-path allowlist assertion: exactly the owning issue, HANDOFF, HUMAN_CHECKPOINT and this new evidence record; previous HANDOFF Recent Activity preserved as a complete substring. No implementation, test, authority or prior raw-evidence modification.
 - `git diff --check`: exit 0, no output. No live probe, new review or implementation test rerun was performed in this persistence step.
+
+### Reviewer transition — 2026-09-21T01:38:51Z
+
+The round was committed as `d8a7f0b7c148342fd8f19ae5c3b0acbc872f9745` (`docs: persist discovery independent review round 1`). `git status --porcelain=v1 --untracked-files=all --ignored` was empty before this exact command:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/run_pipeline.py transition --milestone MILESTONE-20260918T064510Z-prompt-independent-discovery-v1 --actor agent:Codex-discovery-review-20260921 --to CHANGES_REQUIRED
+```
+
+Exit 0, exact stdout:
+
+```text
+PASS MILESTONE-20260918T064510Z-prompt-independent-discovery-v1 AWAITING_PEER_REVIEW -> CHANGES_REQUIRED issue=ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md
+```
+
+The pipeline, not a manual JSON edit, changed the machine state, mapped issue REVIEW to IMPLEMENTING, appended event 5 and the round reference, and retained target/base/implementor/attempt 1. A subsequent read-only dispatcher call returned role `implementer`, state CHANGES_REQUIRED, and the expected IN_PROGRESS command for attempt 2. That next command was not executed. HANDOFF and the reviewer-only checkpoint supplement were reconciled to this state; no closure boxes or approval/acceptance records were changed.
+
+### Final governance validation — 2026-09-21T01:41:11Z
+
+`PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_protocol.py` and `git diff --check` exited 0. The following read-only assertion procedure also exited 0, with these exact summaries:
+
+```text
+PASS one parseable independent round; 3 open material findings; exact reviewed target
+PASS pipeline event 5 only; attempt 1 retained; other milestones and closure checklist unchanged
+PASS Markdown 67 ; HANDOFF five sections / one next action / prior activity preserved
+PASS exactly four reviewer-owned paths; immutable target and implementation unchanged
+PASS read-only deterministic dispatcher: implementer / CHANGES_REQUIRED; attempt 2 not started
+```
+
+Exact procedure, run from the repository root after transition reconciliation (not an implementation review):
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from pathlib import Path
+import hashlib,json,re,subprocess,sys
+sys.path.insert(0,'scripts')
+import run_pipeline as p
+import validate_protocol as v
+root=Path.cwd();baseline='e6fda49be42cbc523faacb4ed86fd0e80267619d'
+mid='MILESTONE-20260918T064510Z-prompt-independent-discovery-v1'
+issue='ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md'
+proof='EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md'
+def git(*args):return subprocess.check_output(['git',*args]).decode()
+def paths():return sorted(set(filter(None,git('ls-files','-z','--cached','--others','--exclude-standard').split('\0'))))
+def snapshot():return {n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in paths()}
+before=snapshot();ctx=p._load_context(root);state=ctx.states[mid]
+review=p._parse_latest_review((root/issue).read_text(),issue)
+assert review.target=='074678d080fc6c1d57d2912314ae21296b618612'
+assert review.reviewer=='agent:Codex-discovery-review-20260921'
+assert review.disposition=='CHANGES_REQUIRED' and review.material_findings==3
+assert state['state']=='CHANGES_REQUIRED' and state['attempt']==1
+assert state['target_revision']==review.target and state['implementor']!=review.reviewer
+for m in ctx.milestones:
+ old=p._parse_state(git('show',baseline+':'+m.issue),m)
+ if m.milestone_id!=mid:assert ctx.states[m.milestone_id]==old,m.milestone_id
+ else:
+  assert state['events'][:-1]==old['events'] and len(state['events'])==5
+  assert state['events'][-1]['actor']==review.reviewer
+  assert state['events'][-1]['from']=='AWAITING_PEER_REVIEW' and state['events'][-1]['to']=='CHANGES_REQUIRED'
+  for field in ['attempt','implementor','base_revision','target_revision','authority_digest','verification_evidence']:assert state[field]==old[field],field
+assert state['review_references']==[issue+'#'+review.reference_fragment]
+text=(root/issue).read_text();rounds=text.split('## Independent review rounds',1)[1].split('\n## ',1)[0]
+assert len(p.REVIEW_HEADING_RE.findall(rounds))==1
+assert '- **Status:** `IMPLEMENTING`' in text
+assert text.split('## Closure checklist',1)[1]==git('show',baseline+':'+issue).split('## Closure checklist',1)[1]
+print('PASS one parseable independent round; 3 open material findings; exact reviewed target')
+print('PASS pipeline event 5 only; attempt 1 retained; other milestones and closure checklist unchanged')
+findings=[f for n in paths() if n.endswith('.md') for f in v._validate_markdown_file(root,root,root/n)]
+assert not findings,'\n'.join(f.render() for f in findings)
+assert not v.validate_repository(root)
+handoff=(root/'HANDOFF.md').read_text();sections=re.findall(r'^## (.+)$',handoff,re.M)
+assert sections==list(v.EXPECTED_HANDOFF_SECTIONS)
+action=handoff.split('## Next Action\n',1)[1].split('## Recent Activity',1)[0].strip()
+assert len(action.split('\n\n'))==1 and 'implementer' in action and 'attempt 2' in action
+recent=lambda s:s.split('## Recent Activity\n',1)[1].split('## Archived Summary',1)[0].strip()
+assert recent(git('show',baseline+':HANDOFF.md')) in recent(handoff)
+print('PASS Markdown',sum(n.endswith('.md') for n in paths()),'; HANDOFF five sections / one next action / prior activity preserved')
+changed=set(git('diff','--name-only',baseline).splitlines())|set(git('ls-files','--others','--exclude-standard').splitlines())
+assert changed=={issue,proof,'HANDOFF.md','HUMAN_CHECKPOINT.md'},changed
+assert git('rev-parse','074678d').strip()==review.target
+print('PASS exactly four reviewer-owned paths; immutable target and implementation unchanged')
+cmd=['python3','scripts/run_dispatch.py','--json']
+a=subprocess.check_output(cmd);b=subprocess.check_output(cmd);assert a==b
+decision=json.loads(a);assert decision['role']=='implementer' and decision['state']=='CHANGES_REQUIRED'
+assert decision['expected_commands'][0][-1]=='IN_PROGRESS'
+assert snapshot()==before
+print('PASS read-only deterministic dispatcher: implementer / CHANGES_REQUIRED; attempt 2 not started')
+PY
+```
+
+### Publication preflight — 2026-09-21T01:41:38Z
+
+`git fetch --no-tags origin main`, `git rev-parse HEAD origin/main`, `git ls-remote origin refs/heads/main` and `git rev-list --left-right --count HEAD...origin/main` exited 0. Local round commit was `d8a7f0b7c148342fd8f19ae5c3b0acbc872f9745`; cached/direct remote remained `e6fda49be42cbc523faacb4ed86fd0e80267619d`, ahead/behind `1 0`. Exactly the four reviewer-owned files held the subsequent transition/reconciliation changes; `git diff --check` passed. No remote divergence was observed.
+
+The final reconciliation commit is identifiable in Git by its parent `d8a7f0b` and subject `docs: record discovery changes-required review boundary`. Its own SHA and post-push equality cannot be embedded in that same commit. After a normal non-force push, the reviewer must check local HEAD, origin/main and direct remote refs/heads/main equality plus an empty porcelain/ignored status, and report the observed values. No future publication outcome is asserted by this pre-commit record.

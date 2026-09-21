@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260918T064510Z-prompt-independent-discovery`
 - **Title:** Make supported fresh participants discover and activate adopted protocol without task-level reminders
-- **Status:** `REVIEW`
+- **Status:** `IMPLEMENTING`
 - **Severity:** `HIGH`
 - **Owner:** `agent:Codex-discovery-authority`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-18T06:45:10Z`
-- **Updated UTC:** `2026-09-21T01:31:25Z`
+- **Updated UTC:** `2026-09-21T01:38:51Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance and order-5 contract
 - **ADRs:** Accepted [four-layer discovery boundary](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [Authority/gap analysis](../EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); [authority validation](../EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md); [independent review round 1](../EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md)
@@ -74,7 +74,7 @@ The approved phase persists specification, compatible accepted ADR, a bounded im
 
 ## Pipeline state
 
-Operational projection of the accepted contract; this block does not authorize scope. Attempt 1 remains bound to frozen target `074678d080fc6c1d57d2912314ae21296b618612`. Independent review round 1 requires changes with three open material findings; acceptance has not occurred. The persisted round must be committed before the reviewer records the CHANGES_REQUIRED transition through the pipeline. Digest remains `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`.
+Operational projection of the accepted contract; this block does not authorize scope. Attempt 1 remains bound to frozen target `074678d080fc6c1d57d2912314ae21296b618612`. Round 1 was committed at `d8a7f0b7c148342fd8f19ae5c3b0acbc872f9745`; the reviewer then recorded CHANGES_REQUIRED through the pipeline at `2026-09-21T01:38:51Z`, with three open material findings. The issue's IMPLEMENTING status is the pipeline's fix-required lifecycle mapping; attempt 2 has not begun. No acceptance or implementation repair occurred. Digest remains `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`.
 
 <!-- AEP-PIPELINE-STATE-V1:BEGIN -->
 ```json
@@ -82,7 +82,7 @@ Operational projection of the accepted contract; this block does not authorize s
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260918T064510Z-prompt-independent-discovery-v1",
   "authority_digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
-  "state": "AWAITING_PEER_REVIEW",
+  "state": "CHANGES_REQUIRED",
   "attempt": 1,
   "implementor": "agent:ClaudeCode-discovery",
   "base_revision": "d140634673439a0853dc6a931e5de1fa835a4f19",
@@ -90,7 +90,9 @@ Operational projection of the accepted contract; this block does not authorize s
   "verification_evidence": [
     "EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json"
   ],
-  "review_references": [],
+  "review_references": [
+    "ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-21t013125z--agentcodex-discovery-review-20260921"
+  ],
   "events": [
     {
       "sequence": 1,
@@ -123,6 +125,14 @@ Operational projection of the accepted contract; this block does not authorize s
       "from": "IN_PROGRESS",
       "to": "AWAITING_PEER_REVIEW",
       "reason": "Immutable target 074678d080fc6c1d57d2912314ae21296b618612 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json."
+    },
+    {
+      "sequence": 5,
+      "utc": "2026-09-21T01:38:51Z",
+      "actor": "agent:Codex-discovery-review-20260921",
+      "from": "AWAITING_PEER_REVIEW",
+      "to": "CHANGES_REQUIRED",
+      "reason": "Independent review ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-21t013125z--agentcodex-discovery-review-20260921 recorded 3 open material finding(s); within-scope fixes are required."
     }
   ]
 }
@@ -177,7 +187,7 @@ The preceding no-round statement is retained as the initial authority-phase obse
 ## Blocker
 
 - **Blocked from:** `NOT BLOCKED`
-- **Blocker:** `NONE` — no new human-authority decision is needed for bounded R1–R3 fixes. Review prevents acceptance; the reviewer records the supported changes-required transition and stops before implementer work.
+- **Blocker:** `NONE` — no new human-authority decision is needed for bounded R1–R3 fixes. Review prevents acceptance; CHANGES_REQUIRED is recorded, and the dispatcher now selects an implementer to begin attempt 2. The reviewer stops before that action.
 - **Unblock owner:** `NOT APPLICABLE`
 - **Unblock condition:** `NONE`
 
@@ -200,6 +210,7 @@ The preceding no-round statement is retained as the initial authority-phase obse
 | `2026-09-20T08:44:32Z` | `agent:ClaudeCode-discovery` | `IMPLEMENTING` | `IMPLEMENTING` | Implemented the authorized slice within contract allowed paths: root `AGENTS.md`/`CLAUDE.md` adoption-declaration bridges with an explicit governed-scope rule; package onboarding/adoption documentation evolution (one-time bridge installation, onboarding prompt demoted to manual fallback); `tests/test_discovery.py` deterministic coverage, `tests/probe_discovery.py` bounded live harness and `tests/fixtures/discovery/`; 57-session live conformance program with per-run durable records under `EVIDENCE/discovery-conformance/`. One nested-scope misidentification finding was repaired via the bridge scope sentence and re-verified before the final matrix. |
 | `2026-09-20T09:35:35Z` | `agent:ClaudeCode-discovery` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target 074678d080fc6c1d57d2912314ae21296b618612 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json. |
 | `2026-09-21T01:31:25Z` | `agent:Codex-discovery-review-20260921` | `REVIEW` | `REVIEW` | Persisted the already-completed independent round: CHANGES_REQUIRED, three open material findings R1 HIGH/R2 HIGH/R3 MEDIUM, non-material N1–N3 and exact reproduction evidence. Earlier read-only platform restriction prevented persistence; no re-review, implementation fix, acceptance or next-role action. Commit this round before the reviewer invokes the pipeline transition. |
+| `2026-09-21T01:38:51Z` | `agent:Codex-discovery-review-20260921` | `REVIEW` | `IMPLEMENTING` | Pipeline AWAITING_PEER_REVIEW -> CHANGES_REQUIRED. Independent review ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-21t013125z--agentcodex-discovery-review-20260921 recorded 3 open material finding(s); within-scope fixes are required. |
 
 ## Closure checklist
 
