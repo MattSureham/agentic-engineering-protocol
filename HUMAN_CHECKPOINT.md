@@ -2,6 +2,16 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Reviewer update — 2026-09-22T02:01:17Z
+
+Prepared by `agent:Codex-discovery-review-20260922` after a fresh independent review of target `cc7961187f067cbc7b337b8f80a64505693f7bc6`. This supersedes the historical support/resolution assertions below; it is not acceptance.
+
+- **CHANGES_REQUIRED**, with three material findings: R1's remaining Codex effective model/configuration provenance, R2's independently reproduced oracle false positives, and new R4's required Claude conflicting-authority/nested failures (2/2 each). R3 portable installation is closed; full-package fixture/bridge fidelity is verified. [Round and evidence](EVIDENCE/EVIDENCE-20260922T020117Z-discovery-review-round-2.md).
+- Accepted PROJECT_SPEC explicitly requires both harnesses and forbids silently narrowing the milestone. Codex root-only directory scope is valid, but observed root success is not a complete profile certification while provenance and oracle proof remain inadequate. Claude positives cannot cancel its required negative failures; leaving it unsupported does not permit milestone acceptance.
+- **Owner decision required now: NONE.** Existing milestone authority permits product recovery/adoption wording, scoped bridge, oracle/test and evidence fixes that implement current requirements. A proposal to drop a harness/negative, change authority/gates or introduce a new trust/architecture mechanism would require owner-approved specification evolution; this reviewer makes no such proposal or change.
+- Target checks passed 151 tests and validator; 19 local probes expose nine adverse false positives. All 34 attempt-2 records were checked against fixture bytes and uniformly reclassified from raw events; original failures/timeouts and characterization reruns remain separate. Earlier evidence is retained. No new live session, implementation repair, approval, closure or recorder work was performed.
+- Reviewer records the matching CHANGES_REQUIRED transition after committing the round, reconciles the operational snapshot and stops before attempt 3. Four deferrals and the unstarted autonomy demonstration remain unchanged.
+
 ## Implementer update — 2026-09-21T11:20:00Z
 
 Prepared by `agent:ClaudeCode-discovery-fix` after discovery attempt 2; not an acceptance record. Prior sections remain historical.

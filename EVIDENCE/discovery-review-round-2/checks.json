@@ -1,0 +1,29 @@
+[
+  {
+    "name": "unit-tests",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "utc_start": "2026-09-22T01:51:06.593503+00:00",
+    "utc_end": "2026-09-22T01:51:32.612059+00:00",
+    "exit_code": 0,
+    "summary": "\n\n----------------------------------------------------------------------\nRan 151 tests in 25.946s\n\nOK"
+  },
+  {
+    "name": "validator",
+    "argv": [
+      "python3",
+      "scripts/validate_protocol.py"
+    ],
+    "utc_start": "2026-09-22T01:51:32.612130+00:00",
+    "utc_end": "2026-09-22T01:51:32.661452+00:00",
+    "exit_code": 0,
+    "summary": "PASS structural protocol validation (package_files=10 handoffs=2)\n\n"
+  }
+]

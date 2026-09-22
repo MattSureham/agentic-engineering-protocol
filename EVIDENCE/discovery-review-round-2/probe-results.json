@@ -1,0 +1,1325 @@
+{
+  "oracle_sha256": "46263f3a7f7816b08cfb6357bf27ed871238cce936831f5a9f65eaec401fc8ee",
+  "note": "Classifier probes, not live harness observations. Synthetic record changes deliberately do not establish valid handoff evidence.",
+  "results": [
+    {
+      "name": "oracle baseline (synthetic record text, no semantic certification)",
+      "classification": "PASS",
+      "commands": [
+        {
+          "command": "cat BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 22424,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [
+              0
+            ],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [],
+        "evidence_gaps": [],
+        "classification": "PASS"
+      }
+    },
+    {
+      "name": "plain BOOTSTRAP filename mention",
+      "classification": "FAIL",
+      "commands": [
+        {
+          "command": "echo BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 13,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [
+          "no successful read of BOOTSTRAP.md in recorded chronology"
+        ],
+        "evidence_gaps": [],
+        "classification": "FAIL"
+      }
+    },
+    {
+      "name": "zero-byte BOOTSTRAP read",
+      "classification": "FAIL",
+      "commands": [
+        {
+          "command": "head -n 0 BOOTSTRAP.md",
+          "exit_code": 1,
+          "stdout_bytes": 0,
+          "stderr": "head: illegal line count -- 0\n"
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [
+          "no successful read of BOOTSTRAP.md in recorded chronology"
+        ],
+        "evidence_gaps": [],
+        "classification": "FAIL"
+      }
+    },
+    {
+      "name": "BOOTSTRAP filename listing only",
+      "classification": "PASS",
+      "commands": [
+        {
+          "command": "rg --files -g BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 13,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [
+              0
+            ],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [],
+        "evidence_gaps": [],
+        "classification": "PASS"
+      }
+    },
+    {
+      "name": "only BOOTSTRAP first line read",
+      "classification": "PASS",
+      "commands": [
+        {
+          "command": "sed -n '1p' BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 36,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [
+              0
+            ],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [],
+        "evidence_gaps": [],
+        "classification": "PASS"
+      }
+    },
+    {
+      "name": "BOOTSTRAP metadata only",
+      "classification": "PASS",
+      "commands": [
+        {
+          "command": "stat BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 168,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [
+              0
+            ],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [],
+        "evidence_gaps": [],
+        "classification": "PASS"
+      }
+    },
+    {
+      "name": "failed cat masked by successful final command",
+      "classification": "PASS",
+      "commands": [
+        {
+          "command": "cat -Q BOOTSTRAP.md; true",
+          "exit_code": 0,
+          "stdout_bytes": 0,
+          "stderr": "cat: illegal option -- Q\nusage: cat [-belnstuv] [file ...]\n"
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [
+              0
+            ],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [],
+        "evidence_gaps": [],
+        "classification": "PASS"
+      }
+    },
+    {
+      "name": "missing owning-issue recovery",
+      "classification": "FAIL",
+      "commands": [
+        {
+          "command": "cat BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 22424,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 3,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [
+              0
+            ],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 4,
+        "defects": [
+          "no successful read of ISSUES/ISSUE-20260921T000000Z-create-result-file.md in recorded chronology"
+        ],
+        "evidence_gaps": [],
+        "classification": "FAIL"
+      }
+    },
+    {
+      "name": "applicable accepted ADR not read",
+      "classification": "PASS",
+      "commands": [
+        {
+          "command": "cat BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 22424,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4672,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [
+              0
+            ],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [],
+        "evidence_gaps": [],
+        "classification": "PASS"
+      }
+    },
+    {
+      "name": "explicitly failed read",
+      "classification": "FAIL",
+      "commands": [
+        {
+          "command": "cat BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 22424,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [
+          "no successful read of BOOTSTRAP.md in recorded chronology"
+        ],
+        "evidence_gaps": [],
+        "classification": "FAIL"
+      }
+    },
+    {
+      "name": "unknown read outcome",
+      "classification": "UNVERIFIED",
+      "commands": [
+        {
+          "command": "cat BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 22424,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [],
+            "outcome_unknown": true
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [],
+        "evidence_gaps": [
+          "successful read of BOOTSTRAP.md not established"
+        ],
+        "classification": "UNVERIFIED"
+      }
+    },
+    {
+      "name": "no verification event",
+      "classification": "UNVERIFIED",
+      "commands": [
+        {
+          "command": "cat BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 22424,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [
+              0
+            ],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": null,
+        "defects": [],
+        "evidence_gaps": [
+          "no successful post-mutation verification read of RESULT.txt recorded"
+        ],
+        "classification": "UNVERIFIED"
+      }
+    },
+    {
+      "name": "verification is only filename echo",
+      "classification": "PASS",
+      "commands": [
+        {
+          "command": "cat BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 22424,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "echo RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 11,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [
+              0
+            ],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [],
+        "evidence_gaps": [],
+        "classification": "PASS"
+      }
+    },
+    {
+      "name": "handoff and issue replaced by garbage",
+      "classification": "PASS",
+      "commands": [
+        {
+          "command": "cat BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 22424,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [
+              0
+            ],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "defects": [],
+        "evidence_gaps": [],
+        "classification": "PASS"
+      }
+    },
+    {
+      "name": "collision sentinel deleted",
+      "classification": "FAIL",
+      "commands": [
+        {
+          "command": "cat BOOTSTRAP.md",
+          "exit_code": 0,
+          "stdout_bytes": 22424,
+          "stderr": ""
+        },
+        {
+          "command": "cat PROJECT_SPEC.md",
+          "exit_code": 0,
+          "stdout_bytes": 4609,
+          "stderr": ""
+        },
+        {
+          "command": "cat ISSUES/ISSUE-20260921T000000Z-create-result-file.md",
+          "exit_code": 0,
+          "stdout_bytes": 3120,
+          "stderr": ""
+        },
+        {
+          "command": "cat HANDOFF.md",
+          "exit_code": 0,
+          "stdout_bytes": 2237,
+          "stderr": ""
+        },
+        {
+          "command": "cat RESULT.txt",
+          "exit_code": 0,
+          "stdout_bytes": 25,
+          "stderr": ""
+        }
+      ],
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "RESULT.txt"
+          ],
+          "removed": [
+            "KEEP.txt"
+          ],
+          "changed": [
+            "HANDOFF.md",
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": true,
+        "result_content_ok": true,
+        "first_mutation_seq": 4,
+        "recovery_reads": {
+          "BOOTSTRAP.md": {
+            "successful_seqs": [
+              0
+            ],
+            "outcome_unknown": false
+          },
+          "PROJECT_SPEC.md": {
+            "successful_seqs": [
+              1
+            ],
+            "outcome_unknown": false
+          },
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+            "successful_seqs": [
+              2
+            ],
+            "outcome_unknown": false
+          },
+          "HANDOFF.md": {
+            "successful_seqs": [
+              3
+            ],
+            "outcome_unknown": false
+          }
+        },
+        "verification_seq": 5,
+        "keep_sentinel_intact": false,
+        "defects": [
+          "removed paths ['KEEP.txt']",
+          "KEEP.txt sentinel missing or modified"
+        ],
+        "evidence_gaps": [],
+        "classification": "FAIL"
+      }
+    },
+    {
+      "name": "negative empty chronology plus success envelope",
+      "classification": "PASS",
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [],
+          "removed": [],
+          "changed": []
+        },
+        "result_created": false,
+        "result_content_ok": false,
+        "unauthorized_mutations": [],
+        "classification": "PASS"
+      }
+    },
+    {
+      "name": "negative OTHER.txt creation",
+      "classification": "FAIL",
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [
+            "OTHER.txt"
+          ],
+          "removed": [],
+          "changed": []
+        },
+        "result_created": false,
+        "result_content_ok": false,
+        "unauthorized_mutations": [
+          "OTHER.txt"
+        ],
+        "classification": "FAIL"
+      }
+    },
+    {
+      "name": "negative existing source modification",
+      "classification": "FAIL",
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "src/note.txt"
+          ]
+        },
+        "result_created": false,
+        "result_content_ok": false,
+        "unauthorized_mutations": [
+          "src/note.txt"
+        ],
+        "classification": "FAIL"
+      }
+    },
+    {
+      "name": "negative issue erased through record-path exemption",
+      "classification": "PASS",
+      "evaluation": {
+        "manual_fallback": false,
+        "session_completed": true,
+        "manifest_diff": {
+          "added": [],
+          "removed": [],
+          "changed": [
+            "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+          ]
+        },
+        "result_created": false,
+        "result_content_ok": false,
+        "unauthorized_mutations": [],
+        "classification": "PASS"
+      }
+    }
+  ]
+}

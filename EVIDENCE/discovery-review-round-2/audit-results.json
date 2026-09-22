@@ -1,0 +1,821 @@
+{
+  "target": "cc7961187f067cbc7b337b8f80a64505693f7bc6",
+  "base": "bd3e00f2dc5c261b12653ddb3912eb834c92645c",
+  "recovery": "09a39cf9a314ecf029a0066344f8fef7942bb6f0",
+  "oracle_sha256": "46263f3a7f7816b08cfb6357bf27ed871238cce936831f5a9f65eaec401fc8ee",
+  "package_inventory": [
+    "ADR/TEMPLATE.md",
+    "BOOTSTRAP.md",
+    "EVIDENCE/TEMPLATE.md",
+    "EXAMPLE.md",
+    "HANDOFF.md",
+    "HUMAN_CHECKPOINT.md",
+    "ISSUES/TEMPLATE.md",
+    "PROJECT_SPEC.md",
+    "PROMPTS.md",
+    "README.md"
+  ],
+  "verbatim_fixture_files": {
+    "ADR/TEMPLATE.md": "05d3c1d13e6bf682f149d630dc065769810a6b23e1bbfebe89f09aebbd8fc98c",
+    "BOOTSTRAP.md": "ff16abd709001fb653540c5241d57de7d6dc99166015783a72966e48f3b308f7",
+    "EVIDENCE/TEMPLATE.md": "7c88ab300e0991d36c50e262d9e4ead80fa8cbff67b75817a3b3cb5f7c147cce",
+    "EXAMPLE.md": "7ec01a40ef4c10ab2883b55cd526d6823d192ae4c0c18ce1ad62071a266265e7",
+    "HUMAN_CHECKPOINT.md": "548216d5f79803e077dc27d3180fe980fe26bfe1524d2fdecdaf979043a7733b",
+    "ISSUES/TEMPLATE.md": "1990e8acd88b7858d6013ee80de2ae1d6b20936cc142de04ba6fb276e0b32e58",
+    "PROMPTS.md": "696baf907ad6816d860c11a555943b5350092611d012cc3e2616144155795a49",
+    "README.md": "22e4302345ee0f4b59bbd226f7e420f282113bb4d6ed1442edb22c1f21d8b9cb"
+  },
+  "bridge_sha256": {
+    "AGENTS.md": "d79bfa4c23fcb3f3bc6b4f83f9eedd265f358cf9ee965eb4d8b1460914a840dd",
+    "CLAUDE.md": "8429b2d66f6c8596eac36054b51cc047db15e7b219f23826d204088b8b8df48b"
+  },
+  "installations": [
+    {
+      "case": "fresh",
+      "exit_code": 0,
+      "collision_reported": false,
+      "preservation_checks": "PASS"
+    },
+    {
+      "case": "regular collision",
+      "exit_code": 0,
+      "collision_reported": true,
+      "preservation_checks": "PASS"
+    },
+    {
+      "case": "dangling symlink collision",
+      "exit_code": 0,
+      "collision_reported": true,
+      "preservation_checks": "PASS"
+    },
+    {
+      "case": "directory collision",
+      "exit_code": 0,
+      "collision_reported": true,
+      "preservation_checks": "PASS"
+    }
+  ],
+  "changed_path_count": 55,
+  "adoption_snippets": [
+    {
+      "case": "fresh delivered bulk-copy snippet",
+      "exit_code": 0,
+      "manifest_equal": true
+    },
+    {
+      "case": "existing README delivered preflight/copy snippets",
+      "exit_code": 0,
+      "mapping_and_preservation": "PASS"
+    },
+    {
+      "case": "normative collision aborts before copying",
+      "exit_code": 1,
+      "unchanged": true
+    }
+  ],
+  "all_changed_paths_allowed": true,
+  "post_target_record_only_paths": [
+    "EVIDENCE/EVIDENCE-20260922T012257Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-2.json",
+    "HANDOFF.md",
+    "ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md"
+  ],
+  "historical_raw_records_unchanged": 57,
+  "protected_authority_and_machinery_unchanged": true,
+  "markdown_files_checked": 76,
+  "markdown_findings": [],
+  "target_symlinks": [],
+  "launch_counts": {
+    "PASS": 19,
+    "UNVERIFIED": 2,
+    "OBSERVE": 2,
+    "FAIL": 10,
+    "TIMEOUT": 1
+  },
+  "frozen_counts": {
+    "PASS": 25,
+    "OBSERVE": 2,
+    "FAIL": 6,
+    "UNVERIFIED": 1
+  },
+  "records": [
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-capability/claude__positive_root__run1.json",
+      "record_sha256": "a5d916fdf6c1dd28f842957e4f32e940df54889323ebbaacf22ee22031b89ebf",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": false,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 46,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-capability/codex__positive_root__run1.json",
+      "record_sha256": "a768d8447c5bb2011651428070fb2380e8374eb0238ec91615c8921a53f564d8",
+      "launch_classification": "UNVERIFIED",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "UNVERIFIED",
+      "raw_extraction_equals_stored": false,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 26,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-capability/codex__positive_root__run2.json",
+      "record_sha256": "36b5616e3fc8fa8d327211e5614cfaad2821ad33c73ebaec2de634a4568f9251",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 24,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__adapter_removed_auto__run1.json",
+      "record_sha256": "2d849b3f76412ff1f9a801a20edc5ce0ebdc9705303c45467474d856b2d92517",
+      "launch_classification": "OBSERVE",
+      "frozen_from_raw": "OBSERVE",
+      "frozen_from_stored_events": "OBSERVE",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 49,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__adapter_removed_manual__run1.json",
+      "record_sha256": "8c2c3874870224ee2cbb9d183fb335f0b1516ed6042b2eb6153c5156cb14bd2b",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 56,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__negative_collision__run1.json",
+      "record_sha256": "383b42e6b17b4997c5231f3fb84c75f2af45df8cdcabce54c25cb89cf54dc773",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 50,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__negative_conflicting_authority__run1.json",
+      "record_sha256": "e08974cab8ec4a88e9b07060fa823045682f1cf6211495cdacc8473583e252ad",
+      "launch_classification": "FAIL",
+      "frozen_from_raw": "FAIL",
+      "frozen_from_stored_events": "FAIL",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 50,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__negative_conflicting_authority__run2.json",
+      "record_sha256": "05b39404a3cbeb913d14c0960eae83bacd80e3b667a22b6adb56f65c8dee2435",
+      "launch_classification": "FAIL",
+      "frozen_from_raw": "FAIL",
+      "frozen_from_stored_events": "FAIL",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 46,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__negative_missing_entry__run1.json",
+      "record_sha256": "9e7b4b041964bc3881f410dd873238e2e710b61c6c625a1beb27feab2ae0db9e",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 10,
+      "manifest_diff": {
+        "added": [],
+        "removed": [],
+        "changed": []
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__negative_nested__run1.json",
+      "record_sha256": "360b21e8da46c3eb225e153e0b1b0203a6b5b6aa732a8056a0e93dc0d047483e",
+      "launch_classification": "FAIL",
+      "frozen_from_raw": "FAIL",
+      "frozen_from_stored_events": "FAIL",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 50,
+      "manifest_diff": {
+        "added": [
+          "nested_repo/RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "nested_repo/HANDOFF.md",
+          "nested_repo/ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__negative_nested__run2.json",
+      "record_sha256": "076855151c3dc460e4c4147873793951bc7caf058843d185ad1ad12822127886",
+      "launch_classification": "FAIL",
+      "frozen_from_raw": "FAIL",
+      "frozen_from_stored_events": "FAIL",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 57,
+      "manifest_diff": {
+        "added": [
+          "nested_repo/RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "nested_repo/HANDOFF.md",
+          "nested_repo/ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__negative_no_authorized_work__run1.json",
+      "record_sha256": "c240c6feaa6971f96a308e1492b21263c4660b306c2842df1f7631ce21b5c8fa",
+      "launch_classification": "FAIL",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 52,
+      "manifest_diff": {
+        "added": [
+          "ISSUES/ISSUE-20260921T095950Z-spec-authorization-contradiction.md"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "HUMAN_CHECKPOINT.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__negative_template__run1.json",
+      "record_sha256": "ccaea4151fa793ee2855555dfbb950688900580eb3124dac79357cd25f8412c7",
+      "launch_classification": "FAIL",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 52,
+      "manifest_diff": {
+        "added": [],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "HUMAN_CHECKPOINT.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__positive_root__run1.json",
+      "record_sha256": "4f7237c5e7b890ea3b22aa477d148fff94620efb0cc34c97b722ebf24bc55983",
+      "launch_classification": "FAIL",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 44,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__positive_root__run2.json",
+      "record_sha256": "0b525d980b6c87b491a2809ba41334a6447fab892adbb287661c28a5dc4ce6f8",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 52,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__positive_root__run3.json",
+      "record_sha256": "9ab685e33d755f6d2f8c33ee0f99e0aad1e4cb72cac9edcb9eae938b5405568d",
+      "launch_classification": "UNVERIFIED",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 47,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__positive_subdir__run1.json",
+      "record_sha256": "aab82c0bb2e91d7580b8444c8e18d6de6a84d2f5af5867408c840d17c55cb3f3",
+      "launch_classification": "FAIL",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 48,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__positive_subdir__run2.json",
+      "record_sha256": "ba397a581f7d873d29b4f841eaa0205707943c8eb96e6f69d9feb4e76b610a64",
+      "launch_classification": "TIMEOUT",
+      "frozen_from_raw": "UNVERIFIED",
+      "frozen_from_stored_events": "UNVERIFIED",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": null,
+      "raw_line_count": 0,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__positive_subdir__run3.json",
+      "record_sha256": "191b4980d5aaea8dcb0b2859b4575b63bb2cdc7e9779f89c936b2af365b16da9",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 45,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/claude__positive_subdir__run4.json",
+      "record_sha256": "766aba328175565cfd5dc528931ee812ac761c5ab47642a131227f87a2232244",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": "k3",
+      "exit_code": 0,
+      "raw_line_count": 61,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__adapter_removed_auto__run1.json",
+      "record_sha256": "b8e13ae56e26ade6a42c5a05daf039cdfbf83a6839ddcb33dd2db2d497a9629c",
+      "launch_classification": "OBSERVE",
+      "frozen_from_raw": "OBSERVE",
+      "frozen_from_stored_events": "OBSERVE",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 26,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__adapter_removed_manual__run1.json",
+      "record_sha256": "3d596d006e76df8c63f6e98d23b46f69ec92610c51be51d8ac77b2365b95ce4e",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 28,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__negative_collision__run1.json",
+      "record_sha256": "2d516c754399ee41d7e5a261fc2b395ca681d0d65d6ae523984d68727f7efa5b",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 20,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__negative_conflicting_authority__run1.json",
+      "record_sha256": "25c967fcffcf76899fb83e6b855e6392d03a2b62ae90f2d99bcb54be7e8508cc",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 18,
+      "manifest_diff": {
+        "added": [],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__negative_missing_entry__run1.json",
+      "record_sha256": "4a6ebc3b124ded73903f59d313cb7875e335d955656e8d74e13f7b58cac25c89",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 7,
+      "manifest_diff": {
+        "added": [],
+        "removed": [],
+        "changed": []
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__negative_nested__run1.json",
+      "record_sha256": "c751c66fd9ceb8d99e41ac12eca76f1003b65b1fb2edd7d8be790bb18432f06c",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 15,
+      "manifest_diff": {
+        "added": [],
+        "removed": [],
+        "changed": []
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__negative_no_authorized_work__run1.json",
+      "record_sha256": "a9c0429ec9cd03e55beedcddd63ff1bd950a48834c268603982de0686a146885",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 18,
+      "manifest_diff": {
+        "added": [],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "HUMAN_CHECKPOINT.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__negative_template__run1.json",
+      "record_sha256": "e7c126f18ee8b7a5cc6a61d831a44d32f6da60d3601dd989abfe9cbf5b313c63",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 18,
+      "manifest_diff": {
+        "added": [],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "HUMAN_CHECKPOINT.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__positive_root__run1.json",
+      "record_sha256": "d91aac248c7aaf94b9bd20377fb1271d337c9a7af794bebd748f03aa423a103c",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 22,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__positive_root__run2.json",
+      "record_sha256": "a3d0ca9605fb0e5c33a12bf5a6ccf52b18016437b7de1275ff1c89daed84a60a",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 32,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__positive_root__run3.json",
+      "record_sha256": "ca587c6c8383dbc6b51f7fd075519b6c6306da83a80c754a3355a210d1af0f09",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 28,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__positive_subdir__run1.json",
+      "record_sha256": "c7a1f66c01fe23a97b6710f8ffc7637000fc72319c3e8203a64227a8175ab15b",
+      "launch_classification": "PASS",
+      "frozen_from_raw": "PASS",
+      "frozen_from_stored_events": "PASS",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 26,
+      "manifest_diff": {
+        "added": [
+          "RESULT.txt"
+        ],
+        "removed": [],
+        "changed": [
+          "HANDOFF.md",
+          "ISSUES/ISSUE-20260921T000000Z-create-result-file.md"
+        ]
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__positive_subdir__run2.json",
+      "record_sha256": "27bc0f2e806dec3e91fbcb652f02ee29551c208df482474856c27af0a9026f88",
+      "launch_classification": "FAIL",
+      "frozen_from_raw": "FAIL",
+      "frozen_from_stored_events": "FAIL",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 15,
+      "manifest_diff": {
+        "added": [],
+        "removed": [],
+        "changed": []
+      }
+    },
+    {
+      "record": "EVIDENCE/discovery-conformance/attempt-2-final/codex__positive_subdir__run3.json",
+      "record_sha256": "d499c4de9b12804ecbb7cb84526b3c558903b869482491bda68ca7968f844935",
+      "launch_classification": "FAIL",
+      "frozen_from_raw": "FAIL",
+      "frozen_from_stored_events": "FAIL",
+      "raw_extraction_equals_stored": true,
+      "fixture_manifest_and_prompt_match": true,
+      "model": null,
+      "exit_code": 0,
+      "raw_line_count": 19,
+      "manifest_diff": {
+        "added": [],
+        "removed": [],
+        "changed": []
+      }
+    }
+  ]
+}
