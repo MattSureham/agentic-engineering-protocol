@@ -6,40 +6,41 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is an operation
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-09-22T02:09:43Z` (reviewer CHANGES_REQUIRED transition recorded; stopped before attempt 3)
-- **Repository state:** `main`; review round commit `7d4b01ac7a44ebb5201aebca6ade0bd19a114678` over recovery `09a39cf`, followed by this transition/reconciliation record commit. Immutable target `cc7961187f067cbc7b337b8f80a64505693f7bc6` and base `bd3e00f2dc5c261b12653ddb3912eb834c92645c` remain unchanged. At reconciliation only reviewer-owned record edits are dirty; recover exact containing commit, cleanliness and upstream state from Git. No implementation drift.
-- **Evidence cutoff:** [Round-2 independent evidence](EVIDENCE/EVIDENCE-20260922T020117Z-discovery-review-round-2.md): target tests/validator, 19 local oracle probes, package installation and all 34 attempt-2 raw-record reclassifications. Earlier implementation summaries remain historical; their acceptance claims are superseded by this round.
-- **External checks:** During review recovery, cached/direct origin/main was `bd3e00f`, local main `09a39cf`, ahead/behind `2/0`; no divergence observed. No publication was performed. Recheck remote state before a future publication.
-- **Stale when:** Revision/branch/upstream or dirty paths change; new specification/ADR/issue/evidence changes a claim; contract digest or dispatcher selection changes; live work appears; validation changes; external capability/version/configuration changes. Reconcile claims, not just timestamps.
+- **Snapshot updated UTC:** `2026-09-22T07:51:33Z` (attempt-3 implementation committed; milestone BLOCKED_HUMAN_AUTHORITY on owner Codex-quota directive)
+- **Repository state:** `main`; attempt-3 work commit `39bae36` over `88fa835`, followed by this transition/reconciliation record commit. Attempt-2 immutable target `cc7961187f067cbc7b337b8f80a64505693f7bc6` and base `bd3e00f2dc5c261b12653ddb3912eb834c92645c` remain unchanged. Recover exact cleanliness and upstream state from Git.
+- **Evidence cutoff:** [Attempt-3 live conformance](EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md): 42 retained live records under the frozen v3 oracle (`e991d148…`), 11 preserved quota-aborted launches, uniform re-evaluation of all 34 attempt-2 records. Earlier acceptance claims remain superseded.
+- **External checks:** Codex account quota exhausted twice on 2026-09-22 (resets observed 14:50 and 19:50 local); the owner has prohibited further Codex live launches without explicit recorded authorization. Claude API reachable; attempt-3 Claude cost ≈ USD 7.83.
+- **Stale when:** Revision/branch/upstream or dirty paths change; new specification/ADR/issue/evidence changes a claim; contract digest or dispatcher selection changes; live work appears; validation changes; the owner records the pending Codex decision; external capability/version/configuration changes. Reconcile claims, not just timestamps.
 
 ### Current objective and state
 
-- **CONFIRMED — Owner authority:** The accepted [specification](PROJECT_SPEC.md), [discovery ADR](ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md) and [issue](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) require both Codex CLI and Claude Code conformance. A failed candidate remains an unmet milestone condition; unsupported wording cannot silently narrow scope.
-- **CONFIRMED — Independent review:** Fresh `agent:Codex-discovery-review-20260922` records CHANGES_REQUIRED on attempt 2, with three open material findings: R1 remaining Codex model/configuration provenance, R2 reproduced oracle false positives, R4 required Claude negative failures. Full-package fixture/bridge byte fidelity is fixed; R3 portable installation is CLOSED. Resolution claims are independently assessed, not inherited.
-- **CONFIRMED — Live observations:** Codex root positives 3/3, required negative outcomes and manual fallback are supported observations; complete profile acceptance is not established while model provenance and R2 remain open. Codex subdirectory is not claimed. Claude root positives 3/3 and three subdirectory passes out of four launches do not cancel conflicting-authority/nested failures, 2/2 each. Timeout and launch-time failures remain retained separately from frozen reclassification.
-- **CONFIRMED — Milestone state:** Order-5 discovery, digest `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`, is CHANGES_REQUIRED after event 8 at `2026-09-22T02:09:43Z`, attempt 2 by `agent:ClaudeCode-discovery-fix`, target `cc79611`. The pipeline maps the owning issue to IMPLEMENTING and the dispatcher selects an implementer for attempt 3; that attempt has not begun. No acceptance occurred.
-- **CONFIRMED — Verification:** In an immutable-target extraction, 151 tests passed in 25.946s and structural validator passed; package/adoption/history/raw-record audit passed. Nineteen independent oracle probes demonstrate nine adverse false positives. Target's 76 Markdown files have zero supported-checker findings.
+- **CONFIRMED — Owner authority:** The accepted [specification](PROJECT_SPEC.md), [discovery ADR](ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md) and [issue](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) require both Codex CLI and Claude Code conformance. A failed or uncovered required case remains an unmet milestone condition; unsupported wording cannot silently narrow scope.
+- **CONFIRMED — Attempt-3 fixes:** R1 (Codex `--model gpt-6-astra` recorded per session), R2 (oracle rehardened; 19 reviewer probes classify 0 PASS; 163 unit tests OK), R4 (conflict-stop/scope wording; both prior Claude failure modes now PASS 2/2). Attempt-2 evidence carries appended attributable corrections; reviewer tables untouched.
+- **CONFIRMED — Live coverage:** Claude profile coverage complete (3 evaluated PASS per positive case of 7 launched; all negatives PASS; manual fallback PASS; adapter-auto OBSERVE). Codex root: `positive_root` 3/7 PASS, five negatives PASS, `negative_collision` and `adapter_removed_manual` UNVERIFIED (sole verification-read gap) — Codex profile claim not established. Codex subdirectory remains unclaimed (writable-scope boundary).
+- **CONFIRMED — Milestone state:** Order-5 discovery, digest `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`, is BLOCKED_HUMAN_AUTHORITY after attempt 3 (`agent:ClaudeCode-discovery-fix-3`), blocked on [ISSUE-20260922T073608Z-codex-quota-authorization](ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md). No review submission; no acceptance.
+- **CONFIRMED — Verification:** 163 unit tests `OK`; structural validator `PASS`; reviewer probe script 19/19 non-PASS against the frozen oracle. Uniform final re-evaluation of all 42 attempt-3 records shows exactly one launch→final flip (missing_entry, disclosed mid-attempt refinement).
 - **CONFIRMED — Preserved work:** Milestones 1–4 remain ACCEPTED. The [autonomy demonstration](ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md) remains AUTHORIZED attempt 0 at order 6 with its original digest/conditions. AUTONOMY-004 is not established. Prior raw evidence, implementation targets and participant activity remain preserved.
 
 ### Constraints and uncertainty
 
-- Current milestone authority permits bounded product entry/recovery/adoption, scoped adapter, oracle/test and evidence fixes that preserve accepted semantics; no routine owner decision is required. Scope reduction, waived negatives, changed precedence/gates or new trust/permission/architecture mechanisms require owner authority. The reviewer changes none of them.
-- The reviewer persists only its round, evidence, matching transition and operational reconciliation, then stops. No implementation fix, acceptance, closure-checklist completion, recorder/coordinator publication or next-role action.
+- The owner's 2026-09-22 directive: no Codex CLI live session launches without explicit recorded owner authorization; no rerun-to-pretty-pass-rates; all existing records preserved. The minimal remaining run set (2 cases, estimated 2–6 sessions) awaits the owner decision in the blocker issue.
+- Milestone authority otherwise permits bounded product entry/recovery/adoption, scoped adapter, oracle/test and evidence fixes that preserve accepted semantics. Scope reduction, waived negatives, changed precedence/gates or new trust/permission/architecture mechanisms require owner authority.
 - Preserve seven-tier precedence, root/product separation, ten-file runtime-neutral package, accepted ADR originals, tool interfaces and four blocked deferrals. Dedicated Markdown linters are unavailable; cross-host/model reliability and missing historical traces remain unverified.
 
 ### Unverified complexity
 
-Oracle soundness, effective Codex profile provenance and required Claude safety/scope behavior remain open in R1/R2/R4. Portable installation and delivered fixture/bridge byte binding are independently verified. Existing automation limitations remain unchanged.
+Codex `negative_collision`/`adapter_removed_manual` live coverage outstanding (owner-gated). Oracle soundness now carries 19-probe regression evidence; Codex profile provenance is argv-recorded (server-side routing internals unverifiable). Verification-discipline variance (positive UNVERIFIED rate) is characterized, not resolved. Existing automation limitations remain unchanged.
 
 ### Background tasks
 
-No non-terminal task is declared. Historical discovery launches have terminal records; this reviewer launched no agent/rotation session, and all local check/probe subprocesses have terminated.
+No non-terminal task. The 19:55 Codex relaunch waiter was cancelled per the owner directive before launching anything (CANCELLED; zero sessions launched from it); all matrix drivers terminated normally.
 
 ## Active Issues
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
-| [`ISSUE-20260918T064510Z-prompt-independent-discovery`](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) | `IMPLEMENTING` | `HIGH` | `agent:Codex-discovery-authority` | `HUMAN` | `INDEPENDENT` | Round 2 CHANGES_REQUIRED; R1/R2/R4 open, R3 closed | CHANGES_REQUIRED event 8, attempt 2; attempt 3 not started; [review evidence](EVIDENCE/EVIDENCE-20260922T020117Z-discovery-review-round-2.md) |
+| [`ISSUE-20260918T064510Z-prompt-independent-discovery`](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) | `BLOCKED` | `HIGH` | `agent:Codex-discovery-authority` | `HUMAN` | `INDEPENDENT` | Attempt 3 fixes complete; Codex coverage incomplete; BLOCKED_HUMAN_AUTHORITY | Owner decision on the minimal Codex run set; [attempt-3 evidence](EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md) |
+| [`ISSUE-20260922T073608Z-codex-quota-authorization`](ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md) | `BLOCKED` | `HIGH` | `human:MattSureham` | `HUMAN` | `SELF` | Owner authorization gate for 2-case minimal Codex rerun set | Owner records authorize/decline decision in the issue |
 | [`ISSUE-20260817T021218Z-autonomy-demonstration`](ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md) | `INVESTIGATING` | `HIGH` | `ClaudeCode/root` | `HUMAN` | `INDEPENDENT` | Unattended demonstration retained, not started | Order 6 after discovery; AUTHORIZED attempt 0, original lifecycle evidence conditions unchanged |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Non-cooperating concurrent writers | New owner-approved failure model/specification |
 | [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Authenticated identity/approval | New owner-approved trust model/specification/ADR |
@@ -48,9 +49,17 @@ No non-terminal task is declared. Historical discovery launches have terminal re
 
 ## Next Action
 
-The next eligible implementer follows the dispatcher to begin attempt 3 from CHANGES_REQUIRED and resolve R1/R2/R4 within the accepted two-harness milestone; the independent reviewer has stopped without beginning that attempt.
+`human:MattSureham` records the authorize/decline decision on the minimal Codex run set in [ISSUE-20260922T073608Z-codex-quota-authorization](ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md); no participant launches any Codex live session before that decision is durably recorded.
 
 ## Recent Activity
+
+### 2026-09-22T07:51:33Z — agent:ClaudeCode-discovery-fix-3 — Attempt 3 Blocked on Owner Codex-Quota Decision
+
+- **Owner directive:** All scheduled Codex live-probe/rerun launches cancelled (the 19:55 relaunch waiter was killed before launching anything; zero sessions from it); no Codex CLI session starts without explicit recorded owner authorization; all records preserved.
+- **Implementation:** R1/R2/R4 fixes committed as `39bae36` (explicit Codex model flag, schema-v3 records, rehardened oracle with 19-probe regression evidence, conflict-stop/scope wording, regenerated fixture); 163 tests OK, validator PASS. Attempt-2 evidence corrections appended; reviewer-authored tables untouched.
+- **Live program:** 42 retained records (24 Claude, 18 Codex) plus 11 preserved quota-aborted launches. Claude coverage complete; Codex `negative_collision`/`adapter_removed_manual` UNVERIFIED with a sole verification-read gap after two quota exhaustions. Uniform final re-evaluation: one disclosed launch→final flip.
+- **Transition:** Pipeline PASS for IN_PROGRESS → BLOCKED_HUMAN_AUTHORITY with blocker issue ISSUE-20260922T073608Z-codex-quota-authorization (minimal run set: 2 cases, estimated 2–6 sessions). No review submission, self-review, or acceptance.
+- **Boundary:** Implementer stops here. Next action belongs to the owner.
 
 ### 2026-09-22T02:09:43Z — agent:Codex-discovery-review-20260922 — Round-2 Changes-Required Boundary
 

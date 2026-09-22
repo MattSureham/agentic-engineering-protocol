@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260918T064510Z-prompt-independent-discovery`
 - **Title:** Make supported fresh participants discover and activate adopted protocol without task-level reminders
-- **Status:** `IMPLEMENTING`
+- **Status:** `BLOCKED`
 - **Severity:** `HIGH`
 - **Owner:** `agent:Codex-discovery-authority`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-18T06:45:10Z`
-- **Updated UTC:** `2026-09-22T07:36:08Z`
+- **Updated UTC:** `2026-09-22T07:51:33Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance and order-5 contract
 - **ADRs:** Accepted [four-layer discovery boundary](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [Authority/gap analysis](../EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); [authority validation](../EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md); [independent review round 1](../EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md)
@@ -88,7 +88,7 @@ Round 2 was committed as `7d4b01ac7a44ebb5201aebca6ade0bd19a114678`; at `2026-09
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260918T064510Z-prompt-independent-discovery-v1",
   "authority_digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
-  "state": "IN_PROGRESS",
+  "state": "BLOCKED_HUMAN_AUTHORITY",
   "attempt": 3,
   "implementor": "agent:ClaudeCode-discovery-fix-3",
   "base_revision": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
@@ -173,6 +173,14 @@ Round 2 was committed as `7d4b01ac7a44ebb5201aebca6ade0bd19a114678`; at `2026-09
       "from": "CHANGES_REQUIRED",
       "to": "IN_PROGRESS",
       "reason": "Implementation attempt 3 began from immutable base 88fa8359ec3a62f200096d0d96bd04a88ebd118a."
+    },
+    {
+      "sequence": 10,
+      "utc": "2026-09-22T07:51:33Z",
+      "actor": "agent:ClaudeCode-discovery-fix-3",
+      "from": "IN_PROGRESS",
+      "to": "BLOCKED_HUMAN_AUTHORITY",
+      "reason": "Human authority is required; linked blocker ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md defines the unblock condition."
     }
   ]
 }
@@ -263,10 +271,10 @@ This section is the implementor's resolution claim for round 2, appended separat
 
 ## Blocker
 
-- **Blocked from:** `NOT BLOCKED`
-- **Blocker:** `NONE` — no missing human authority is established. Round 2 requires changes under the accepted milestone; its reviewer-owned CHANGES_REQUIRED transition is recorded as event 8 at 2026-09-22T02:09:43Z. Dispatcher selects an implementer for a future attempt 3. The reviewer does not begin attempt 3. Any proposal to narrow requirements or change a protected boundary must instead follow human escalation.
-- **Unblock owner:** `NOT APPLICABLE`
-- **Unblock condition:** `NONE`
+- **Blocked from:** `IN_PROGRESS`
+- **Blocker:** `Linked human-authority issue ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md`
+- **Unblock owner:** `Human technical owner`
+- **Unblock condition:** `The owner records an explicit decision here — authorize the minimal run set (or an amended bounded set), or direct an alternative disposition. On authorization, the recorder persists the decision in this section and the activity history before any launch.`
 
 ## Residual uncertainty
 
@@ -296,6 +304,7 @@ This section is the implementor's resolution claim for round 2, appended separat
 | `2026-09-22T02:09:43Z` | `agent:Codex-discovery-review-20260922` | `REVIEW` | `IMPLEMENTING` | Pipeline AWAITING_PEER_REVIEW -> CHANGES_REQUIRED. Independent review ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-22t020117z--agentcodex-discovery-review-20260922 recorded 3 open material finding(s); within-scope fixes are required. |
 | `2026-09-22T02:35:41Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Pipeline CHANGES_REQUIRED -> IN_PROGRESS. Implementation attempt 3 began from immutable base 88fa8359ec3a62f200096d0d96bd04a88ebd118a. |
 | `2026-09-22T07:36:08Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Attempt-3 implementation within contract allowed paths: R1 explicit Codex `--model gpt-6-astra` provenance plus schema-v3 records and timeout capture fix; R2 oracle rehardening (strict marker-bound reads, record validation, stop evidence, ADR reads; 19 reviewer probes all non-PASS; 163 unit tests OK); R4 conflict-stop/scope wording in product text and bridges with fixture regeneration; both R4 failure modes now 2/2 PASS. 42 live records retained plus 11 quota-aborted launches preserved separately. Owner paused further Codex live runs; `codex negative_collision`/`adapter_removed_manual` coverage outstanding — see ISSUE-20260922T073608Z-codex-quota-authorization. No review submission. |
+| `2026-09-22T07:51:33Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `BLOCKED` | Pipeline IN_PROGRESS -> BLOCKED_HUMAN_AUTHORITY. Human authority is required; linked blocker ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md defines the unblock condition. |
 
 ## Closure checklist
 
