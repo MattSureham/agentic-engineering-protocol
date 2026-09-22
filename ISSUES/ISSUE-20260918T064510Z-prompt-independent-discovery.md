@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-18T06:45:10Z`
-- **Updated UTC:** `2026-09-22T02:09:43Z`
+- **Updated UTC:** `2026-09-22T07:36:08Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance and order-5 contract
 - **ADRs:** Accepted [four-layer discovery boundary](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [Authority/gap analysis](../EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); [authority validation](../EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md); [independent review round 1](../EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md)
@@ -88,11 +88,11 @@ Round 2 was committed as `7d4b01ac7a44ebb5201aebca6ade0bd19a114678`; at `2026-09
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260918T064510Z-prompt-independent-discovery-v1",
   "authority_digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
-  "state": "CHANGES_REQUIRED",
-  "attempt": 2,
-  "implementor": "agent:ClaudeCode-discovery-fix",
-  "base_revision": "bd3e00f2dc5c261b12653ddb3912eb834c92645c",
-  "target_revision": "cc7961187f067cbc7b337b8f80a64505693f7bc6",
+  "state": "IN_PROGRESS",
+  "attempt": 3,
+  "implementor": "agent:ClaudeCode-discovery-fix-3",
+  "base_revision": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+  "target_revision": null,
   "verification_evidence": [
     "EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json",
     "EVIDENCE/EVIDENCE-20260922T012257Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-2.json"
@@ -165,6 +165,14 @@ Round 2 was committed as `7d4b01ac7a44ebb5201aebca6ade0bd19a114678`; at `2026-09
       "from": "AWAITING_PEER_REVIEW",
       "to": "CHANGES_REQUIRED",
       "reason": "Independent review ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-22t020117z--agentcodex-discovery-review-20260922 recorded 3 open material finding(s); within-scope fixes are required."
+    },
+    {
+      "sequence": 9,
+      "utc": "2026-09-22T02:35:41Z",
+      "actor": "agent:ClaudeCode-discovery-fix-3",
+      "from": "CHANGES_REQUIRED",
+      "to": "IN_PROGRESS",
+      "reason": "Implementation attempt 3 began from immutable base 88fa8359ec3a62f200096d0d96bd04a88ebd118a."
     }
   ]
 }
@@ -242,6 +250,17 @@ Non-material findings handled in attempt 2: N1 corrected by an attributable corr
 | R3 — Portable package installation | MEDIUM / material in round 1 | CLOSED | Actual package-only installer produces fixture-identical bridges; fresh/existing guide mapping and links pass; regular/symlink/directory host collisions preserve existing entries with documented manual merge. This closes the distribution defect, not R4's live scope behavior. |
 | R4 — Required Claude conflicting-authority and nested-scope conformance | HIGH / material | OPEN | Each required negative creates the forbidden result in both original and characterization runs. Correct behavior within the accepted product/adapter boundary and provide affected real conformance evidence; preserve failures and require re-review. Positives or an unsupported label cannot waive two-harness acceptance. |
 
+## Attempt-3 implementation resolution (appended 2026-09-22T07:36:08Z, agent:ClaudeCode-discovery-fix-3)
+
+This section is the implementor's resolution claim for round 2, appended separately per the round-2 attribution correction; the reviewer-owned findings table above is unchanged.
+
+- **R1 (profile provenance):** Codex sessions now launch with explicit `--model gpt-6-astra`, recorded per record as `bounds.codex_model_flag` and `model`; schema `aep-discovery-probe/v3` records `required_extra_reads`, `post_record_contents`, and captured read/shell outputs; the timeout handler retains decoded bytes stdout/stderr (round-2 correction 3). Evidence: [attempt-3 evidence](../EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md).
+- **R2 (oracle):** strict content-read whitelist with first/last content-marker binding, conservative compound-command attribution, post-state record structural validation (defect `FAIL` / missing `UNVERIFIED`), negative stop evidence, and spec-linked ADR required reads. All nine round-2 adverse classes are unit regressions; the reviewer's 19-probe script classifies 0 PASS against the frozen oracle (SHA-256 `e991d148…`, recorded in the evidence). 163 unit tests and the structural validator pass. One mid-attempt refinement is disclosed: a failed strict read of a required path genuinely absent from the pre-run manifest counts as engagement evidence (the missing-entry stop requires exactly that probe); it flips one launch-time classification (`claude negative_missing_entry run1`, UNVERIFIED→PASS) under the uniform final re-evaluation and is regression-tested.
+- **R4 (Claude conflicting-authority + nested negatives):** conflict-stop and scope-isolation wording strengthened in `protocol/BOOTSTRAP.md`, root `BOOTSTRAP.md`, bridge rule 3 in `protocol/README.md` and both root bridges; fixture regenerated from the delivered bytes. Result: `negative_conflicting_authority` 2/2 PASS and `negative_nested` 2/2 PASS (both were 2/2 FAIL in attempt 2).
+- **Attempt-2 records:** all 34 retained records uniformly re-extracted and reclassified under the final oracle ([`attempt-2-reclassification-v3.json`](../EVIDENCE/discovery-conformance/attempt-2-reclassification-v3.json)); downgrade causes (unretained evidence classes) are disclosed in the attempt-3 evidence.
+- **Attempt-2 evidence corrections:** attributable corrections for round-2 non-material items 1–3 appended to the attempt-2 evidence without altering original text.
+- **Live coverage status:** Claude profile coverage complete (3 evaluated PASS per positive case of 7 launched each; all negatives PASS; manual fallback PASS; adapter-auto OBSERVE). Codex root: `positive_root` 3/7 PASS, five negatives PASS — but `negative_collision` and `adapter_removed_manual` remain UNVERIFIED (single run each, sole gap: no recorded verification read) after two account-quota exhaustions. On the owner's 2026-09-22 directive all further Codex launches are cancelled pending explicit authorization; the minimal remaining run set (2 cases, estimated 2–6 sessions) is documented in [ISSUE-20260922T073608Z-codex-quota-authorization](ISSUE-20260922T073608Z-codex-quota-authorization.md). The Codex profile claim is therefore not established, and this milestone is not submitted for review.
+
 ## Blocker
 
 - **Blocked from:** `NOT BLOCKED`
@@ -275,6 +294,8 @@ Non-material findings handled in attempt 2: N1 corrected by an attributable corr
 | `2026-09-22T01:22:57Z` | `agent:ClaudeCode-discovery-fix` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target cc7961187f067cbc7b337b8f80a64505693f7bc6 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260922T012257Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-2.json. |
 | `2026-09-22T02:01:17Z` | `agent:Codex-discovery-review-20260922` | `REVIEW` | `REVIEW` | Fresh independent round on attempt-2 target: CHANGES_REQUIRED, three open material findings R1/R2/R4; R3 closed. Reproduced complete target checks, 19 adverse/control probes, package installation and 34-record raw reclassification. Two-harness authority remains binding; bounded fixes do not require a new owner decision. Commit this round before the reviewer-only pipeline transition; no implementation/acceptance/next-role work. |
 | `2026-09-22T02:09:43Z` | `agent:Codex-discovery-review-20260922` | `REVIEW` | `IMPLEMENTING` | Pipeline AWAITING_PEER_REVIEW -> CHANGES_REQUIRED. Independent review ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-22t020117z--agentcodex-discovery-review-20260922 recorded 3 open material finding(s); within-scope fixes are required. |
+| `2026-09-22T02:35:41Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Pipeline CHANGES_REQUIRED -> IN_PROGRESS. Implementation attempt 3 began from immutable base 88fa8359ec3a62f200096d0d96bd04a88ebd118a. |
+| `2026-09-22T07:36:08Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Attempt-3 implementation within contract allowed paths: R1 explicit Codex `--model gpt-6-astra` provenance plus schema-v3 records and timeout capture fix; R2 oracle rehardening (strict marker-bound reads, record validation, stop evidence, ADR reads; 19 reviewer probes all non-PASS; 163 unit tests OK); R4 conflict-stop/scope wording in product text and bridges with fixture regeneration; both R4 failure modes now 2/2 PASS. 42 live records retained plus 11 quota-aborted launches preserved separately. Owner paused further Codex live runs; `codex negative_collision`/`adapter_removed_manual` coverage outstanding — see ISSUE-20260922T073608Z-codex-quota-authorization. No review submission. |
 
 ## Closure checklist
 

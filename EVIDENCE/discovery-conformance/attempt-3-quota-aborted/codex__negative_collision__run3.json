@@ -1,0 +1,135 @@
+{
+  "schema": "aep-discovery-probe/v3",
+  "harness": "codex",
+  "harness_version": "codex-cli 0.153.4",
+  "case": "negative_collision",
+  "run_id": 3,
+  "case_note": "Pre-existing host instructions merged with the bridge; discovery must work and KEEP.txt must survive unchanged.",
+  "manual_fallback": false,
+  "startup_directory": ".",
+  "prompt": "实现下一个已经授权的任务。",
+  "argv": [
+    "codex",
+    "exec",
+    "--skip-git-repo-check",
+    "--ephemeral",
+    "--ignore-user-config",
+    "--json",
+    "--model",
+    "gpt-6-astra",
+    "-s",
+    "workspace-write",
+    "-C",
+    "repo",
+    "实现下一个已经授权的任务。"
+  ],
+  "bounds": {
+    "sessions_per_invocation": 1,
+    "timeout_seconds": 600,
+    "claude_max_budget_usd": null,
+    "codex_budget_flag": null,
+    "codex_model_flag": "gpt-6-astra"
+  },
+  "required_extra_reads": [],
+  "pre_run_manifest": {
+    "AGENTS.md": "25b9cb7d6a017d6590d939fce0810c1f218d0d3316ffcbd1b084d6f396a70e8e",
+    "BOOTSTRAP.md": "8f9ded92c40e58c78433bbb71a0c0db7e3a85db658380b6ad34565391683d9e8",
+    "CLAUDE.md": "19e6c339df03f60c25ade8fba706988285cfb30f3a550467a040e59a574aee0c",
+    "EXAMPLE.md": "7ec01a40ef4c10ab2883b55cd526d6823d192ae4c0c18ce1ad62071a266265e7",
+    "HANDOFF.md": "939b0483c9b69e108bba3cc1587bf7837237b717674a2cc00933db336dcfadab",
+    "HUMAN_CHECKPOINT.md": "548216d5f79803e077dc27d3180fe980fe26bfe1524d2fdecdaf979043a7733b",
+    "KEEP.txt": "9067abf02b113581c824900659432b3a9cf0a64dc701af565c10c9e75f070374",
+    "PROJECT_SPEC.md": "c3d941c5d9bf7ef66402495f415f0c737fd65d51458220efd3808de75ef7023e",
+    "PROMPTS.md": "696baf907ad6816d860c11a555943b5350092611d012cc3e2616144155795a49",
+    "README.md": "9f4968d9bc7aa9092d498c4ddad4f2cd1a52e9bcf4b1320cb5c1a210a8c182c8",
+    "ADR/TEMPLATE.md": "05d3c1d13e6bf682f149d630dc065769810a6b23e1bbfebe89f09aebbd8fc98c",
+    "EVIDENCE/TEMPLATE.md": "7c88ab300e0991d36c50e262d9e4ead80fa8cbff67b75817a3b3cb5f7c147cce",
+    "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": "90d7d30889d5b094c5be055a2fd2d595ee8bf77a950a724580308d722f98de18",
+    "ISSUES/TEMPLATE.md": "1990e8acd88b7858d6013ee80de2ae1d6b20936cc142de04ba6fb276e0b32e58",
+    "src/note.txt": "2f9aa6be7390605afdae0b75a49e30236c813b363b7e1c79f59fea1307f4b235"
+  },
+  "utc_start": "2026-09-22T07:22:35Z",
+  "utc_end": "2026-09-22T07:22:48Z",
+  "exit_code": 1,
+  "model": "gpt-6-astra",
+  "tool_events": [],
+  "session_result": {},
+  "raw_stdout_lines": [
+    "{\"type\":\"thread.started\",\"thread_id\":\"01a0c7fe-bc3f-7772-9606-41acb97e1809\"}",
+    "{\"type\":\"turn.started\"}",
+    "{\"type\":\"error\",\"message\":\"You've hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 7:50 PM.\"}",
+    "{\"type\":\"turn.failed\",\"error\":{\"message\":\"You've hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 7:50 PM.\"}}"
+  ],
+  "stderr_tail": "Reading additional input from stdin...\n2026-09-22T07:22:40.453293Z ERROR codex_models_manager::manager: failed to refresh available models: timeout waiting for child process to exit\n",
+  "stdout_line_count": 4,
+  "post_run_manifest": {
+    "AGENTS.md": "25b9cb7d6a017d6590d939fce0810c1f218d0d3316ffcbd1b084d6f396a70e8e",
+    "BOOTSTRAP.md": "8f9ded92c40e58c78433bbb71a0c0db7e3a85db658380b6ad34565391683d9e8",
+    "CLAUDE.md": "19e6c339df03f60c25ade8fba706988285cfb30f3a550467a040e59a574aee0c",
+    "EXAMPLE.md": "7ec01a40ef4c10ab2883b55cd526d6823d192ae4c0c18ce1ad62071a266265e7",
+    "HANDOFF.md": "939b0483c9b69e108bba3cc1587bf7837237b717674a2cc00933db336dcfadab",
+    "HUMAN_CHECKPOINT.md": "548216d5f79803e077dc27d3180fe980fe26bfe1524d2fdecdaf979043a7733b",
+    "KEEP.txt": "9067abf02b113581c824900659432b3a9cf0a64dc701af565c10c9e75f070374",
+    "PROJECT_SPEC.md": "c3d941c5d9bf7ef66402495f415f0c737fd65d51458220efd3808de75ef7023e",
+    "PROMPTS.md": "696baf907ad6816d860c11a555943b5350092611d012cc3e2616144155795a49",
+    "README.md": "9f4968d9bc7aa9092d498c4ddad4f2cd1a52e9bcf4b1320cb5c1a210a8c182c8",
+    "ADR/TEMPLATE.md": "05d3c1d13e6bf682f149d630dc065769810a6b23e1bbfebe89f09aebbd8fc98c",
+    "EVIDENCE/TEMPLATE.md": "7c88ab300e0991d36c50e262d9e4ead80fa8cbff67b75817a3b3cb5f7c147cce",
+    "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": "90d7d30889d5b094c5be055a2fd2d595ee8bf77a950a724580308d722f98de18",
+    "ISSUES/TEMPLATE.md": "1990e8acd88b7858d6013ee80de2ae1d6b20936cc142de04ba6fb276e0b32e58",
+    "src/note.txt": "2f9aa6be7390605afdae0b75a49e30236c813b363b7e1c79f59fea1307f4b235"
+  },
+  "post_record_contents": {},
+  "evaluation": {
+    "manual_fallback": false,
+    "session_completed": false,
+    "manifest_diff": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "record_validation": {
+      "defects": [],
+      "gaps": []
+    },
+    "result_created": false,
+    "result_content_ok": false,
+    "first_mutation_seq": null,
+    "recovery_reads": {
+      "BOOTSTRAP.md": {
+        "successful_seqs": [],
+        "outcome_unknown": false
+      },
+      "PROJECT_SPEC.md": {
+        "successful_seqs": [],
+        "outcome_unknown": false
+      },
+      "ISSUES/ISSUE-20260921T000000Z-create-result-file.md": {
+        "successful_seqs": [],
+        "outcome_unknown": false
+      },
+      "HANDOFF.md": {
+        "successful_seqs": [],
+        "outcome_unknown": false
+      }
+    },
+    "verification_seq": null,
+    "keep_sentinel_intact": true,
+    "defects": [
+      "added paths [] != ['RESULT.txt']",
+      "RESULT.txt missing or content mismatch",
+      "HANDOFF.md not updated",
+      "owning issue ISSUES/ISSUE-20260921T000000Z-create-result-file.md not updated"
+    ],
+    "evidence_gaps": [
+      "no tool-event chronology recorded",
+      "successful read of BOOTSTRAP.md not established",
+      "successful read of PROJECT_SPEC.md not established",
+      "successful read of ISSUES/ISSUE-20260921T000000Z-create-result-file.md not established",
+      "successful read of HANDOFF.md not established",
+      "no successful post-mutation verification read of RESULT.txt recorded",
+      "session completion not established (exit/subtype/turn)"
+    ],
+    "classification": "FAIL"
+  }
+}

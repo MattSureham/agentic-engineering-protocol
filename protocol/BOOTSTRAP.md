@@ -20,7 +20,7 @@ Resolve claims about intended product behavior in this order:
 
 Only accepted ADRs occupy level 2. Proposed, rejected, and superseded ADRs are historical or pending records, not current authority. `HUMAN_CHECKPOINT.md`, issue narratives, README files, prompts, comments, and chat summaries are navigation or coordination aids; they do not override the hierarchy.
 
-When sources conflict, do not choose the convenient interpretation or silently make them consistent. Record the contradiction as an issue, cite both sources, classify its impact, and escalate if resolving it crosses the Human Authority Boundary.
+When sources conflict, do not choose the convenient interpretation or silently make them consistent. Record the contradiction as an issue, cite both sources, classify its impact, and escalate if resolving it crosses the Human Authority Boundary. Until the contradiction is reconciled or escalated, do not perform the implementation it affects. Source precedence decides which claim governs once work proceeds; it does not waive the stop, and verifying that a lower-precedence claim is stale does not by itself reconcile the contradiction.
 
 Use these certainty labels for material claims:
 
@@ -60,7 +60,7 @@ Before implementation, perform this sequence:
 5. Reconcile every `QUEUED` or `RUNNING` background task in HANDOFF. Query its durable reference. Mark a missing process or remote reference `ORPHANED`; do not assume it is alive.
 6. Independently inspect the code and files relevant to the proposed work. Verify important HANDOFF claims where feasible instead of inheriting them.
 7. Identify contradictions, unsupported assumptions, uncommitted or partial work, unavailable tools, and dirty files that may belong to another participant.
-8. Confirm that `PROJECT_SPEC.md` is sufficiently complete and accepted for the proposed behavior. An explicit current milestone in an accepted specification is prior human authorization for its declared scope; no new approval is needed merely to enter its next implementation, verification, review, or within-scope fix stage. If authority is draft, stale, missing, or ambiguous, limit work to investigation, specification, evidence gathering, or a reversible proposal.
+8. Confirm that `PROJECT_SPEC.md` is sufficiently complete and accepted for the proposed behavior. An explicit current milestone in an accepted specification is prior human authorization for its declared scope; no new approval is needed merely to enter its next implementation, verification, review, or within-scope fix stage. If authority is draft, stale, missing, ambiguous, or contradicted by another durable source, limit work to investigation, specification, evidence gathering, or a reversible proposal; do not implement the affected task until the contradiction is reconciled or escalated.
 9. Select the highest-priority safe action. Treat HANDOFF's Next Action as a continuity pointer, not an instruction that outranks current evidence.
 10. Classify authority and review requirements before changing implementation. If an accepted milestone contract and local pipeline exist, reconcile its machine state from the owning issue and use it only for supported transitions.
 11. Update the active issue or create one when the work is meaningful, will span a run, is blocked, or carries uncertainty.

@@ -2,6 +2,15 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Implementer update — 2026-09-22T07:36:08Z
+
+Prepared by `agent:ClaudeCode-discovery-fix-3` after discovery attempt 3; not an acceptance record. Prior sections remain historical.
+
+- **Owner decision requested:** authorize the minimal remaining Codex live run set in [ISSUE-20260922T073608Z-codex-quota-authorization](ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md) — `codex negative_collision` and `codex adapter_removed_manual` reruns to one evaluated PASS each, estimated 2–6 sessions in one bounded batch. Per your 2026-09-22 directive, no Codex live session will launch without your explicit recorded authorization. The milestone is not submitted for review while this coverage is outstanding.
+- **Round-2 material findings addressed:** R1 (explicit `--model gpt-6-astra` recorded per session), R2 (oracle rehardened; the reviewer's 19 adverse probes classify 0 PASS; 163 unit tests OK), R4 (conflict-stop/scope wording fixed in product text and bridges; both prior failure modes now PASS 2/2 each). Details and honest bounds in the [attempt-3 evidence](EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md).
+- **Claude coverage complete** (3 evaluated PASS per positive case of 7 launched; all negatives PASS; manual fallback PASS). **Codex root coverage incomplete**: `positive_root` 3/7 PASS and five negatives PASS, but the two cases above are UNVERIFIED with a sole verification-read gap after two account-quota exhaustions. Eleven quota-aborted launches are preserved, not discarded.
+- All attempt-2 records were uniformly reclassified under the final oracle with disclosed downgrades; attempt-2 evidence received append-only attributable corrections. No self-review, acceptance, or review submission occurred.
+
 ## Reviewer update — 2026-09-22T02:01:17Z
 
 Prepared by `agent:Codex-discovery-review-20260922` after a fresh independent review of target `cc7961187f067cbc7b337b8f80a64505693f7bc6`. This supersedes the historical support/resolution assertions below; it is not acceptance.

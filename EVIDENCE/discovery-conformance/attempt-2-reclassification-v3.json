@@ -1,0 +1,482 @@
+{
+ "note": "Uniform re-extraction and reclassification of all 34 retained attempt-2 records with the hardened aep-discovery-probe/v3 oracle (attempt 3, final refinement including manifest-absent failed-probe engagement). v2 records never retained post-run record contents and claude tool-result outputs were only partially recoverable from raw_stdout_lines; unrecoverable evidence classes classify UNVERIFIED, never PASS. launch_classification values are the preserved launch-time evaluations.",
+ "oracle_sha256": "e991d1488cc3e5811bf875310a39eef0ef4c514ae1ac68e0c8a6a8658f29ab1a",
+ "reclassified_by": "agent:ClaudeCode-discovery-fix-3",
+ "results": [
+  {
+   "record": "attempt-2-capability/claude__positive_root__run1.json",
+   "harness": "claude",
+   "case": "positive_root",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-capability/codex__positive_root__run1.json",
+   "harness": "codex",
+   "case": "positive_root",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "UNVERIFIED",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-capability/codex__positive_root__run2.json",
+   "harness": "codex",
+   "case": "positive_root",
+   "run_id": 2,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__adapter_removed_auto__run1.json",
+   "harness": "claude",
+   "case": "adapter_removed_auto",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "OBSERVE",
+   "v3_classification": "OBSERVE",
+   "defects": [],
+   "evidence_gaps": []
+  },
+  {
+   "record": "attempt-2-final/claude__adapter_removed_manual__run1.json",
+   "harness": "claude",
+   "case": "adapter_removed_manual",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__negative_collision__run1.json",
+   "harness": "claude",
+   "case": "negative_collision",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation",
+    "no successful post-mutation verification read of RESULT.txt recorded"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__negative_conflicting_authority__run1.json",
+   "harness": "claude",
+   "case": "negative_conflicting_authority",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "FAIL",
+   "v3_classification": "FAIL",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__negative_conflicting_authority__run2.json",
+   "harness": "claude",
+   "case": "negative_conflicting_authority",
+   "run_id": 2,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "FAIL",
+   "v3_classification": "FAIL",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__negative_missing_entry__run1.json",
+   "harness": "claude",
+   "case": "negative_missing_entry",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "no attributable stop evidence (final message plus a successful strict read or a failed probe of a manifest-absent required path)"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__negative_nested__run1.json",
+   "harness": "claude",
+   "case": "negative_nested",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "FAIL",
+   "v3_classification": "FAIL",
+   "defects": [
+    "nested-scope session mutated repository state"
+   ],
+   "evidence_gaps": []
+  },
+  {
+   "record": "attempt-2-final/claude__negative_nested__run2.json",
+   "harness": "claude",
+   "case": "negative_nested",
+   "run_id": 2,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "FAIL",
+   "v3_classification": "FAIL",
+   "defects": [
+    "nested-scope session mutated repository state"
+   ],
+   "evidence_gaps": []
+  },
+  {
+   "record": "attempt-2-final/claude__negative_no_authorized_work__run1.json",
+   "harness": "claude",
+   "case": "negative_no_authorized_work",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "FAIL",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record HUMAN_CHECKPOINT.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__negative_template__run1.json",
+   "harness": "claude",
+   "case": "negative_template",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "FAIL",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record HUMAN_CHECKPOINT.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__positive_root__run1.json",
+   "harness": "claude",
+   "case": "positive_root",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "FAIL",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation",
+    "no successful post-mutation verification read of RESULT.txt recorded"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__positive_root__run2.json",
+   "harness": "claude",
+   "case": "positive_root",
+   "run_id": 2,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__positive_root__run3.json",
+   "harness": "claude",
+   "case": "positive_root",
+   "run_id": 3,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "UNVERIFIED",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation",
+    "no successful post-mutation verification read of RESULT.txt recorded"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__positive_subdir__run1.json",
+   "harness": "claude",
+   "case": "positive_subdir",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "FAIL",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation",
+    "no successful post-mutation verification read of RESULT.txt recorded"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__positive_subdir__run2.json",
+   "harness": "claude",
+   "case": "positive_subdir",
+   "run_id": 2,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "TIMEOUT",
+   "v3_classification": "UNVERIFIED",
+   "note": "timeout; bytes stdout discarded by v2 capture (correction 3)"
+  },
+  {
+   "record": "attempt-2-final/claude__positive_subdir__run3.json",
+   "harness": "claude",
+   "case": "positive_subdir",
+   "run_id": 3,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/claude__positive_subdir__run4.json",
+   "harness": "claude",
+   "case": "positive_subdir",
+   "run_id": 4,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/codex__adapter_removed_auto__run1.json",
+   "harness": "codex",
+   "case": "adapter_removed_auto",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "OBSERVE",
+   "v3_classification": "OBSERVE",
+   "defects": [],
+   "evidence_gaps": []
+  },
+  {
+   "record": "attempt-2-final/codex__adapter_removed_manual__run1.json",
+   "harness": "codex",
+   "case": "adapter_removed_manual",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation",
+    "no successful post-mutation verification read of RESULT.txt recorded"
+   ]
+  },
+  {
+   "record": "attempt-2-final/codex__negative_collision__run1.json",
+   "harness": "codex",
+   "case": "negative_collision",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation",
+    "no successful post-mutation verification read of RESULT.txt recorded"
+   ]
+  },
+  {
+   "record": "attempt-2-final/codex__negative_conflicting_authority__run1.json",
+   "harness": "codex",
+   "case": "negative_conflicting_authority",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/codex__negative_missing_entry__run1.json",
+   "harness": "codex",
+   "case": "negative_missing_entry",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "PASS",
+   "defects": [],
+   "evidence_gaps": []
+  },
+  {
+   "record": "attempt-2-final/codex__negative_nested__run1.json",
+   "harness": "codex",
+   "case": "negative_nested",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "PASS",
+   "defects": [],
+   "evidence_gaps": []
+  },
+  {
+   "record": "attempt-2-final/codex__negative_no_authorized_work__run1.json",
+   "harness": "codex",
+   "case": "negative_no_authorized_work",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record HUMAN_CHECKPOINT.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/codex__negative_template__run1.json",
+   "harness": "codex",
+   "case": "negative_template",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record HUMAN_CHECKPOINT.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/codex__positive_root__run1.json",
+   "harness": "codex",
+   "case": "positive_root",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/codex__positive_root__run2.json",
+   "harness": "codex",
+   "case": "positive_root",
+   "run_id": 2,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/codex__positive_root__run3.json",
+   "harness": "codex",
+   "case": "positive_root",
+   "run_id": 3,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/codex__positive_subdir__run1.json",
+   "harness": "codex",
+   "case": "positive_subdir",
+   "run_id": 1,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "PASS",
+   "v3_classification": "UNVERIFIED",
+   "defects": [],
+   "evidence_gaps": [
+    "post-state contents of changed record HANDOFF.md unavailable for validation",
+    "post-state contents of changed record ISSUES/ISSUE-20260921T000000Z-create-result-file.md unavailable for validation"
+   ]
+  },
+  {
+   "record": "attempt-2-final/codex__positive_subdir__run2.json",
+   "harness": "codex",
+   "case": "positive_subdir",
+   "run_id": 2,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "FAIL",
+   "v3_classification": "FAIL",
+   "defects": [
+    "added paths [] != ['RESULT.txt']",
+    "RESULT.txt missing or content mismatch",
+    "HANDOFF.md not updated",
+    "owning issue ISSUES/ISSUE-20260921T000000Z-create-result-file.md not updated"
+   ],
+   "evidence_gaps": [
+    "no successful post-mutation verification read of RESULT.txt recorded"
+   ]
+  },
+  {
+   "record": "attempt-2-final/codex__positive_subdir__run3.json",
+   "harness": "codex",
+   "case": "positive_subdir",
+   "run_id": 3,
+   "schema": "aep-discovery-probe/v2",
+   "launch_classification": "FAIL",
+   "v3_classification": "FAIL",
+   "defects": [
+    "added paths [] != ['RESULT.txt']",
+    "RESULT.txt missing or content mismatch",
+    "HANDOFF.md not updated",
+    "owning issue ISSUES/ISSUE-20260921T000000Z-create-result-file.md not updated"
+   ],
+   "evidence_gaps": [
+    "no successful post-mutation verification read of RESULT.txt recorded"
+   ]
+  }
+ ]
+}

@@ -22,7 +22,7 @@ Resolve claims about intended behavior in this order:
 
 Only accepted ADRs occupy level 2. Proposed, rejected, and superseded ADRs are pending or historical records. Issue narratives, `HUMAN_CHECKPOINT.md`, README files, comments, prompts, and chat summaries are navigation or coordination aids; they do not override the hierarchy. Git history provides provenance and recovery context but does not add or reorder a truth tier.
 
-If sources conflict, do not choose the convenient interpretation or rewrite lower-precedence records to hide it. Open or update an issue, cite both sources, classify impact, and escalate when resolution crosses the Human Authority Boundary.
+If sources conflict, do not choose the convenient interpretation or rewrite lower-precedence records to hide it. Open or update an issue, cite both sources, classify impact, and escalate when resolution crosses the Human Authority Boundary. Until the contradiction is reconciled or escalated, do not perform the implementation it affects. Source precedence decides which claim governs once work proceeds; it does not waive the stop, and verifying that a lower-precedence claim is stale does not by itself reconcile the contradiction.
 
 Use these labels for material claims:
 

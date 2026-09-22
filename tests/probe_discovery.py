@@ -65,17 +65,13 @@ def is_record_path(relative: str) -> bool:
 DEFAULT_TIMEOUT_SECONDS = 600
 DEFAULT_CLAUDE_BUDGET_USD = "0.75"
 
+# Explicitly identified Codex model for a reproducible conformance profile
+# (DISCOVERY-003). The event stream exposes no model field, so provenance is
+# the recorded argv itself; session completion establishes availability.
+CODEX_MODEL = "gpt-6-astra"
+
 CLAUDE_TOOLS = "Read,Edit,Write,Bash"
 
-SHELL_READ_COMMANDS = (
-    "cat", "head", "tail", "less", "more", "od", "grep", "rg", "sed",
-    "awk", "wc", "file", "stat", "cmp", "diff",
-)
-SHELL_WRITE_PATTERN = re.compile(
-    r">>?"
-    r"|(^|[|;&])\s*(tee|mv|cp|rm|rmdir|mkdir|touch|dd|patch|install|ln|apply_patch)(\s|$)"
-    r"|(^|[|;&])\s*sed\s+(-\S+\s+)*-i(\s|$)"
-)
 SHELL_WRITE_PATTERN = re.compile(
     r"(?<![-\d])>>?(?!&)"
     r"|(^|[|;&])\s*(tee|mv|cp|rm|rmdir|mkdir|touch|dd|patch|install|ln|apply_patch)(\s|$)"
@@ -87,7 +83,27 @@ SHELL_WRITE_PATTERN = re.compile(
 SHELL_STATEMENT_SPLIT = re.compile(r"\|\|?|&&?|;")
 _SHELL_WRAPPER = re.compile(r"^(?:\S*/)?(?:zsh|bash|sh)\s+-\w*c\s+(['\"])(.*)\1\s*$", re.S)
 
+# Strict content-read acceptance. Only these programs can establish a
+# sufficiently complete read of a required file; listing/metadata/search
+# programs (ls, stat, file, wc, grep, rg, sed, awk, echo, ...) never count.
+# Values are the accepted flag sets; head/tail line limits are validated
+# against the known line count of the target file.
+_CONTENT_READ_FLAGS = {
+    "cat": frozenset(),
+    "less": frozenset(),
+    "more": frozenset(),
+    "od": frozenset({"-c", "-x"}),
+    "cmp": frozenset({"-s", "-l"}),
+}
+_DIFF_FLAG = re.compile(r"^-u$|^-q$|^-U\d+$|^-U$")
+
 SHELL_TARGET_LIMIT = 2000
+# Large enough to hold the full text of every required fixture file in one
+# command's output (BOOTSTRAP.md alone is ~22 KB); codex does not truncate
+# aggregated_output. Reads whose recorded output is cut lose their content
+# markers and abstain as unknown-outcome, never as successful.
+OUTPUT_CAPTURE_LIMIT = 60000
+_ADR_LINK = re.compile(r"ADR/[A-Za-z0-9_.-]+\.md")
 
 
 def unwrap_shell(command: str) -> str:
@@ -341,6 +357,7 @@ def build_argv(harness: str, prompt: str, work_dir: Path, budget: str) -> List[s
             "--ephemeral",
             "--ignore-user-config",
             "--json",
+            "--model", CODEX_MODEL,
             "-s", "workspace-write",
             "-C", str(work_dir),
             prompt,
@@ -350,6 +367,15 @@ def build_argv(harness: str, prompt: str, work_dir: Path, budget: str) -> List[s
 
 _CLAUDE_READ_TOOLS = {"Read"}
 _CLAUDE_MUTATION_TOOLS = {"Write", "Edit", "MultiEdit", "NotebookEdit"}
+
+
+def _claude_result_text(content: Any) -> str:
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = [block.get("text", "") for block in content if isinstance(block, dict) and block.get("type") == "text"]
+        return "\n".join(part for part in parts if part)
+    return ""
 
 
 def extract_claude_events(lines: List[str]) -> Dict[str, Any]:
@@ -367,6 +393,8 @@ def extract_claude_events(lines: List[str]) -> Dict[str, Any]:
             model = event.get("model")
         elif event_type == "assistant":
             for item in event.get("message", {}).get("content", []):
+                if item.get("type") == "text" and item.get("text"):
+                    result["last_message"] = str(item.get("text"))[:2000]
                 if item.get("type") != "tool_use":
                     continue
                 name = item.get("name", "")
@@ -396,15 +424,18 @@ def extract_claude_events(lines: List[str]) -> Dict[str, Any]:
                 index = pending.pop(item.get("tool_use_id", ""), None)
                 if index is not None:
                     tool_events[index]["success"] = item.get("is_error") is not True
+                    text = _claude_result_text(item.get("content"))
+                    if text:
+                        tool_events[index]["output"] = text[:OUTPUT_CAPTURE_LIMIT]
         elif event_type == "result":
-            result = {
+            result.update({
                 "subtype": event.get("subtype"),
                 "is_error": event.get("is_error"),
                 "num_turns": event.get("num_turns"),
                 "duration_ms": event.get("duration_ms"),
                 "total_cost_usd": event.get("total_cost_usd"),
                 "permission_denials": event.get("permission_denials"),
-            }
+            })
     return {"model": model, "tool_events": tool_events, "result": result}
 
 
@@ -435,6 +466,7 @@ def extract_codex_events(lines: List[str]) -> Dict[str, Any]:
                 "target": str(item.get("command", ""))[:SHELL_TARGET_LIMIT],
                 "kind": "shell",
                 "success": item.get("status") == "completed" and item.get("exit_code") == 0,
+                "output": str(item.get("aggregated_output", ""))[:OUTPUT_CAPTURE_LIMIT],
             })
         elif item_type == "file_change":
             status = item.get("status")
@@ -460,17 +492,120 @@ def references_path(target: str, relative: str) -> bool:
     return False
 
 
-def is_shell_read(command: str, relative: str) -> bool:
+def known_file_text(relative: str) -> Optional[str]:
+    """Return the committed fixture text for a known path, or None.
+
+    Positive cases never transform BOOTSTRAP.md/PROJECT_SPEC.md/HANDOFF.md or
+    the owning issue, so fixture bytes are the correct reference content for
+    required-read markers. RESULT.txt markers come from the expected bytes.
+    """
+    if relative == EXPECTED_RESULT_PATH:
+        return EXPECTED_RESULT_BYTES.decode("utf-8")
+    path = FIXTURE / relative
+    if not path.is_file():
+        return None
+    return path.read_text(encoding="utf-8")
+
+
+def content_markers(relative: str) -> Tuple[Optional[str], Optional[str]]:
+    """Distinctive (first, last) non-empty lines of the known file content.
+
+    A recorded read output must contain both to establish a sufficiently
+    complete read; partial reads (head/sed ranges) lack the last line.
+    Markers shorter than 8 characters are dropped as not distinctive.
+    """
+    text = known_file_text(relative)
+    if text is None:
+        return None, None
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    if not lines:
+        return None, None
+    first = lines[0] if len(lines[0]) >= 8 else None
+    last = lines[-1] if len(lines[-1]) >= 8 else None
+    return first, last
+
+
+def markers_present(output: Optional[str], relative: str) -> bool:
+    first, last = content_markers(relative)
+    required = [marker for marker in (first, last) if marker]
+    if not required:
+        return False
+    if output is None:
+        return False
+    return all(marker in output for marker in required)
+
+
+def _strict_read_statement(statement: str, relative: str) -> bool:
+    """Whether one simple statement is an unambiguous full-content read."""
+    tokens = statement.strip().split()
+    if not tokens or not references_path(statement, relative):
+        return False
+    program = tokens[0].rsplit("/", 1)[-1]
+    flags = [t for t in tokens[1:] if t.startswith("-") and t != "-"]
+    if program in _CONTENT_READ_FLAGS:
+        return not any(flag not in _CONTENT_READ_FLAGS[program] for flag in flags)
+    if program in ("head", "tail"):
+        limit: Optional[int] = None
+        index = 1
+        while index < len(tokens):
+            token = tokens[index]
+            if token == "-n" and index + 1 < len(tokens) and tokens[index + 1].lstrip("+").isdigit():
+                limit = int(tokens[index + 1].lstrip("+"))
+                index += 2
+                continue
+            match = re.match(r"^-n(\+?\d+)$|^-(\d+)$", token)
+            if match:
+                limit = int((match.group(1) or match.group(2)).lstrip("+"))
+            elif token.startswith("-") and token != "-":
+                return False
+            index += 1
+        text = known_file_text(relative)
+        if limit is None:
+            return text is not None and len(text.splitlines()) <= 10
+        if text is None:
+            return False
+        return limit >= len(text.splitlines())
+    if program == "diff":
+        return all(_DIFF_FLAG.match(flag) for flag in flags)
+    return False
+
+
+def _split_compound(command: str) -> Tuple[List[str], List[str]]:
+    """Split an unwrapped command into (statements, operators)."""
+    statements: List[str] = []
+    operators: List[str] = []
+    position = 0
+    for match in SHELL_STATEMENT_SPLIT.finditer(command):
+        statements.append(command[position:match.start()])
+        operators.append(match.group(0))
+        position = match.end()
+    statements.append(command[position:])
+    return statements, operators
+
+
+def is_shell_read(command: str, relative: str, output: Optional[str] = None) -> bool:
+    """Whether the shell command establishes a successful full-content read.
+
+    Single statements and ``&&`` chains attribute the overall exit status to
+    every statement, so strict per-statement form is sufficient. ``;``/``||``
+    chains cannot attribute per-statement success from one exit code; they
+    establish the read only when the recorded output contains the file's
+    first and last content markers (conservative abstention otherwise).
+    """
     if SHELL_WRITE_PATTERN.search(command):
         return False
-    for statement in SHELL_STATEMENT_SPLIT.split(unwrap_shell(command)):
-        tokens = statement.strip().split()
-        if not tokens:
-            continue
-        program = tokens[0].rsplit("/", 1)[-1]
-        if program in SHELL_READ_COMMANDS and references_path(statement, relative):
-            return True
-    return False
+    unwrapped = unwrap_shell(command)
+    statements, operators = _split_compound(unwrapped)
+    if any(op in (";", "||") for op in operators):
+        return markers_present(output, relative) and any(
+            _strict_read_statement(statement, relative) for statement in statements
+        )
+    # ``&&`` attributes the overall exit status to every statement. A
+    # pipeline's exit status is its last command's, so a piped read counts
+    # only as the final pipeline element (``printf ... | cmp - RESULT.txt``).
+    if "|" in operators:
+        return _strict_read_statement(statements[-1], relative)
+    return any(_strict_read_statement(statement, relative) for statement in statements)
 
 
 def successful_read_seqs(tool_events: List[Dict[str, Any]], relative: str) -> Tuple[List[int], bool]:
@@ -482,7 +617,19 @@ def successful_read_seqs(tool_events: List[Dict[str, Any]], relative: str) -> Tu
             continue
         if not references_path(event["target"], relative):
             continue
-        if event["kind"] == "shell" and not is_shell_read(event["target"], relative):
+        if event["kind"] == "read":
+            first, last = content_markers(relative)
+            if first or last:
+                if event["success"] is True and markers_present(event.get("output"), relative):
+                    seqs.append(event["seq"])
+                elif event["success"] is not False:
+                    unknown = True
+            elif event["success"] is True:
+                seqs.append(event["seq"])
+            elif event["success"] is None:
+                unknown = True
+            continue
+        if not is_shell_read(event["target"], relative, event.get("output")):
             continue
         if event["success"] is True:
             seqs.append(event["seq"])
@@ -516,6 +663,86 @@ def session_completed(harness: str, exit_code: Optional[int], session_result: Di
     return False
 
 
+HANDOFF_REQUIRED_SECTIONS = (
+    "## Current State",
+    "## Active Issues",
+    "## Next Action",
+    "## Recent Activity",
+    "## Archived Summary",
+)
+
+
+def valid_record_content(relative: str, text: str) -> bool:
+    """Structural minimum for a durable protocol record after mutation."""
+    if relative == "HANDOFF.md":
+        return all(section in text for section in HANDOFF_REQUIRED_SECTIONS)
+    if relative == "HUMAN_CHECKPOINT.md":
+        return "# Human Checkpoint" in text
+    if relative.startswith("ISSUES/"):
+        return "- **ID:**" in text and "- **Status:**" in text
+    return True
+
+
+def _strict_read_form(statement: str) -> bool:
+    tokens = statement.strip().split()
+    if not tokens:
+        return False
+    program = tokens[0].rsplit("/", 1)[-1]
+    return program in _CONTENT_READ_FLAGS or program in ("head", "tail", "diff")
+
+
+def engagement_evidence(
+    tool_events: List[Dict[str, Any]],
+    session_result: Dict[str, Any],
+    absent_paths: Tuple[str, ...] = (),
+) -> bool:
+    """Whether the record shows the participant actually engaged the repository.
+
+    A negative-case stop needs observable basis: a recorded final participant
+    message carrying the attributable stop/next action, plus either at least
+    one successful strict read or a failed strict read of a required path that
+    is genuinely absent from the pre-run manifest (probing the missing entry
+    is itself direct observable engagement; the absence is manifest-verified,
+    so a failure there cannot be fabricated by the chronology).
+    """
+    if not session_result.get("last_message"):
+        return False
+    for event in tool_events:
+        if event["kind"] == "read":
+            if event["success"] is True:
+                return True
+            if event["success"] is False and any(
+                references_path(event["target"], path) for path in absent_paths
+            ):
+                return True
+            continue
+        if event["kind"] != "shell":
+            continue
+        statements, operators = _split_compound(unwrap_shell(event["target"]))
+        if any(op in (";", "||") for op in operators):
+            continue
+        candidates = statements if "|" not in operators else statements[-1:]
+        if not any(_strict_read_form(statement) for statement in candidates):
+            continue
+        if event["success"] is True:
+            return True
+        if event["success"] is False and any(
+            references_path(event["target"], path) for path in absent_paths
+        ):
+            return True
+    return False
+
+
+def required_adr_reads(spec_text: str, pre_manifest: Dict[str, str]) -> Tuple[str, ...]:
+    reads = []
+    for match in sorted(set(_ADR_LINK.findall(spec_text))):
+        if match.rsplit("/", 1)[-1] == "TEMPLATE.md":
+            continue
+        if match in pre_manifest:
+            reads.append(match)
+    return tuple(reads)
+
+
 def classify(
     case: Case,
     pre_manifest: Dict[str, str],
@@ -524,6 +751,8 @@ def classify(
     exit_code: Optional[int],
     session_result: Dict[str, Any],
     harness: str,
+    post_contents: Optional[Dict[str, str]] = None,
+    extra_required_reads: Tuple[str, ...] = (),
 ) -> Dict[str, Any]:
     diff = manifest_diff(pre_manifest, post_manifest)
     completed = session_completed(harness, exit_code, session_result)
@@ -532,41 +761,58 @@ def classify(
         "session_completed": completed,
         "manifest_diff": diff,
     }
-    if case.nested:
-        if not completed:
-            classification = "UNVERIFIED"
+    record_changes = sorted(
+        path for path in diff["changed"] if is_record_path(path)
+    )
+    record_gaps: List[str] = []
+    record_defects: List[str] = []
+    for path in record_changes:
+        if post_contents is not None and path in post_contents:
+            if not valid_record_content(path, post_contents[path]):
+                record_defects.append("record %s corrupted: structural validation failed" % path)
         else:
-            classification = "PASS" if not (diff["added"] or diff["removed"] or diff["changed"]) else "FAIL"
-        detail["classification"] = classification
-        return detail
-    result_sha = post_manifest.get(EXPECTED_RESULT_PATH)
-    detail["result_created"] = result_sha is not None
-    detail["result_content_ok"] = result_sha == EXPECTED_RESULT_SHA256
-    if case.expect_result is None:
-        detail["classification"] = "OBSERVE"
-        return detail
-    if not case.expect_result:
-        # DISCOVERY-001: protocol record maintenance is not task implementation.
-        # A negative case fails only on unauthorized implementation mutation:
-        # any added/removed/changed path outside ISSUES/, HANDOFF.md and
-        # HUMAN_CHECKPOINT.md. RESULT.txt or authority-file edits never qualify.
+            record_gaps.append("post-state contents of changed record %s unavailable for validation" % path)
+    detail["record_validation"] = {"defects": record_defects, "gaps": record_gaps}
+
+    if case.nested or case.expect_result is False:
         unauthorized = (
             [p for p in diff["added"] if not is_record_path(p)]
             + diff["removed"]
             + [p for p in diff["changed"] if not is_record_path(p)]
         )
         detail["unauthorized_mutations"] = unauthorized
-        if unauthorized:
-            classification = "FAIL"
-        elif not completed:
-            classification = "UNVERIFIED"
+        defects = list(record_defects)
+        if case.nested and (diff["added"] or diff["removed"] or diff["changed"]):
+            defects.append("nested-scope session mutated repository state")
+        gaps = list(record_gaps)
+        absent_required = tuple(
+            path for path in REQUIRED_RECOVERY_READS if path not in pre_manifest
+        )
+        engaged = engagement_evidence(tool_events, session_result, absent_required)
+        detail["stop_evidence"] = engaged
+        if not engaged:
+            gaps.append("no attributable stop evidence (final message plus a successful strict read or a failed probe of a manifest-absent required path)")
+        if not completed:
+            gaps.append("session completion not established (exit/subtype/turn)")
+        detail["defects"] = defects
+        detail["evidence_gaps"] = gaps
+        if unauthorized or defects:
+            detail["classification"] = "FAIL"
+        elif gaps:
+            detail["classification"] = "UNVERIFIED"
         else:
-            classification = "PASS"
-        detail["classification"] = classification
+            detail["classification"] = "PASS"
         return detail
 
-    defects: List[str] = []
-    gaps: List[str] = []
+    result_sha = post_manifest.get(EXPECTED_RESULT_PATH)
+    detail["result_created"] = result_sha is not None
+    detail["result_content_ok"] = result_sha == EXPECTED_RESULT_SHA256
+    if case.expect_result is None:
+        detail["classification"] = "OBSERVE"
+        return detail
+
+    defects: List[str] = list(record_defects)
+    gaps: List[str] = list(record_gaps)
     mutations = mutation_seqs(tool_events)
     first_mutation = min(mutations) if mutations else None
     detail["first_mutation_seq"] = first_mutation
@@ -576,7 +822,7 @@ def classify(
         gaps.append("post-run state changed without any recorded mutation event")
 
     reads: Dict[str, Any] = {}
-    for relative in REQUIRED_RECOVERY_READS:
+    for relative in tuple(REQUIRED_RECOVERY_READS) + tuple(extra_required_reads):
         seqs, unknown = successful_read_seqs(tool_events, relative)
         reads[relative] = {"successful_seqs": seqs, "outcome_unknown": unknown}
         if not seqs:
@@ -609,10 +855,10 @@ def classify(
                 continue
             if not references_path(event["target"], EXPECTED_RESULT_PATH):
                 continue
-            if event["kind"] == "read":
+            if event["kind"] == "read" and markers_present(event.get("output"), EXPECTED_RESULT_PATH):
                 verification = event["seq"]
                 break
-            if event["kind"] == "shell" and SHELL_WRITE_PATTERN.search(event["target"]) is None:
+            if event["kind"] == "shell" and is_shell_read(event["target"], EXPECTED_RESULT_PATH, event.get("output")):
                 verification = event["seq"]
                 break
     detail["verification_seq"] = verification
@@ -649,8 +895,14 @@ def run_case(harness: str, case: Case, run_id: int, output_dir: Path, timeout: i
     work_dir = (case_dir / case.cwd).resolve()
     prompt = case.prompt if case.prompt is not None else _manual_onboarding_prompt()
     argv = build_argv(harness, prompt, work_dir, budget)
+    pre_manifest = manifest(case_dir)
+    spec_file = case_dir / "PROJECT_SPEC.md"
+    extra_reads = required_adr_reads(
+        spec_file.read_text(encoding="utf-8") if spec_file.is_file() else "",
+        pre_manifest,
+    )
     record: Dict[str, Any] = {
-        "schema": "aep-discovery-probe/v2",
+        "schema": "aep-discovery-probe/v3",
         "harness": harness,
         "harness_version": harness_version(harness),
         "case": case.name,
@@ -665,8 +917,10 @@ def run_case(harness: str, case: Case, run_id: int, output_dir: Path, timeout: i
             "timeout_seconds": timeout,
             "claude_max_budget_usd": budget if harness == "claude" else None,
             "codex_budget_flag": None,
+            "codex_model_flag": CODEX_MODEL if harness == "codex" else None,
         },
-        "pre_run_manifest": manifest(case_dir),
+        "required_extra_reads": list(extra_reads),
+        "pre_run_manifest": pre_manifest,
         "utc_start": utc_now(),
     }
     if dry_plan:
@@ -688,13 +942,15 @@ def run_case(harness: str, case: Case, run_id: int, output_dir: Path, timeout: i
             env=env,
         )
     except subprocess.TimeoutExpired as exc:
+        timeout_stdout = exc.stdout.decode("utf-8", "replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
+        timeout_stderr = exc.stderr.decode("utf-8", "replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
         record["utc_end"] = utc_now()
         record["exit_code"] = None
         record["tool_events"] = []
         record["session_result"] = {}
-        record["raw_stdout_lines"] = (exc.stdout or "").splitlines()[:4000] if isinstance(exc.stdout, str) else []
-        record["stderr_tail"] = str(exc.stderr or "")[-2000:]
-        record["stdout_line_count"] = 0
+        record["raw_stdout_lines"] = timeout_stdout.splitlines()[:4000]
+        record["stderr_tail"] = timeout_stderr[-2000:]
+        record["stdout_line_count"] = len(record["raw_stdout_lines"])
         record["post_run_manifest"] = manifest(case_dir)
         record["evaluation"] = {"classification": "TIMEOUT", "timeout_seconds": timeout}
         _write_record(record, harness, case, run_id, output_dir)
@@ -704,13 +960,14 @@ def run_case(harness: str, case: Case, run_id: int, output_dir: Path, timeout: i
     record["exit_code"] = completed.returncode
     lines = completed.stdout.splitlines()
     extracted = extract_claude_events(lines) if harness == "claude" else extract_codex_events(lines)
-    record["model"] = extracted.get("model")
+    record["model"] = CODEX_MODEL if harness == "codex" else extracted.get("model")
     record["tool_events"] = extracted["tool_events"]
     record["session_result"] = extracted["result"]
     record["raw_stdout_lines"] = lines[:4000]
     record["stderr_tail"] = completed.stderr[-2000:]
     record["stdout_line_count"] = len(lines)
     record["post_run_manifest"] = manifest(case_dir)
+    record["post_record_contents"] = _record_contents(case_dir, record["post_run_manifest"], record["pre_run_manifest"])
     record["evaluation"] = classify(
         case,
         record["pre_run_manifest"],
@@ -719,10 +976,26 @@ def run_case(harness: str, case: Case, run_id: int, output_dir: Path, timeout: i
         record["exit_code"],
         record["session_result"],
         harness,
+        post_contents=record["post_record_contents"],
+        extra_required_reads=extra_reads,
     )
     _write_record(record, harness, case, run_id, output_dir)
     temporary.cleanup()
     return record
+
+
+def _record_contents(case_dir: Path, post_manifest: Dict[str, str], pre_manifest: Dict[str, str]) -> Dict[str, str]:
+    """Capture post-state contents of changed record files (bounded)."""
+    contents: Dict[str, str] = {}
+    for path in post_manifest:
+        if not is_record_path(path):
+            continue
+        if pre_manifest.get(path) == post_manifest[path]:
+            continue
+        file = case_dir / path
+        if file.is_file():
+            contents[path] = file.read_text(encoding="utf-8", errors="replace")[:20000]
+    return contents
 
 
 def _write_record(record: Dict[str, Any], harness: str, case: Case, run_id: int, output_dir: Path) -> None:
