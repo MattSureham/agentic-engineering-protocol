@@ -162,3 +162,34 @@ PASS retained results bind the frozen target oracle
 ```
 
 There are exactly two parseable independent rounds, with one newly appended round on attempt 2. All seven pre-existing pipeline events remain unchanged at this pre-transition checkpoint. The nine paths are this evidence record, its five reproducibility artifacts, the owning issue, HANDOFF and HUMAN_CHECKPOINT. No historical raw record or other participant's received review text is changed by this reviewer.
+
+### Reviewer transition — 2026-09-22T02:09:43Z
+
+Round commit `7d4b01ac7a44ebb5201aebca6ade0bd19a114678` contained exactly the nine reviewer-owned paths. Porcelain including ignored paths was empty before this command:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/run_pipeline.py transition --milestone MILESTONE-20260918T064510Z-prompt-independent-discovery-v1 --actor agent:Codex-discovery-review-20260922 --to CHANGES_REQUIRED
+```
+
+Exit 0; exact stdout:
+
+```text
+PASS MILESTONE-20260918T064510Z-prompt-independent-discovery-v1 AWAITING_PEER_REVIEW -> CHANGES_REQUIRED issue=ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md
+```
+
+The pipeline appended event 8 and the new review reference; issue REVIEW became IMPLEMENTING. Attempt 2 and its immutable target/base/implementor remain fixed. The subsequent dispatcher returned implementer/CHANGES_REQUIRED with an IN_PROGRESS command for future attempt 3. That next-role command was not executed. HANDOFF, the issue's shared blocker/state prose and the reviewer checkpoint were reconciled to this boundary. No new owner decision, acceptance, implementation change or publication occurred.
+
+### Final governance validation — 2026-09-22T02:11:53Z
+
+Read-only comparisons with recovery `09a39cf`, pipeline parsers, complete current Markdown checks, two identical dispatcher invocations and before/after file-hash snapshots exited 0:
+
+```text
+PASS exactly two rounds; latest CHANGES_REQUIRED / 3 findings / immutable attempt-2 target; prior received review preserved
+PASS only event 8 and one review reference appended; attempt 3 absent; other milestones and closure checklist unchanged
+PASS all 77 Markdown checks; HANDOFF five sections / one next action / prior authored activity preserved
+PASS exactly nine reviewer-owned paths; all implementation/authority and historical raw-evidence bytes unchanged
+PASS deterministic read-only dispatcher: implementer / CHANGES_REQUIRED; next-role command not executed
+PASS structural protocol validation (package_files=10 handoffs=2)
+```
+
+`git diff --check` also exited 0. The final record commit follows `7d4b01a` and is identifiable by subject `docs: record discovery round 2 changes-required boundary`; its own hash cannot be embedded in itself. No push is part of this review. Final cleanliness and commit identity are checked from Git after committing and reported to the user, without adding a fictitious future success to this record.

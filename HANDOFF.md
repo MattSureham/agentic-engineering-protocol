@@ -6,8 +6,8 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is an operation
 
 ### Snapshot metadata
 
-- **Snapshot updated UTC:** `2026-09-22T02:01:17Z` (fresh independent review round 2 recorded; matching reviewer transition pending)
-- **Repository state:** Review-owned record changes on clean recovery `09a39cf9a314ecf029a0066344f8fef7942bb6f0`, main; immutable target `cc7961187f067cbc7b337b8f80a64505693f7bc6` and base `bd3e00f2dc5c261b12653ddb3912eb834c92645c` unchanged. Recover the containing review commits from Git; no implementation files are changed by this reviewer.
+- **Snapshot updated UTC:** `2026-09-22T02:09:43Z` (reviewer CHANGES_REQUIRED transition recorded; stopped before attempt 3)
+- **Repository state:** `main`; review round commit `7d4b01ac7a44ebb5201aebca6ade0bd19a114678` over recovery `09a39cf`, followed by this transition/reconciliation record commit. Immutable target `cc7961187f067cbc7b337b8f80a64505693f7bc6` and base `bd3e00f2dc5c261b12653ddb3912eb834c92645c` remain unchanged. At reconciliation only reviewer-owned record edits are dirty; recover exact containing commit, cleanliness and upstream state from Git. No implementation drift.
 - **Evidence cutoff:** [Round-2 independent evidence](EVIDENCE/EVIDENCE-20260922T020117Z-discovery-review-round-2.md): target tests/validator, 19 local oracle probes, package installation and all 34 attempt-2 raw-record reclassifications. Earlier implementation summaries remain historical; their acceptance claims are superseded by this round.
 - **External checks:** During review recovery, cached/direct origin/main was `bd3e00f`, local main `09a39cf`, ahead/behind `2/0`; no divergence observed. No publication was performed. Recheck remote state before a future publication.
 - **Stale when:** Revision/branch/upstream or dirty paths change; new specification/ADR/issue/evidence changes a claim; contract digest or dispatcher selection changes; live work appears; validation changes; external capability/version/configuration changes. Reconcile claims, not just timestamps.
@@ -17,7 +17,7 @@ Read [`BOOTSTRAP.md`](BOOTSTRAP.md) before using this file. This is an operation
 - **CONFIRMED — Owner authority:** The accepted [specification](PROJECT_SPEC.md), [discovery ADR](ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md) and [issue](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) require both Codex CLI and Claude Code conformance. A failed candidate remains an unmet milestone condition; unsupported wording cannot silently narrow scope.
 - **CONFIRMED — Independent review:** Fresh `agent:Codex-discovery-review-20260922` records CHANGES_REQUIRED on attempt 2, with three open material findings: R1 remaining Codex model/configuration provenance, R2 reproduced oracle false positives, R4 required Claude negative failures. Full-package fixture/bridge byte fidelity is fixed; R3 portable installation is CLOSED. Resolution claims are independently assessed, not inherited.
 - **CONFIRMED — Live observations:** Codex root positives 3/3, required negative outcomes and manual fallback are supported observations; complete profile acceptance is not established while model provenance and R2 remain open. Codex subdirectory is not claimed. Claude root positives 3/3 and three subdirectory passes out of four launches do not cancel conflicting-authority/nested failures, 2/2 each. Timeout and launch-time failures remain retained separately from frozen reclassification.
-- **CONFIRMED — Milestone state:** Order-5 discovery, digest `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`, remains AWAITING_PEER_REVIEW, attempt 2 by `agent:ClaudeCode-discovery-fix`, target `cc79611`; latest round requires the reviewer to record CHANGES_REQUIRED after committing its records. No acceptance or attempt 3 has occurred.
+- **CONFIRMED — Milestone state:** Order-5 discovery, digest `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`, is CHANGES_REQUIRED after event 8 at `2026-09-22T02:09:43Z`, attempt 2 by `agent:ClaudeCode-discovery-fix`, target `cc79611`. The pipeline maps the owning issue to IMPLEMENTING and the dispatcher selects an implementer for attempt 3; that attempt has not begun. No acceptance occurred.
 - **CONFIRMED — Verification:** In an immutable-target extraction, 151 tests passed in 25.946s and structural validator passed; package/adoption/history/raw-record audit passed. Nineteen independent oracle probes demonstrate nine adverse false positives. Target's 76 Markdown files have zero supported-checker findings.
 - **CONFIRMED — Preserved work:** Milestones 1–4 remain ACCEPTED. The [autonomy demonstration](ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md) remains AUTHORIZED attempt 0 at order 6 with its original digest/conditions. AUTONOMY-004 is not established. Prior raw evidence, implementation targets and participant activity remain preserved.
 
@@ -39,7 +39,7 @@ No non-terminal task is declared. Historical discovery launches have terminal re
 
 | Issue | Status | Severity | Owner | Authority | Review | Summary | Evidence or unblock condition |
 |---|---|---|---|---|---|---|---|
-| [`ISSUE-20260918T064510Z-prompt-independent-discovery`](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) | `REVIEW` | `HIGH` | `agent:Codex-discovery-authority` | `HUMAN` | `INDEPENDENT` | Round 2 CHANGES_REQUIRED; R1/R2/R4 open, R3 closed | Reviewer transition pending on attempt 2; [review evidence](EVIDENCE/EVIDENCE-20260922T020117Z-discovery-review-round-2.md) |
+| [`ISSUE-20260918T064510Z-prompt-independent-discovery`](ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md) | `IMPLEMENTING` | `HIGH` | `agent:Codex-discovery-authority` | `HUMAN` | `INDEPENDENT` | Round 2 CHANGES_REQUIRED; R1/R2/R4 open, R3 closed | CHANGES_REQUIRED event 8, attempt 2; attempt 3 not started; [review evidence](EVIDENCE/EVIDENCE-20260922T020117Z-discovery-review-round-2.md) |
 | [`ISSUE-20260817T021218Z-autonomy-demonstration`](ISSUES/ISSUE-20260817T021218Z-autonomy-demonstration.md) | `INVESTIGATING` | `HIGH` | `ClaudeCode/root` | `HUMAN` | `INDEPENDENT` | Unattended demonstration retained, not started | Order 6 after discovery; AUTHORIZED attempt 0, original lifecycle evidence conditions unchanged |
 | [`ISSUE-20260806T013907Z-concurrent-writer-guarantees`](ISSUES/ISSUE-20260806T013907Z-concurrent-writer-guarantees.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Non-cooperating concurrent writers | New owner-approved failure model/specification |
 | [`ISSUE-20260806T013907Z-authenticated-identity-approval`](ISSUES/ISSUE-20260806T013907Z-authenticated-identity-approval.md) | `BLOCKED` | `MEDIUM` | `UNASSIGNED` | `HUMAN` | `INDEPENDENT` | Authenticated identity/approval | New owner-approved trust model/specification/ADR |
@@ -48,9 +48,16 @@ No non-terminal task is declared. Historical discovery launches have terminal re
 
 ## Next Action
 
-The independent reviewer commits the round-2 records and records the dispatcher-emitted AWAITING_PEER_REVIEW → CHANGES_REQUIRED transition for attempt 2, reconciles this snapshot, then stops before another participant begins attempt 3.
+The next eligible implementer follows the dispatcher to begin attempt 3 from CHANGES_REQUIRED and resolve R1/R2/R4 within the accepted two-harness milestone; the independent reviewer has stopped without beginning that attempt.
 
 ## Recent Activity
+
+### 2026-09-22T02:09:43Z — agent:Codex-discovery-review-20260922 — Round-2 Changes-Required Boundary
+
+- **Persistence:** Round 2 and its reviewer-owned evidence are committed as `7d4b01a` on immutable target `cc79611`; disposition CHANGES_REQUIRED with three material findings R1/R2/R4, R3 closed.
+- **Transition:** After a clean-tree check, the existing pipeline command under the reviewer label returned PASS for AWAITING_PEER_REVIEW → CHANGES_REQUIRED, appended event 8 and the round reference, and mapped issue REVIEW → IMPLEMENTING. Attempt remains 2; target/base/implementor and previous events remain fixed.
+- **Next role/boundary:** Read-only dispatcher selects implementer and emits IN_PROGRESS for future attempt 3. That command was not executed. No implementation repair, acceptance, closure-checklist change, recorder/coordinator duty or publication was performed.
+- **Verification:** Final governance checks are recorded in [review evidence](EVIDENCE/EVIDENCE-20260922T020117Z-discovery-review-round-2.md); target implementation tests were not repeated for these record-only changes.
 
 ### 2026-09-22T02:01:17Z — agent:Codex-discovery-review-20260922 — Fresh Independent Review Round 2
 

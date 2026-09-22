@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260918T064510Z-prompt-independent-discovery`
 - **Title:** Make supported fresh participants discover and activate adopted protocol without task-level reminders
-- **Status:** `REVIEW`
+- **Status:** `IMPLEMENTING`
 - **Severity:** `HIGH`
 - **Owner:** `agent:Codex-discovery-authority`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-18T06:45:10Z`
-- **Updated UTC:** `2026-09-22T02:01:17Z`
+- **Updated UTC:** `2026-09-22T02:09:43Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance and order-5 contract
 - **ADRs:** Accepted [four-layer discovery boundary](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [Authority/gap analysis](../EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); [authority validation](../EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md); [independent review round 1](../EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md)
@@ -80,13 +80,15 @@ The approved phase persists specification, compatible accepted ADR, a bounded im
 
 Operational projection of the accepted contract; this block does not authorize scope. Attempt 1 remains bound to frozen target `074678d080fc6c1d57d2912314ae21296b618612`. Round 1 was committed at `d8a7f0b7c148342fd8f19ae5c3b0acbc872f9745`; the reviewer then recorded CHANGES_REQUIRED through the pipeline at `2026-09-21T01:38:51Z`, with three open material findings. Attempt 2 began from immutable base `bd3e00f2dc5c261b12653ddb3912eb834c92645c` at `2026-09-21T09:06:56Z`; the implementor recorded R1–R3 resolutions and attempt-2 verification above and submitted a new immutable target for fresh independent review. No acceptance occurred. Digest remains `c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f`.
 
+Round 2 was committed as `7d4b01ac7a44ebb5201aebca6ade0bd19a114678`; at `2026-09-22T02:09:43Z` the reviewer recorded CHANGES_REQUIRED through the pipeline (event 8). Attempt 2, its target/base/implementor and verification evidence remain fixed. Issue IMPLEMENTING is the fix-required mapping; attempt 3 has not started.
+
 <!-- AEP-PIPELINE-STATE-V1:BEGIN -->
 ```json
 {
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260918T064510Z-prompt-independent-discovery-v1",
   "authority_digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
-  "state": "AWAITING_PEER_REVIEW",
+  "state": "CHANGES_REQUIRED",
   "attempt": 2,
   "implementor": "agent:ClaudeCode-discovery-fix",
   "base_revision": "bd3e00f2dc5c261b12653ddb3912eb834c92645c",
@@ -96,7 +98,8 @@ Operational projection of the accepted contract; this block does not authorize s
     "EVIDENCE/EVIDENCE-20260922T012257Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-2.json"
   ],
   "review_references": [
-    "ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-21t013125z--agentcodex-discovery-review-20260921"
+    "ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-21t013125z--agentcodex-discovery-review-20260921",
+    "ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-22t020117z--agentcodex-discovery-review-20260922"
   ],
   "events": [
     {
@@ -154,6 +157,14 @@ Operational projection of the accepted contract; this block does not authorize s
       "from": "IN_PROGRESS",
       "to": "AWAITING_PEER_REVIEW",
       "reason": "Immutable target cc7961187f067cbc7b337b8f80a64505693f7bc6 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260922T012257Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-2.json."
+    },
+    {
+      "sequence": 8,
+      "utc": "2026-09-22T02:09:43Z",
+      "actor": "agent:Codex-discovery-review-20260922",
+      "from": "AWAITING_PEER_REVIEW",
+      "to": "CHANGES_REQUIRED",
+      "reason": "Independent review ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-22t020117z--agentcodex-discovery-review-20260922 recorded 3 open material finding(s); within-scope fixes are required."
     }
   ]
 }
@@ -234,7 +245,7 @@ Non-material findings handled in attempt 2: N1 corrected by an attributable corr
 ## Blocker
 
 - **Blocked from:** `NOT BLOCKED`
-- **Blocker:** `NONE` — no missing human authority is established. Round 2 requires changes under the accepted milestone; its reviewer-owned CHANGES_REQUIRED transition must be recorded after the round is committed. The reviewer does not begin attempt 3. Any proposal to narrow requirements or change a protected boundary must instead follow human escalation.
+- **Blocker:** `NONE` — no missing human authority is established. Round 2 requires changes under the accepted milestone; its reviewer-owned CHANGES_REQUIRED transition is recorded as event 8 at 2026-09-22T02:09:43Z. Dispatcher selects an implementer for a future attempt 3. The reviewer does not begin attempt 3. Any proposal to narrow requirements or change a protected boundary must instead follow human escalation.
 - **Unblock owner:** `NOT APPLICABLE`
 - **Unblock condition:** `NONE`
 
@@ -263,6 +274,7 @@ Non-material findings handled in attempt 2: N1 corrected by an attributable corr
 | `2026-09-21T11:20:00Z` | `agent:ClaudeCode-discovery-fix` | `IMPLEMENTING` | `IMPLEMENTING` | Attempt-2 implementation within contract allowed paths: R3 self-contained portable bridge installer in `protocol/README.md`; R2 fail-closed oracle rewrite (schema v2, adverse regressions); R1 faithful adopted fixture bound to delivered bytes; N1 attributable correction appended to attempt-1 evidence; 34-session live program with frozen-oracle re-evaluation. Result: Codex root profile satisfies the acceptance criteria; Claude profile does not (systematic `negative_conflicting_authority` and `negative_nested` failures, 2/2 each), recorded honestly in the attempt-2 evidence without claiming support. 151 unit tests and validator pass. |
 | `2026-09-22T01:22:57Z` | `agent:ClaudeCode-discovery-fix` | `IMPLEMENTING` | `REVIEW` | Pipeline IN_PROGRESS -> AWAITING_PEER_REVIEW. Immutable target cc7961187f067cbc7b337b8f80a64505693f7bc6 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260922T012257Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-2.json. |
 | `2026-09-22T02:01:17Z` | `agent:Codex-discovery-review-20260922` | `REVIEW` | `REVIEW` | Fresh independent round on attempt-2 target: CHANGES_REQUIRED, three open material findings R1/R2/R4; R3 closed. Reproduced complete target checks, 19 adverse/control probes, package installation and 34-record raw reclassification. Two-harness authority remains binding; bounded fixes do not require a new owner decision. Commit this round before the reviewer-only pipeline transition; no implementation/acceptance/next-role work. |
+| `2026-09-22T02:09:43Z` | `agent:Codex-discovery-review-20260922` | `REVIEW` | `IMPLEMENTING` | Pipeline AWAITING_PEER_REVIEW -> CHANGES_REQUIRED. Independent review ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-22t020117z--agentcodex-discovery-review-20260922 recorded 3 open material finding(s); within-scope fixes are required. |
 
 ## Closure checklist
 
