@@ -2,6 +2,14 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Implementer update — 2026-09-23T01:32:06Z
+
+Prepared by `agent:ClaudeCode-discovery-fix-3` after recording the owner's bounded authorization; not an acceptance record. Prior sections remain historical.
+
+- **Your bounded authorization is persisted** in [ISSUE-20260922T073608Z-codex-quota-authorization](ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md): only `codex negative_collision` and `codex adapter_removed_manual`, one evaluated PASS each then stop, ≤6 new Codex sessions total, failures preserved without unbounded retry, no repetition inflation, no wakeups/auto-relaunch, no specification change. **No Codex session has been launched or scheduled** — execution awaits your distinct "execute the authorized Codex supplementary verification now" instruction.
+- **Owner decision requested now (contract gap):** the accepted pipeline contract (ADR-20260814T015817Z decision 5, PROJECT_SPEC `PIPELINE-003`) defines entry into `BLOCKED_HUMAN_AUTHORITY` but **no exit edge** — `run_pipeline.py` refuses every transition out, and machine state blocks are never hand-edited. Your authorization satisfies the human gate, but the milestone stays machine-blocked until the contract is amended. The proposed minimal amendment (add `BLOCKED_HUMAN_AUTHORITY → IN_PROGRESS` gated on the blocker issue's recorded owner decision) is in [ISSUE-20260923T013206Z-pipeline-blocked-exit](ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md) and needs your approval/amendment/rejection.
+- **Self-correction disclosed:** the 2026-09-22 entry into `BLOCKED_HUMAN_AUTHORITY` misapplied `ROTATE-004` (quota exhaustion is a participant failure and must not produce that state); the genuine gate was your resource directive, now satisfied. The correction fixes the record, not the machine state.
+
 ## Implementer update — 2026-09-22T07:36:08Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after discovery attempt 3; not an acceptance record. Prior sections remain historical.
