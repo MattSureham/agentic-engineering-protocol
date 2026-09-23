@@ -2,6 +2,14 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Implementer update — 2026-09-23T03:13:39Z
+
+Prepared by `agent:ClaudeCode-discovery-fix-3` after implementing the owner-approved blocked-exit amendment; not an acceptance record. Prior sections remain historical.
+
+- **Your approved amendment is implemented** (`47a0cb4`): `BLOCKED_HUMAN_AUTHORITY → IN_PROGRESS` resume gated on the entry blocker issue's recorded owner decision, attempt preserved, decision cited in the transition reason. PROJECT_SPEC gained PIPELINE-009 (every enterable state must have a verifiable exit; unblock authorizes no separately gated execution or resource consumption; quota/participant failures alone never produce `BLOCKED_HUMAN_AUTHORITY`) and ADR-20260814T015817Z decision 5 carries the amendment plus a status-history row. Four new deterministic tests; 167 tests OK, validator PASS. Per the amendment issue's `Review: INDEPENDENT`, an independent review of the amendment is still outstanding.
+- **Milestone resumed:** the discovery milestone is `IN_PROGRESS` (attempt 3 continues) after the validated transition citing your recorded decision. **No Codex session has been launched** — the unblock resolves only the authority blocker; your armed budget (2 cases, ≤6 sessions) still awaits your distinct "execute the authorized Codex supplementary verification now" instruction.
+- **Owner decision requested now: NONE.** Next action remains yours alone: issue the explicit Codex execution trigger when you choose, or direct otherwise.
+
 ## Implementer update — 2026-09-23T01:32:06Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after recording the owner's bounded authorization; not an acceptance record. Prior sections remain historical.

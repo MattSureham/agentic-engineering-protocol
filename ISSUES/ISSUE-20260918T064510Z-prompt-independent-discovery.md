@@ -4,13 +4,13 @@
 
 - **ID:** `ISSUE-20260918T064510Z-prompt-independent-discovery`
 - **Title:** Make supported fresh participants discover and activate adopted protocol without task-level reminders
-- **Status:** `BLOCKED`
+- **Status:** `IMPLEMENTING`
 - **Severity:** `HIGH`
 - **Owner:** `agent:Codex-discovery-authority`
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-18T06:45:10Z`
-- **Updated UTC:** `2026-09-22T07:51:33Z`
+- **Updated UTC:** `2026-09-23T03:13:39Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance and order-5 contract
 - **ADRs:** Accepted [four-layer discovery boundary](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [Authority/gap analysis](../EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); [authority validation](../EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md); [independent review round 1](../EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md)
@@ -88,7 +88,7 @@ Round 2 was committed as `7d4b01ac7a44ebb5201aebca6ade0bd19a114678`; at `2026-09
   "schema": "aep-pipeline-state/v1",
   "milestone_id": "MILESTONE-20260918T064510Z-prompt-independent-discovery-v1",
   "authority_digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
-  "state": "BLOCKED_HUMAN_AUTHORITY",
+  "state": "IN_PROGRESS",
   "attempt": 3,
   "implementor": "agent:ClaudeCode-discovery-fix-3",
   "base_revision": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
@@ -181,6 +181,14 @@ Round 2 was committed as `7d4b01ac7a44ebb5201aebca6ade0bd19a114678`; at `2026-09
       "from": "IN_PROGRESS",
       "to": "BLOCKED_HUMAN_AUTHORITY",
       "reason": "Human authority is required; linked blocker ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md defines the unblock condition."
+    },
+    {
+      "sequence": 11,
+      "utc": "2026-09-23T03:13:39Z",
+      "actor": "agent:ClaudeCode-discovery-fix-3",
+      "from": "BLOCKED_HUMAN_AUTHORITY",
+      "to": "IN_PROGRESS",
+      "reason": "Recorded owner decision in ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md satisfies the human-authority blocker; implementation attempt 3 resumes."
     }
   ]
 }
@@ -275,12 +283,16 @@ This section is the implementor's resolution claim for round 2, appended separat
 - **Self-correction (ROTATE-004):** the 2026-09-22T07:51:33Z `IN_PROGRESS → BLOCKED_HUMAN_AUTHORITY` transition misapplied the contract — quota exhaustion is a participant failure that MUST NOT produce `BLOCKED_HUMAN_AUTHORITY`. The genuine human gate was the owner's resource directive, which is now satisfied by the recorded decision. The state block is never hand-edited; this correction fixes the record, not the machine state.
 - **Contract gap:** the accepted pipeline contract (ADR-20260814T015817Z decision 5, PROJECT_SPEC `PIPELINE-003`) defines no exit edge from `BLOCKED_HUMAN_AUTHORITY`, so `run_pipeline.py` refuses every transition out of it even though the human gate is satisfied. Resolution requires owner-approved contract evolution and is tracked in [ISSUE-20260923T013206Z-pipeline-blocked-exit](ISSUE-20260923T013206Z-pipeline-blocked-exit.md). The milestone's machine state remains `BLOCKED_HUMAN_AUTHORITY` until that amendment lands; no review submission has occurred.
 
+## Blocked-exit amendment landed (appended 2026-09-23T03:13:39Z, agent:ClaudeCode-discovery-fix-3)
+
+The owner approved the blocked-exit amendment with bounded scope; it is implemented in `run_pipeline.py`, PROJECT_SPEC PIPELINE-003/PIPELINE-009, and ADR-20260814T015817Z decision 5 (commit `47a0cb4`, 167 tests OK, validator PASS). The pipeline executed `BLOCKED_HUMAN_AUTHORITY → IN_PROGRESS` citing the recorded owner decision in ISSUE-20260922T073608Z; attempt 3 resumes with implementor and base preserved. The "Contract gap" bullet above is thereby superseded. Per PIPELINE-009 this unblock resolves only the authority blocker: the owner's deferred Codex execution gate remains in force — no Codex live session may launch until the explicit "execute now" instruction. The amendment itself awaits independent review (ISSUE-20260923T013206Z). No review submission and no acceptance has occurred.
+
 ## Blocker
 
-- **Blocked from:** `IN_PROGRESS`
-- **Blocker:** `Linked human-authority issue ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md` (authorization gate ISSUE-20260922T073608Z is satisfied by the recorded owner decision; the machine-exit contract gap and the owner's deferred execution trigger remain)
-- **Unblock owner:** `Human technical owner`
-- **Unblock condition:** `The owner decides the proposed pipeline-contract amendment in ISSUE-20260923T013206Z-pipeline-blocked-exit, and separately issues the explicit "execute the authorized Codex supplementary verification now" instruction before any Codex launch consumes the authorized budget.`
+- **Blocked from:** `NOT BLOCKED`
+- **Blocker:** `NONE (resolved human-authority issue ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md)`
+- **Unblock owner:** `NONE`
+- **Unblock condition:** `NONE`
 
 ## Residual uncertainty
 
@@ -312,6 +324,7 @@ This section is the implementor's resolution claim for round 2, appended separat
 | `2026-09-22T07:36:08Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Attempt-3 implementation within contract allowed paths: R1 explicit Codex `--model gpt-6-astra` provenance plus schema-v3 records and timeout capture fix; R2 oracle rehardening (strict marker-bound reads, record validation, stop evidence, ADR reads; 19 reviewer probes all non-PASS; 163 unit tests OK); R4 conflict-stop/scope wording in product text and bridges with fixture regeneration; both R4 failure modes now 2/2 PASS. 42 live records retained plus 11 quota-aborted launches preserved separately. Owner paused further Codex live runs; `codex negative_collision`/`adapter_removed_manual` coverage outstanding — see ISSUE-20260922T073608Z-codex-quota-authorization. No review submission. |
 | `2026-09-22T07:51:33Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `BLOCKED` | Pipeline IN_PROGRESS -> BLOCKED_HUMAN_AUTHORITY. Human authority is required; linked blocker ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md defines the unblock condition. |
 | `2026-09-23T01:32:06Z` | `human:MattSureham` (recorded by `agent:ClaudeCode-discovery-fix-3`) | `BLOCKED` | `BLOCKED` | Owner granted the bounded Codex supplementary verification authorization (2 cases, 1 evaluated PASS each, ≤6 sessions, no auto-retry/inflation/wakeups) in ISSUE-20260922T073608Z and explicitly deferred execution pending a distinct "execute now" instruction. Self-correction recorded: the 2026-09-22 blocked entry misapplied ROTATE-004. The pipeline contract has no exit edge from BLOCKED_HUMAN_AUTHORITY, so the machine state is unchanged pending the owner-decided contract amendment in ISSUE-20260923T013206Z-pipeline-blocked-exit. No Codex session launched or scheduled; no review submission. |
+| `2026-09-23T03:13:39Z` | `agent:ClaudeCode-discovery-fix-3` | `BLOCKED` | `IMPLEMENTING` | Pipeline BLOCKED_HUMAN_AUTHORITY -> IN_PROGRESS. Recorded owner decision in ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md satisfies the human-authority blocker; implementation attempt 3 resumes. |
 
 ## Closure checklist
 
