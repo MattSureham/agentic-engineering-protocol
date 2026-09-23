@@ -56,6 +56,7 @@ TRANSITIONS = {
     ("AWAITING_PEER_REVIEW", "CHANGES_REQUIRED"),
     ("CHANGES_REQUIRED", "IN_PROGRESS"),
     ("AWAITING_PEER_REVIEW", "ACCEPTED"),
+    ("BLOCKED_HUMAN_AUTHORITY", "IN_PROGRESS"),
 }
 ISSUE_STATUS = {
     "AUTHORIZED": "INVESTIGATING",
@@ -915,6 +916,7 @@ def _updated_issue_text(
     reason: str,
     evidence: Optional[str] = None,
     blocker: Optional[Tuple[str, str]] = None,
+    resolved_blocker: Optional[str] = None,
 ) -> str:
     text = context.issue_texts[milestone.milestone_id]
     text = _replace_metadata(text, "Status", ISSUE_STATUS[target], milestone.issue)
@@ -932,6 +934,18 @@ def _updated_issue_text(
             "Blocker": "Linked human-authority issue {}".format(blocker_path),
             "Unblock owner": "Human technical owner",
             "Unblock condition": condition,
+        }
+        for field, value in replacements.items():
+            pattern = re.compile(r"^- \*\*" + re.escape(field) + r":\*\*.*$", re.MULTILINE)
+            if len(pattern.findall(text)) != 1:
+                raise PipelineError("AEP-PIPE-SCHEMA", milestone.issue, "blocker field {!r} must appear exactly once".format(field), 2)
+            text = pattern.sub("- **{}:** `{}`".format(field, value), text, count=1)
+    if resolved_blocker is not None:
+        replacements = {
+            "Blocked from": "NOT BLOCKED",
+            "Blocker": "NONE (resolved human-authority issue {})".format(resolved_blocker),
+            "Unblock owner": "NONE",
+            "Unblock condition": "NONE",
         }
         for field, value in replacements.items():
             pattern = re.compile(r"^- \*\*" + re.escape(field) + r":\*\*.*$", re.MULTILINE)
@@ -1035,6 +1049,33 @@ def _human_blocker(root: Path, relative: str) -> Tuple[str, str]:
     return relative, match.group("value").strip()
 
 
+def _human_blocker_resolved(root: Path, relative: str) -> Tuple[str, str]:
+    _safe_relative(relative, "command", "blocker issue")
+    if not relative.startswith("ISSUES/") or not relative.endswith(".md"):
+        raise PipelineError("AEP-PIPE-BLOCKER", relative, "blocker must be a repository issue path")
+    path = _resolve_owned_path(root, relative)
+    text = _read_text(path, relative)
+    metadata = _metadata(text, relative)
+    if metadata.get("Authority") != "HUMAN":
+        raise PipelineError("AEP-PIPE-BLOCKER", relative, "blocker issue must have Authority HUMAN")
+    if metadata.get("Status") in {None, "BLOCKED"}:
+        raise PipelineError("AEP-PIPE-BLOCKER", relative, "blocker issue must record the owner decision (Status no longer BLOCKED) before the milestone may resume")
+    match = re.search(r"^- \*\*Unblock condition:\*\*\s+`?(?P<value>[^`\n]+)`?\s*$", text, re.MULTILINE)
+    if match is None or match.group("value").strip().upper() in {"", "NONE", "UNKNOWN", "PENDING"}:
+        raise PipelineError("AEP-PIPE-BLOCKER", relative, "blocker issue needs a nonempty observable Unblock condition")
+    return relative, match.group("value").strip()
+
+
+def _blocked_entry_blocker(state: Dict[str, Any], path: str) -> str:
+    entries = [event for event in state["events"] if event["to"] == "BLOCKED_HUMAN_AUTHORITY"]
+    if not entries:
+        raise PipelineError("AEP-PIPE-STATE", path, "no BLOCKED_HUMAN_AUTHORITY entry event is recorded")
+    match = re.search(r"linked blocker (?P<blocker>ISSUES/\S+?\.md)", entries[-1]["reason"])
+    if match is None:
+        raise PipelineError("AEP-PIPE-STATE", path, "the BLOCKED_HUMAN_AUTHORITY entry event records no linked blocker")
+    return match.group("blocker")
+
+
 def _find_milestone(context: Context, milestone_id: str) -> Milestone:
     matches = [item for item in context.milestones if item.milestone_id == milestone_id]
     if not matches:
@@ -1062,8 +1103,9 @@ def _transition(context: Context, arguments: argparse.Namespace) -> str:
     target_state = arguments.to
     if arguments.target is not None and target_state != "AWAITING_PEER_REVIEW":
         raise PipelineError("AEP-PIPE-CLI", "command", "--target is valid only for AWAITING_PEER_REVIEW", 2)
-    if arguments.blocker_issue is not None and target_state != "BLOCKED_HUMAN_AUTHORITY":
-        raise PipelineError("AEP-PIPE-CLI", "command", "--blocker-issue is valid only for BLOCKED_HUMAN_AUTHORITY", 2)
+    blocked_resume = source == "BLOCKED_HUMAN_AUTHORITY" and target_state == "IN_PROGRESS"
+    if arguments.blocker_issue is not None and target_state != "BLOCKED_HUMAN_AUTHORITY" and not blocked_resume:
+        raise PipelineError("AEP-PIPE-CLI", "command", "--blocker-issue is valid only for BLOCKED_HUMAN_AUTHORITY or a resume from it", 2)
     if not _legal_transition(source, target_state):
         raise PipelineError("AEP-PIPE-STATE", milestone.issue, "transition {} -> {} is not permitted".format(source, target_state))
     if not _dependencies_satisfied(context, milestone):
@@ -1075,6 +1117,7 @@ def _transition(context: Context, arguments: argparse.Namespace) -> str:
     reason = "Validated transition {} to {}.".format(source, target_state)
     evidence: Optional[str] = None
     blocker: Optional[Tuple[str, str]] = None
+    resolved_blocker: Optional[str] = None
 
     if target_state == "READY":
         _require_clean(context.root)
@@ -1082,11 +1125,21 @@ def _transition(context: Context, arguments: argparse.Namespace) -> str:
             raise PipelineError("AEP-PIPE-AUTH", milestone.issue, "milestone is not the next dependency-satisfied contract")
     elif target_state == "IN_PROGRESS":
         _require_clean(context.root)
-        state["attempt"] += 1
-        state["implementor"] = actor
-        state["base_revision"] = _head(context.root)
-        state["target_revision"] = None
-        reason = "Implementation attempt {} began from immutable base {}.".format(state["attempt"], state["base_revision"])
+        if blocked_resume:
+            if arguments.blocker_issue is None:
+                raise PipelineError("AEP-PIPE-CLI", "command", "--blocker-issue is required when resuming from BLOCKED_HUMAN_AUTHORITY", 2)
+            resolved = _human_blocker_resolved(context.root, arguments.blocker_issue)
+            recorded = _blocked_entry_blocker(state, milestone.issue)
+            if resolved[0] != recorded:
+                raise PipelineError("AEP-PIPE-BLOCKER", arguments.blocker_issue, "the named blocker {} does not match the recorded entry blocker {}".format(resolved[0], recorded))
+            resolved_blocker = resolved[0]
+            reason = "Recorded owner decision in {} satisfies the human-authority blocker; implementation attempt {} resumes.".format(resolved[0], state["attempt"])
+        else:
+            state["attempt"] += 1
+            state["implementor"] = actor
+            state["base_revision"] = _head(context.root)
+            state["target_revision"] = None
+            reason = "Implementation attempt {} began from immutable base {}.".format(state["attempt"], state["base_revision"])
     elif target_state == "AWAITING_PEER_REVIEW":
         if arguments.target is None:
             raise PipelineError("AEP-PIPE-CLI", "command", "--target is required for AWAITING_PEER_REVIEW", 2)
@@ -1142,7 +1195,7 @@ def _transition(context: Context, arguments: argparse.Namespace) -> str:
     _append_event(state, source, target_state, actor, utc, reason)
     updated = _updated_issue_text(
         context, milestone, state, source, target_state, actor, utc, reason,
-        evidence=evidence, blocker=blocker,
+        evidence=evidence, blocker=blocker, resolved_blocker=resolved_blocker,
     )
     _commit_issue(context, milestone, updated)
     return "PASS {} {} -> {} issue={}\n".format(milestone.milestone_id, source, target_state, milestone.issue)

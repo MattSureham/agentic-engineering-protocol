@@ -786,6 +786,127 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
         self.assertEqual(fixture.state()["state"], "BLOCKED_HUMAN_AUTHORITY")
         self.assertIn("**Status:** `BLOCKED`", fixture.issue_path().read_text(encoding="utf-8"))
 
+    def _enter_blocked(self, fixture: PipelineRepository) -> None:
+        fixture.begin()
+        fixture.commit("in progress")
+        result = fixture.run(
+            "transition", "--milestone", fixture.milestones[0]["id"],
+            "--actor", "agent:implementor", "--to", "BLOCKED_HUMAN_AUTHORITY",
+            "--blocker-issue", "ISSUES/ISSUE-20260814T030099Z-human-blocker.md",
+        )
+        if result.returncode != 0:
+            raise AssertionError(result.stdout + result.stderr)
+        fixture.commit("blocked")
+
+    @staticmethod
+    def _resolve_blocker(fixture: PipelineRepository) -> None:
+        path = fixture.root / "ISSUES" / "ISSUE-20260814T030099Z-human-blocker.md"
+        text = path.read_text(encoding="utf-8")
+        path.write_text(text.replace("- **Status:** `BLOCKED`", "- **Status:** `OPEN`"), encoding="utf-8")
+        fixture.commit("owner decision recorded")
+
+    def test_blocked_resume_requires_recorded_owner_decision(self) -> None:
+        fixture = self.fixture()
+        self._enter_blocked(fixture)
+        before = self.snapshot(fixture.root)
+        unresolved = fixture.run(
+            "transition", "--milestone", fixture.milestones[0]["id"],
+            "--actor", "agent:implementor", "--to", "IN_PROGRESS",
+            "--blocker-issue", "ISSUES/ISSUE-20260814T030099Z-human-blocker.md",
+        )
+        self.assertEqual(unresolved.returncode, 1)
+        self.assertIn("AEP-PIPE-BLOCKER", unresolved.stderr)
+        self.assertEqual(before, self.snapshot(fixture.root))
+        self._resolve_blocker(fixture)
+        resumed = fixture.run(
+            "transition", "--milestone", fixture.milestones[0]["id"],
+            "--actor", "agent:implementor", "--to", "IN_PROGRESS",
+            "--blocker-issue", "ISSUES/ISSUE-20260814T030099Z-human-blocker.md",
+        )
+        self.assertEqual(resumed.returncode, 0, resumed.stderr)
+        state = fixture.state()
+        self.assertEqual(state["state"], "IN_PROGRESS")
+        self.assertEqual(state["attempt"], 1)
+        self.assertEqual(state["implementor"], "agent:implementor")
+        self.assertIn("ISSUE-20260814T030099Z-human-blocker.md", state["events"][-1]["reason"])
+        text = fixture.issue_path().read_text(encoding="utf-8")
+        self.assertIn("**Status:** `IMPLEMENTING`", text)
+        self.assertIn("- **Blocked from:** `NOT BLOCKED`", text)
+        self.assertIn("- **Unblock condition:** `NONE`", text)
+
+    def test_blocked_resume_requires_entry_blocker_and_clean_tree(self) -> None:
+        fixture = self.fixture()
+        self._enter_blocked(fixture)
+        self._resolve_blocker(fixture)
+        missing_flag = fixture.run(
+            "transition", "--milestone", fixture.milestones[0]["id"],
+            "--actor", "agent:implementor", "--to", "IN_PROGRESS",
+        )
+        self.assertEqual(missing_flag.returncode, 2)
+        self.assertIn("AEP-PIPE-CLI", missing_flag.stderr)
+        other = fixture.root / "ISSUES" / "ISSUE-20260814T030098Z-other.md"
+        other.write_text(
+            "# Other\n\n## Metadata\n\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n\n"
+            "## Blocker\n\n- **Unblock condition:** `Owner decided.`\n",
+            encoding="utf-8",
+        )
+        fixture.commit("other resolved issue")
+        mismatch = fixture.run(
+            "transition", "--milestone", fixture.milestones[0]["id"],
+            "--actor", "agent:implementor", "--to", "IN_PROGRESS",
+            "--blocker-issue", "ISSUES/ISSUE-20260814T030098Z-other.md",
+        )
+        self.assertEqual(mismatch.returncode, 1)
+        self.assertIn("does not match the recorded entry blocker", mismatch.stderr)
+        (fixture.root / "work" / "dirty.txt").write_text("dirty\n", encoding="utf-8")
+        dirty = fixture.run(
+            "transition", "--milestone", fixture.milestones[0]["id"],
+            "--actor", "agent:implementor", "--to", "IN_PROGRESS",
+            "--blocker-issue", "ISSUES/ISSUE-20260814T030099Z-human-blocker.md",
+        )
+        self.assertEqual(dirty.returncode, 1)
+        self.assertIn("AEP-PIPE-GIT", dirty.stderr)
+        fixture.commit("clean again")
+        resumed = fixture.run(
+            "transition", "--milestone", fixture.milestones[0]["id"],
+            "--actor", "agent:implementor", "--to", "IN_PROGRESS",
+            "--blocker-issue", "ISSUES/ISSUE-20260814T030099Z-human-blocker.md",
+        )
+        self.assertEqual(resumed.returncode, 0, resumed.stderr)
+        self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+
+    def test_blocker_flag_rejected_for_ordinary_in_progress(self) -> None:
+        fixture = self.fixture()
+        ready = fixture.run(
+            "transition", "--milestone", fixture.milestones[0]["id"],
+            "--actor", "agent:implementor", "--to", "READY",
+        )
+        self.assertEqual(ready.returncode, 0, ready.stderr)
+        fixture.commit("ready")
+        result = fixture.run(
+            "transition", "--milestone", fixture.milestones[0]["id"],
+            "--actor", "agent:implementor", "--to", "IN_PROGRESS",
+            "--blocker-issue", "ISSUES/ISSUE-20260814T030099Z-human-blocker.md",
+        )
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("AEP-PIPE-CLI", result.stderr)
+        self.assertEqual(fixture.state()["state"], "READY")
+
+    def test_blocked_resume_still_rejects_blocked_target_states(self) -> None:
+        fixture = self.fixture()
+        self._enter_blocked(fixture)
+        self._resolve_blocker(fixture)
+        for target in ("READY", "AWAITING_PEER_REVIEW", "ACCEPTED", "CHANGES_REQUIRED"):
+            with self.subTest(target=target):
+                before = self.snapshot(fixture.root)
+                result = fixture.run(
+                    "transition", "--milestone", fixture.milestones[0]["id"],
+                    "--actor", "agent:implementor", "--to", target,
+                )
+                self.assertEqual(result.returncode, 1)
+                self.assertIn("AEP-PIPE-STATE", result.stderr)
+                self.assertEqual(before, self.snapshot(fixture.root))
+
     def test_issue_conflict_is_detected_before_atomic_replacement(self) -> None:
         fixture = self.fixture()
         context = pipeline._load_context(fixture.root)
