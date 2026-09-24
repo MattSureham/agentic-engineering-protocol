@@ -10,10 +10,10 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-23T01:32:06Z`
-- **Updated UTC:** `2026-09-23T01:32:06Z`
+- **Updated UTC:** `2026-09-24T01:19:04Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) `PIPELINE-003`, `ROTATE-004`
 - **ADRs:** [ADR-20260814T015817Z](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md) decision 5
-- **Evidence:** [ISSUE-20260922T073608Z-codex-quota-authorization](ISSUE-20260922T073608Z-codex-quota-authorization.md) (owner decision recorded 2026-09-23T01:32:06Z)
+- **Evidence:** [ISSUE-20260922T073608Z-codex-quota-authorization](ISSUE-20260922T073608Z-codex-quota-authorization.md) (owner decision recorded 2026-09-23T01:32:06Z); [independent review round 1](../EVIDENCE/EVIDENCE-20260924T011904Z-blocked-exit-review-round-1.md)
 - **Milestone:** `milestone-20260918t064510z-prompt-independent-discovery-v1`
 
 ## Problem
@@ -51,7 +51,7 @@ Human technical owner `MattSureham` **approved** the proposed amendment with exp
 - `ADR-20260814T015817Z`: decision 5 amended with the exit edge and gates; status-history row appended.
 - `tests/test_run_pipeline.py`: deterministic coverage for resume success (attempt preserved, decision cited, blocker section cleared), unresolved-blocker refusal without mutation, missing/mismatched blocker refusal, dirty-tree refusal, `--blocker-issue` rejection on ordinary `IN_PROGRESS`, and refusal of all other target states from `BLOCKED_HUMAN_AUTHORITY`.
 
-**Review status:** per this issue's `Review: INDEPENDENT`, the amendment awaits an independent review round; none has occurred.
+**Review status:** per this issue's `Review: INDEPENDENT`, independent review round 1 by `agent:ClaudeCode-blocked-exit-review-20260924` on immutable target `9e8f6b285b8e9f47022c7c3fb4ba67d5341601b3` returned **APPROVED** with 0 open material findings ([evidence](../EVIDENCE/EVIDENCE-20260924T011904Z-blocked-exit-review-round-1.md)); details in the review-rounds section below.
 
 ### Original proposal (superseded by the recorded approval above)
 
@@ -80,6 +80,8 @@ Proposed minimal contract amendment, as submitted for owner approval:
 |---|---|---|---|---|---|
 | `2026-09-23T01:32:06Z` | `agent:ClaudeCode-discovery-fix-3` | Source inspection of `scripts/run_pipeline.py` (`TRANSITIONS`, `_legal_transition`) against the recorded owner decision | No exit edge from `BLOCKED_HUMAN_AUTHORITY` exists; gap confirmed without mutating state | This issue | Inspection only; no dynamic probe of the transition validator was run |
 | `2026-09-23` | `agent:ClaudeCode-discovery-fix-3` | `python3 -m unittest tests.test_run_pipeline -v` | 27 tests OK (exit 0), including the four new blocked-exit tests | This issue | Fixture-based; the real milestone resume is exercised separately by the actual transition |
+| `2026-09-24T01:19:04Z` | `agent:ClaudeCode-blocked-exit-review-20260924` | `python3 -m unittest discover -s tests` | 167 tests OK (exit 0) | [Round-1 evidence](../EVIDENCE/EVIDENCE-20260924T011904Z-blocked-exit-review-round-1.md) | Independent re-run at reviewed state `9e8f6b2`; same code revision as the amendment |
+| `2026-09-24T01:19:04Z` | `agent:ClaudeCode-blocked-exit-review-20260924` | `python3 scripts/validate_protocol.py` | PASS (exit 0) | [Round-1 evidence](../EVIDENCE/EVIDENCE-20260924T011904Z-blocked-exit-review-round-1.md) | Structural checks only; no Markdown linter |
 
 ## Pipeline state (optional)
 
@@ -91,19 +93,32 @@ NOT APPLICABLE.
 
 ## Independent review rounds
 
-- **Required:** YES — the owner approved the contract amendment on 2026-09-23; the amendment changes the accepted pipeline contract and must follow the ordinary specification-evolution review path. No round has been recorded.
+- **Required:** YES — the owner approved the contract amendment on 2026-09-23; the amendment changes the accepted pipeline contract and must follow the ordinary specification-evolution review path.
+
+### 2026-09-24T01:19:04Z — agent:ClaudeCode-blocked-exit-review-20260924
+
+- **Reviewer:** `agent:ClaudeCode-blocked-exit-review-20260924` (fresh instance; did not implement the target; label differs from implementor `agent:ClaudeCode-discovery-fix-3`; label inequality is not authenticated identity).
+- **Reviewed immutable state:** `9e8f6b285b8e9f47022c7c3fb4ba67d5341601b3` (amendment `47a0cb4` plus resume/reconciliation `9e8f6b2`), `main`, clean tree.
+- **Scope:** the owner-approved blocked-exit amendment and the actual unblock transition only; the discovery implementation was not re-reviewed; no Codex live probe, no implementer/recorder/coordinator work.
+- **Procedures:** full-diff inspection of both target commits; source inspection of `run_pipeline.py` (`TRANSITIONS`, `_legal_transition`, resume branch, both blocker validators, Blocker-section reset); independent re-run of the full suite (`python3 -m unittest discover -s tests` → 167 tests OK, exit 0) and `scripts/validate_protocol.py` (PASS, exit 0); history-integrity inspection of `ea2d393`/`610c672` confirming the 2026-09-22 ROTATE-004 correction is appended and attributable, not a rewrite.
+- **Findings:** all ten review questions confirmed — single new edge matching the approved bounds; durable-decision, clean-tree, Authority-`HUMAN`, nonempty-unblock-condition gates; fail-closed entry-blocker identity match with no-mutation refusals; attempt 3/implementor/base preserved in the actual resume; event-11 reason byte-identical to the machine format (pipeline-executed, not hand-edited); unblock authorizes no separately gated execution and the armed Codex budget (2 cases, ≤6 sessions) remains unconsumed pending the owner's distinct execute-now instruction; quota/participant failure alone cannot produce the state per PIPELINE-009/ROTATE-004; new deterministic tests cover success and the required counterexamples.
+- **Non-material observations:** O1 — PIPELINE-009's literal "every milestone state" phrasing includes terminal `ACCEPTED`, which has no exit by design (owner's bound was "blocking state"; intent clear from context); O2 — entry-side validation does not mechanically reject quota-rationale entries (deliberately excluded from the approved scope; ROTATE-004 remains spec-level at entry); O3 — the machine checks durable recording signals only, not semantic adequacy of the decision (disclosed; this round supplies that judgment and finds the ISSUE-20260922T073608Z decision satisfies the recorded unblock condition).
+- **Limitations:** "no Codex session launched" is verified from durable-records consistency, not external Codex telemetry; Markdown linter unavailable; this disposition is not discovery-milestone acceptance.
+- **Evidence:** [EVIDENCE-20260924T011904Z-blocked-exit-review-round-1](../EVIDENCE/EVIDENCE-20260924T011904Z-blocked-exit-review-round-1.md).
+- **Open material findings:** **0**.
+- **Disposition:** **APPROVED**.
 
 ## Blocker
 
 - **Blocked from:** `RESOLVED` — the owner approved the amendment and it is implemented and tested; the discovery milestone's resume transition is executable.
 - **Blocker:** `NONE (owner approval recorded 2026-09-23; amendment implemented)`.
 - **Unblock owner:** `human:MattSureham`
-- **Unblock condition:** SATISFIED — the owner recorded approval of the proposed amendment with bounded scope, and the amendment is implemented in `run_pipeline.py`, PROJECT_SPEC PIPELINE-003/PIPELINE-009, and ADR-20260814T015817Z decision 5 with deterministic test coverage. Independent review of the amendment remains outstanding and is tracked by this issue's Review field.
+- **Unblock condition:** SATISFIED — the owner recorded approval of the proposed amendment with bounded scope, and the amendment is implemented in `run_pipeline.py`, PROJECT_SPEC PIPELINE-003/PIPELINE-009, and ADR-20260814T015817Z decision 5 with deterministic test coverage. Independent review round 1 (2026-09-24) is APPROVED with 0 open material findings.
 
 ## Residual uncertainty
 
 - The owner selected `IN_PROGRESS` as the sole exit target; a future need for `BLOCKED_HUMAN_AUTHORITY → CHANGES_REQUIRED` would require separate owner-approved evolution.
-- Independent review of the amendment has not yet occurred; findings could require fixes within this issue's scope.
+- Independent review round 1 is APPROVED with 0 open material findings; the non-material observations O1–O3 recorded there remain owned here (wording imprecision on the terminal `ACCEPTED` state; entry-side quota-rationale rejection not machine-enforced; machine checks durable recording signals only).
 
 ## Activity history
 
@@ -111,6 +126,7 @@ NOT APPLICABLE.
 |---|---|---|---|---|
 | `2026-09-23T01:32:06Z` | `agent:ClaudeCode-discovery-fix-3` | `NONE` | `BLOCKED` | Recorded the contract gap discovered while persisting the owner's bounded Codex authorization: no machine exit from `BLOCKED_HUMAN_AUTHORITY` exists, and the 2026-09-22 entry misapplied `ROTATE-004`. Proposed a minimal exit-edge amendment; awaiting owner decision. No state block was hand-edited and no Codex session was launched. |
 | `2026-09-23` | `human:MattSureham` (recorded by `agent:ClaudeCode-discovery-fix-3`) | `BLOCKED` | `OPEN` | Owner approved the amendment with explicit bounds (exit only to `IN_PROGRESS`; recorded-decision gates; no side-effect authorization; ROTATE-004 reaffirmed; no new states). Implemented the amendment in `run_pipeline.py`, PROJECT_SPEC (PIPELINE-003 reference + new PIPELINE-009 + change record), and ADR-20260814T015817Z decision 5, with four new deterministic tests (27 pipeline tests OK). Independent review of the amendment remains outstanding. No Codex session launched. |
+| `2026-09-24T01:19:04Z` | `agent:ClaudeCode-blocked-exit-review-20260924` | `OPEN` | `OPEN` | Independent review round 1 on immutable target `9e8f6b285b8e9f47022c7c3fb4ba67d5341601b3`: APPROVED, 0 open material findings; three non-material observations recorded. Independently re-ran 167 tests OK and validator PASS. No implementation change, no Codex launch, no milestone acceptance. Issue remains OPEN pending ordinary closure. |
 
 ## Closure checklist
 
@@ -118,7 +134,7 @@ NOT APPLICABLE.
 - [x] The change or resolution is recorded (this issue, spec change record, ADR status history).
 - [x] Required verification ran and evidence is linked (27 pipeline tests OK; full suite and validator run at reconciliation).
 - [x] If `Review: SELF`, the Self-review outcome is recorded — NOT APPLICABLE here (`Review: INDEPENDENT`).
-- [ ] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved — PENDING; no round yet.
+- [x] If `Review: INDEPENDENT`, the latest review round is `APPROVED` and shows that prior material findings are resolved — round 1 (2026-09-24) APPROVED, 0 open material findings.
 - [x] Required human authority is recorded in the owning artifact (owner approval recorded above).
 - [x] New complexity is covered, removed, or linked to an explicitly accepted open debt issue.
 - [x] Residual uncertainty is absent or explicitly owned.

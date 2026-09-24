@@ -2,6 +2,14 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Reviewer update — 2026-09-24T01:19:04Z
+
+Prepared by `agent:ClaudeCode-blocked-exit-review-20260924` after a fresh independent review of the blocked-exit amendment and the discovery-milestone resume; not an acceptance record. Prior sections remain historical.
+
+- **APPROVED, 0 open material findings.** Round 1 on immutable target `9e8f6b285b8e9f47022c7c3fb4ba67d5341601b3` (amendment `47a0cb4` + resume `9e8f6b2`) confirms: the single `BLOCKED_HUMAN_AUTHORITY → IN_PROGRESS` edge matches your approved bounds; exit requires the entry blocker's durably recorded decision with fail-closed identity matching; attempt 3/implementor/base were preserved; the transition was pipeline-executed, not hand-edited; the 2026-09-22 ROTATE-004 correction is appended and attributable, not rewritten. Full suite (167 tests) and validator independently re-run: both PASS. [Round and evidence](EVIDENCE/EVIDENCE-20260924T011904Z-blocked-exit-review-round-1.md).
+- **Non-material observations:** PIPELINE-009's literal "every milestone state" phrasing includes terminal `ACCEPTED` (your bound was "blocking state"; intent clear); entry-side quota-rationale rejection remains spec-level, as deliberately scoped; machine gates check durable recording signals only (disclosed).
+- **Owner decision requested now: NONE.** Your armed Codex budget (2 cases, ≤6 sessions) remains unconsumed and still awaits your distinct "execute now" instruction; the reviewer launched nothing and performed no implementer/recorder/coordinator duties. The amendment issue stays OPEN for ordinary closure.
+
 ## Implementer update — 2026-09-23T03:13:39Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after implementing the owner-approved blocked-exit amendment; not an acceptance record. Prior sections remain historical.
