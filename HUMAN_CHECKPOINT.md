@@ -2,6 +2,14 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Implementer update — 2026-09-28T02:02:06Z
+
+Prepared by `agent:ClaudeCode-discovery-fix-3` after executing your single-session authorization; not an acceptance record. Prior sections remain historical.
+
+- **Your authorized single session ran exactly once; result UNVERIFIED, zero defects.** Run 9 (`codex adapter_removed_manual`, 2026-09-28T01:51:27Z–01:53:56Z, exit 0, frozen oracle hash verified unchanged pre-launch) ended with the sole gap "no successful post-mutation verification read of `RESULT.txt` recorded". Per your stop condition, no second session was launched.
+- **What happened:** the participant *did* follow the new instruction and performed a content-visible post-change read — but fused it into the same single shell command that created the file (one `zsh -lc` containing the write heredoc, then `cat RESULT.txt`, `od -An -tx1 RESULT.txt`, then a byte assertion). The frozen fail-closed oracle can only credit a read that stands as a separately attributable command; it conservatively abstains on reads fused into the mutating event (and `od -An -tx1`'s flags are outside its accepted set). The recorded output does show the content — this is an attribution boundary of the reviewer-required conservative design, not a missing verification behavior. No oracle change, no reclassification, no review submission. Uniform re-evaluation of all 49 records is clean apart from the previously disclosed historical refinement; details in the [attempt-3 evidence](EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md).
+- **Owner decision requested now (disposition):** acceptance criterion 5 remains unmet (`adapter_removed_manual`: 7 UNVERIFIED runs, all otherwise conforming). Options: authorize a further explicitly bounded Codex session (e.g., additionally instructing the read as a separately executed command), amend the claim through specification evolution, route the oracle attribution boundary to independent review, or direct an alternative disposition. **No participant launches any live session or submits the milestone for review until you decide.**
+
 ## Implementer update — 2026-09-28T01:43:10Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after diagnosing the systematic verification-read gap per your instruction; no live sessions were launched. Prior sections remain historical.
