@@ -283,6 +283,26 @@ class FixtureTests(unittest.TestCase):
         self.assertIn("re-read the artifact after the change", prompt)
         self.assertIn("output showing its actual content", prompt)
 
+    def test_delivered_bootstraps_require_separate_verification_invocation(self) -> None:
+        for path in (PROTOCOL / "BOOTSTRAP.md", REPOSITORY_ROOT / "BOOTSTRAP.md"):
+            text = path.read_text(encoding="utf-8")
+            self.assertIn(
+                "perform that read as a separate subsequent command or tool invocation",
+                text,
+                str(path),
+            )
+            self.assertIn(
+                "do not combine the write and the verification read into one "
+                "compound shell command",
+                text,
+                str(path),
+            )
+
+    def test_manual_fallback_requires_separate_reread_invocation(self) -> None:
+        prompt = probe._manual_onboarding_prompt()
+        self.assertIn("its own command or tool invocation after the write completes", prompt)
+        self.assertIn("not merged with the write into one compound shell command", prompt)
+
     def test_fixture_verification_contract_is_satisfied_by_strict_reread(self) -> None:
         text = (FIXTURE / probe.ISSUE_REL).read_text(encoding="utf-8")
         self.assertIn("Record the exact verification command and result", text)

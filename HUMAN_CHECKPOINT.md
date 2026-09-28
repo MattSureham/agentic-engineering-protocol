@@ -2,6 +2,14 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Implementer update — 2026-09-28T02:15:19Z
+
+Prepared by `agent:ClaudeCode-discovery-fix-3` after your directed offline refinement; no live session was launched. Prior sections remain historical.
+
+- **Refinement delivered per your instruction.** The delivered verification instructions now explicitly require: (1) the mutation/write completes first; (2) the exact-artifact post-change verification read runs as a **separate subsequent command or tool invocation**; (3) that invocation's recorded output shows the actual content; (4) write and verification read MUST NOT be merged into one compound shell command. Applied to root `BOOTSTRAP.md`, `protocol/BOOTSTRAP.md`, and the `protocol/PROMPTS.md` manual fallback; fixture resynchronized byte-identically; two deterministic regression tests prove both delivered BOOTSTRAPs and the actually-launched manual fallback prompt carry the separate-invocation requirement.
+- **Verification:** 172 unit tests OK, structural validator PASS, reviewer adverse probes 19/19 non-PASS; frozen oracle untouched (`e991d148…`); acceptance criteria unchanged; run 9 and all prior UNVERIFIED/PASS/quota evidence preserved unmodified — nothing reclassified, no history rewritten.
+- **Stopped as directed:** no live session launched and none will be without your new explicit authorization. A further evaluated `codex adapter_removed_manual` PASS on this delivered-byte revision is the remaining gap before review submission; the disposition is yours.
+
 ## Implementer update — 2026-09-28T02:02:06Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after executing your single-session authorization; not an acceptance record. Prior sections remain historical.

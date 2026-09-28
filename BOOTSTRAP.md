@@ -139,7 +139,7 @@ Do not commit secrets, credentials, personal data, or needlessly large generated
 
 If a check cannot run, record `NOT RUN`, the attempted command when applicable, the reason, and consequence. Unavailable, skipped, flaky, partial, or inspection-only checks are not passes. Preserve original observations and append attributable corrections rather than silently rewriting them.
 
-When the expected behavior is an exact artifact or recorded file state, verification MUST include at least one read of the artifact performed after the change whose recorded output shows the artifact's actual content (for example `cat` or `od`), with the command and output preserved as evidence. A write-time assumption, an existence or exit-status check, or a hash or byte assertion whose recorded output does not show the content is not inspectable proof of the artifact's content to a fresh participant.
+When the expected behavior is an exact artifact or recorded file state, verification MUST include at least one read of the artifact performed after the change whose recorded output shows the artifact's actual content (for example `cat` or `od`), with the command and output preserved as evidence. Complete the mutation or write first, then perform that read as a separate subsequent command or tool invocation; do not combine the write and the verification read into one compound shell command, because a read fused with the mutating command is not independently attributable as post-change verification. A write-time assumption, an existence or exit-status check, or a hash or byte assertion whose recorded output does not show the content is not inspectable proof of the artifact's content to a fresh participant.
 
 ## Unverified complexity
 
