@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-18T06:45:10Z`
-- **Updated UTC:** `2026-09-28T01:28:45Z`
+- **Updated UTC:** `2026-09-28T01:43:10Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance and order-5 contract
 - **ADRs:** Accepted [four-layer discovery boundary](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [Authority/gap analysis](../EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); [authority validation](../EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md); [independent review round 1](../EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md)
@@ -298,6 +298,10 @@ Final uniform frozen-oracle re-evaluation of all 48 `attempt-3-final/` records s
 
 **Acceptance consequence:** `adapter_removed_manual` still lacks one evaluated PASS after 6 total runs, so acceptance criterion 5 is still unmet for the Codex root profile. The milestone remains `IN_PROGRESS` (attempt 3); **no review submission is made** — submission while a required case lacks passing coverage would violate the accepted acceptance criteria. The implementer stopped at the budget cap and expands nothing: a further bounded batch, a specification-evolution claim amendment, or an alternative disposition is a new human technical owner decision, recorded in `HUMAN_CHECKPOINT.md`.
 
+## Verification-read gap diagnosed; delivered-instruction fix (appended 2026-09-28T01:43:10Z, agent:ClaudeCode-discovery-fix-3)
+
+Diagnosis from preserved raw records, zero live sessions: the systematic `adapter_removed_manual` gap was a **delivered-instruction gap**. Every UNVERIFIED Codex run verified `RESULT.txt` post-mutation via Python hash/byte assertions, but the reviewer-required fail-closed oracle counts only strict content reads (`cat`/`od`/validated whitelist) whose recorded output shows the content — a form the delivered texts never explicitly required. Fix within accepted milestone scope (no acceptance-criteria, requirement, or oracle change; probe hash unchanged): `protocol/BOOTSTRAP.md` + root `BOOTSTRAP.md` now MUST-level require a post-change content-showing read for exact-artifact expectations; `protocol/PROMPTS.md` manual fallback requires the same in prompt form; fixture resynchronized; three deterministic regression tests added. 170 unit tests OK, validator PASS, reviewer probes 19/19 non-PASS. All prior PASS/UNVERIFIED/quota evidence is preserved unmodified and bounded to the pre-fix bytes; no record was reclassified. Remaining live need for final verification: exactly one evaluated PASS for `codex adapter_removed_manual` on the updated bytes — awaiting new owner resource authorization.
+
 ## Blocker
 
 - **Blocked from:** `NOT BLOCKED`
@@ -337,6 +341,7 @@ Final uniform frozen-oracle re-evaluation of all 48 `attempt-3-final/` records s
 | `2026-09-23T01:32:06Z` | `human:MattSureham` (recorded by `agent:ClaudeCode-discovery-fix-3`) | `BLOCKED` | `BLOCKED` | Owner granted the bounded Codex supplementary verification authorization (2 cases, 1 evaluated PASS each, ≤6 sessions, no auto-retry/inflation/wakeups) in ISSUE-20260922T073608Z and explicitly deferred execution pending a distinct "execute now" instruction. Self-correction recorded: the 2026-09-22 blocked entry misapplied ROTATE-004. The pipeline contract has no exit edge from BLOCKED_HUMAN_AUTHORITY, so the machine state is unchanged pending the owner-decided contract amendment in ISSUE-20260923T013206Z-pipeline-blocked-exit. No Codex session launched or scheduled; no review submission. |
 | `2026-09-23T03:13:39Z` | `agent:ClaudeCode-discovery-fix-3` | `BLOCKED` | `IMPLEMENTING` | Pipeline BLOCKED_HUMAN_AUTHORITY -> IN_PROGRESS. Recorded owner decision in ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md satisfies the human-authority blocker; implementation attempt 3 resumes. |
 | `2026-09-28T01:28:45Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Owner-authorized bounded Codex batch executed and fully consumed (6/6 sessions): `negative_collision` run 4 evaluated PASS (case stopped), `adapter_removed_manual` runs 4–8 all UNVERIFIED with the single verification-read gap; cap reached, execution stopped, no budget expansion. Frozen-oracle re-evaluation of 48 records clean; 19/19 reviewer probes non-PASS. Acceptance criterion 5 still unmet for the Codex root profile — no review submission; the exhausted-budget disposition is a new owner decision. |
+| `2026-09-28T01:43:10Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Diagnosed the systematic verification-read gap from preserved records (no live sessions): delivered-instruction gap, not a probe/oracle defect — Codex runs verified via Python assertions whose recorded output lacks content markers. Fixed within milestone scope: both BOOTSTRAPs now MUST-require a post-change content-showing read for exact artifacts; PROMPTS manual fallback likewise; fixture resynced; 3 regression tests added. 170 tests OK, validator PASS, probes 19/19 non-PASS. No record reclassified; no Codex launch. Remaining: one evaluated PASS for `adapter_removed_manual` on updated bytes — needs new owner authorization. |
 
 ## Closure checklist
 

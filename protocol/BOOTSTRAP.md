@@ -156,6 +156,8 @@ Use [`EVIDENCE/TEMPLATE.md`](EVIDENCE/TEMPLATE.md) for substantial, reusable, ex
 
 If a test cannot run, record `NOT RUN`, the attempted command if any, the reason, and the consequence. A skipped, unavailable, flaky, or partially executed check is not a pass. Never claim success from visual confidence, code inspection alone, or another participant's unverified summary.
 
+When the expected behavior is an exact artifact or recorded file state, verification MUST include at least one read of the artifact performed after the change whose recorded output shows the artifact's actual content (for example `cat` or `od`), with the command and output preserved as evidence. A write-time assumption, an existence or exit-status check, or a hash or byte assertion whose recorded output does not show the content is not inspectable proof of the artifact's content to a fresh participant.
+
 Preserve original evidence. Append a correction with attribution when an observation was wrong; do not silently rewrite it.
 
 ## Unverified complexity

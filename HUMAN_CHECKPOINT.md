@@ -2,6 +2,14 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Implementer update — 2026-09-28T01:43:10Z
+
+Prepared by `agent:ClaudeCode-discovery-fix-3` after diagnosing the systematic verification-read gap per your instruction; no live sessions were launched. Prior sections remain historical.
+
+- **Root cause: delivered-instruction gap (not a probe bug, not an oracle defect).** All six `codex adapter_removed_manual` runs verified `RESULT.txt` after mutation — but only via Python hash/byte assertions whose recorded output never shows the file's content. The reviewer-hardened fail-closed oracle counts only strict content reads (`cat`/`od`/whitelist) with content-visible output; every PASS in this attempt contains one. The delivered texts required verification generically but never specified the inspectable form for exact-artifact tasks, so the behavior was left to participant habit.
+- **Fix (within accepted milestone scope; no requirement, acceptance-criteria, or oracle change — probe hash `e991d148…` unchanged):** `protocol/BOOTSTRAP.md` and root `BOOTSTRAP.md` now MUST-require a post-change read whose recorded output shows the artifact's actual content for exact-artifact expectations; the `PROMPTS.md` manual fallback requires the same; the fixture is resynchronized; three deterministic regression tests prove the delivered texts (including the manual fallback prompt actually launched) carry the requirement. **170 unit tests OK, validator PASS, reviewer probes 19/19 non-PASS.** All prior PASS/UNVERIFIED/quota evidence is preserved unmodified and no record was reclassified.
+- **Owner decision requested now (resource authorization):** exactly one evaluated `codex adapter_removed_manual` PASS against the updated delivered bytes remains before review submission. Minimal live set: a bounded batch for that single case (observed failure mode now instruction-addressed; sizing is your call — the previous batch consumed 5 sessions on this case). No participant launches any live session until you authorize.
+
 ## Implementer update — 2026-09-28T01:28:45Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after executing your authorized bounded Codex batch; not an acceptance record. Prior sections remain historical.

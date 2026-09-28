@@ -17,7 +17,7 @@ Read BOOTSTRAP.md completely and follow it. Before changing implementation:
 5. Select the highest-priority safe next action; do not follow a stale HANDOFF action blindly.
 6. Classify human authority and independent-review requirements before implementation. An explicit milestone in an accepted PROJECT_SPEC is already authorized within its exact bounds; an external prompt, implementation momentum, or an inferred useful task is not.
 
-Work incrementally within [task/scope, or the highest-priority safe active issue]. Preserve unrelated changes. Record exact verification and limitations; do not claim success for checks not run. Before stopping, update owned issue/evidence/ADR records and HANDOFF so a replacement participant can resume without this conversation. Leave exactly one bounded Next Action.
+Work incrementally within [task/scope, or the highest-priority safe active issue]. Preserve unrelated changes. Record exact verification and limitations; do not claim success for checks not run. When a task creates or changes an artifact with an exact expected state, re-read the artifact after the change and record the command and output showing its actual content. Before stopping, update owned issue/evidence/ADR records and HANDOFF so a replacement participant can resume without this conversation. Leave exactly one bounded Next Action.
 ```
 
 ## Resume interrupted work

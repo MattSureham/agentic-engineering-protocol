@@ -267,6 +267,30 @@ class FixtureTests(unittest.TestCase):
         )
         self.assertEqual(prompt, expected)
 
+    def test_delivered_bootstraps_require_post_change_content_read(self) -> None:
+        for path in (PROTOCOL / "BOOTSTRAP.md", REPOSITORY_ROOT / "BOOTSTRAP.md"):
+            text = path.read_text(encoding="utf-8")
+            self.assertIn(
+                "read of the artifact performed after the change whose recorded output "
+                "shows the artifact's actual content",
+                text,
+                str(path),
+            )
+            self.assertIn("not inspectable proof", text, str(path))
+
+    def test_manual_fallback_requires_post_change_artifact_reread(self) -> None:
+        prompt = probe._manual_onboarding_prompt()
+        self.assertIn("re-read the artifact after the change", prompt)
+        self.assertIn("output showing its actual content", prompt)
+
+    def test_fixture_verification_contract_is_satisfied_by_strict_reread(self) -> None:
+        text = (FIXTURE / probe.ISSUE_REL).read_text(encoding="utf-8")
+        self.assertIn("Record the exact verification command and result", text)
+        bootstrap = (FIXTURE / "BOOTSTRAP.md").read_text(encoding="utf-8")
+        self.assertIn("read of the artifact performed after the change", bootstrap)
+        spec = (FIXTURE / "PROJECT_SPEC.md").read_text(encoding="utf-8")
+        self.assertIn(probe.EXPECTED_RESULT_BYTES.decode("utf-8").strip(), spec)
+
 
 class ProbeHarnessDeterministicTests(unittest.TestCase):
     def copy_fixture(self, root: Path) -> Path:

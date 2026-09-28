@@ -139,6 +139,8 @@ Do not commit secrets, credentials, personal data, or needlessly large generated
 
 If a check cannot run, record `NOT RUN`, the attempted command when applicable, the reason, and consequence. Unavailable, skipped, flaky, partial, or inspection-only checks are not passes. Preserve original observations and append attributable corrections rather than silently rewriting them.
 
+When the expected behavior is an exact artifact or recorded file state, verification MUST include at least one read of the artifact performed after the change whose recorded output shows the artifact's actual content (for example `cat` or `od`), with the command and output preserved as evidence. A write-time assumption, an existence or exit-status check, or a hash or byte assertion whose recorded output does not show the content is not inspectable proof of the artifact's content to a fresh participant.
+
 ## Unverified complexity
 
 Every abstraction, dependency, persistent state element, configuration dimension, background process, concurrency mechanism, and cross-module coupling is a cost requiring justification, requirement ownership, failure-mode analysis, and contract/test/evidence coverage.
