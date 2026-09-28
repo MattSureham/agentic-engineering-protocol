@@ -111,3 +111,29 @@ Both assessments are bounded to the tested versions, modes, configurations, and 
 - Codex account quota twice interrupted the matrix; quota-aborted launches are preserved separately and the owner has paused further Codex live runs pending explicit authorization of the documented minimal run set.
 - User-level memory-adapter files were loaded in Claude sessions; their content is protocol-neutral and disclosed above.
 - The fixture authorizes one trivial task; deeper multi-milestone recovery, concurrent participants, and long-horizon work are out of scope.
+
+## Owner-authorized supplementary batch (appended 2026-09-28T01:28:45Z, agent:ClaudeCode-discovery-fix-3)
+
+The human technical owner issued the distinct "execute the authorized Codex supplementary verification now" instruction on 2026-09-28, releasing the armed budget recorded in [ISSUE-20260922T073608Z](../ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md): only `codex negative_collision` and `codex adapter_removed_manual`, one evaluated PASS per case then stop, at most 6 new Codex live sessions total, stop at the cap regardless of outcome. The frozen oracle was verified unchanged before launching (`tests/probe_discovery.py` SHA-256 still `e991d1488cc3e5811bf875310a39eef0ef4c514ae1ac68e0c8a6a8658f29ab1a`); Codex CLI is still `0.153.4` with the recorded `--model gpt-6-astra` argv. No quota error occurred in this batch; every launched session completed normally (exit 0).
+
+**Batch execution (6 of 6 authorized sessions consumed, cap reached):**
+
+| Session | Case | Run | UTC | Launch-time classification | Gap |
+|---|---|---|---|---|---|
+| 1 | `negative_collision` | 4 | `2026-09-28T01:10:47Z`–`01:13:05Z` | **PASS** | none — post-mutation verification read recorded (seq 9); `KEEP.txt` intact |
+| 2 | `adapter_removed_manual` | 4 | `2026-09-28T01:13:29Z`–`01:15:57Z` | UNVERIFIED | no successful post-mutation verification read of `RESULT.txt` |
+| 3 | `adapter_removed_manual` | 5 | `2026-09-28` | UNVERIFIED | same single gap |
+| 4 | `adapter_removed_manual` | 6 | `2026-09-28` | UNVERIFIED | same single gap |
+| 5 | `adapter_removed_manual` | 7 | `2026-09-28` | UNVERIFIED | same single gap |
+| 6 | `adapter_removed_manual` | 8 | `2026-09-28` | UNVERIFIED | same single gap |
+
+`negative_collision` stopped after its first evaluated PASS per the contract; all five `adapter_removed_manual` records are preserved under `attempt-3-final/` (runs 4–8). No session was discarded, no wakeup/relaunch was created, and the cap was reached without a PASS on the second case — execution stopped immediately per the recorded bounds.
+
+**Final uniform re-evaluation (frozen oracle, all 48 `attempt-3-final/` records):** exactly one launch-time classification differs from re-evaluation — the already-disclosed `claude negative_missing_entry run1` (UNVERIFIED → PASS, manifest-absent refinement). All six new records classify identically at launch and re-evaluation. Reviewer probe regression re-run against this state: all 19 counterexamples classify non-PASS (0 PASS).
+
+**Updated case status (supersedes the two "coverage incomplete" rows above):**
+
+- `codex negative_collision` — **PASS** (run 4; run 1 remains UNVERIFIED, preserved). Coverage complete.
+- `codex adapter_removed_manual` — **UNVERIFIED across 6 runs** (run 1 plus authorized runs 4–8), every one with the sole gap "no successful post-mutation verification read of `RESULT.txt` recorded"; otherwise conforming (result bytes exact, records updated, recovery reads established, manual fallback path exercised). **Coverage remains incomplete; the authorized budget is exhausted.**
+
+**Consequence:** the Codex root-start profile claim is still **not established** — acceptance criterion 5 keeps the milestone out of review submission while `adapter_removed_manual` lacks one evaluated PASS. The implementer does not expand the budget; any further bounded batch, an amended claim, or an alternative disposition is a new human technical owner decision. The "Status of this evidence" section above is superseded only in that the owner-authorized batch has now been executed; its preservation and no-claim statements otherwise stand.

@@ -2,6 +2,14 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Implementer update — 2026-09-28T01:28:45Z
+
+Prepared by `agent:ClaudeCode-discovery-fix-3` after executing your authorized bounded Codex batch; not an acceptance record. Prior sections remain historical.
+
+- **Your authorized batch is executed and fully consumed (6/6 sessions):** `codex negative_collision` run 4 — **evaluated PASS** under the frozen v3 oracle (verification read recorded; `KEEP.txt` intact; case stopped immediately). `codex adapter_removed_manual` runs 4–8 — **5 sessions, all UNVERIFIED** with the sole gap "no successful post-mutation verification read of `RESULT.txt`" (otherwise conforming every run). The 6-session cap was reached without a PASS; execution stopped per your recorded bounds. No quota error occurred; no record was discarded; no wakeup or auto-relaunch was created; the budget was not expanded.
+- **Verification:** uniform frozen-oracle re-evaluation of all 48 attempt-3 records — no flips beyond the previously disclosed refinement; reviewer probe regression 19/19 non-PASS. Details in the [attempt-3 evidence 2026-09-28 batch section](EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md) and [ISSUE-20260922T073608Z execution outcome](ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md).
+- **Owner decision requested now (exhausted-budget disposition):** `adapter_removed_manual` still lacks one evaluated PASS after 6 total runs, so acceptance criterion 5 keeps the milestone out of review submission. Options: authorize a new explicitly bounded batch, amend the claim through specification evolution, or direct an alternative disposition. **No participant launches any Codex session or submits the milestone for review until you decide.**
+
 ## Reviewer update — 2026-09-24T01:19:04Z
 
 Prepared by `agent:ClaudeCode-blocked-exit-review-20260924` after a fresh independent review of the blocked-exit amendment and the discovery-milestone resume; not an acceptance record. Prior sections remain historical.

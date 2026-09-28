@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `SELF`
 - **Created UTC:** `2026-09-22T07:36:08Z`
-- **Updated UTC:** `2026-09-23T01:32:06Z`
+- **Updated UTC:** `2026-09-28T01:28:45Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance criteria 4–5
 - **ADRs:** [ADR-20260918T064510Z](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [attempt-3 live conformance](../EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md), [`attempt-3-quota-aborted/`](../EVIDENCE/discovery-conformance/attempt-3-quota-aborted/NOTE.md)
@@ -59,6 +59,17 @@ The accepted pipeline contract (ADR-20260814T015817Z decision 5, PROJECT_SPEC PI
 
 Total estimate: 2–6 Codex sessions in one bounded batch. Each rerun is a fresh isolated fixture copy launched by `tests/probe_discovery.py` with the frozen v3 oracle; every record, pass or fail, is retained. No other Codex runs are needed: `positive_root` has 3 evaluated PASS, `positive_subdir` remains unclaimed (writable-scope boundary, unchanged from attempt 2), and all other negatives and `adapter_removed_auto` (OBSERVE) are complete.
 
+### Execution outcome recorded 2026-09-28T01:28:45Z (agent:ClaudeCode-discovery-fix-3)
+
+The owner issued the explicit "execute the authorized Codex supplementary verification now" instruction on 2026-09-28; the batch ran under the recorded bounds and the authorization is now **fully consumed (6 of 6 sessions)**:
+
+- `codex negative_collision` run 4 — **evaluated PASS** (session 1; case stopped immediately per the contract). Coverage complete.
+- `codex adapter_removed_manual` runs 4–8 — **5 sessions, all UNVERIFIED** with the sole gap "no successful post-mutation verification read of `RESULT.txt` recorded" (otherwise conforming: exit 0, result bytes exact, records updated, recovery reads established). The cap was reached without a PASS; execution stopped immediately.
+- No quota error occurred in this batch; no record was discarded; no wakeup, scheduled task, or auto-relaunch was created; no budget expansion was made or is claimed.
+- Uniform frozen-oracle re-evaluation of all 48 `attempt-3-final/` records: no flips beyond the previously disclosed `claude negative_missing_entry run1` refinement; reviewer probe regression 19/19 non-PASS. Details: [attempt-3 evidence, appended 2026-09-28 batch section](../EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md).
+
+**Result against the expected behavior:** `negative_collision` met; `adapter_removed_manual` still lacks one evaluated PASS after 6 total runs (run 1 plus authorized runs 4–8). Acceptance criterion 5 therefore still prevents milestone review submission. A further bounded batch, a claim amendment through specification evolution, or any alternative disposition is a **new owner decision** — this issue makes no proposal and the implementer expands nothing.
+
 ## Change
 
 - **Files or components:** None yet — this issue records the gate. Authorized reruns would append records under `EVIDENCE/discovery-conformance/attempt-3-final/` only.
@@ -95,12 +106,13 @@ NOT APPLICABLE.
 - **Blocked from:** `IMPLEMENTING` (milestone attempt 3) — Codex live execution only; all non-Codex-quota work may proceed.
 - **Blocker:** RESOLVED at the authority layer — the owner decision is recorded above (2026-09-23T01:32:06Z). Two gates remain before any launch: (1) the owner's distinct explicit "execute the authorized Codex supplementary verification now" instruction; (2) a contract-conformant machine exit from `BLOCKED_HUMAN_AUTHORITY`, tracked in [ISSUE-20260923T013206Z-pipeline-blocked-exit](ISSUE-20260923T013206Z-pipeline-blocked-exit.md).
 - **Unblock owner:** `human:MattSureham`
-- **Unblock condition:** SATISFIED for the authorization gate by the recorded owner decision. Execution unblocks only when the owner issues the explicit execution instruction; the machine-state gate unblocks per the contract-amendment decision in the linked issue.
+- **Unblock condition:** SATISFIED for the authorization gate by the recorded owner decision. Both execution gates opened (owner "execute now" instruction 2026-09-28; machine exit via the approved blocked-exit amendment) and the authorized batch has been executed and consumed — see the 2026-09-28 execution-outcome section above.
 
 ## Residual uncertainty
 
-- Quota window behavior is host-account-controlled; the next window's capacity is UNKNOWN until observed. The bounded batch is sized to fit one window based on the observed ~18-session capacity.
-- When the owner will issue the explicit execution trigger is UNKNOWN by design — the decision defers execution.
+- Quota window behavior is host-account-controlled; no quota error occurred in the 2026-09-28 batch.
+- The verification-read discipline gap on `codex adapter_removed_manual` reproduced in 5 of 5 authorized runs (6 of 6 total); whether a further bounded batch would yield an evaluated PASS is UNKNOWN — observed Codex verification-discipline rates (3/7 on `positive_root`, 0/6 on this case) are characterized, not predictive.
+- The owner's disposition of the exhausted budget (new bounded authorization, claim amendment, or alternative) is UNKNOWN pending the owner decision.
 
 ## Activity history
 
@@ -108,6 +120,7 @@ NOT APPLICABLE.
 |---|---|---|---|---|
 | `2026-09-22T07:36:08Z` | `agent:ClaudeCode-discovery-fix-3` | `NONE` | `BLOCKED` | Recorded the owner's Codex quota directive, cancelled the scheduled 19:55 relaunch (no session launched from it), preserved all records, and documented the minimal remaining run set with per-run purpose and estimates. Milestone attempt 3 cannot reach review until Codex `negative_collision` and `adapter_removed_manual` have an evaluated PASS or the owner directs otherwise. |
 | `2026-09-23T01:32:06Z` | `human:MattSureham` (recorded by `agent:ClaudeCode-discovery-fix-3`) | `BLOCKED` | `OPEN` | Owner granted the bounded authorization recorded in "Investigation and decision": the two named cases only, one evaluated PASS each then stop, at most 6 new Codex live sessions total, failures preserved without unbounded retry, no repetition inflation, no wakeups or auto-relaunch, no specification change. The owner explicitly deferred execution pending a distinct "execute now" instruction. Status moves `BLOCKED`→`OPEN` at the authority layer; the milestone's machine state remains `BLOCKED_HUMAN_AUTHORITY` pending the contract-conformant exit tracked in ISSUE-20260923T013206Z. No Codex session was launched and none is scheduled. |
+| `2026-09-28T01:28:45Z` | `agent:ClaudeCode-discovery-fix-3` | `OPEN` | `OPEN` | Owner issued the explicit execution instruction; the bounded batch ran and the authorization is fully consumed (6/6 sessions): `codex negative_collision` run 4 evaluated PASS (case stopped), `codex adapter_removed_manual` runs 4–8 all UNVERIFIED with the single verification-read gap. No budget expansion, no discarded record, no wakeup/relaunch. Acceptance criterion 5 still prevents milestone review submission; the disposition of the exhausted budget is a new owner decision. |
 
 ## Closure checklist
 

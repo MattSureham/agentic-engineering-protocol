@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-18T06:45:10Z`
-- **Updated UTC:** `2026-09-23T03:13:39Z`
+- **Updated UTC:** `2026-09-28T01:28:45Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance and order-5 contract
 - **ADRs:** Accepted [four-layer discovery boundary](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [Authority/gap analysis](../EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); [authority validation](../EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md); [independent review round 1](../EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md)
@@ -287,6 +287,17 @@ This section is the implementor's resolution claim for round 2, appended separat
 
 The owner approved the blocked-exit amendment with bounded scope; it is implemented in `run_pipeline.py`, PROJECT_SPEC PIPELINE-003/PIPELINE-009, and ADR-20260814T015817Z decision 5 (commit `47a0cb4`, 167 tests OK, validator PASS). The pipeline executed `BLOCKED_HUMAN_AUTHORITY → IN_PROGRESS` citing the recorded owner decision in ISSUE-20260922T073608Z; attempt 3 resumes with implementor and base preserved. The "Contract gap" bullet above is thereby superseded. Per PIPELINE-009 this unblock resolves only the authority blocker: the owner's deferred Codex execution gate remains in force — no Codex live session may launch until the explicit "execute now" instruction. The amendment itself awaits independent review (ISSUE-20260923T013206Z). No review submission and no acceptance has occurred.
 
+## Owner-authorized Codex batch executed (appended 2026-09-28T01:28:45Z, agent:ClaudeCode-discovery-fix-3)
+
+The owner issued the explicit "execute the authorized Codex supplementary verification now" instruction; the bounded batch ran exactly under the ISSUE-20260922T073608Z contract and the budget is fully consumed (6/6 new sessions, no quota error, no discarded record, no wakeup/relaunch, no budget expansion):
+
+- `codex negative_collision` run 4 — **evaluated PASS** under the frozen v3 oracle (post-mutation verification read recorded; `KEEP.txt` intact); the case stopped immediately. Coverage complete.
+- `codex adapter_removed_manual` runs 4–8 — **5 sessions, all UNVERIFIED** with the sole gap "no successful post-mutation verification read of `RESULT.txt` recorded"; otherwise conforming across every run. The 6-session cap was reached without a PASS and execution stopped per the recorded bounds.
+
+Final uniform frozen-oracle re-evaluation of all 48 `attempt-3-final/` records shows no flips beyond the previously disclosed `claude negative_missing_entry run1` refinement; reviewer probe regression re-run classifies 19/19 non-PASS. Details in the [attempt-3 evidence, 2026-09-28 batch section](../EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md).
+
+**Acceptance consequence:** `adapter_removed_manual` still lacks one evaluated PASS after 6 total runs, so acceptance criterion 5 is still unmet for the Codex root profile. The milestone remains `IN_PROGRESS` (attempt 3); **no review submission is made** — submission while a required case lacks passing coverage would violate the accepted acceptance criteria. The implementer stopped at the budget cap and expands nothing: a further bounded batch, a specification-evolution claim amendment, or an alternative disposition is a new human technical owner decision, recorded in `HUMAN_CHECKPOINT.md`.
+
 ## Blocker
 
 - **Blocked from:** `NOT BLOCKED`
@@ -325,6 +336,7 @@ The owner approved the blocked-exit amendment with bounded scope; it is implemen
 | `2026-09-22T07:51:33Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `BLOCKED` | Pipeline IN_PROGRESS -> BLOCKED_HUMAN_AUTHORITY. Human authority is required; linked blocker ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md defines the unblock condition. |
 | `2026-09-23T01:32:06Z` | `human:MattSureham` (recorded by `agent:ClaudeCode-discovery-fix-3`) | `BLOCKED` | `BLOCKED` | Owner granted the bounded Codex supplementary verification authorization (2 cases, 1 evaluated PASS each, ≤6 sessions, no auto-retry/inflation/wakeups) in ISSUE-20260922T073608Z and explicitly deferred execution pending a distinct "execute now" instruction. Self-correction recorded: the 2026-09-22 blocked entry misapplied ROTATE-004. The pipeline contract has no exit edge from BLOCKED_HUMAN_AUTHORITY, so the machine state is unchanged pending the owner-decided contract amendment in ISSUE-20260923T013206Z-pipeline-blocked-exit. No Codex session launched or scheduled; no review submission. |
 | `2026-09-23T03:13:39Z` | `agent:ClaudeCode-discovery-fix-3` | `BLOCKED` | `IMPLEMENTING` | Pipeline BLOCKED_HUMAN_AUTHORITY -> IN_PROGRESS. Recorded owner decision in ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md satisfies the human-authority blocker; implementation attempt 3 resumes. |
+| `2026-09-28T01:28:45Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Owner-authorized bounded Codex batch executed and fully consumed (6/6 sessions): `negative_collision` run 4 evaluated PASS (case stopped), `adapter_removed_manual` runs 4–8 all UNVERIFIED with the single verification-read gap; cap reached, execution stopped, no budget expansion. Frozen-oracle re-evaluation of 48 records clean; 19/19 reviewer probes non-PASS. Acceptance criterion 5 still unmet for the Codex root profile — no review submission; the exhausted-budget disposition is a new owner decision. |
 
 ## Closure checklist
 
