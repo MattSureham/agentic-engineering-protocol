@@ -2,6 +2,14 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Implementer update — 2026-09-29T01:35:13Z
+
+Prepared by `agent:ClaudeCode-discovery-fix-3` after executing your final single-session authorization; not an acceptance record. Prior sections remain historical.
+
+- **Run 10: evaluated PASS.** Your authorized single `codex adapter_removed_manual` session on revision `a834108` (frozen oracle hash verified unchanged; 1/1 session, no retry) classified PASS with zero defects: the participant completed the write first, then ran the verification read as a separate standalone `cat` invocation with content-visible output — exactly what the refined instruction requires. Uniform frozen-oracle re-evaluation of all 50 records is clean apart from the previously disclosed historical refinement; 172 tests OK, validator PASS, reviewer probes 19/19 non-PASS. **Acceptance criteria 1–5 are now established** for both first-slice supported profiles (Claude root+subdirectory; Codex root only).
+- **Review submission refused by the deterministic scope gate — owner decision needed.** The pipeline transition `IN_PROGRESS → AWAITING_PEER_REVIEW` (target `9f72d3d`) failed `AEP-PIPE-SCOPE` with no state advance: the attempt-3 base→target diff includes six paths outside the milestone's accepted `allowed_paths` — the blocked-exit amendment (`PROJECT_SPEC.md` PIPELINE-009, ADR decision 5, `run_pipeline.py`, `test_run_pipeline.py`) and its two record issues (quota authorization, blocked-exit), all separately owner-approved and independently reviewed, but landed while the milestone was BLOCKED_HUMAN_AUTHORITY. Since the target must equal HEAD, no in-scope target can exclude them. Widening `allowed_paths` changes the accepted milestone digest that the digest-binding gate checks — a specification-evolution decision only you can make.
+- **Stopped at the boundary:** the milestone remains IN_PROGRESS attempt 3; no machine state was edited, no scope self-extended, no review submission stands, and no further live session will be launched without your explicit authorization. The evidence boundary (50 records + this refusal) is preserved for independent review once you decide the disposition.
+
 ## Implementer update — 2026-09-28T02:15:19Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after your directed offline refinement; no live session was launched. Prior sections remain historical.
