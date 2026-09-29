@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `SELF`
 - **Created UTC:** `2026-09-22T07:36:08Z`
-- **Updated UTC:** `2026-09-28T02:02:06Z`
+- **Updated UTC:** `2026-09-29T01:31:00Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance criteria 4–5
 - **ADRs:** [ADR-20260918T064510Z](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [attempt-3 live conformance](../EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md), [`attempt-3-quota-aborted/`](../EVIDENCE/discovery-conformance/attempt-3-quota-aborted/NOTE.md)
@@ -74,6 +74,10 @@ The owner issued the explicit "execute the authorized Codex supplementary verifi
 
 After the verification-read delivered-instruction fix, the owner issued a new distinct bounded authorization: exactly one `codex adapter_removed_manual` session on the current committed delivered bytes with the frozen unmodified oracle, stopping on any outcome with no retry. **The authorization is now fully consumed (1 of 1 session):** run 9 (`2026-09-28T01:51:27Z`–`01:53:56Z`, exit 0) classified **UNVERIFIED** with the sole verification-read gap and zero defects — the participant performed the content-visible post-change read but fused it into the same shell event as the artifact creation, which the frozen oracle's conservative compound-command attribution cannot credit (mechanism in the attempt-3 evidence). No quota or infrastructure error; no retry; no oracle change; no reclassification; no review submission. `adapter_removed_manual` stands at 7 UNVERIFIED runs, all otherwise conforming. The disposition is again a **new owner decision**.
 
+### Final single-session authorization executed and consumed 2026-09-29T01:31:00Z (agent:ClaudeCode-discovery-fix-3)
+
+After the separate-invocation instruction refinement, the owner issued a final distinct bounded authorization: exactly one `codex adapter_removed_manual` session on revision `a834108` with the frozen unmodified oracle, stopping on any outcome with no retry. **The authorization is fully consumed (1 of 1 session):** run 10 (`2026-09-29T01:23:31Z`–`01:25:29Z`, exit 0) classified **evaluated PASS** — zero defects and zero evidence gaps; the participant performed the post-change verification read as a separate standalone `cat` invocation (seq 12) after the mutation (seq 8), exactly the behavior the refined instruction requires. No quota or infrastructure error; no retry; no oracle change; no reclassification of any historical record. `codex adapter_removed_manual` coverage is now complete (runs 1, 4–9 remain preserved UNVERIFIED on pre-refinement bytes). With this run, acceptance criteria 1–5 are established for both first-slice supported profiles and the milestone has been submitted for fresh independent review per the dispatcher contract. **No further Codex live session is authorized or launched by this record.**
+
 ## Change
 
 - **Files or components:** None yet — this issue records the gate. Authorized reruns would append records under `EVIDENCE/discovery-conformance/attempt-3-final/` only.
@@ -126,6 +130,7 @@ NOT APPLICABLE.
 | `2026-09-23T01:32:06Z` | `human:MattSureham` (recorded by `agent:ClaudeCode-discovery-fix-3`) | `BLOCKED` | `OPEN` | Owner granted the bounded authorization recorded in "Investigation and decision": the two named cases only, one evaluated PASS each then stop, at most 6 new Codex live sessions total, failures preserved without unbounded retry, no repetition inflation, no wakeups or auto-relaunch, no specification change. The owner explicitly deferred execution pending a distinct "execute now" instruction. Status moves `BLOCKED`→`OPEN` at the authority layer; the milestone's machine state remains `BLOCKED_HUMAN_AUTHORITY` pending the contract-conformant exit tracked in ISSUE-20260923T013206Z. No Codex session was launched and none is scheduled. |
 | `2026-09-28T01:28:45Z` | `agent:ClaudeCode-discovery-fix-3` | `OPEN` | `OPEN` | Owner issued the explicit execution instruction; the bounded batch ran and the authorization is fully consumed (6/6 sessions): `codex negative_collision` run 4 evaluated PASS (case stopped), `codex adapter_removed_manual` runs 4–8 all UNVERIFIED with the single verification-read gap. No budget expansion, no discarded record, no wakeup/relaunch. Acceptance criterion 5 still prevents milestone review submission; the disposition of the exhausted budget is a new owner decision. |
 | `2026-09-28T02:02:06Z` | `agent:ClaudeCode-discovery-fix-3` | `OPEN` | `OPEN` | Owner's new single-session authorization (exactly one `codex adapter_removed_manual` run on the updated delivered bytes, frozen oracle, stop on any outcome) executed and fully consumed (1/1): run 9 UNVERIFIED, zero defects — verification read fused into the mutating shell event, an oracle attribution boundary. No retry, no oracle change, no review submission; the disposition is a new owner decision. |
+| `2026-09-29T01:31:00Z` | `agent:ClaudeCode-discovery-fix-3` | `OPEN` | `OPEN` | Owner's final single-session authorization executed and fully consumed (1/1, no retry): run 10 on revision `a834108` evaluated **PASS** (separate standalone post-change verification read, zero defects/gaps). No oracle change or reclassification; `adapter_removed_manual` coverage complete; acceptance criteria 1–5 established; milestone submitted for independent review. No further Codex session authorized. |
 
 ## Closure checklist
 
