@@ -2,6 +2,14 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Implementer update — 2026-09-29T02:44:00Z
+
+Prepared by `agent:ClaudeCode-discovery-fix-3` after implementing your approved scope-accounting amendment; not an acceptance record. Prior sections remain historical.
+
+- **Your approved amendment is implemented** per the ten recorded invariants, tracked in [ISSUE-20260929T020157Z-pipeline-scope-intervening-authority](ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md): PIPELINE-010 in `PROJECT_SPEC.md` (the milestone contract block is untouched — all digests unchanged), ADR-20260814T015817Z decision 7 amended with a status-history row, and `scripts/run_pipeline.py` now verifies an optional fail-closed `aep-intervening-authority/v1` registry on the milestone issue. INDEPENDENT entries require a verifiable APPROVED independent round (zero open material findings, reviewed target ancestor-or-equal of the range tip, post-review commits restricted to record-keeping, reviewer label differing from the implementor); SELF entries can exclude only their own issue file. A path outside `allowed_paths` is excluded only when every commit touching it belongs to a verified range, and every exclusion is recorded in the submission evidence for the milestone's reviewer.
+- **The real case is proven without any state change:** the discovery issue now registers Entry A (blocked-exit amendment, INDEPENDENT) and Entry B (quota-authorization record, SELF). A read-only evaluation using the pipeline's own verification functions shows all six previously refused paths covered by verified ranges, zero uncovered; with Entry A removed the amendment paths are uncovered (fail-closed); a hypothetical unauthorized `AGENTS.md` change is uncoverable (no smuggling). **178 tests OK** (6 new deterministic registry test groups), validator PASS, reviewer probes 19/19 non-PASS, frozen oracle unchanged. No live session, no transition, no machine-state edit.
+- **Stopped at the independent-review boundary:** the amendment changes accepted pipeline verification semantics, so per `Review: INDEPENDENT` it needs a fresh independent review (same path as the blocked-exit amendment). I did not self-review or self-accept. Discovery resubmission is deferred until that review is APPROVED and a third registry entry covers this amendment's own commits — the current scope gate is not bypassed.
+
 ## Implementer update — 2026-09-29T01:35:13Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after executing your final single-session authorization; not an acceptance record. Prior sections remain historical.

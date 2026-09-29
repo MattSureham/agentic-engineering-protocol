@@ -19,6 +19,9 @@ sys.path.insert(0, str(SCRIPTS))
 import run_pipeline as pipeline  # noqa: E402
 
 
+INTERVENING_ISSUE = "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+
+
 class PipelineRepository:
     def __init__(self, milestone_count: int = 1, failing_check: bool = False) -> None:
         self.temporary = tempfile.TemporaryDirectory(prefix="aep pipeline ")
@@ -307,6 +310,68 @@ No independent review round has been recorded.
         text = text.replace("\n## Blocker", "\n" + round_text + "## Blocker", 1)
         path.write_text(text, encoding="utf-8")
 
+    def write_intervening_issue(
+        self,
+        path: str = INTERVENING_ISSUE,
+        authority: str = "HUMAN",
+        review: str = "INDEPENDENT",
+        status: str = "OPEN",
+        unblock: str = "SATISFIED - owner decision recorded in this issue",
+    ) -> None:
+        text = """# Intervening authority record
+
+## Metadata
+
+- **ID:** `ISSUE-20260814T030050Z-intervening-authority`
+- **Status:** `{status}`
+- **Authority:** `{authority}`
+- **Review:** `{review}`
+
+## Independent review rounds
+
+- **Required:** `YES`
+
+## Blocker
+
+- **Blocked from:** `NOT BLOCKED`
+- **Blocker:** `NONE`
+- **Unblock owner:** `human:fixture-owner`
+- **Unblock condition:** `{unblock}`
+""".format(status=status, authority=authority, review=review, unblock=unblock)
+        (self.root / path).write_text(text, encoding="utf-8")
+
+    def add_intervening_review(
+        self,
+        target: str,
+        disposition: str = "APPROVED",
+        material: int = 0,
+        reviewer: str = "agent:intervening-reviewer",
+        utc: str = "2026-08-14T03:25:00Z",
+        path: str = INTERVENING_ISSUE,
+    ) -> None:
+        issue_path = self.root / path
+        text = issue_path.read_text(encoding="utf-8")
+        round_text = """
+### {utc} — {reviewer}
+
+- **Reviewed immutable state:** `{target}` (fixture intervening amendment).
+- **Open material findings:** **{material}**.
+- **Disposition:** **{disposition}**.
+
+""".format(utc=utc, reviewer=reviewer, target=target, material=material, disposition=disposition)
+        text = text.replace("\n## Blocker", "\n" + round_text + "## Blocker", 1)
+        issue_path.write_text(text, encoding="utf-8")
+
+    def add_registry(self, entries: Any, index: int = 0, schema: str = pipeline.INTERVENING_SCHEMA) -> None:
+        block = {"schema": schema, "entries": entries}
+        path = self.issue_path(index)
+        text = path.read_text(encoding="utf-8")
+        registry = (
+            pipeline.INTERVENING_BEGIN + "\n```json\n" + json.dumps(block, indent=2) + "\n```\n" + pipeline.INTERVENING_END
+        )
+        text = text.replace("\n## Self-review", "\n## Intervening authority\n\n" + registry + "\n\n## Self-review", 1)
+        path.write_text(text, encoding="utf-8")
+
 
 class AuthorizedMilestonePipelineTests(unittest.TestCase):
     def fixture(self, *arguments: Any, **keywords: Any) -> PipelineRepository:
@@ -500,6 +565,225 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
         self.assertIn("AEP-PIPE-SCOPE", result.stderr)
         self.assertEqual(before, fixture.issue_path().read_bytes())
         self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
+    def intervening_fixture(self, **issue_keywords: Any) -> Tuple[PipelineRepository, str, str, str]:
+        fixture = self.fixture()
+        fixture.begin()
+        base = fixture.git("rev-parse", "HEAD")
+        fixture.write_intervening_issue(**issue_keywords)
+        (fixture.root / "OTHER").mkdir(exist_ok=True)
+        (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+        reviewed = fixture.commit("separately authorized intervening amendment")
+        fixture.add_intervening_review(reviewed)
+        tip = fixture.commit("intervening review persistence")
+        return fixture, base, reviewed, tip
+
+    @staticmethod
+    def registry_entry(base: str, tip: str, issue: str = INTERVENING_ISSUE) -> Dict[str, str]:
+        return {
+            "issue": issue,
+            "from": base,
+            "to": tip,
+            "recorded_utc": "2026-08-14T03:20:00Z",
+            "recorded_by": "agent:coordinator",
+        }
+
+    def test_intervening_authority_excludes_verified_independent_range(self) -> None:
+        fixture, base, _reviewed, tip = self.intervening_fixture()
+        fixture.add_registry([self.registry_entry(base, tip)])
+        target = fixture.make_target()
+        result = fixture.submit(target)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        state = fixture.state()
+        self.assertEqual(state["state"], "AWAITING_PEER_REVIEW")
+        evidence = json.loads((fixture.root / state["verification_evidence"][0]).read_text(encoding="utf-8"))
+        exclusions = {item["path"]: item for item in evidence["scope_exclusions"]}
+        self.assertEqual(sorted(exclusions), [INTERVENING_ISSUE, "OTHER/amendment.md"])
+        for item in exclusions.values():
+            self.assertEqual(item["covering_issues"], [INTERVENING_ISSUE])
+            self.assertEqual(item["commit_count"], 1 if item["path"] == "OTHER/amendment.md" else 2)
+
+    def test_intervening_self_entry_excludes_only_its_own_issue_file(self) -> None:
+        fixture = self.fixture()
+        fixture.begin()
+        base = fixture.git("rev-parse", "HEAD")
+        fixture.write_intervening_issue(review="SELF")
+        tip = fixture.commit("human authority record")
+        fixture.add_registry([self.registry_entry(base, tip)])
+        target = fixture.make_target()
+        result = fixture.submit(target)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        state = fixture.state()
+        evidence = json.loads((fixture.root / state["verification_evidence"][0]).read_text(encoding="utf-8"))
+        self.assertEqual([item["path"] for item in evidence["scope_exclusions"]], [INTERVENING_ISSUE])
+
+    def test_intervening_self_entry_cannot_exclude_substantive_paths(self) -> None:
+        fixture = self.fixture()
+        fixture.begin()
+        base = fixture.git("rev-parse", "HEAD")
+        fixture.write_intervening_issue(review="SELF")
+        (fixture.root / "OTHER").mkdir()
+        (fixture.root / "OTHER" / "smuggle.md").write_text("not reviewable\n", encoding="utf-8")
+        tip = fixture.commit("self record with substantive change")
+        fixture.add_registry([self.registry_entry(base, tip)])
+        target = fixture.make_target()
+        before = fixture.issue_path().read_bytes()
+        result = fixture.submit(target)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("AEP-PIPE-SCOPE", result.stderr)
+        self.assertIn("OTHER/smuggle.md", result.stderr)
+        self.assertNotIn(INTERVENING_ISSUE, result.stderr)
+        self.assertEqual(before, fixture.issue_path().read_bytes())
+        self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
+    def test_intervening_authority_requires_human_authority_and_owner_decision(self) -> None:
+        cases = (
+            ("foreign_authority", {"authority": "AGENT"}),
+            ("unsupported_review_class", {"review": "NONE"}),
+            ("blocked_self_record", {"review": "SELF", "status": "BLOCKED"}),
+            ("pending_unblock", {"review": "SELF", "unblock": "PENDING"}),
+        )
+        for name, keywords in cases:
+            with self.subTest(case=name):
+                fixture, base, _reviewed, tip = self.intervening_fixture(**keywords)
+                fixture.add_registry([self.registry_entry(base, tip)])
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, 1, result.stderr)
+                self.assertIn("AEP-PIPE-SCOPE", result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+
+    def test_intervening_authority_fails_closed_on_unverified_ranges(self) -> None:
+        def unregistered(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            fixture.add_registry([])
+            return fixture.make_target(), 1, "AEP-PIPE-SCOPE"
+
+        def no_registry(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            return fixture.make_target(), 1, "AEP-PIPE-SCOPE"
+
+        def unapproved(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            fixture.add_intervening_review(reviewed, disposition="CHANGES_REQUIRED", material=1, utc="2026-08-14T03:26:00Z")
+            new_tip = fixture.commit("adverse intervening review")
+            fixture.add_registry([self.registry_entry(base, new_tip)])
+            return fixture.make_target(), 1, "AEP-PIPE-SCOPE"
+
+        def open_findings(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            fixture.add_intervening_review(reviewed, material=1, utc="2026-08-14T03:26:00Z")
+            new_tip = fixture.commit("findings intervening review")
+            fixture.add_registry([self.registry_entry(base, new_tip)])
+            return fixture.make_target(), 1, "AEP-PIPE-SCOPE"
+
+        def reviewer_is_implementor(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            fixture.add_intervening_review(reviewed, reviewer="agent:implementor", utc="2026-08-14T03:26:00Z")
+            new_tip = fixture.commit("self-labelled intervening review")
+            fixture.add_registry([self.registry_entry(base, new_tip)])
+            return fixture.make_target(), 1, "AEP-PIPE-SCOPE"
+
+        def review_target_not_ancestor(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            fixture.git("checkout", "-b", "side")
+            (fixture.root / "OTHER" / "side.md").write_text("side\n", encoding="utf-8")
+            side = fixture.commit("side branch work")
+            fixture.git("checkout", "main")
+            fixture.add_intervening_review(side, utc="2026-08-14T03:26:00Z")
+            new_tip = fixture.commit("review of non-ancestor target")
+            fixture.add_registry([self.registry_entry(base, new_tip)])
+            return fixture.make_target(), 1, "AEP-PIPE-SCOPE"
+
+        def post_review_substantive(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            (fixture.root / "OTHER" / "more.md").write_text("late\n", encoding="utf-8")
+            new_tip = fixture.commit("post-review substantive change")
+            fixture.add_registry([self.registry_entry(base, new_tip)])
+            return fixture.make_target(), 1, "AEP-PIPE-SCOPE"
+
+        def overlapping_attribution(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            fixture.add_registry([self.registry_entry(base, tip)])
+            (fixture.root / "OTHER" / "amendment.md").write_text("attempt overwrote\n", encoding="utf-8")
+            return fixture.commit("attempt touches intervening path"), 1, "AEP-PIPE-SCOPE"
+
+        def swapped_range(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            fixture.add_registry([self.registry_entry(tip, base)])
+            return fixture.make_target(), 1, "AEP-PIPE-SCOPE"
+
+        def empty_range(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            fixture.add_registry([self.registry_entry(tip, tip)])
+            return fixture.make_target(), 1, "AEP-PIPE-SCOPE"
+
+        def tip_not_ancestor_of_target(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            fixture.git("checkout", "-b", "side")
+            (fixture.root / "OTHER" / "side.md").write_text("side\n", encoding="utf-8")
+            side = fixture.commit("side branch work")
+            fixture.git("checkout", "main")
+            fixture.add_registry([self.registry_entry(base, side)])
+            return fixture.make_target(), 1, "AEP-PIPE-SCOPE"
+
+        def non_issue_owner(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            fixture.add_registry([self.registry_entry(base, tip, issue="work/milestone-1.txt")])
+            return fixture.make_target(), 1, "AEP-PIPE-SCOPE"
+
+        def missing_owner_issue(fixture: PipelineRepository, base: str, reviewed: str, tip: str) -> Tuple[str, int, str]:
+            fixture.add_registry([self.registry_entry(base, tip, issue="ISSUES/ISSUE-20260814T030051Z-missing.md")])
+            return fixture.make_target(), 2, "AEP-PIPE-IO"
+
+        mutations = [
+            unregistered, no_registry, unapproved, open_findings, reviewer_is_implementor,
+            review_target_not_ancestor, post_review_substantive, overlapping_attribution,
+            swapped_range, empty_range, tip_not_ancestor_of_target, non_issue_owner, missing_owner_issue,
+        ]
+        for mutate in mutations:
+            with self.subTest(mutation=mutate.__name__):
+                fixture, base, reviewed, tip = self.intervening_fixture()
+                target, code, token = mutate(fixture, base, reviewed, tip)
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, code, result.stderr)
+                self.assertIn(token, result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
+    def test_malformed_intervening_registry_fails_closed(self) -> None:
+        def bad_schema(fixture: PipelineRepository, base: str, tip: str) -> None:
+            fixture.add_registry([self.registry_entry(base, tip)], schema="aep-intervening-authority/v2")
+
+        def entries_not_list(fixture: PipelineRepository, base: str, tip: str) -> None:
+            fixture.add_registry({"issue": INTERVENING_ISSUE})
+
+        def extra_entry_key(fixture: PipelineRepository, base: str, tip: str) -> None:
+            entry = self.registry_entry(base, tip)
+            entry["paths"] = ["OTHER/"]
+            fixture.add_registry([entry])
+
+        def missing_entry_key(fixture: PipelineRepository, base: str, tip: str) -> None:
+            entry = self.registry_entry(base, tip)
+            del entry["recorded_by"]
+            fixture.add_registry([entry])
+
+        def short_revision(fixture: PipelineRepository, base: str, tip: str) -> None:
+            fixture.add_registry([self.registry_entry(base[:12], tip)])
+
+        def bad_recorded_by(fixture: PipelineRepository, base: str, tip: str) -> None:
+            entry = self.registry_entry(base, tip)
+            entry["recorded_by"] = "not a label!!"
+            fixture.add_registry([entry])
+
+        def bad_recorded_utc(fixture: PipelineRepository, base: str, tip: str) -> None:
+            entry = self.registry_entry(base, tip)
+            entry["recorded_utc"] = "yesterday"
+            fixture.add_registry([entry])
+
+        mutations = [bad_schema, entries_not_list, extra_entry_key, missing_entry_key, short_revision, bad_recorded_by, bad_recorded_utc]
+        for mutate in mutations:
+            with self.subTest(mutation=mutate.__name__):
+                fixture, base, _reviewed, tip = self.intervening_fixture()
+                mutate(fixture, base, tip)
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertIn("AEP-PIPE-SCHEMA", result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
 
     def test_failed_check_preserves_evidence_without_advancing(self) -> None:
         fixture = self.fixture(failing_check=True)

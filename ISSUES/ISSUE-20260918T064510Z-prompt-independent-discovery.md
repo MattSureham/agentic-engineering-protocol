@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-18T06:45:10Z`
-- **Updated UTC:** `2026-09-29T01:35:13Z`
+- **Updated UTC:** `2026-09-29T02:28:36Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md), `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance and order-5 contract
 - **ADRs:** Accepted [four-layer discovery boundary](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [Authority/gap analysis](../EVIDENCE/EVIDENCE-20260918T064510Z-discovery-authority-analysis.md); [authority validation](../EVIDENCE/EVIDENCE-20260918T065750Z-discovery-authority-validation.md); [independent review round 1](../EVIDENCE/EVIDENCE-20260921T013125Z-discovery-review-round-1.md)
@@ -320,6 +320,34 @@ The owner authorized exactly one final `codex adapter_removed_manual` session on
 
 The implementer committed the run-10 reconciliation as candidate target `9f72d3de57085525a8ddf8a3b14bf1a3161e26e8` and invoked the contract-conformant transition `IN_PROGRESS → AWAITING_PEER_REVIEW`. The pipeline **refused deterministically** (`AEP-PIPE-SCOPE`; state did not advance — still `IN_PROGRESS` attempt 3, nothing written): the accepted milestone contract's `allowed_paths` diff-gate (base `88fa8359…` → target) rejects six paths that entered history while the milestone was `BLOCKED_HUMAN_AUTHORITY`, all belonging to the separately owner-approved blocked-exit amendment and its records: `PROJECT_SPEC.md` (PIPELINE-009), `ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md` (decision-5 amendment), `scripts/run_pipeline.py`, `tests/test_run_pipeline.py`, `ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md`, `ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md`. That amendment was owner-approved, implemented (`47a0cb4`), and independently reviewed APPROVED (round 1, 2026-09-24) — but the discovery milestone's accepted contract does not cover those paths, the gate compares raw base-to-target diffs, and the target must equal HEAD, so no in-scope target can exclude them. Widening `allowed_paths` is specification evolution: it changes the milestone digest (`c2e02b5b…` is computed over the contract mapping), which the digest-binding gate requires to match — a human-authority decision, not implementer scope. The implementer makes no proposal, edits no machine state, and stops here awaiting the owner's disposition.
 
+## Intervening-authority registry (appended 2026-09-29T02:28:36Z, agent:ClaudeCode-discovery-fix-3)
+
+Per the owner-approved scope-accounting amendment ([ISSUE-20260929T020157Z-pipeline-scope-intervening-authority](ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md), PIPELINE-010), this milestone registers the separately authorized intervening work that entered `main` while attempt 3 was open. Entry A covers the owner-approved, independently APPROVED blocked-exit amendment (`INDEPENDENT`: review round 1 APPROVED with zero open material findings, reviewed immutable state `9e8f6b285b8e9f47022c7c3fb4ba67d5341601b3` an ancestor of the range tip, post-review commit `79063cb` restricted to review-persistence record keeping). Entry B covers the human-authority record issue (`SELF`: owner decisions durably recorded; only its own issue file is excludable through it). Neither entry widens this milestone's accepted `allowed_paths` or digest; the attempt base `88fa8359…` and history are preserved. The scope-accounting amendment's own commits are NOT covered by these entries; a third entry for that amendment can be registered only after its own independent acceptance, before any resubmission.
+
+<!-- AEP-INTERVENING-AUTHORITY-V1:BEGIN -->
+```json
+{
+  "schema": "aep-intervening-authority/v1",
+  "entries": [
+    {
+      "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+      "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+      "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d",
+      "recorded_utc": "2026-09-29T02:28:36Z",
+      "recorded_by": "agent:ClaudeCode-discovery-fix-3"
+    },
+    {
+      "issue": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
+      "from": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+      "to": "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8",
+      "recorded_utc": "2026-09-29T02:28:36Z",
+      "recorded_by": "agent:ClaudeCode-discovery-fix-3"
+    }
+  ]
+}
+```
+<!-- AEP-INTERVENING-AUTHORITY-V1:END -->
+
 ## Blocker
 
 - **Blocked from:** `NOT BLOCKED`
@@ -364,6 +392,7 @@ The implementer committed the run-10 reconciliation as candidate target `9f72d3d
 | `2026-09-28T02:15:19Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Owner-directed offline refinement: delivered verification instructions now explicitly require the exact-artifact post-change read as a separate subsequent command/tool invocation after the write, prohibiting write+read fusion in one compound shell command (the ambiguity run 9 exposed). Both BOOTSTRAPs + PROMPTS manual fallback updated, fixture resynced byte-identically, 2 regression tests added; 172 tests OK, validator PASS, probes 19/19 non-PASS, oracle unchanged. No live session launched; further PASS on this revision needs new owner authorization. |
 | `2026-09-29T01:31:00Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Owner-authorized final single session executed (1/1, no retry): `codex adapter_removed_manual` run 10 on revision `a834108` evaluated **PASS** (zero defects/gaps; verification read as separate standalone `cat` at seq 12 after mutation seq 8). Uniform frozen-oracle re-evaluation of all 50 records clean bar the disclosed historical refinement; 172 tests OK, validator PASS, probes 19/19 non-PASS. Acceptance criteria 1–5 established; no record reclassified. Review submission attempted next (refused by the scope gate — see following row). |
 | `2026-09-29T01:35:13Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Pipeline `IN_PROGRESS → AWAITING_PEER_REVIEW` with target `9f72d3d` **refused** (`AEP-PIPE-SCOPE`, no state advance): the base→target diff contains six paths outside the accepted contract's `allowed_paths` — the separately owner-approved, independently reviewed blocked-exit amendment (`PROJECT_SPEC.md` PIPELINE-009, ADR decision 5, `run_pipeline.py`, `test_run_pipeline.py`) and its two record issues (quota authorization, blocked-exit), which landed during `BLOCKED_HUMAN_AUTHORITY`. Widening scope is specification evolution (changes the milestone digest) — owner authority required. Stopped; awaiting owner disposition. |
+| `2026-09-29T02:28:36Z` | `agent:ClaudeCode-discovery-fix-3` | `IMPLEMENTING` | `IMPLEMENTING` | Owner classified the refusal as a protocol contract gap and approved the scope-accounting amendment (ISSUE-20260929T020157Z, PIPELINE-010, ten invariants). Registered the `aep-intervening-authority/v1` block: Entry A = blocked-exit amendment `ea2d393…→79063cb…` (INDEPENDENT, APPROVED round 1), Entry B = quota-authorization record `88fa835…→9f72d3d…` (SELF, own issue file only). No `allowed_paths`/digest change, no resubmission; the amendment's own commits await their own registry entry after independent acceptance. |
 
 ## Closure checklist
 

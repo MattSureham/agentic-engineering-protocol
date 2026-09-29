@@ -27,10 +27,13 @@ CONTRACT_BEGIN = "<!-- AEP-AUTHORIZED-MILESTONES-V1:BEGIN -->"
 CONTRACT_END = "<!-- AEP-AUTHORIZED-MILESTONES-V1:END -->"
 STATE_BEGIN = "<!-- AEP-PIPELINE-STATE-V1:BEGIN -->"
 STATE_END = "<!-- AEP-PIPELINE-STATE-V1:END -->"
+INTERVENING_BEGIN = "<!-- AEP-INTERVENING-AUTHORITY-V1:BEGIN -->"
+INTERVENING_END = "<!-- AEP-INTERVENING-AUTHORITY-V1:END -->"
 CONTRACT_SCHEMA = "aep-authorized-milestones/v1"
 STATE_SCHEMA = "aep-pipeline-state/v1"
 STATUS_SCHEMA = "aep-pipeline-status/v1"
 EVIDENCE_SCHEMA = "aep-pipeline-verification/v1"
+INTERVENING_SCHEMA = "aep-intervening-authority/v1"
 
 CONTRACT_KEYS = {"schema", "milestones"}
 MILESTONE_KEYS = {
@@ -44,6 +47,9 @@ STATE_KEYS = {
     "verification_evidence", "review_references", "events",
 }
 EVENT_KEYS = {"sequence", "utc", "actor", "from", "to", "reason"}
+INTERVENING_KEYS = {"schema", "entries"}
+INTERVENING_ENTRY_KEYS = {"issue", "from", "to", "recorded_utc", "recorded_by"}
+RECORD_KEEPING_PATHS = {"HANDOFF.md", "HUMAN_CHECKPOINT.md", "ROTATION_LOG.jsonl"}
 
 STATES = {
     "AUTHORIZED", "READY", "IN_PROGRESS", "AWAITING_PEER_REVIEW",
@@ -650,7 +656,176 @@ def _path_allowed(path: str, allowed: Sequence[str]) -> bool:
     return any(path == candidate or (candidate.endswith("/") and path.startswith(candidate)) for candidate in allowed)
 
 
-def _verify_target_scope(context: Context, milestone: Milestone, state: Mapping[str, Any], target: str) -> None:
+def _optional_json_block(text: str, begin: str, end: str, path: str) -> Any:
+    if text.count(begin) == 0 and text.count(end) == 0:
+        return None
+    return _extract_json_block(text, begin, end, path)
+
+
+def _parse_intervening_registry(text: str, path: str) -> List[Mapping[str, Any]]:
+    """Parse the optional intervening-authority registry from a milestone issue.
+
+    Fail closed: a present block must be exactly one well-formed
+    ``aep-intervening-authority/v1`` object; malformed registries are never
+    silently ignored.
+    """
+    block = _optional_json_block(text, INTERVENING_BEGIN, INTERVENING_END, path)
+    if block is None:
+        return []
+    block = _require_keys(block, INTERVENING_KEYS, path, "intervening-authority registry")
+    if block["schema"] != INTERVENING_SCHEMA:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "unsupported intervening-authority schema {!r}".format(block["schema"]), 2)
+    entries = block["entries"]
+    if not isinstance(entries, list):
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "intervening-authority entries must be an array", 2)
+    for entry in entries:
+        _require_keys(entry, INTERVENING_ENTRY_KEYS, path, "intervening-authority entry")
+        _require_string(entry["issue"], path, "intervening-authority issue")
+        for field in ("from", "to"):
+            if FULL_REVISION_RE.fullmatch(entry[field]) is None:
+                raise PipelineError("AEP-PIPE-SCHEMA", path, "intervening-authority {} must be a full lowercase Git revision".format(field), 2)
+        if UTC_RE.fullmatch(entry["recorded_utc"]) is None:
+            raise PipelineError("AEP-PIPE-SCHEMA", path, "intervening-authority recorded_utc must be a UTC timestamp", 2)
+        if ACTOR_RE.fullmatch(entry["recorded_by"]) is None:
+            raise PipelineError("AEP-PIPE-SCHEMA", path, "intervening-authority recorded_by must be a bounded participant label", 2)
+    return entries
+
+
+def _tolerant_latest_review(text: str, path: str) -> ReviewRound:
+    """Latest review round of a non-milestone issue, accepting prose field styles.
+
+    Milestone review parsing (``_parse_latest_review``) requires the strict
+    machine format; independently reviewed contract amendments recorded their
+    rounds in prose (``**APPROVED**.`` / ``Reviewed immutable state``). This
+    parser accepts both but enforces the same substance: exactly one latest
+    round with a full revision, a numeric finding count, and a disposition.
+    """
+    section_start = text.find("## Independent review rounds")
+    if section_start < 0:
+        raise PipelineError("AEP-PIPE-REVIEW", path, "Independent review rounds section is missing", 2)
+    section_end = text.find("\n## ", section_start + 1)
+    section = text[section_start:] if section_end < 0 else text[section_start:section_end]
+    headings = list(REVIEW_HEADING_RE.finditer(section))
+    if not headings:
+        raise PipelineError("AEP-PIPE-REVIEW", path, "no durable independent review round is recorded", 2)
+    heading = headings[-1]
+    body = section[heading.end():]
+
+    def field(*names: str) -> str:
+        found: List[str] = []
+        for name in names:
+            pattern = re.compile(r"^- \*\*" + re.escape(name) + r":\*\*\s*(?P<value>.+?)\s*$", re.MULTILINE)
+            found.extend(match.group("value") for match in pattern.finditer(body))
+        if len(found) != 1:
+            raise PipelineError("AEP-PIPE-REVIEW", path, "latest review must contain exactly one of {}".format(names), 2)
+        value = found[0].strip().strip("`").strip()
+        if value.startswith("**") and value.endswith("**."):
+            value = value[2:-3].strip()
+        return value.rstrip(".").strip().strip("`").strip()
+
+    target = field("Reviewed target", "Reviewed immutable state")
+    target_match = re.search(r"[0-9a-f]{40}", target)
+    if target_match is None:
+        raise PipelineError("AEP-PIPE-REVIEW", path, "reviewed target must contain a full lowercase Git revision", 2)
+    material_text = field("Open material findings")
+    material_match = re.fullmatch(r"\*`*(\d+)\`*", material_text) or re.search(r"\d+", material_text)
+    if material_match is None:
+        raise PipelineError("AEP-PIPE-REVIEW", path, "open material findings must contain a nonnegative integer", 2)
+    disposition = field("Disposition")
+    if disposition not in DISPOSITIONS:
+        raise PipelineError("AEP-PIPE-REVIEW", path, "unsupported disposition {!r}".format(disposition), 2)
+    return ReviewRound(
+        utc=heading.group("utc"), reviewer=heading.group("reviewer").strip(),
+        target=target_match.group(0), material_findings=int(material_match.group(1) if material_match.lastindex else material_match.group(0)),
+        disposition=disposition,
+    )
+
+
+def _commit_paths(root: Path, commit: str) -> List[str]:
+    return _git(root, ["diff-tree", "--no-commit-id", "--name-only", "-r", commit]).stdout.splitlines()
+
+
+def _is_ancestor(root: Path, ancestor: str, descendant: str) -> bool:
+    return _git(root, ["merge-base", "--is-ancestor", ancestor, descendant], check=False).returncode == 0
+
+
+def _verify_intervening_entry(
+    context: Context,
+    implementor: Optional[str],
+    entry: Mapping[str, Any],
+    target: str,
+    registry_path: str,
+) -> Dict[str, Any]:
+    """Verify one registered intervening-authority range; fail closed.
+
+    An entry is usable only when its owning issue durably records HUMAN
+    authority, its own required acceptance is verifiably satisfied, and its
+    commit range is ancestor-consistent with the submission target.
+    """
+    issue = entry["issue"]
+    _safe_relative(issue, registry_path, "intervening-authority issue")
+    if not issue.startswith("ISSUES/") or not issue.endswith(".md"):
+        raise PipelineError("AEP-PIPE-SCOPE", registry_path, "intervening authority must be owned by a repository issue path")
+    text = _read_text(_resolve_owned_path(context.root, issue), issue)
+    metadata = _metadata(text, issue)
+    if metadata.get("Authority") != "HUMAN":
+        raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening work lacks durably recorded human authority")
+    review_class = metadata.get("Review")
+    if review_class not in {"INDEPENDENT", "SELF"}:
+        raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening issue Review must be INDEPENDENT or SELF")
+    base, tip = entry["from"], entry["to"]
+    if base == tip or not _is_ancestor(context.root, base, tip):
+        raise PipelineError("AEP-PIPE-SCOPE", registry_path, "intervening range {}..{} is not ancestor-ordered".format(base[:12], tip[:12]))
+    if not _is_ancestor(context.root, tip, target):
+        raise PipelineError("AEP-PIPE-SCOPE", registry_path, "intervening range tip {} is not an ancestor of the target".format(tip[:12]))
+    commits = set(_git(context.root, ["rev-list", "{}..{}".format(base, tip)]).stdout.splitlines())
+    if not commits:
+        raise PipelineError("AEP-PIPE-SCOPE", registry_path, "intervening range {}..{} is empty".format(base[:12], tip[:12]))
+
+    if review_class == "INDEPENDENT":
+        review = _tolerant_latest_review(text, issue)
+        if review.disposition != "APPROVED" or review.material_findings != 0:
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening work is not independently APPROVED with zero open material findings")
+        if review.reviewer == implementor:
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening review label equals the current implementor label")
+        if not _is_ancestor(context.root, review.target, tip):
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "reviewed target is not an ancestor of the intervening range tip")
+        for commit in _git(context.root, ["rev-list", "{}..{}".format(review.target, tip)]).stdout.splitlines():
+            unsafe = [
+                name for name in _commit_paths(context.root, commit)
+                if name != issue and name not in RECORD_KEEPING_PATHS and not name.startswith("EVIDENCE/")
+            ]
+            if unsafe:
+                raise PipelineError(
+                    "AEP-PIPE-SCOPE", issue,
+                    "post-review commits in the intervening range touch non-record paths: {}".format(", ".join(sorted(unsafe))),
+                )
+        excludable: set = set()
+        for commit in sorted(commits):
+            excludable.update(_commit_paths(context.root, commit))
+    else:
+        if metadata.get("Status") in {None, "BLOCKED"}:
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening human-authority issue must record the owner decision (Status no longer BLOCKED)")
+        match = re.search(r"^- \*\*Unblock condition:\*\*\s+`?(?P<value>[^`\n]+)`?\s*$", text, re.MULTILINE)
+        if match is None or match.group("value").strip().upper() in {"", "NONE", "UNKNOWN", "PENDING"}:
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening human-authority issue needs a nonempty observable Unblock condition")
+        # A self-reviewed authority record owns no substantive repository paths:
+        # only its own issue file may be excluded through it.
+        excludable = set()
+        for commit in sorted(commits):
+            excludable.update(_commit_paths(context.root, commit))
+        excludable &= {issue}
+    return {
+        "issue": issue,
+        "from": base,
+        "to": tip,
+        "review": review_class,
+        "commits": commits,
+        "excludable": excludable,
+    }
+
+
+def _verify_target_scope(context: Context, milestone: Milestone, state: Mapping[str, Any], target: str) -> List[Dict[str, Any]]:
     if target != _head(context.root):
         raise PipelineError("AEP-PIPE-TARGET", ".git", "submission target must equal current HEAD")
     base = state["base_revision"]
@@ -659,14 +834,35 @@ def _verify_target_scope(context: Context, milestone: Milestone, state: Mapping[
         raise PipelineError("AEP-PIPE-TARGET", ".git", "base_revision is not an ancestor of target")
     names = _git(context.root, ["diff", "--name-only", "{}..{}".format(base, target)]).stdout.splitlines()
     outside = sorted(name for name in names if not _path_allowed(name, milestone.raw["allowed_paths"]))
+    exclusions: List[Dict[str, Any]] = []
     if outside:
-        raise PipelineError("AEP-PIPE-SCOPE", ".git", "target changes paths outside milestone scope: {}".format(", ".join(outside)))
+        entries = [
+            _verify_intervening_entry(context, state["implementor"], entry, target, milestone.issue)
+            for entry in _parse_intervening_registry(context.issue_texts[milestone.milestone_id], milestone.issue)
+        ]
+        uncovered = []
+        for name in outside:
+            touching = set(_git(context.root, ["rev-list", "{}..{}".format(base, target), "--", name]).stdout.splitlines())
+            covering = sorted(
+                entry["issue"] for entry in entries
+                if name in entry["excludable"] and touching <= entry["commits"]
+            )
+            if covering:
+                exclusions.append({"path": name, "covering_issues": covering, "commit_count": len(touching)})
+            else:
+                uncovered.append(name)
+        if uncovered:
+            raise PipelineError(
+                "AEP-PIPE-SCOPE", ".git",
+                "target changes paths outside milestone scope: {}".format(", ".join(uncovered)),
+            )
     spec_at_target = _git(context.root, ["show", "{}:PROJECT_SPEC.md".format(target)]).stdout
     target_milestones = _parse_contract_text(spec_at_target, "{}:PROJECT_SPEC.md".format(target))
     target_by_id = {item.milestone_id: item for item in target_milestones}
     target_contract = target_by_id.get(milestone.milestone_id)
     if target_contract is None or target_contract.digest != milestone.digest:
         raise PipelineError("AEP-PIPE-AUTH", "PROJECT_SPEC.md", "target does not contain the accepted milestone contract digest")
+    return exclusions
 
 
 def _bounded_output(value: str, limit: int = 16384) -> Tuple[str, bool]:
@@ -825,6 +1021,7 @@ def _write_verification_evidence(
     repository_postconditions: List[Dict[str, str]],
     passed: bool,
     utc: str,
+    scope_exclusions: Optional[List[Dict[str, Any]]] = None,
 ) -> str:
     stamp = utc.replace("-", "").replace(":", "")
     name = "EVIDENCE-{}-{}-attempt-{}.json".format(stamp, _slug(milestone.milestone_id), state["attempt"])
@@ -845,6 +1042,7 @@ def _write_verification_evidence(
         "structural_validator": {"result": "PASS", "finding_count": 0},
         "checks": checks,
         "repository_postconditions": repository_postconditions,
+        "scope_exclusions": scope_exclusions or [],
         "result": "PASS" if passed else "FAIL",
         "limitations": [
             "Participant labels are recorded assertions, not authenticated identities.",
@@ -1145,13 +1343,14 @@ def _transition(context: Context, arguments: argparse.Namespace) -> str:
             raise PipelineError("AEP-PIPE-CLI", "command", "--target is required for AWAITING_PEER_REVIEW", 2)
         _require_clean(context.root, include_ignored=True)
         target = _target_revision(context.root, arguments.target)
-        _verify_target_scope(context, milestone, state, target)
+        scope_exclusions = _verify_target_scope(context, milestone, state, target)
         _structural_gate(context.root)
         checks, commands_passed = _run_checks(context.root, milestone)
         postconditions, repository_passed = _repository_postconditions(context, milestone, target)
         passed = commands_passed and repository_passed
         evidence = _write_verification_evidence(
             context, milestone, state, target, actor, checks, postconditions, passed, utc,
+            scope_exclusions=scope_exclusions,
         )
         if not passed:
             failed_postconditions = [item["id"] for item in postconditions if item["result"] == "FAIL"]
