@@ -72,7 +72,7 @@ None — this amendment is owner-approved contract evolution tracked at issue le
 
 Review reconciliation (`2026-09-30T01:59:49Z`, `agent:Codex-scope-review-20260930`): round 1 is `CHANGES_REQUIRED`, so this ordinary issue returns to `IMPLEMENTING`. The prior `OPEN` metadata under-represented its implemented/review-ready state. No amendment machine state exists and no discovery transition is appropriate; discovery remains `IN_PROGRESS`, attempt 3, original base/digest/history, no submitted target. The reviewer does not perform the rework.
 
-Rework reconciliation (`2026-09-30T03:14:19Z`, `agent:ClaudeCode-discovery-fix-3`): all five round-1 material findings are resolved on a new immutable target built on preserved history (`6e39cea` and the round-1 records are untouched; no amend or rewrite). The issue remains `IMPLEMENTING` and review-ready for a fresh independent round 2; the implementer does not review its own rework. Discovery remains `IN_PROGRESS`, attempt 3, original base/digest/history, no submitted target; resubmission stays deferred until this amendment is legally accepted.
+Rework reconciliation (`2026-09-30T03:14:19Z`, `agent:ClaudeCode-discovery-fix-3`): all five round-1 material findings are resolved on the new immutable target `4f5e38744340fb7597222bf31483eb67187e2bbf` built on preserved history (`6e39cea` and the round-1 records are untouched; no amend or rewrite). The issue remains `IMPLEMENTING` and review-ready for a fresh independent round 2 on that target; the implementer does not review its own rework. Discovery remains `IN_PROGRESS`, attempt 3, original base/digest/history, no submitted target; resubmission stays deferred until this amendment is legally accepted.
 
 ## Self-review
 
@@ -115,7 +115,7 @@ Rework reconciliation (`2026-09-30T03:14:19Z`, `agent:ClaudeCode-discovery-fix-3
 
 - The trust model remains recorded-signals: machine gates verify durable attribution and review records, not cryptographic authorship (consistent with the accepted pipeline's disclosed limitation).
 - Whether the discovery milestone's eventual reviewer accepts the exclusion records is a review judgment; the mechanism only makes them transparent and verifiable.
-- Independent round 1's material findings R1–R5 are resolved on the new immutable target (see the 2026-09-30T03:14:19Z verification row); they are not accepted debt. Approval requires a fresh independent round 2 showing the resolutions; discovery resubmission remains blocked until then.
+- Independent round 1's material findings R1–R5 are resolved on the new immutable target `4f5e38744340fb7597222bf31483eb67187e2bbf` (see the 2026-09-30T03:14:19Z verification row); they are not accepted debt. Approval requires a fresh independent round 2 showing the resolutions; discovery resubmission remains blocked until then.
 
 ## Activity history
 
