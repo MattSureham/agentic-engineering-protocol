@@ -1,0 +1,88 @@
+Separate post-write content read; reviewer agent:Codex-scope-review-20260930.
+Captured 2026-09-30 after review records were written, before the closeout appendix.
+
+Command:
+rg -n '^(- \*\*(Status|Updated UTC|Requirements|Evidence|Reviewed target|Open material findings|Disposition|Snapshot updated UTC|Repository state):|## Next Action|The implementer reworks|### 2026-09-30|## Reviewer update|\| `2026-09-30)' HANDOFF.md HUMAN_CHECKPOINT.md ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md EVIDENCE/EVIDENCE-20260930T015159Z-scope-attribution-review-round-1.md && sed -n '1,39p' EVIDENCE/scope-attribution-review-round-1/supplemental-results.json && tail -n 14 EVIDENCE/scope-attribution-review-round-1/supplemental-results.json
+
+Exit: 0
+Raw output:
+EVIDENCE/EVIDENCE-20260930T015159Z-scope-attribution-review-round-1.md:8:- **Reviewed target:** `6e39cea8ac46d909709ddaeeda1aa8d2df59ce08`.
+EVIDENCE/EVIDENCE-20260930T015159Z-scope-attribution-review-round-1.md:11:- **Requirements:** accepted [PROJECT_SPEC](../PROJECT_SPEC.md), especially `PIPELINE-002`, `PIPELINE-005`, `PIPELINE-007`, `PIPELINE-010`, and root [BOOTSTRAP](../BOOTSTRAP.md) authority/review boundaries.
+EVIDENCE/EVIDENCE-20260930T015159Z-scope-attribution-review-round-1.md:15:- **Disposition:** `CHANGES_REQUIRED`.
+EVIDENCE/EVIDENCE-20260930T015159Z-scope-attribution-review-round-1.md:16:- **Open material findings:** `5` (R1–R5 below; IDs are local to this owning issue, not discovery review findings).
+ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md:7:- **Status:** `IMPLEMENTING`
+ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md:13:- **Updated UTC:** `2026-09-30T01:59:49Z`
+ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md:14:- **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) `PIPELINE-002`, `PIPELINE-005`, `PIPELINE-007`, `PIPELINE-010`
+ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md:16:- **Evidence:** [attempt-3 submission boundary](../EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md); [blocked-exit review round 1](../EVIDENCE/EVIDENCE-20260924T011904Z-blocked-exit-review-round-1.md); [scope-attribution independent review round 1](../EVIDENCE/EVIDENCE-20260930T015159Z-scope-attribution-review-round-1.md)
+ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md:64:| `2026-09-30T01:59:49Z` | `agent:Codex-scope-review-20260930` | `PYTHONDONTWRITEBYTECODE=1 python3 EVIDENCE/scope-attribution-review-round-1/reviewer_checks.py . --suite` and `--supplemental` | Procedures exit 0; frozen target 33 pipeline / 178 total tests OK and validator PASS; 22 extra cases include 11 false advances, 9 no-mutation refusals and 2 positive controls; actual six-path attribution independently confirmed | [Round-1 evidence and raw outputs](../EVIDENCE/EVIDENCE-20260930T015159Z-scope-attribution-review-round-1.md) | Reproduction success is not conformance; ordinary issue review only, no discovery transition or live session |
+ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md:80:### 2026-09-30T01:59:49Z — agent:Codex-scope-review-20260930
+ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md:82:- **Reviewed target:** `6e39cea8ac46d909709ddaeeda1aa8d2df59ce08`
+ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md:83:- **Open material findings:** `5`
+ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md:98:- **Evidence:** [EVIDENCE-20260930T015159Z-scope-attribution-review-round-1](../EVIDENCE/EVIDENCE-20260930T015159Z-scope-attribution-review-round-1.md).
+ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md:100:- **Disposition:** `CHANGES_REQUIRED`
+ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md:121:| `2026-09-30T01:59:49Z` | `agent:Codex-scope-review-20260930` | `OPEN` (stale review-ready metadata) | `IMPLEMENTING` | Independent review round 1 on immutable target `6e39cea8ac46d909709ddaeeda1aa8d2df59ce08`: CHANGES_REQUIRED, five material findings R1–R5. Target tests/validator pass but reviewer fixtures expose 11 false advances. Actual A/B six-path coverage confirmed without submission. Persisted exact reproductions, evidence and current-state reconciliation; no implementation, target, registry, discovery state, acceptance or recorder work. |
+HUMAN_CHECKPOINT.md:5:## Reviewer update — 2026-09-30T01:59:49Z
+HUMAN_CHECKPOINT.md:62:## Reviewer update — 2026-09-24T01:19:04Z
+HUMAN_CHECKPOINT.md:95:## Reviewer update — 2026-09-22T02:01:17Z
+HUMAN_CHECKPOINT.md:114:## Reviewer update — 2026-09-21T01:31:25Z
+HANDOFF.md:9:- **Snapshot updated UTC:** `2026-09-30T01:59:49Z`, `agent:Codex-scope-review-20260930` — scope-attribution amendment independent round 1, `CHANGES_REQUIRED`, five open material findings.
+HANDOFF.md:10:- **Repository state:** `main`; immutable reviewed implementation `6e39cea8ac46d909709ddaeeda1aa8d2df59ce08`, parent `ebfab74c40f0fa858f4297ff7d10db74f7de8bd8`. This snapshot belongs to the reviewer-record changes based on that target (resolve their containing commit with Git); implementation/specification/ADR/tests/product/discovery issue remain target-identical. Only this HANDOFF, checkpoint, amendment issue and linked review evidence are changed by this round.
+HANDOFF.md:53:## Next Action
+HANDOFF.md:55:The implementer reworks amendment findings R1–R5 in [ISSUE-20260929T020157Z](ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md) within the accepted PIPELINE-010/ADR decision-7 authority, verifies a new immutable target and requests a fresh independent review; do not resubmit discovery or add a third registry entry before amendment approval, and escalate any new authority/architecture decision to the owner.
+HANDOFF.md:59:### 2026-09-30T01:59:49Z — agent:Codex-scope-review-20260930 — Scope-Attribution Amendment Review Round 1
+HANDOFF.md:61:- **Disposition:** CHANGES_REQUIRED on immutable `6e39cea8ac46d909709ddaeeda1aa8d2df59ce08`, five material findings R1–R5. Ordinary issue returns to IMPLEMENTING; this reviewer performs no rework.
+HANDOFF.md:62:- **Evidence:** Frozen target 33 pipeline / 178 total deterministic tests OK and validator PASS; 22 reviewer fixtures include 11 unsafe advances, 9 no-mutation refusals and 2 positive controls. Actual original six-path A/B coverage independently confirmed, without treating it as general proof. [Round, commands, raw results and resolution conditions](EVIDENCE/EVIDENCE-20260930T015159Z-scope-attribution-review-round-1.md).
+HANDOFF.md:202:- **Evidence:** Clean synchronized baseline `58fa281`; repository entry-gap analysis and owner report distinguished from unperformed incident reproduction.
+{
+  "captured_utc": "2026-09-30T01:59:06Z",
+  "checks": [],
+  "environment": {
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "platform": "macOS-26.3-arm64-arm-64bit",
+    "python": "3.9.6"
+  },
+  "probes": [
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "same_issue_registry",
+      "details": {
+        "registry_issue_equals_milestone_issue": true
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+            ],
+            "path": "AGENTS.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "blocked_independent",
+    "unchanged_machine_state": true,
+    "uncovered": []
+  },
+  "summary": {
+    "all_refusals_preserve_files_and_state": true,
+    "cases": 3,
+    "requirement_violations": [
+      "same_issue_registry",
+      "blocked_independent",
+      "overlapping_unrelated_ranges"
+    ]
+  },
+  "target": "6e39cea8ac46d909709ddaeeda1aa8d2df59ce08"
+}

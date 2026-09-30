@@ -1,0 +1,261 @@
+{
+  "captured_utc": "2026-09-30T01:59:06Z",
+  "checks": [],
+  "environment": {
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "platform": "macOS-26.3-arm64-arm-64bit",
+    "python": "3.9.6"
+  },
+  "probes": [
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "same_issue_registry",
+      "details": {
+        "registry_issue_equals_milestone_issue": true
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+            ],
+            "path": "AGENTS.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "blocked_independent",
+      "details": {},
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 2,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+          },
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "OTHER/amendment.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "overlapping_unrelated_ranges",
+      "details": {
+        "ranges_overlap": true,
+        "second_authority_expressly_excludes_first_work": true
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 2,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+              "ISSUES/ISSUE-20260814T030051Z-other-authority.md"
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+          },
+          {
+            "commit_count": 2,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030051Z-other-authority.md"
+            ],
+            "path": "ISSUES/ISSUE-20260814T030051Z-other-authority.md"
+          },
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+              "ISSUES/ISSUE-20260814T030051Z-other-authority.md"
+            ],
+            "path": "OTHER/amendment.md"
+          },
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030051Z-other-authority.md"
+            ],
+            "path": "OTHER/second.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    }
+  ],
+  "real_case": {
+    "attempt": 3,
+    "base": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+    "boundary": "Read-only component attribution at historical candidate, NOT a submission or target==HEAD bypass.",
+    "candidate": "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8",
+    "digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
+    "entry_removal_uncovered": {
+      "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md": [
+        "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md"
+      ],
+      "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md": [
+        "ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md",
+        "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+        "PROJECT_SPEC.md",
+        "scripts/run_pipeline.py",
+        "tests/test_run_pipeline.py"
+      ]
+    },
+    "implementor": "agent:ClaudeCode-discovery-fix-3",
+    "paths": [
+      {
+        "path": "ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touches": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      },
+      {
+        "path": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
+        "support": [
+          {
+            "from": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+            "issue": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
+            "review": "SELF",
+            "to": "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8"
+          }
+        ],
+        "touches": [
+          "39bae36d15b584b8aa233f4a4b801f22c6a3f3fa",
+          "610c672082a44e591a13822ffc12a9aa58babadb",
+          "80fe4cb1dea66db03957fc91e813976a57bf20b1",
+          "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8",
+          "c1215a50c469c5ad2097d927bf6efe1a5ee3ff9b"
+        ]
+      },
+      {
+        "path": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touches": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93",
+          "610c672082a44e591a13822ffc12a9aa58babadb",
+          "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+        ]
+      },
+      {
+        "path": "PROJECT_SPEC.md",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touches": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      },
+      {
+        "path": "scripts/run_pipeline.py",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touches": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      },
+      {
+        "path": "tests/test_run_pipeline.py",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touches": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      }
+    ],
+    "registry_entries": [
+      {
+        "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+        "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+        "recorded_by": "agent:ClaudeCode-discovery-fix-3",
+        "recorded_utc": "2026-09-29T02:28:36Z",
+        "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+      },
+      {
+        "from": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+        "issue": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
+        "recorded_by": "agent:ClaudeCode-discovery-fix-3",
+        "recorded_utc": "2026-09-29T02:28:36Z",
+        "to": "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8"
+      }
+    ],
+    "state": "IN_PROGRESS",
+    "target_revision": null,
+    "unchanged_contract": true,
+    "unchanged_machine_state": true,
+    "uncovered": []
+  },
+  "summary": {
+    "all_refusals_preserve_files_and_state": true,
+    "cases": 3,
+    "requirement_violations": [
+      "same_issue_registry",
+      "blocked_independent",
+      "overlapping_unrelated_ranges"
+    ]
+  },
+  "target": "6e39cea8ac46d909709ddaeeda1aa8d2df59ce08"
+}

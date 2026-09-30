@@ -2,6 +2,15 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Reviewer update — 2026-09-30T01:59:49Z
+
+Prepared by `agent:Codex-scope-review-20260930`, independently reviewing only the scope-attribution amendment `6e39cea8ac46d909709ddaeeda1aa8d2df59ce08`. Prior sections are preserved as history, not current approval.
+
+- **CHANGES_REQUIRED, five open material findings:** R1 HIGH merge-history/post-review bypasses; R2 HIGH unbound/self-referential/contradictory registry ranges can launder attempt-owned AGENTS.md changes; R3 HIGH ambiguous or unresolved review records pass; R4 MEDIUM malformed registries ignored for in-scope targets; R5 MEDIUM SELF own-file exclusion without an owner-decision record. [Owning round](ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md) and [reproducible evidence](EVIDENCE/EVIDENCE-20260930T015159Z-scope-attribution-review-round-1.md) contain exact resolution conditions.
+- **Existing tests pass, but do not prove fail-closed behavior:** frozen-target 33 pipeline / 178 full deterministic tests and validator pass; 22 reviewer fixtures show 11 unsafe advances. The actual two entries do cover the six historical paths, confirmed by independent per-commit enumeration, but that valid case does not remedy the general counterexamples.
+- **Current state:** amendment issue returns to IMPLEMENTING through its ordinary issue-level review path. Discovery remains IN_PROGRESS attempt 3, original digest/base/history, no submitted target; no machine transition or third registry entry occurred. The dispatcher still reports discovery implementer, but resubmission remains deferred pending amendment fixes and approval.
+- **Owner decision requested now: NONE for fixes that implement the already accepted invariants.** New scope, architecture or trust-boundary changes would require your approval; this review does not adopt any. No implementation change, live session, discovery-conformance re-review, acceptance, closure, recorder/coordinator action or publication was performed.
+
 ## Implementer update — 2026-09-29T02:44:00Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after implementing your approved scope-accounting amendment; not an acceptance record. Prior sections remain historical.

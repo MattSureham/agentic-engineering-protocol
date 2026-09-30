@@ -1,0 +1,634 @@
+{
+  "captured_utc": "2026-09-30T01:54:48Z",
+  "checks": [
+    {
+      "argv": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_run_pipeline.py",
+        "-v"
+      ],
+      "exit": 0,
+      "stderr_tail": [
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 33 tests in 32.849s",
+        "",
+        "OK"
+      ],
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit": 0,
+      "stderr_tail": [
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 178 tests in 43.110s",
+        "",
+        "OK"
+      ],
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "scripts/validate_protocol.py"
+      ],
+      "exit": 0,
+      "stderr_tail": [],
+      "stdout": "PASS structural protocol validation (package_files=10 handoffs=2)\n"
+    }
+  ],
+  "environment": {
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "platform": "macOS-26.3-arm64-arm-64bit",
+    "python": "3.9.6"
+  },
+  "probes": [
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "positive_independent",
+      "details": {},
+      "exit": 0,
+      "expected": "ADVANCE",
+      "refusal_no_mutation": null,
+      "requirement_met": true,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 2,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+          },
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "OTHER/amendment.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "positive_self",
+      "details": {},
+      "exit": 0,
+      "expected": "ADVANCE",
+      "refusal_no_mutation": null,
+      "requirement_met": true,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "unapproved_review",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: intervening work is not independently APPROVED with zero open material findings\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "wrong_authority",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: intervening work lacks durably recorded human authority\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "identity_conflict",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: intervening review label equals the current implementor label\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "wrong_range",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030001Z-fixture-1.md: intervening range d6c2e900972c..4509ae174b30 is not ancestor-ordered\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "partial_coverage",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE .git: target changes paths outside milestone scope: OTHER/amendment.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "self_substantive",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE .git: target changes paths outside milestone scope: OTHER/amendment.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "dirty_authority",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-GIT .git: working tree is not clean: ISSUES/ISSUE-20260814T030050Z-intervening-authority.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "unrecorded_file",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-GIT .git: working tree is not clean: unrecorded.txt\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "AGENTS_after_valid_range",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE .git: target changes paths outside milestone scope: AGENTS.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "merge_post_review",
+      "details": {
+        "final_substantive_content": "unreviewed substantive merge edit\n",
+        "first_parent_changed_paths": [
+          "EVIDENCE/side.md",
+          "OTHER/amendment.md"
+        ],
+        "implementation_commit_paths": [],
+        "merge_commit": "9eba0a3eee3599543acdef06ea20c6bbcfb41769",
+        "reviewed_target": "ba88e371fbd826da3d331f3ebff2bc2367d8adf6"
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 2,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+          },
+          {
+            "commit_count": 2,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "OTHER/amendment.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "merge_hidden_attempt_touch",
+      "details": {
+        "full_history_touches": [
+          "692b1e97885a5dc5ca9c704e621597e096b1eb34",
+          "1b461add8a1510e362d526109f08f20244e6bc31",
+          "e7fc1e28063ceb7921f551086f159c3dfda7816f"
+        ],
+        "simplified_touches": [
+          "e7fc1e28063ceb7921f551086f159c3dfda7816f"
+        ],
+        "unregistered_touch": "1b461add8a1510e362d526109f08f20244e6bc31",
+        "unregistered_touch_in_range": false
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 2,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+          },
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "OTHER/amendment.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "wide_range_attempt_AGENTS",
+      "details": {
+        "attempt_owned_commit": "f03a232b6af3cd0718d9b94a550770eaf38c67f7"
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "AGENTS.md"
+          },
+          {
+            "commit_count": 2,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+          },
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "OTHER/amendment.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "ambiguous_count",
+      "details": {},
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 2,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+          },
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "OTHER/amendment.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "ambiguous_target",
+      "details": {},
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 2,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+          },
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "OTHER/amendment.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "self_awaiting_decision",
+      "details": {},
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "commit_count": 1,
+            "covering_issues": [
+              "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md"
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "malformed_in_scope",
+      "details": {},
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        []
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "null_registry_in_scope",
+      "details": {
+        "parsed_null_registry": []
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        []
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    }
+  ],
+  "real_case": {
+    "attempt": 3,
+    "base": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+    "boundary": "Read-only component attribution at historical candidate, NOT a submission or target==HEAD bypass.",
+    "candidate": "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8",
+    "digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
+    "entry_removal_uncovered": {
+      "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md": [
+        "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md"
+      ],
+      "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md": [
+        "ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md",
+        "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+        "PROJECT_SPEC.md",
+        "scripts/run_pipeline.py",
+        "tests/test_run_pipeline.py"
+      ]
+    },
+    "implementor": "agent:ClaudeCode-discovery-fix-3",
+    "paths": [
+      {
+        "path": "ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touches": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      },
+      {
+        "path": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
+        "support": [
+          {
+            "from": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+            "issue": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
+            "review": "SELF",
+            "to": "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8"
+          }
+        ],
+        "touches": [
+          "39bae36d15b584b8aa233f4a4b801f22c6a3f3fa",
+          "610c672082a44e591a13822ffc12a9aa58babadb",
+          "80fe4cb1dea66db03957fc91e813976a57bf20b1",
+          "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8",
+          "c1215a50c469c5ad2097d927bf6efe1a5ee3ff9b"
+        ]
+      },
+      {
+        "path": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touches": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93",
+          "610c672082a44e591a13822ffc12a9aa58babadb",
+          "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+        ]
+      },
+      {
+        "path": "PROJECT_SPEC.md",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touches": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      },
+      {
+        "path": "scripts/run_pipeline.py",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touches": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      },
+      {
+        "path": "tests/test_run_pipeline.py",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touches": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      }
+    ],
+    "registry_entries": [
+      {
+        "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+        "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+        "recorded_by": "agent:ClaudeCode-discovery-fix-3",
+        "recorded_utc": "2026-09-29T02:28:36Z",
+        "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+      },
+      {
+        "from": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+        "issue": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
+        "recorded_by": "agent:ClaudeCode-discovery-fix-3",
+        "recorded_utc": "2026-09-29T02:28:36Z",
+        "to": "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8"
+      }
+    ],
+    "state": "IN_PROGRESS",
+    "target_revision": null,
+    "unchanged_contract": true,
+    "unchanged_machine_state": true,
+    "uncovered": []
+  },
+  "summary": {
+    "all_refusals_preserve_files_and_state": true,
+    "cases": 19,
+    "requirement_violations": [
+      "merge_post_review",
+      "merge_hidden_attempt_touch",
+      "wide_range_attempt_AGENTS",
+      "ambiguous_count",
+      "ambiguous_target",
+      "self_awaiting_decision",
+      "malformed_in_scope",
+      "null_registry_in_scope"
+    ]
+  },
+  "target": "6e39cea8ac46d909709ddaeeda1aa8d2df59ce08"
+}
