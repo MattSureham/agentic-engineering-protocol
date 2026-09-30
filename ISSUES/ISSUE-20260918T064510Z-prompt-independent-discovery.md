@@ -322,25 +322,34 @@ The implementer committed the run-10 reconciliation as candidate target `9f72d3d
 
 ## Intervening-authority registry (appended 2026-09-29T02:28:36Z, agent:ClaudeCode-discovery-fix-3)
 
-Per the owner-approved scope-accounting amendment ([ISSUE-20260929T020157Z-pipeline-scope-intervening-authority](ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md), PIPELINE-010), this milestone registers the separately authorized intervening work that entered `main` while attempt 3 was open. Entry A covers the owner-approved, independently APPROVED blocked-exit amendment (`INDEPENDENT`: review round 1 APPROVED with zero open material findings, reviewed immutable state `9e8f6b285b8e9f47022c7c3fb4ba67d5341601b3` an ancestor of the range tip, post-review commit `79063cb` restricted to review-persistence record keeping). Entry B covers the human-authority record issue (`SELF`: owner decisions durably recorded; only its own issue file is excludable through it). Neither entry widens this milestone's accepted `allowed_paths` or digest; the attempt base `88fa8359…` and history are preserved. The scope-accounting amendment's own commits are NOT covered by these entries; a third entry for that amendment can be registered only after its own independent acceptance, before any resubmission.
+Per the owner-approved scope-accounting amendment ([ISSUE-20260929T020157Z-pipeline-scope-intervening-authority](ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md), PIPELINE-010), this milestone registers the separately authorized intervening work that entered `main` while attempt 3 was open. Entry A covers the owner-approved, independently APPROVED blocked-exit amendment (`INDEPENDENT`: review round 1 APPROVED with zero open material findings, reviewed immutable state `9e8f6b285b8e9f47022c7c3fb4ba67d5341601b3` within the registered range, post-review commit `79063cb` restricted to review-persistence record keeping). Entry B covers the human-authority record issue (`SELF`: owner decisions durably recorded; only its own issue file is excludable through it). Neither entry widens this milestone's accepted `allowed_paths` or digest; the attempt base `88fa8359…` and history are preserved. The scope-accounting amendment's own commits are NOT covered by these entries; a third entry for that amendment can be registered only after its own independent acceptance, before any resubmission.
+
+*Migrated to `aep-intervening-authority/v2` on 2026-09-30 (same actor) per the round-1 rework of the scope-accounting amendment: Entry A now declares its exclusion scope — the four substantive amendment paths; the blocked-exit issue file itself is excludable as the entry's own authority record — and Entry B declares none, as a self-reviewed authority record may exclude only its own issue file. Ranges, owning issues, and registered work are unchanged.*
 
 <!-- AEP-INTERVENING-AUTHORITY-V1:BEGIN -->
 ```json
 {
-  "schema": "aep-intervening-authority/v1",
+  "schema": "aep-intervening-authority/v2",
   "entries": [
     {
       "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
       "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
       "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d",
-      "recorded_utc": "2026-09-29T02:28:36Z",
+      "paths": [
+        "PROJECT_SPEC.md",
+        "ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md",
+        "scripts/run_pipeline.py",
+        "tests/test_run_pipeline.py"
+      ],
+      "recorded_utc": "2026-09-30T03:07:32Z",
       "recorded_by": "agent:ClaudeCode-discovery-fix-3"
     },
     {
       "issue": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
       "from": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
       "to": "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8",
-      "recorded_utc": "2026-09-29T02:28:36Z",
+      "paths": [],
+      "recorded_utc": "2026-09-30T03:07:32Z",
       "recorded_by": "agent:ClaudeCode-discovery-fix-3"
     }
   ]

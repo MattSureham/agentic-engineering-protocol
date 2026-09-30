@@ -33,7 +33,7 @@ CONTRACT_SCHEMA = "aep-authorized-milestones/v1"
 STATE_SCHEMA = "aep-pipeline-state/v1"
 STATUS_SCHEMA = "aep-pipeline-status/v1"
 EVIDENCE_SCHEMA = "aep-pipeline-verification/v1"
-INTERVENING_SCHEMA = "aep-intervening-authority/v1"
+INTERVENING_SCHEMA = "aep-intervening-authority/v2"
 
 CONTRACT_KEYS = {"schema", "milestones"}
 MILESTONE_KEYS = {
@@ -48,7 +48,7 @@ STATE_KEYS = {
 }
 EVENT_KEYS = {"sequence", "utc", "actor", "from", "to", "reason"}
 INTERVENING_KEYS = {"schema", "entries"}
-INTERVENING_ENTRY_KEYS = {"issue", "from", "to", "recorded_utc", "recorded_by"}
+INTERVENING_ENTRY_KEYS = {"issue", "from", "to", "paths", "recorded_utc", "recorded_by"}
 RECORD_KEEPING_PATHS = {"HANDOFF.md", "HUMAN_CHECKPOINT.md", "ROTATION_LOG.jsonl"}
 
 STATES = {
@@ -79,6 +79,9 @@ UTC_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 ACTOR_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9:._/@+-]{0,127}$")
 METADATA_RE = re.compile(r"^- \*\*(?P<key>[^*]+):\*\*\s+`?(?P<value>[^`\n]+)`?\s*$", re.MULTILINE)
 REVIEW_HEADING_RE = re.compile(r"^### (?P<utc>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z) — (?P<reviewer>\S.*?)\s*$", re.MULTILINE)
+OWNER_DECISION_RE = re.compile(r"^### Owner decision recorded (?P<utc>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)[ \t]*$", re.MULTILINE)
+FULL_REVISION_FIND_RE = re.compile(r"[0-9a-f]{40}")
+DIGIT_RUN_RE = re.compile(r"\d+")
 
 
 class PipelineError(Exception):
@@ -656,22 +659,18 @@ def _path_allowed(path: str, allowed: Sequence[str]) -> bool:
     return any(path == candidate or (candidate.endswith("/") and path.startswith(candidate)) for candidate in allowed)
 
 
-def _optional_json_block(text: str, begin: str, end: str, path: str) -> Any:
-    if text.count(begin) == 0 and text.count(end) == 0:
-        return None
-    return _extract_json_block(text, begin, end, path)
-
-
 def _parse_intervening_registry(text: str, path: str) -> List[Mapping[str, Any]]:
-    """Parse the optional intervening-authority registry from a milestone issue.
+    """Parse the intervening-authority registry from a milestone issue.
 
-    Fail closed: a present block must be exactly one well-formed
-    ``aep-intervening-authority/v1`` object; malformed registries are never
-    silently ignored.
+    Fail closed: absent markers mean no registry; present markers must wrap
+    exactly one well-formed ``aep-intervening-authority/v2`` object. A present
+    but null or malformed block is never treated as an absent registry.
     """
-    block = _optional_json_block(text, INTERVENING_BEGIN, INTERVENING_END, path)
-    if block is None:
+    if text.count(INTERVENING_BEGIN) == 0 and text.count(INTERVENING_END) == 0:
         return []
+    block = _extract_json_block(text, INTERVENING_BEGIN, INTERVENING_END, path)
+    if not isinstance(block, dict):
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "intervening-authority registry must be a JSON object", 2)
     block = _require_keys(block, INTERVENING_KEYS, path, "intervening-authority registry")
     if block["schema"] != INTERVENING_SCHEMA:
         raise PipelineError("AEP-PIPE-SCHEMA", path, "unsupported intervening-authority schema {!r}".format(block["schema"]), 2)
@@ -684,6 +683,15 @@ def _parse_intervening_registry(text: str, path: str) -> List[Mapping[str, Any]]
         for field in ("from", "to"):
             if FULL_REVISION_RE.fullmatch(entry[field]) is None:
                 raise PipelineError("AEP-PIPE-SCHEMA", path, "intervening-authority {} must be a full lowercase Git revision".format(field), 2)
+        declared = entry["paths"]
+        if not isinstance(declared, list):
+            raise PipelineError("AEP-PIPE-SCHEMA", path, "intervening-authority paths must be an array", 2)
+        normalized: List[str] = []
+        for spec in declared:
+            spec = _safe_relative(spec, path, "intervening-authority path", allow_directory=True)
+            if spec in normalized:
+                raise PipelineError("AEP-PIPE-SCHEMA", path, "intervening-authority paths contain duplicate {!r}".format(spec), 2)
+            normalized.append(spec)
         if UTC_RE.fullmatch(entry["recorded_utc"]) is None:
             raise PipelineError("AEP-PIPE-SCHEMA", path, "intervening-authority recorded_utc must be a UTC timestamp", 2)
         if ACTOR_RE.fullmatch(entry["recorded_by"]) is None:
@@ -698,7 +706,8 @@ def _tolerant_latest_review(text: str, path: str) -> ReviewRound:
     machine format; independently reviewed contract amendments recorded their
     rounds in prose (``**APPROVED**.`` / ``Reviewed immutable state``). This
     parser accepts both but enforces the same substance: exactly one latest
-    round with a full revision, a numeric finding count, and a disposition.
+    round with exactly one full revision, exactly one finding count, and a
+    disposition; ambiguous records are refused rather than guessed.
     """
     section_start = text.find("## Independent review rounds")
     if section_start < 0:
@@ -724,25 +733,42 @@ def _tolerant_latest_review(text: str, path: str) -> ReviewRound:
         return value.rstrip(".").strip().strip("`").strip()
 
     target = field("Reviewed target", "Reviewed immutable state")
-    target_match = re.search(r"[0-9a-f]{40}", target)
-    if target_match is None:
-        raise PipelineError("AEP-PIPE-REVIEW", path, "reviewed target must contain a full lowercase Git revision", 2)
+    target_matches = FULL_REVISION_FIND_RE.findall(target)
+    if len(target_matches) != 1:
+        raise PipelineError("AEP-PIPE-REVIEW", path, "reviewed target must contain exactly one full lowercase Git revision", 2)
     material_text = field("Open material findings")
-    material_match = re.fullmatch(r"\*`*(\d+)\`*", material_text) or re.search(r"\d+", material_text)
-    if material_match is None:
-        raise PipelineError("AEP-PIPE-REVIEW", path, "open material findings must contain a nonnegative integer", 2)
+    material_matches = DIGIT_RUN_RE.findall(material_text)
+    if len(material_matches) != 1:
+        raise PipelineError("AEP-PIPE-REVIEW", path, "open material findings must contain exactly one nonnegative integer", 2)
     disposition = field("Disposition")
     if disposition not in DISPOSITIONS:
         raise PipelineError("AEP-PIPE-REVIEW", path, "unsupported disposition {!r}".format(disposition), 2)
     return ReviewRound(
         utc=heading.group("utc"), reviewer=heading.group("reviewer").strip(),
-        target=target_match.group(0), material_findings=int(material_match.group(1) if material_match.lastindex else material_match.group(0)),
+        target=target_matches[0], material_findings=int(material_matches[0]),
         disposition=disposition,
     )
 
 
 def _commit_paths(root: Path, commit: str) -> List[str]:
-    return _git(root, ["diff-tree", "--no-commit-id", "--name-only", "-r", commit]).stdout.splitlines()
+    """Paths touched by a commit against every parent (merge-aware).
+
+    Plain ``diff-tree`` reports nothing for merge commits, hiding substantive
+    merge content; ``-m`` diffs against each parent and the union is the
+    complete touch set.
+    """
+    output = _git(root, ["diff-tree", "--root", "-m", "--no-commit-id", "--name-only", "-r", commit]).stdout
+    return sorted(set(output.splitlines()))
+
+
+def _specs_overlap(first: str, second: str) -> bool:
+    """Two declared path specs overlap when either can match the other's paths."""
+    if first == second:
+        return True
+    for prefix, other in ((first, second), (second, first)):
+        if prefix.endswith("/") and (other == prefix[:-1] or other.startswith(prefix)):
+            return True
+    return False
 
 
 def _is_ancestor(root: Path, ancestor: str, descendant: str) -> bool:
@@ -755,17 +781,23 @@ def _verify_intervening_entry(
     entry: Mapping[str, Any],
     target: str,
     registry_path: str,
+    allowed_paths: Sequence[str],
 ) -> Dict[str, Any]:
     """Verify one registered intervening-authority range; fail closed.
 
-    An entry is usable only when its owning issue durably records HUMAN
-    authority, its own required acceptance is verifiably satisfied, and its
-    commit range is ancestor-consistent with the submission target.
+    An entry is usable only when its owning issue is a distinct issue with
+    durably recorded HUMAN authority and a resolved (non-BLOCKED) status, its
+    declared exclusion scope is bound to verifiable acceptance of the range,
+    and every substantive path touched inside the range is either declared,
+    record-keeping, or already inside the milestone's own scope. Anything
+    ambiguous — provenance, review records, ownership, or coverage — refuses.
     """
     issue = entry["issue"]
     _safe_relative(issue, registry_path, "intervening-authority issue")
     if not issue.startswith("ISSUES/") or not issue.endswith(".md"):
         raise PipelineError("AEP-PIPE-SCOPE", registry_path, "intervening authority must be owned by a repository issue path")
+    if issue == registry_path:
+        raise PipelineError("AEP-PIPE-SCOPE", registry_path, "a milestone cannot register itself as intervening authority")
     text = _read_text(_resolve_owned_path(context.root, issue), issue)
     metadata = _metadata(text, issue)
     if metadata.get("Authority") != "HUMAN":
@@ -773,6 +805,8 @@ def _verify_intervening_entry(
     review_class = metadata.get("Review")
     if review_class not in {"INDEPENDENT", "SELF"}:
         raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening issue Review must be INDEPENDENT or SELF")
+    if metadata.get("Status") in {None, "BLOCKED"}:
+        raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening issue must record a resolved status (missing or BLOCKED is ambiguous)")
     base, tip = entry["from"], entry["to"]
     if base == tip or not _is_ancestor(context.root, base, tip):
         raise PipelineError("AEP-PIPE-SCOPE", registry_path, "intervening range {}..{} is not ancestor-ordered".format(base[:12], tip[:12]))
@@ -781,15 +815,19 @@ def _verify_intervening_entry(
     commits = set(_git(context.root, ["rev-list", "{}..{}".format(base, tip)]).stdout.splitlines())
     if not commits:
         raise PipelineError("AEP-PIPE-SCOPE", registry_path, "intervening range {}..{} is empty".format(base[:12], tip[:12]))
+    commit_paths = {commit: set(_commit_paths(context.root, commit)) for commit in commits}
+    declared = list(entry["paths"])
 
     if review_class == "INDEPENDENT":
+        if not declared:
+            raise PipelineError("AEP-PIPE-SCOPE", registry_path, "independent intervening entry must declare its exclusion scope")
         review = _tolerant_latest_review(text, issue)
         if review.disposition != "APPROVED" or review.material_findings != 0:
             raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening work is not independently APPROVED with zero open material findings")
         if review.reviewer == implementor:
             raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening review label equals the current implementor label")
-        if not _is_ancestor(context.root, review.target, tip):
-            raise PipelineError("AEP-PIPE-SCOPE", issue, "reviewed target is not an ancestor of the intervening range tip")
+        if not _is_ancestor(context.root, base, review.target) or not _is_ancestor(context.root, review.target, tip):
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "reviewed target is not within the intervening range")
         for commit in _git(context.root, ["rev-list", "{}..{}".format(review.target, tip)]).stdout.splitlines():
             unsafe = [
                 name for name in _commit_paths(context.root, commit)
@@ -800,21 +838,38 @@ def _verify_intervening_entry(
                     "AEP-PIPE-SCOPE", issue,
                     "post-review commits in the intervening range touch non-record paths: {}".format(", ".join(sorted(unsafe))),
                 )
-        excludable: set = set()
-        for commit in sorted(commits):
-            excludable.update(_commit_paths(context.root, commit))
+        touched = set().union(*commit_paths.values())
+        undeclared_touched = [spec for spec in declared if not any(_path_allowed(name, [spec]) for name in touched)]
+        if undeclared_touched:
+            raise PipelineError(
+                "AEP-PIPE-SCOPE", registry_path,
+                "declared intervening paths are not touched in the range: {}".format(", ".join(sorted(undeclared_touched))),
+            )
+        foreign = sorted(
+            name for name in touched
+            if not _path_allowed(name, declared)
+            and name not in RECORD_KEEPING_PATHS
+            and not name.startswith("EVIDENCE/")
+            and not (name.startswith("ISSUES/") and name.endswith(".md"))
+            and not _path_allowed(name, allowed_paths)
+        )
+        if foreign:
+            raise PipelineError(
+                "AEP-PIPE-SCOPE", registry_path,
+                "intervening range touches substantive paths outside its declared scope: {}".format(", ".join(foreign)),
+            )
+        excludable = declared + [issue]
     else:
-        if metadata.get("Status") in {None, "BLOCKED"}:
-            raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening human-authority issue must record the owner decision (Status no longer BLOCKED)")
+        if declared:
+            raise PipelineError("AEP-PIPE-SCOPE", registry_path, "self-reviewed authority records may not declare substantive exclusion paths")
+        if OWNER_DECISION_RE.search(text) is None:
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "self-reviewed intervening issue lacks a durable recorded owner decision")
         match = re.search(r"^- \*\*Unblock condition:\*\*\s+`?(?P<value>[^`\n]+)`?\s*$", text, re.MULTILINE)
         if match is None or match.group("value").strip().upper() in {"", "NONE", "UNKNOWN", "PENDING"}:
             raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening human-authority issue needs a nonempty observable Unblock condition")
         # A self-reviewed authority record owns no substantive repository paths:
         # only its own issue file may be excluded through it.
-        excludable = set()
-        for commit in sorted(commits):
-            excludable.update(_commit_paths(context.root, commit))
-        excludable &= {issue}
+        excludable = [issue]
     return {
         "issue": issue,
         "from": base,
@@ -832,23 +887,49 @@ def _verify_target_scope(context: Context, milestone: Milestone, state: Mapping[
     ancestor = _git(context.root, ["merge-base", "--is-ancestor", base, target], check=False)
     if ancestor.returncode != 0:
         raise PipelineError("AEP-PIPE-TARGET", ".git", "base_revision is not an ancestor of target")
+    # A present registry is validated on every submission, in-scope or not:
+    # malformed or unverifiable entries are never silently ignored.
+    entries = [
+        _verify_intervening_entry(
+            context, state["implementor"], entry, target, milestone.issue,
+            milestone.raw["allowed_paths"],
+        )
+        for entry in _parse_intervening_registry(context.issue_texts[milestone.milestone_id], milestone.issue)
+    ]
+    for index, first in enumerate(entries):
+        for second in entries[index + 1:]:
+            overlapping = [
+                (left, right)
+                for left in first["excludable"] for right in second["excludable"]
+                if _specs_overlap(left, right)
+            ]
+            if overlapping:
+                raise PipelineError(
+                    "AEP-PIPE-SCOPE", milestone.issue,
+                    "intervening entries claim overlapping exclusion scope: {}".format(
+                        ", ".join(sorted("{} ~ {}".format(left, right) for left, right in overlapping))
+                    ),
+                )
     names = _git(context.root, ["diff", "--name-only", "{}..{}".format(base, target)]).stdout.splitlines()
     outside = sorted(name for name in names if not _path_allowed(name, milestone.raw["allowed_paths"]))
     exclusions: List[Dict[str, Any]] = []
     if outside:
-        entries = [
-            _verify_intervening_entry(context, state["implementor"], entry, target, milestone.issue)
-            for entry in _parse_intervening_registry(context.issue_texts[milestone.milestone_id], milestone.issue)
-        ]
+        # Enumerate the whole attempt window once, merge-aware and without
+        # path-limited history simplification, so no touching commit is lost.
+        window = {
+            commit: set(_commit_paths(context.root, commit))
+            for commit in _git(context.root, ["rev-list", "{}..{}".format(base, target)]).stdout.splitlines()
+        }
         uncovered = []
         for name in outside:
-            touching = set(_git(context.root, ["rev-list", "{}..{}".format(base, target), "--", name]).stdout.splitlines())
-            covering = sorted(
-                entry["issue"] for entry in entries
-                if name in entry["excludable"] and touching <= entry["commits"]
-            )
+            touching = sorted(commit for commit, paths in window.items() if name in paths)
+            covering = [
+                {"issue": entry["issue"], "from": entry["from"], "to": entry["to"], "review": entry["review"]}
+                for entry in entries
+                if _path_allowed(name, entry["excludable"]) and set(touching) <= entry["commits"]
+            ]
             if covering:
-                exclusions.append({"path": name, "covering_issues": covering, "commit_count": len(touching)})
+                exclusions.append({"path": name, "touching_commits": touching, "covering": covering})
             else:
                 uncovered.append(name)
         if uncovered:
