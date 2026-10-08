@@ -82,6 +82,23 @@ REVIEW_HEADING_RE = re.compile(r"^### (?P<utc>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2
 OWNER_DECISION_RE = re.compile(r"^### Owner decision recorded (?P<utc>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)[ \t]*$", re.MULTILINE)
 FULL_REVISION_FIND_RE = re.compile(r"[0-9a-f]{40}")
 DIGIT_RUN_RE = re.compile(r"\d+")
+BOUNDED_REVISION_FIND_RE = re.compile(r"(?<![0-9a-f])[0-9a-f]{40}(?![0-9a-f])")
+COUNT_FULL_RE = re.compile(r"[0-9]+")
+FENCE_RE = re.compile(r"^\s*(`{3,}|~{3,})")
+REVIEW_SECTION_RE = re.compile(r"^## Independent review rounds[ \t]*$", re.MULTILINE)
+ANY_HEADING_RE = re.compile(r"^#{1,6} ", re.MULTILINE)
+RESOLVED_ISSUE_STATUSES = {"OPEN", "INVESTIGATING", "IMPLEMENTING", "REVIEW", "CLOSED"}
+DECISION_ATTRIBUTION_RE = re.compile(r"\bhuman:[A-Za-z0-9_.:-]+|Human technical owner\b")
+DECISION_POSITIVE_RE = re.compile(r"\b(?:approved|authorized|authorised|granted|accepted|confirmed|ratified)\b", re.IGNORECASE)
+DECISION_NEGATION_RE = re.compile(r"\bNOT\b")
+DECISION_PENDING_RE = re.compile(
+    r"\bnot\s+(?:approved|authorized|authorised|granted|accepted|confirmed|recorded|given|issued)\b"
+    r"|\b(?:has|have)\s+not\b"
+    r"|\bawaiting\b|\bpending\b"
+    r"|\bno\s+(?:authorization|authorisation|approval|decision)\b"
+    r"|\bwithout\s+(?:authorization|authorisation|approval)\b",
+    re.IGNORECASE,
+)
 
 
 class PipelineError(Exception):
@@ -699,25 +716,55 @@ def _parse_intervening_registry(text: str, path: str) -> List[Mapping[str, Any]]
     return entries
 
 
+def _strip_fenced_blocks(text: str) -> str:
+    """Remove fenced code blocks so examples/templates cannot spoof records."""
+    kept: List[str] = []
+    fence_char: Optional[str] = None
+    for line in text.splitlines(keepends=True):
+        match = FENCE_RE.match(line)
+        if fence_char is None:
+            if match is not None:
+                fence_char = match.group(1)[0]
+                continue
+            kept.append(line)
+        elif match is not None and match.group(1)[0] == fence_char:
+            fence_char = None
+    return "".join(kept)
+
+
 def _tolerant_latest_review(text: str, path: str) -> ReviewRound:
     """Latest review round of a non-milestone issue, accepting prose field styles.
 
     Milestone review parsing (``_parse_latest_review``) requires the strict
     machine format; independently reviewed contract amendments recorded their
     rounds in prose (``**APPROVED**.`` / ``Reviewed immutable state``). This
-    parser accepts both but enforces the same substance: exactly one latest
-    round with exactly one full revision, exactly one finding count, and a
-    disposition; ambiguous records are refused rather than guessed.
+    parser accepts both but enforces the same substance: exactly one unfenced
+    review-rounds section; a uniquely latest round; exactly one
+    boundary-delimited full revision; a finding count that is exactly one bare
+    nonnegative integer; and a known disposition. Unknown, negated,
+    conflicting, malformed, or example-only records refuse rather than guess.
     """
-    section_start = text.find("## Independent review rounds")
-    if section_start < 0:
-        raise PipelineError("AEP-PIPE-REVIEW", path, "Independent review rounds section is missing", 2)
-    section_end = text.find("\n## ", section_start + 1)
-    section = text[section_start:] if section_end < 0 else text[section_start:section_end]
+    stripped = _strip_fenced_blocks(text)
+    sections = list(REVIEW_SECTION_RE.finditer(stripped))
+    if len(sections) != 1:
+        raise PipelineError(
+            "AEP-PIPE-REVIEW", path,
+            "exactly one unfenced Independent review rounds section is required (found {})".format(len(sections)),
+            2,
+        )
+    section_start = sections[0].start()
+    section_end = stripped.find("\n## ", sections[0].end())
+    section = stripped[section_start:] if section_end < 0 else stripped[section_start:section_end]
     headings = list(REVIEW_HEADING_RE.finditer(section))
     if not headings:
         raise PipelineError("AEP-PIPE-REVIEW", path, "no durable independent review round is recorded", 2)
     heading = headings[-1]
+    if any(other.group("utc") >= heading.group("utc") for other in headings[:-1]):
+        raise PipelineError(
+            "AEP-PIPE-REVIEW", path,
+            "latest review round is not strictly later than every prior round; applicable round is ambiguous",
+            2,
+        )
     body = section[heading.end():]
 
     def field(*names: str) -> str:
@@ -733,19 +780,26 @@ def _tolerant_latest_review(text: str, path: str) -> ReviewRound:
         return value.rstrip(".").strip().strip("`").strip()
 
     target = field("Reviewed target", "Reviewed immutable state")
-    target_matches = FULL_REVISION_FIND_RE.findall(target)
+    target_matches = BOUNDED_REVISION_FIND_RE.findall(target)
     if len(target_matches) != 1:
-        raise PipelineError("AEP-PIPE-REVIEW", path, "reviewed target must contain exactly one full lowercase Git revision", 2)
+        raise PipelineError(
+            "AEP-PIPE-REVIEW", path,
+            "reviewed target must contain exactly one boundary-delimited full lowercase Git revision",
+            2,
+        )
     material_text = field("Open material findings")
-    material_matches = DIGIT_RUN_RE.findall(material_text)
-    if len(material_matches) != 1:
-        raise PipelineError("AEP-PIPE-REVIEW", path, "open material findings must contain exactly one nonnegative integer", 2)
+    if COUNT_FULL_RE.fullmatch(material_text) is None:
+        raise PipelineError(
+            "AEP-PIPE-REVIEW", path,
+            "open material findings must be exactly one bare nonnegative integer",
+            2,
+        )
     disposition = field("Disposition")
     if disposition not in DISPOSITIONS:
         raise PipelineError("AEP-PIPE-REVIEW", path, "unsupported disposition {!r}".format(disposition), 2)
     return ReviewRound(
         utc=heading.group("utc"), reviewer=heading.group("reviewer").strip(),
-        target=target_matches[0], material_findings=int(material_matches[0]),
+        target=target_matches[0], material_findings=int(material_text),
         disposition=disposition,
     )
 
@@ -773,6 +827,42 @@ def _specs_overlap(first: str, second: str) -> bool:
 
 def _is_ancestor(root: Path, ancestor: str, descendant: str) -> bool:
     return _git(root, ["merge-base", "--is-ancestor", ancestor, descendant], check=False).returncode == 0
+
+
+def _issue_introduction(root: Path, issue: str, registry_path: str) -> str:
+    """Oldest commit adding the authority-record file: the durable moment the separate authority began."""
+    added = _git(root, ["log", "--diff-filter=A", "--format=%H", "--reverse", "--", issue]).stdout.splitlines()
+    if not added:
+        raise PipelineError("AEP-PIPE-SCOPE", registry_path, "authority record {} has no introduction commit".format(issue))
+    return added[0]
+
+
+def _verify_owner_decision(text: str, issue: str) -> None:
+    """Every recorded owner-decision heading must hold a real positive decision.
+
+    A heading alone proves nothing: the body up to the next heading must be
+    nonempty, attribute the decision to a human owner label, contain a positive
+    decision verb, and carry no negated, pending, or awaiting language. Fenced
+    examples and templates are stripped before any matching, and every recorded
+    decision heading is validated so a contradictory record cannot hide behind
+    a later positive one.
+    """
+    stripped = _strip_fenced_blocks(text)
+    headings = list(OWNER_DECISION_RE.finditer(stripped))
+    if not headings:
+        raise PipelineError("AEP-PIPE-SCOPE", issue, "self-reviewed intervening issue lacks a durable recorded owner decision")
+    for heading in headings:
+        rest = stripped[heading.end():]
+        next_heading = ANY_HEADING_RE.search(rest)
+        body = rest[: next_heading.start()] if next_heading is not None else rest
+        if not body.strip():
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "recorded owner decision has an empty body")
+        if DECISION_ATTRIBUTION_RE.search(body) is None:
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "recorded owner decision is not attributed to a human owner label")
+        if DECISION_POSITIVE_RE.search(body) is None:
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "recorded owner decision contains no positive decision verb")
+        if DECISION_NEGATION_RE.search(body) is not None or DECISION_PENDING_RE.search(body) is not None:
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "recorded owner decision is negated, pending, or otherwise not effective")
 
 
 def _verify_intervening_entry(
@@ -805,8 +895,13 @@ def _verify_intervening_entry(
     review_class = metadata.get("Review")
     if review_class not in {"INDEPENDENT", "SELF"}:
         raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening issue Review must be INDEPENDENT or SELF")
-    if metadata.get("Status") in {None, "BLOCKED"}:
-        raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening issue must record a resolved status (missing or BLOCKED is ambiguous)")
+    if metadata.get("Status") not in RESOLVED_ISSUE_STATUSES:
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "intervening issue must record an unambiguous resolved status (one of {}; missing, BLOCKED, or unrecognized values refuse)".format(
+                ", ".join(sorted(RESOLVED_ISSUE_STATUSES))
+            ),
+        )
     base, tip = entry["from"], entry["to"]
     if base == tip or not _is_ancestor(context.root, base, tip):
         raise PipelineError("AEP-PIPE-SCOPE", registry_path, "intervening range {}..{} is not ancestor-ordered".format(base[:12], tip[:12]))
@@ -838,35 +933,64 @@ def _verify_intervening_entry(
                     "AEP-PIPE-SCOPE", issue,
                     "post-review commits in the intervening range touch non-record paths: {}".format(", ".join(sorted(unsafe))),
                 )
-        touched = set().union(*commit_paths.values())
-        undeclared_touched = [spec for spec in declared if not any(_path_allowed(name, [spec]) for name in touched)]
-        if undeclared_touched:
+        substantive: Dict[str, List[str]] = {}
+        for commit in sorted(commits):
+            for name in commit_paths[commit]:
+                if (
+                    name == issue
+                    or name in RECORD_KEEPING_PATHS
+                    or name.startswith("EVIDENCE/")
+                    or (name.startswith("ISSUES/") and name.endswith(".md"))
+                    or _path_allowed(name, allowed_paths)
+                ):
+                    continue
+                substantive.setdefault(name, []).append(commit)
+        if any(spec.endswith("/") for spec in declared):
             raise PipelineError(
                 "AEP-PIPE-SCOPE", registry_path,
-                "declared intervening paths are not touched in the range: {}".format(", ".join(sorted(undeclared_touched))),
+                "declared intervening paths must be exact files, not directory prefixes",
             )
-        foreign = sorted(
-            name for name in touched
-            if not _path_allowed(name, declared)
-            and name not in RECORD_KEEPING_PATHS
-            and not name.startswith("EVIDENCE/")
-            and not (name.startswith("ISSUES/") and name.endswith(".md"))
-            and not _path_allowed(name, allowed_paths)
-        )
-        if foreign:
+        derived = sorted(substantive)
+        if sorted(declared) != derived:
             raise PipelineError(
                 "AEP-PIPE-SCOPE", registry_path,
-                "intervening range touches substantive paths outside its declared scope: {}".format(", ".join(foreign)),
+                "declared exclusion scope {} does not equal the range's Git-derived substantive work {}".format(
+                    sorted(declared), derived
+                ),
             )
+        # The durable authority signal is the owning issue's introduction
+        # commit: substantive work inside the range must not predate the
+        # record that authorizes it, so a widened range cannot absorb
+        # attempt-owned commits made before the authority existed.
+        introduction = _issue_introduction(context.root, issue, registry_path)
+        if not _is_ancestor(context.root, introduction, tip):
+            raise PipelineError(
+                "AEP-PIPE-SCOPE", issue,
+                "the authority record's introduction commit is not an ancestor of the registered range tip",
+            )
+        for commit in sorted({commit for touching in substantive.values() for commit in touching}):
+            if not _is_ancestor(context.root, introduction, commit):
+                raise PipelineError(
+                    "AEP-PIPE-SCOPE", issue,
+                    "substantive range commit {} predates the authority record's introduction {}".format(
+                        commit[:12], introduction[:12]
+                    ),
+                )
         excludable = declared + [issue]
     else:
         if declared:
             raise PipelineError("AEP-PIPE-SCOPE", registry_path, "self-reviewed authority records may not declare substantive exclusion paths")
-        if OWNER_DECISION_RE.search(text) is None:
-            raise PipelineError("AEP-PIPE-SCOPE", issue, "self-reviewed intervening issue lacks a durable recorded owner decision")
-        match = re.search(r"^- \*\*Unblock condition:\*\*\s+`?(?P<value>[^`\n]+)`?\s*$", text, re.MULTILINE)
-        if match is None or match.group("value").strip().upper() in {"", "NONE", "UNKNOWN", "PENDING"}:
-            raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening human-authority issue needs a nonempty observable Unblock condition")
+        _verify_owner_decision(text, issue)
+        match = re.search(
+            r"^- \*\*Unblock condition:\*\*\s+`?(?P<value>[^`\n]+)`?\s*$",
+            _strip_fenced_blocks(text),
+            re.MULTILINE,
+        )
+        if match is None or not match.group("value").strip().upper().startswith("SATISFIED"):
+            raise PipelineError(
+                "AEP-PIPE-SCOPE", issue,
+                "intervening human-authority issue needs an Unblock condition recording satisfaction (it must begin with SATISFIED)",
+            )
         # A self-reviewed authority record owns no substantive repository paths:
         # only its own issue file may be excluded through it.
         excludable = [issue]

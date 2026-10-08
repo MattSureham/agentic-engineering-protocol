@@ -857,6 +857,10 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
             fixture.add_registry([entry, dict(entry)])
 
         def prefix_overlap(fixture: PipelineRepository, base: str, tip: str) -> None:
+            # Directory-prefix declarations are no longer a valid exclusion
+            # scope at all: scope must equal the range's Git-derived
+            # substantive work as exact files, so a broader prefix that would
+            # swallow a sibling's (or the attempt's) paths refuses on sight.
             second_issue = "ISSUES/ISSUE-20260814T030052Z-second-authority.md"
             fixture.write_intervening_issue(path=second_issue)
             reviewed_second = fixture.commit("second authority record")
@@ -869,7 +873,10 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
                 self.registry_entry(base, tip_second, issue=second_issue, paths=("OTHER/amendment.md",)),
             ])
 
-        for name, mutate in (("identical_entries", identical_entries), ("prefix_overlap", prefix_overlap)):
+        for name, mutate, token in (
+            ("identical_entries", identical_entries, "overlapping exclusion scope"),
+            ("prefix_overlap", prefix_overlap, "exact files"),
+        ):
             with self.subTest(case=name):
                 fixture, base, _reviewed, tip = self.intervening_fixture()
                 mutate(fixture, base, tip)
@@ -878,7 +885,7 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
                 result = fixture.submit(target)
                 self.assertEqual(result.returncode, 1, result.stderr)
                 self.assertIn("AEP-PIPE-SCOPE", result.stderr)
-                self.assertIn("overlapping exclusion scope", result.stderr)
+                self.assertIn(token, result.stderr)
                 self.assertEqual(before, fixture.issue_path().read_bytes())
                 self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
 
@@ -985,6 +992,221 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
         self.assertIn("OTHER/amendment.md", result.stderr)
         self.assertEqual(before, fixture.issue_path().read_bytes())
         self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+
+    def widening_fixture(self, unauthorized_path: str) -> Tuple[PipelineRepository, str, str]:
+        # Attempt-owned out-of-scope work committed before the separate
+        # authority record exists, then a legitimate authorized amendment.
+        fixture = self.fixture()
+        fixture.begin()
+        base = fixture.git("rev-parse", "HEAD")
+        target_file = fixture.root / unauthorized_path
+        target_file.parent.mkdir(parents=True, exist_ok=True)
+        target_file.write_text("unauthorized current-attempt work\n", encoding="utf-8")
+        fixture.commit("current-attempt unauthorized work")
+        fixture.write_intervening_issue()
+        (fixture.root / "OTHER").mkdir(exist_ok=True)
+        (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+        reviewed = fixture.commit("separately authorized intervening amendment")
+        fixture.add_intervening_review(reviewed)
+        tip = fixture.commit("intervening review persistence")
+        return fixture, base, tip
+
+    def test_intervening_registry_cannot_widen_scope_over_attempt_owned_work(self) -> None:
+        # Round-2 review variants: declaration, prefix, or range widening must
+        # not absorb current-attempt work that predates the authority record.
+        cases = (
+            ("declared_agents_widening", "AGENTS.md", ("OTHER/amendment.md", "AGENTS.md")),
+            ("declared_prefix_widening", "OTHER/unapproved.md", ("OTHER/",)),
+            ("same_path_range_widening", "OTHER/amendment.md", ("OTHER/amendment.md",)),
+            ("foreign_substantive_control", "AGENTS.md", ("OTHER/amendment.md",)),
+        )
+        for name, unauthorized_path, paths in cases:
+            with self.subTest(case=name):
+                fixture, base, tip = self.widening_fixture(unauthorized_path)
+                fixture.add_registry([self.registry_entry(base, tip, paths=paths)])
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, 1, result.stderr)
+                self.assertIn("AEP-PIPE-SCOPE", result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
+    def test_intervening_review_provenance_must_be_unambiguous(self) -> None:
+        # Round-2 review variants: unknown, negated, malformed, duplicated,
+        # missing, or unresolved review/status evidence must refuse, never
+        # resolve to approval by picking a plausible field.
+        def unknown_zero(text: str, reviewed: str) -> str:
+            return text.replace("**0**.", "UNKNOWN (lower bound 0); actual open count not established.")
+
+        def negated_zero(text: str, reviewed: str) -> str:
+            return text.replace("**0**.", "NOT 0; material findings remain.")
+
+        def elongated_target(text: str, reviewed: str) -> str:
+            return text.replace(
+                "`{}` (fixture intervening amendment).".format(reviewed), "`{}0`".format(reviewed)
+            )
+
+        def duplicate_sections(text: str, reviewed: str) -> str:
+            return text + (
+                "\n## Independent review rounds\n\n### 2026-08-14T03:26:00Z — agent:intervening-reviewer\n\n"
+                "- **Reviewed immutable state:** `{}`\n"
+                "- **Open material findings:** **1**.\n"
+                "- **Disposition:** **CHANGES_REQUIRED**.\n"
+            ).format(reviewed)
+
+        def missing_status(text: str, reviewed: str) -> str:
+            return text.replace("- **Status:** `OPEN`\n", "")
+
+        def unresolved_status(text: str, reviewed: str) -> str:
+            return text.replace("- **Status:** `OPEN`", "- **Status:** `UNRESOLVED`")
+
+        cases = (
+            ("review_unknown_zero", unknown_zero, 2, "AEP-PIPE-REVIEW"),
+            ("review_negated_zero", negated_zero, 2, "AEP-PIPE-REVIEW"),
+            ("review_41_hex_target", elongated_target, 2, "AEP-PIPE-REVIEW"),
+            ("review_duplicate_sections", duplicate_sections, 2, "AEP-PIPE-REVIEW"),
+            ("review_missing_status", missing_status, 1, "AEP-PIPE-SCOPE"),
+            ("review_unresolved_status", unresolved_status, 1, "AEP-PIPE-SCOPE"),
+        )
+        for name, mutate, code, token in cases:
+            with self.subTest(case=name):
+                fixture, base, reviewed, _tip = self.intervening_fixture()
+                issue_path = fixture.root / INTERVENING_ISSUE
+                mutated = mutate(issue_path.read_text(encoding="utf-8"), reviewed)
+                self.assertNotEqual(mutated, issue_path.read_text(encoding="utf-8"))
+                issue_path.write_text(mutated, encoding="utf-8")
+                new_tip = fixture.commit("mutated authority record")
+                fixture.add_registry([self.registry_entry(base, new_tip)])
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, code, result.stderr)
+                self.assertIn(token, result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
+    def self_fixture(self, **issue_keywords: Any) -> Tuple[PipelineRepository, str, str]:
+        fixture = self.fixture()
+        fixture.begin()
+        base = fixture.git("rev-parse", "HEAD")
+        fixture.write_intervening_issue(review="SELF", **issue_keywords)
+        tip = fixture.commit("human authority record")
+        return fixture, base, tip
+
+    def test_intervening_self_owner_decision_must_be_real_and_effective(self) -> None:
+        # Round-2 review variants: a heading, template, or pending record is
+        # not a durable owner decision; only a positive, attributed, effective
+        # decision with a satisfied unblock condition may anchor a SELF entry.
+        decision_body = "human:fixture-owner approved this separate authority record."
+        decision_block = "### Owner decision recorded 2026-08-14T03:10:00Z\n\n" + decision_body + "\n"
+
+        def pending_heading(text: str) -> str:
+            return text.replace(
+                decision_body, "Owner has NOT approved. Awaiting decision; no authorization exists."
+            )
+
+        def empty_heading(text: str) -> str:
+            return text.replace("\n" + decision_body, "")
+
+        def fenced_heading(text: str) -> str:
+            return text.replace(
+                decision_block,
+                "No owner decision exists. The following is only an example:\n\n"
+                "```markdown\n### Owner decision recorded 2026-08-14T03:10:00Z\n```\n",
+            )
+
+        cases = (
+            ("self_pending_heading", {}, pending_heading),
+            ("self_empty_heading", {}, empty_heading),
+            ("self_fenced_heading", {}, fenced_heading),
+            ("self_blocked_control", {"status": "BLOCKED"}, None),
+            ("self_pending_unblock", {"unblock": "Awaiting owner approval; decision NOT RECORDED"}, None),
+        )
+        for name, keywords, mutate in cases:
+            with self.subTest(case=name):
+                fixture, base, tip = self.self_fixture(**keywords)
+                if mutate is not None:
+                    issue_path = fixture.root / INTERVENING_ISSUE
+                    mutated = mutate(issue_path.read_text(encoding="utf-8"))
+                    self.assertNotEqual(mutated, issue_path.read_text(encoding="utf-8"))
+                    issue_path.write_text(mutated, encoding="utf-8")
+                    tip = fixture.commit("mutated self authority record")
+                fixture.add_registry([self.registry_entry(base, tip, paths=[])])
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, 1, result.stderr)
+                self.assertIn("AEP-PIPE-SCOPE", result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
+    def test_intervening_merge_agreeing_with_only_first_parent_is_refused(self) -> None:
+        # Round-2 review variant: a post-review merge whose tree agrees with
+        # its first parent still differs substantively from its other parent;
+        # merge-aware accounting must attribute that difference and refuse.
+        fixture, base, _reviewed, tip = self.intervening_fixture()
+        fixture.git("switch", "-c", "asymmetric-side", base)
+        (fixture.root / "EVIDENCE" / "side.md").write_text("side record\n", encoding="utf-8")
+        fixture.commit("side record lacking the reviewed work")
+        fixture.git("switch", "main")
+        fixture.git("merge", "--no-ff", "--no-commit", "asymmetric-side")
+        merge_tip = fixture.commit("merge agrees with first parent only")
+        fixture.add_registry([self.registry_entry(base, merge_tip)])
+        target = fixture.make_target()
+        before = fixture.issue_path().read_bytes()
+        result = fixture.submit(target)
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("AEP-PIPE-SCOPE", result.stderr)
+        self.assertEqual(before, fixture.issue_path().read_bytes())
+        self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+
+    def octopus_fixture(self) -> Tuple[PipelineRepository, str]:
+        fixture, base, _reviewed, tip = self.intervening_fixture()
+        for branch in ("side-a", "side-b"):
+            fixture.git("switch", "-c", branch, tip)
+            (fixture.root / "EVIDENCE").mkdir(exist_ok=True)
+            (fixture.root / "EVIDENCE" / "{}.md".format(branch)).write_text("record\n", encoding="utf-8")
+            fixture.commit("{} record".format(branch))
+        fixture.git("switch", "main")
+        fixture.git("merge", "--no-ff", "--no-commit", "side-a", "side-b")
+        return fixture, base
+
+    def test_intervening_octopus_record_only_merge_is_accepted(self) -> None:
+        fixture, base = self.octopus_fixture()
+        merge_tip = fixture.commit("record-only octopus merge")
+        fixture.add_registry([self.registry_entry(base, merge_tip)])
+        target = fixture.make_target()
+        result = fixture.submit(target)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(fixture.state()["state"], "AWAITING_PEER_REVIEW")
+
+    def test_intervening_octopus_substantive_resolution_is_refused(self) -> None:
+        fixture, base = self.octopus_fixture()
+        (fixture.root / "OTHER" / "amendment.md").write_text("unreviewed octopus resolution\n", encoding="utf-8")
+        merge_tip = fixture.commit("octopus merge with unreviewed substantive resolution")
+        self.assertIn("OTHER/amendment.md", pipeline._commit_paths(fixture.root, merge_tip))
+        fixture.add_registry([self.registry_entry(base, merge_tip)])
+        target = fixture.make_target()
+        before = fixture.issue_path().read_bytes()
+        result = fixture.submit(target)
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("AEP-PIPE-SCOPE", result.stderr)
+        self.assertEqual(before, fixture.issue_path().read_bytes())
+        self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+
+    def test_absent_registry_in_scope_submission_still_advances(self) -> None:
+        # Round-2 control: with no intervening registry and no outside-path
+        # changes, an ordinary in-scope submission still advances.
+        fixture = self.fixture()
+        fixture.begin()
+        target = fixture.make_target()
+        result = fixture.submit(target)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(fixture.state()["state"], "AWAITING_PEER_REVIEW")
 
     def test_malformed_intervening_registry_fails_closed(self) -> None:
         def bad_schema(fixture: PipelineRepository, base: str, tip: str) -> None:
