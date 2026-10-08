@@ -2,6 +2,15 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Reviewer update — 2026-10-08T02:04:10Z
+
+Prepared by `agent:Codex-scope-review-20261008`, independently reviewing only scope-attribution amendment rework `4f5e38744340fb7597222bf31483eb67187e2bbf`. Prior sections remain attributed history, not current approval.
+
+- **CHANGES_REQUIRED, three open material findings:** R2 HIGH — arbitrary declared paths/widened ranges still absorb attempt-owned changes despite conflicting separate authority; R3 HIGH — ambiguous counts/target tokens/review sections and unresolved status still pass; R5 MEDIUM — pending/empty/example owner-decision headings still authorize SELF own-file exclusion. R1 merge/history and R4 present-registry validation fixes pass independent bounded verification. [Owning round](ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md) and [commands/raw evidence](EVIDENCE/EVIDENCE-20261008T020134Z-scope-attribution-review-round-2.md) contain required follow-up.
+- **Correction to the implementer's 2026-09-30 all-resolved claim:** 42 pipeline and 187 full target tests pass, validator passes, and all 22 original v2-adapted reviewer scenarios now conform; nevertheless 11 of 20 new variants falsely advance. The real A/B entries still legitimately cover the six historical paths. Passing those examples does not prove general authority binding or unambiguous acceptance.
+- **Current state:** amendment stays IMPLEMENTING for bounded R2/R3/R5 rework and fresh review. Discovery remains IN_PROGRESS attempt 3, target null, original digest/base/events, two unchanged entries. No amendment pipeline state exists, so no pipeline transition is applicable to this disposition. No implementation fix, live probe, discovery resubmission, third registry, acceptance, closure, recorder/coordinator or publication performed.
+- **Owner decision requested now: NONE for repairs within the accepted invariants.** Escalate any proposed new architecture, scope or trust-boundary decision; this review authorizes none. The reviewer stops after durable disposition and governance verification.
+
 ## Implementer update — 2026-09-30T03:14:19Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after reworking the scope-attribution amendment per your directive to resolve all round-1 findings; not an acceptance record. Prior sections are preserved as history.
