@@ -1,0 +1,2243 @@
+{
+  "captured_utc": "2026-10-09T01:51:42Z",
+  "checks": [
+    {
+      "argv": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_run_pipeline.py",
+        "-v"
+      ],
+      "exit": 0,
+      "stderr_tail": [
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 49 tests in 54.216s",
+        "",
+        "OK"
+      ],
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit": 0,
+      "stderr_tail": [
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 194 tests in 64.917s",
+        "",
+        "OK"
+      ],
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "scripts/validate_protocol.py"
+      ],
+      "exit": 0,
+      "stderr_tail": [],
+      "stdout": "PASS structural protocol validation (package_files=10 handoffs=2)\n"
+    }
+  ],
+  "environment": {
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "platform": "macOS-26.3-arm64-arm-64bit",
+    "python": "3.9.6"
+  },
+  "hostile_variants": [
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "post_introduction_foreign",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved ONLY OTHER/amendment.md and this issue; AGENTS.md and all current-attempt-owned work are expressly NOT authorized here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only the separate amendment and its authorized rename, if any. AGENTS.md and current-attempt work are NOT reviewed.\n- **Reviewed immutable state:** `b42d20f1cb54bba4bca2b744fdd769e78afd0c95` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "2b4561c3c41c132a97c6dd23a1f5cab830e77126 b42d20f1cb54bba4bca2b744fdd769e78afd0c95 persist scoped review provenance\nb42d20f1cb54bba4bca2b744fdd769e78afd0c95 f3813799503eab4fdb2bc87e17ca77fdfbb57973 separately scoped substantive amendment\nf3813799503eab4fdb2bc87e17ca77fdfbb57973 0346bf79cfb03519cb7653cca199c1fb4799b30f attempt-owned foreign substantive work\n0346bf79cfb03519cb7653cca199c1fb4799b30f 61c61e522e85c8c4bc7bc4fe84d29122c7dc5ab2 introduce separate issue record",
+        "foreign_commit": "f3813799503eab4fdb2bc87e17ca77fdfbb57973",
+        "initial_issue_commit": "0346bf79cfb03519cb7653cca199c1fb4799b30f",
+        "introduction_selected": "0346bf79cfb03519cb7653cca199c1fb4799b30f",
+        "registry_entry": {
+          "from": "61c61e522e85c8c4bc7bc4fe84d29122c7dc5ab2",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [
+            "OTHER/amendment.md",
+            "AGENTS.md"
+          ],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "2b4561c3c41c132a97c6dd23a1f5cab830e77126"
+        }
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "61c61e522e85c8c4bc7bc4fe84d29122c7dc5ab2",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "2b4561c3c41c132a97c6dd23a1f5cab830e77126"
+              }
+            ],
+            "path": "AGENTS.md",
+            "touching_commits": [
+              "f3813799503eab4fdb2bc87e17ca77fdfbb57973"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "61c61e522e85c8c4bc7bc4fe84d29122c7dc5ab2",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "2b4561c3c41c132a97c6dd23a1f5cab830e77126"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "0346bf79cfb03519cb7653cca199c1fb4799b30f",
+              "2b4561c3c41c132a97c6dd23a1f5cab830e77126"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "61c61e522e85c8c4bc7bc4fe84d29122c7dc5ab2",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "2b4561c3c41c132a97c6dd23a1f5cab830e77126"
+              }
+            ],
+            "path": "OTHER/amendment.md",
+            "touching_commits": [
+              "b42d20f1cb54bba4bca2b744fdd769e78afd0c95"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "draft_introduction",
+      "details": {
+        "actual_authority_commit": "2e721d360ec19162901c7d4a8e90af7a0f25d79f",
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved ONLY OTHER/amendment.md and this issue; the preceding AGENTS.md work is NOT authorized.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only the separate amendment and its authorized rename, if any. AGENTS.md and current-attempt work are NOT reviewed.\n- **Reviewed immutable state:** `9dd7ce820a4b69eecfbdce31f63d54fbe643af8d` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "2397860418e8c4d849db3326b845f1fc862d98c2 9dd7ce820a4b69eecfbdce31f63d54fbe643af8d persist scoped review provenance\n9dd7ce820a4b69eecfbdce31f63d54fbe643af8d 2e721d360ec19162901c7d4a8e90af7a0f25d79f separately scoped substantive amendment\n2e721d360ec19162901c7d4a8e90af7a0f25d79f 6323ef3189958207c00348a9cebaa4841b4e34e6 owner authorizes later separate work only\n6323ef3189958207c00348a9cebaa4841b4e34e6 cf463a21ee7f34da4a3978e97dd173b7d39434f5 attempt-owned foreign substantive work\ncf463a21ee7f34da4a3978e97dd173b7d39434f5 3ae627018711e76b45667c921f761a64e6cc03db introduce separate issue record",
+        "foreign_commit": "6323ef3189958207c00348a9cebaa4841b4e34e6",
+        "initial_issue_commit": "cf463a21ee7f34da4a3978e97dd173b7d39434f5",
+        "introduction_selected": "cf463a21ee7f34da4a3978e97dd173b7d39434f5",
+        "registry_entry": {
+          "from": "3ae627018711e76b45667c921f761a64e6cc03db",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [
+            "OTHER/amendment.md",
+            "AGENTS.md"
+          ],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "2397860418e8c4d849db3326b845f1fc862d98c2"
+        }
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "3ae627018711e76b45667c921f761a64e6cc03db",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "2397860418e8c4d849db3326b845f1fc862d98c2"
+              }
+            ],
+            "path": "AGENTS.md",
+            "touching_commits": [
+              "6323ef3189958207c00348a9cebaa4841b4e34e6"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "3ae627018711e76b45667c921f761a64e6cc03db",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "2397860418e8c4d849db3326b845f1fc862d98c2"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "2397860418e8c4d849db3326b845f1fc862d98c2",
+              "2e721d360ec19162901c7d4a8e90af7a0f25d79f",
+              "cf463a21ee7f34da4a3978e97dd173b7d39434f5"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "3ae627018711e76b45667c921f761a64e6cc03db",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "2397860418e8c4d849db3326b845f1fc862d98c2"
+              }
+            ],
+            "path": "OTHER/amendment.md",
+            "touching_commits": [
+              "9dd7ce820a4b69eecfbdce31f63d54fbe643af8d"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "deleted_readded_authority",
+      "details": {
+        "actual_authority_commit": "be1431af9bd1d84ca128ff2d956d76b9093c3008",
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved ONLY OTHER/amendment.md and this issue; the preceding AGENTS.md work is NOT authorized.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only the separate amendment and its authorized rename, if any. AGENTS.md and current-attempt work are NOT reviewed.\n- **Reviewed immutable state:** `1d702980140b1c7ba97c0b5ab2701a3b2fc44ba5` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "ee9099b23b0c469deb2375c620122cc4cb0c06df 1d702980140b1c7ba97c0b5ab2701a3b2fc44ba5 persist scoped review provenance\n1d702980140b1c7ba97c0b5ab2701a3b2fc44ba5 be1431af9bd1d84ca128ff2d956d76b9093c3008 separately scoped substantive amendment\nbe1431af9bd1d84ca128ff2d956d76b9093c3008 377d1020ee4cc2e72b0308699f5dd8ee3c68a7ab owner authorizes later separate work only\n377d1020ee4cc2e72b0308699f5dd8ee3c68a7ab 22733ac52e45e44ac3e46a6320e596b62643aff8 attempt-owned foreign substantive work\n22733ac52e45e44ac3e46a6320e596b62643aff8 3e98c32374bf0dc324611b3cf6fe0c8bc7786f49 delete unauthoritative proposal record\n3e98c32374bf0dc324611b3cf6fe0c8bc7786f49 2e58fe98ff6ebce80097530193877c712421295c introduce separate issue record",
+        "foreign_commit": "377d1020ee4cc2e72b0308699f5dd8ee3c68a7ab",
+        "initial_issue_commit": "3e98c32374bf0dc324611b3cf6fe0c8bc7786f49",
+        "introduction_selected": "3e98c32374bf0dc324611b3cf6fe0c8bc7786f49",
+        "registry_entry": {
+          "from": "2e58fe98ff6ebce80097530193877c712421295c",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [
+            "OTHER/amendment.md",
+            "AGENTS.md"
+          ],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "ee9099b23b0c469deb2375c620122cc4cb0c06df"
+        }
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "2e58fe98ff6ebce80097530193877c712421295c",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "ee9099b23b0c469deb2375c620122cc4cb0c06df"
+              }
+            ],
+            "path": "AGENTS.md",
+            "touching_commits": [
+              "377d1020ee4cc2e72b0308699f5dd8ee3c68a7ab"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "2e58fe98ff6ebce80097530193877c712421295c",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "ee9099b23b0c469deb2375c620122cc4cb0c06df"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "22733ac52e45e44ac3e46a6320e596b62643aff8",
+              "3e98c32374bf0dc324611b3cf6fe0c8bc7786f49",
+              "be1431af9bd1d84ca128ff2d956d76b9093c3008",
+              "ee9099b23b0c469deb2375c620122cc4cb0c06df"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "2e58fe98ff6ebce80097530193877c712421295c",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "ee9099b23b0c469deb2375c620122cc4cb0c06df"
+              }
+            ],
+            "path": "OTHER/amendment.md",
+            "touching_commits": [
+              "1d702980140b1c7ba97c0b5ab2701a3b2fc44ba5"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "mixed_authority_merge",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved ONLY OTHER/amendment.md and this issue; AGENTS.md and all current-attempt-owned work are expressly NOT authorized here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only the separate amendment and its authorized rename, if any. AGENTS.md and current-attempt work are NOT reviewed.\n- **Reviewed immutable state:** `95183e5cb592e287bb2b57deb33d4672eb5d268f` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "98c0f4916514b170026f55c2fa515833dca11d3e 95183e5cb592e287bb2b57deb33d4672eb5d268f persist scoped review provenance\n95183e5cb592e287bb2b57deb33d4672eb5d268f d571fa175827d3341d8704cd975f868f8b4fec32 eb239e5fa4aaba84c799221ea8441d8f03c28e6a merge foreign work before narrowly scoped review\nd571fa175827d3341d8704cd975f868f8b4fec32 5319956cc214dfa41059b489f16e61e59b1ee39d separately scoped substantive amendment\neb239e5fa4aaba84c799221ea8441d8f03c28e6a 5319956cc214dfa41059b489f16e61e59b1ee39d foreign branch work after issue introduction\n5319956cc214dfa41059b489f16e61e59b1ee39d 32bcaad553ac4543eb5d3ad7510113356f18741c introduce separate issue record",
+        "foreign_commit": "eb239e5fa4aaba84c799221ea8441d8f03c28e6a",
+        "initial_issue_commit": "5319956cc214dfa41059b489f16e61e59b1ee39d",
+        "introduction_selected": "5319956cc214dfa41059b489f16e61e59b1ee39d",
+        "merge_paths_explicit_parents": [
+          "AGENTS.md",
+          "OTHER/amendment.md"
+        ],
+        "registry_entry": {
+          "from": "32bcaad553ac4543eb5d3ad7510113356f18741c",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [
+            "OTHER/amendment.md",
+            "AGENTS.md"
+          ],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "98c0f4916514b170026f55c2fa515833dca11d3e"
+        }
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "32bcaad553ac4543eb5d3ad7510113356f18741c",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "98c0f4916514b170026f55c2fa515833dca11d3e"
+              }
+            ],
+            "path": "AGENTS.md",
+            "touching_commits": [
+              "95183e5cb592e287bb2b57deb33d4672eb5d268f",
+              "eb239e5fa4aaba84c799221ea8441d8f03c28e6a"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "32bcaad553ac4543eb5d3ad7510113356f18741c",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "98c0f4916514b170026f55c2fa515833dca11d3e"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "5319956cc214dfa41059b489f16e61e59b1ee39d",
+              "98c0f4916514b170026f55c2fa515833dca11d3e"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "32bcaad553ac4543eb5d3ad7510113356f18741c",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "98c0f4916514b170026f55c2fa515833dca11d3e"
+              }
+            ],
+            "path": "OTHER/amendment.md",
+            "touching_commits": [
+              "95183e5cb592e287bb2b57deb33d4672eb5d268f",
+              "d571fa175827d3341d8704cd975f868f8b4fec32"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "side_work_before_introduction",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved ONLY OTHER/amendment.md and this issue; AGENTS.md and all current-attempt-owned work are expressly NOT authorized here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only the separate amendment and its authorized rename, if any. AGENTS.md and current-attempt work are NOT reviewed.\n- **Reviewed immutable state:** `6c8255fb5f9b4d059bc8c41dce8a2faca5690051` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "f7b1a95ba1d2b4217d04a3c2c3297779b7b16e3c 6c8255fb5f9b4d059bc8c41dce8a2faca5690051 persist scoped review provenance\n6c8255fb5f9b4d059bc8c41dce8a2faca5690051 41d4bbd58fdaa5d264e9e69424fdf4c739ad208d 19e3ec5a648cb16f7d275c9d8ac31744022a0b4b merge foreign work before narrowly scoped review\n41d4bbd58fdaa5d264e9e69424fdf4c739ad208d 72aff28e799e750e41164603ff527022c207d61e separately scoped substantive amendment\n19e3ec5a648cb16f7d275c9d8ac31744022a0b4b 8570644e2ebeb8881cf17b6a21e595ebb8ba82a1 foreign side attempt work\n72aff28e799e750e41164603ff527022c207d61e 8570644e2ebeb8881cf17b6a21e595ebb8ba82a1 introduce separate issue record",
+        "foreign_commit": "19e3ec5a648cb16f7d275c9d8ac31744022a0b4b",
+        "initial_issue_commit": "72aff28e799e750e41164603ff527022c207d61e",
+        "introduction_selected": "72aff28e799e750e41164603ff527022c207d61e",
+        "merge_paths_explicit_parents": [
+          "AGENTS.md",
+          "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "OTHER/amendment.md"
+        ],
+        "registry_entry": {
+          "from": "8570644e2ebeb8881cf17b6a21e595ebb8ba82a1",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [
+            "OTHER/amendment.md",
+            "AGENTS.md"
+          ],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "f7b1a95ba1d2b4217d04a3c2c3297779b7b16e3c"
+        }
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: substantive range commit 19e3ec5a648c predates the authority record's introduction 72aff28e799e\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "merge_introduction_positive",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved ONLY OTHER/amendment.md and this issue; AGENTS.md and all current-attempt-owned work are expressly NOT authorized here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only the separate amendment and its authorized rename, if any. AGENTS.md and current-attempt work are NOT reviewed.\n- **Reviewed immutable state:** `4c94d7a8e250d1402d26e281c056a508a206aa48` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "9f43457b4b9001bb7cb797e1853a10ccc72ca805 4c94d7a8e250d1402d26e281c056a508a206aa48 persist scoped review provenance\n4c94d7a8e250d1402d26e281c056a508a206aa48 daeb0455500949a096391c2a9483662d9622379a separately scoped substantive amendment\ndaeb0455500949a096391c2a9483662d9622379a f5ead44814445f5aa1c5472fc581912a237831b9 0edfea937af158f275a5e4572dd5a548618a7f99 merge authority record before work\nf5ead44814445f5aa1c5472fc581912a237831b9 13e5d8bad4afc1e4226fcfac6c0a227a9fd66d47 record concurrent main history\n0edfea937af158f275a5e4572dd5a548618a7f99 13e5d8bad4afc1e4226fcfac6c0a227a9fd66d47 introduce separate issue record",
+        "initial_issue_commit": "0edfea937af158f275a5e4572dd5a548618a7f99",
+        "introduction_selected": "0edfea937af158f275a5e4572dd5a548618a7f99",
+        "registry_entry": {
+          "from": "13e5d8bad4afc1e4226fcfac6c0a227a9fd66d47",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [
+            "OTHER/amendment.md"
+          ],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "9f43457b4b9001bb7cb797e1853a10ccc72ca805"
+        }
+      },
+      "exit": 0,
+      "expected": "ADVANCE",
+      "refusal_no_mutation": null,
+      "requirement_met": true,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "13e5d8bad4afc1e4226fcfac6c0a227a9fd66d47",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "9f43457b4b9001bb7cb797e1853a10ccc72ca805"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "0edfea937af158f275a5e4572dd5a548618a7f99",
+              "9f43457b4b9001bb7cb797e1853a10ccc72ca805",
+              "daeb0455500949a096391c2a9483662d9622379a"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "13e5d8bad4afc1e4226fcfac6c0a227a9fd66d47",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "9f43457b4b9001bb7cb797e1853a10ccc72ca805"
+              }
+            ],
+            "path": "OTHER/amendment.md",
+            "touching_commits": [
+              "4c94d7a8e250d1402d26e281c056a508a206aa48"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "rename_positive",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved ONLY OTHER/amendment.md and OTHER/renamed.md (authorized rename) and this issue; AGENTS.md and all current-attempt-owned work are expressly NOT authorized here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only the separate amendment and its authorized rename, if any. AGENTS.md and current-attempt work are NOT reviewed.\n- **Reviewed immutable state:** `8e154600d144016103003bffa2518f5a3980b5c4` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "986151d086b21883694d7632c8f92c3079c39698 8e154600d144016103003bffa2518f5a3980b5c4 persist scoped review provenance\n8e154600d144016103003bffa2518f5a3980b5c4 4d4823def22b45f1aa991ac02ee593ae41466023 authorized exact-file rename\n4d4823def22b45f1aa991ac02ee593ae41466023 ab5a051f9e738c9832c01ae041b1fff067d45779 separately scoped substantive amendment\nab5a051f9e738c9832c01ae041b1fff067d45779 488da17c60326dbd823a1b8cce2ad041e5f1d02f introduce separate issue record",
+        "initial_issue_commit": "ab5a051f9e738c9832c01ae041b1fff067d45779",
+        "introduction_selected": "ab5a051f9e738c9832c01ae041b1fff067d45779",
+        "registry_entry": {
+          "from": "488da17c60326dbd823a1b8cce2ad041e5f1d02f",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [
+            "OTHER/amendment.md",
+            "OTHER/renamed.md"
+          ],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "986151d086b21883694d7632c8f92c3079c39698"
+        }
+      },
+      "exit": 0,
+      "expected": "ADVANCE",
+      "refusal_no_mutation": null,
+      "requirement_met": true,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "488da17c60326dbd823a1b8cce2ad041e5f1d02f",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "986151d086b21883694d7632c8f92c3079c39698"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "8e154600d144016103003bffa2518f5a3980b5c4",
+              "986151d086b21883694d7632c8f92c3079c39698",
+              "ab5a051f9e738c9832c01ae041b1fff067d45779"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "488da17c60326dbd823a1b8cce2ad041e5f1d02f",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "986151d086b21883694d7632c8f92c3079c39698"
+              }
+            ],
+            "path": "OTHER/renamed.md",
+            "touching_commits": [
+              "8e154600d144016103003bffa2518f5a3980b5c4"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "delete_readd_post_review",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved ONLY OTHER/amendment.md and this issue; AGENTS.md and all current-attempt-owned work are expressly NOT authorized here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only the separate amendment and its authorized rename, if any. AGENTS.md and current-attempt work are NOT reviewed.\n- **Reviewed immutable state:** `5bf5219e21919f5683d5c1f3d47aec71378700ea` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "f93c1464ceb9c8f039217e91ce159d0a3849d36e 1e8ddb10d07276511458fe7d4018ac4626937231 unreviewed readdition of identical final bytes\n1e8ddb10d07276511458fe7d4018ac4626937231 ee1bcfd6fa4ec9f4f3206ca5117f5f2f5b130acf unreviewed deletion\nee1bcfd6fa4ec9f4f3206ca5117f5f2f5b130acf 5bf5219e21919f5683d5c1f3d47aec71378700ea persist scoped review provenance\n5bf5219e21919f5683d5c1f3d47aec71378700ea 07dbf35e24397e16fea9ca75e1e496b1892f6013 separately scoped substantive amendment\n07dbf35e24397e16fea9ca75e1e496b1892f6013 f0b77cec83186651f3b1020391b9195eb5fe60cc introduce separate issue record",
+        "initial_issue_commit": "07dbf35e24397e16fea9ca75e1e496b1892f6013",
+        "introduction_selected": "07dbf35e24397e16fea9ca75e1e496b1892f6013",
+        "registry_entry": {
+          "from": "f0b77cec83186651f3b1020391b9195eb5fe60cc",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [
+            "OTHER/amendment.md"
+          ],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "f93c1464ceb9c8f039217e91ce159d0a3849d36e"
+        }
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: post-review commits in the intervening range touch non-record paths: OTHER/amendment.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "review_long_fence_example",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved ONLY OTHER/amendment.md and this issue; AGENTS.md and all current-attempt-owned work are expressly NOT authorized here.\n\n## Example only; no actual review exists\n\n````markdown\n```example\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only the separate amendment and its authorized rename, if any. AGENTS.md and current-attempt work are NOT reviewed.\n- **Reviewed immutable state:** `f2bf934f03ddb3b424499242d37919b2d5a30449` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n````\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "662d070fb07cef1d68be03d942ba6ad99ccfef98 f2bf934f03ddb3b424499242d37919b2d5a30449 persist scoped review provenance\nf2bf934f03ddb3b424499242d37919b2d5a30449 b9be07563e329a937da8f7546af14fdb75bea737 separately scoped substantive amendment\nb9be07563e329a937da8f7546af14fdb75bea737 a0a75f5d9afb53eaeebd098f5c516e6a8e0215c4 introduce separate issue record",
+        "initial_issue_commit": "b9be07563e329a937da8f7546af14fdb75bea737",
+        "introduction_selected": "b9be07563e329a937da8f7546af14fdb75bea737",
+        "registry_entry": {
+          "from": "a0a75f5d9afb53eaeebd098f5c516e6a8e0215c4",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [
+            "OTHER/amendment.md"
+          ],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "662d070fb07cef1d68be03d942ba6ad99ccfef98"
+        }
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "a0a75f5d9afb53eaeebd098f5c516e6a8e0215c4",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "662d070fb07cef1d68be03d942ba6ad99ccfef98"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "662d070fb07cef1d68be03d942ba6ad99ccfef98",
+              "b9be07563e329a937da8f7546af14fdb75bea737"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "a0a75f5d9afb53eaeebd098f5c516e6a8e0215c4",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "662d070fb07cef1d68be03d942ba6ad99ccfef98"
+              }
+            ],
+            "path": "OTHER/amendment.md",
+            "touching_commits": [
+              "f2bf934f03ddb3b424499242d37919b2d5a30449"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "review_malformed_latest",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved ONLY OTHER/amendment.md and this issue; AGENTS.md and all current-attempt-owned work are expressly NOT authorized here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only the separate amendment and its authorized rename, if any. AGENTS.md and current-attempt work are NOT reviewed.\n- **Reviewed immutable state:** `5b82faf99ec37af7eb7262bfeb2f80440cbde359` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n### 2026-08-14T03:26:00Z - agent:latest-reviewer\n\nLatest review is BLOCKED; required authority is unresolved. Do not use the earlier approval.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "a1cd7ec0d9b080a702b58617e75e4730726978dd 5b82faf99ec37af7eb7262bfeb2f80440cbde359 persist scoped review provenance\n5b82faf99ec37af7eb7262bfeb2f80440cbde359 e75fa516b423aa80a86f00a8136b2a8b9ea01e21 separately scoped substantive amendment\ne75fa516b423aa80a86f00a8136b2a8b9ea01e21 d1cb158109da3ca4ae1162e10e0b4559cb553f14 introduce separate issue record",
+        "initial_issue_commit": "e75fa516b423aa80a86f00a8136b2a8b9ea01e21",
+        "introduction_selected": "e75fa516b423aa80a86f00a8136b2a8b9ea01e21",
+        "registry_entry": {
+          "from": "d1cb158109da3ca4ae1162e10e0b4559cb553f14",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [
+            "OTHER/amendment.md"
+          ],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "a1cd7ec0d9b080a702b58617e75e4730726978dd"
+        }
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "d1cb158109da3ca4ae1162e10e0b4559cb553f14",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "a1cd7ec0d9b080a702b58617e75e4730726978dd"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "a1cd7ec0d9b080a702b58617e75e4730726978dd",
+              "e75fa516b423aa80a86f00a8136b2a8b9ea01e21"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "d1cb158109da3ca4ae1162e10e0b4559cb553f14",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "a1cd7ec0d9b080a702b58617e75e4730726978dd"
+              }
+            ],
+            "path": "OTHER/amendment.md",
+            "touching_commits": [
+              "5b82faf99ec37af7eb7262bfeb2f80440cbde359"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "review_duplicate_timestamp",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved ONLY OTHER/amendment.md and this issue; AGENTS.md and all current-attempt-owned work are expressly NOT authorized here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only the separate amendment and its authorized rename, if any. AGENTS.md and current-attempt work are NOT reviewed.\n- **Reviewed immutable state:** `6a1e0115ce32a11ccc07266be26c4a25d41feae8` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n\n### 2026-08-14T03:25:00Z — agent:other-reviewer\n\n- **Reviewed immutable state:** `6a1e0115ce32a11ccc07266be26c4a25d41feae8` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "743cf1eca83bb5f86ede8371f766271ce32f1bda 6a1e0115ce32a11ccc07266be26c4a25d41feae8 persist scoped review provenance\n6a1e0115ce32a11ccc07266be26c4a25d41feae8 2f423df089e9c0d1d6656e35e79dde8843200db7 separately scoped substantive amendment\n2f423df089e9c0d1d6656e35e79dde8843200db7 0a222f2db06866872f2641c71e519b1d61357c06 introduce separate issue record",
+        "initial_issue_commit": "2f423df089e9c0d1d6656e35e79dde8843200db7",
+        "introduction_selected": "2f423df089e9c0d1d6656e35e79dde8843200db7",
+        "registry_entry": {
+          "from": "0a222f2db06866872f2641c71e519b1d61357c06",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [
+            "OTHER/amendment.md"
+          ],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "743cf1eca83bb5f86ede8371f766271ce32f1bda"
+        }
+      },
+      "exit": 2,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-REVIEW ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: latest review round is not strictly later than every prior round; applicable round is ambiguous\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "self_contracted_negation",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `SELF`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner hasn't approved this authority record.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "4ef9240b625409ee23462f43ffcd4c2025eb2e23 b5cd641a978b722c33f234352bd9c561e1285550 introduce separate issue record",
+        "initial_issue_commit": "4ef9240b625409ee23462f43ffcd4c2025eb2e23",
+        "introduction_selected": "4ef9240b625409ee23462f43ffcd4c2025eb2e23",
+        "registry_entry": {
+          "from": "b5cd641a978b722c33f234352bd9c561e1285550",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "4ef9240b625409ee23462f43ffcd4c2025eb2e23"
+        }
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "b5cd641a978b722c33f234352bd9c561e1285550",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "SELF",
+                "to": "4ef9240b625409ee23462f43ffcd4c2025eb2e23"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "4ef9240b625409ee23462f43ffcd4c2025eb2e23"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "self_positive_pending_control",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `SELF`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved preparation only; authorization is pending.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "commit_graph": "5737145297aca0f53aa85e5cd6b323bf27a8e28b 7e7a6e1eb6bcd25b2b1faa310a0aea04cba32906 introduce separate issue record",
+        "initial_issue_commit": "5737145297aca0f53aa85e5cd6b323bf27a8e28b",
+        "introduction_selected": "5737145297aca0f53aa85e5cd6b323bf27a8e28b",
+        "registry_entry": {
+          "from": "7e7a6e1eb6bcd25b2b1faa310a0aea04cba32906",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "5737145297aca0f53aa85e5cd6b323bf27a8e28b"
+        }
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: recorded owner decision is negated, pending, or otherwise not effective\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "self_satisfied_pending",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `SELF`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved this separate authority record.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED is false; awaiting owner authorization`\n",
+        "commit_graph": "af8a809cb0b4f4b611bf77610052da98ebbd32ce 7e7a6e1eb6bcd25b2b1faa310a0aea04cba32906 introduce separate issue record",
+        "initial_issue_commit": "af8a809cb0b4f4b611bf77610052da98ebbd32ce",
+        "introduction_selected": "af8a809cb0b4f4b611bf77610052da98ebbd32ce",
+        "registry_entry": {
+          "from": "7e7a6e1eb6bcd25b2b1faa310a0aea04cba32906",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "af8a809cb0b4f4b611bf77610052da98ebbd32ce"
+        }
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "7e7a6e1eb6bcd25b2b1faa310a0aea04cba32906",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "SELF",
+                "to": "af8a809cb0b4f4b611bf77610052da98ebbd32ce"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "af8a809cb0b4f4b611bf77610052da98ebbd32ce"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "self_duplicate_unblock",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `SELF`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approved this separate authority record.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n\n- **Unblock condition:** `PENDING - owner authorization is unresolved`\n",
+        "commit_graph": "93be8c55662b13a0af977705d30415a1c93e3d44 6cd19e6ac3e9384a11bcaaabe131231031b7367d introduce separate issue record",
+        "initial_issue_commit": "93be8c55662b13a0af977705d30415a1c93e3d44",
+        "introduction_selected": "93be8c55662b13a0af977705d30415a1c93e3d44",
+        "registry_entry": {
+          "from": "6cd19e6ac3e9384a11bcaaabe131231031b7367d",
+          "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "paths": [],
+          "recorded_by": "agent:review-fixture-recorder",
+          "recorded_utc": "2026-09-30T01:51:59Z",
+          "to": "93be8c55662b13a0af977705d30415a1c93e3d44"
+        }
+      },
+      "exit": 0,
+      "expected": "REFUSE",
+      "refusal_no_mutation": null,
+      "requirement_met": false,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "6cd19e6ac3e9384a11bcaaabe131231031b7367d",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "SELF",
+                "to": "93be8c55662b13a0af977705d30415a1c93e3d44"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "93be8c55662b13a0af977705d30415a1c93e3d44"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    }
+  ],
+  "real_case": {
+    "all_parent_oracle_agrees": true,
+    "base": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+    "boundary": "Historical read-only component characterization, NOT a submission or target==HEAD bypass.",
+    "candidate": "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8",
+    "entry_removal_uncovered": {
+      "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md": [
+        "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md"
+      ],
+      "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md": [
+        "ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md",
+        "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+        "PROJECT_SPEC.md",
+        "scripts/run_pipeline.py",
+        "tests/test_run_pipeline.py"
+      ]
+    },
+    "hypothetical_AGENTS_supported_by_existing_entries": false,
+    "paths": [
+      {
+        "path": "ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touching_commits": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      },
+      {
+        "path": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
+        "support": [
+          {
+            "from": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+            "issue": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
+            "review": "SELF",
+            "to": "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8"
+          }
+        ],
+        "touching_commits": [
+          "39bae36d15b584b8aa233f4a4b801f22c6a3f3fa",
+          "610c672082a44e591a13822ffc12a9aa58babadb",
+          "80fe4cb1dea66db03957fc91e813976a57bf20b1",
+          "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8",
+          "c1215a50c469c5ad2097d927bf6efe1a5ee3ff9b"
+        ]
+      },
+      {
+        "path": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touching_commits": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93",
+          "610c672082a44e591a13822ffc12a9aa58babadb",
+          "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+        ]
+      },
+      {
+        "path": "PROJECT_SPEC.md",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touching_commits": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      },
+      {
+        "path": "scripts/run_pipeline.py",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touching_commits": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      },
+      {
+        "path": "tests/test_run_pipeline.py",
+        "support": [
+          {
+            "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+            "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+            "review": "INDEPENDENT",
+            "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+          }
+        ],
+        "touching_commits": [
+          "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+        ]
+      }
+    ],
+    "provenance": [
+      {
+        "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+        "metadata": {
+          "ADRs": "[ADR-20260814T015817Z](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md) decision 5",
+          "Authority": "HUMAN",
+          "Created UTC": "2026-09-23T01:32:06Z",
+          "Evidence": "[ISSUE-20260922T073608Z-codex-quota-authorization](ISSUE-20260922T073608Z-codex-quota-authorization.md) (owner decision recorded 2026-09-23T01:32:06Z); [independent review round 1](../EVIDENCE/EVIDENCE-20260924T011904Z-blocked-exit-review-round-1.md)",
+          "ID": "ISSUE-20260923T013206Z-pipeline-blocked-exit",
+          "Milestone": "milestone-20260918t064510z-prompt-independent-discovery-v1",
+          "Owner": "human:MattSureham",
+          "Review": "INDEPENDENT",
+          "Severity": "HIGH",
+          "Status": "OPEN",
+          "Title": "Accepted pipeline contract defines entry into BLOCKED_HUMAN_AUTHORITY but no exit edge; discovery milestone is machine-blocked with the human gate satisfied",
+          "Updated UTC": "2026-09-24T01:19:04Z"
+        },
+        "owner_heading_timestamps": [],
+        "review": {
+          "disposition": "APPROVED",
+          "material_findings": 0,
+          "reviewer": "agent:ClaudeCode-blocked-exit-review-20260924",
+          "target": "9e8f6b285b8e9f47022c7c3fb4ba67d5341601b3",
+          "utc": "2026-09-24T01:19:04Z"
+        }
+      },
+      {
+        "issue": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
+        "metadata": {
+          "ADRs": "[ADR-20260918T064510Z](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)",
+          "Authority": "HUMAN",
+          "Created UTC": "2026-09-22T07:36:08Z",
+          "ID": "ISSUE-20260922T073608Z-codex-quota-authorization",
+          "Milestone": "milestone-20260918t064510z-prompt-independent-discovery-v1",
+          "Owner": "human:MattSureham",
+          "Review": "SELF",
+          "Severity": "HIGH",
+          "Status": "OPEN",
+          "Title": "Owner authorization gate for the minimal remaining Codex live conformance runs (attempt 3)",
+          "Updated UTC": "2026-09-29T01:31:00Z"
+        },
+        "owner_heading_timestamps": [
+          "2026-09-23T01:32:06Z"
+        ],
+        "review": null
+      }
+    ],
+    "registry_entries": [
+      {
+        "from": "ea2d39389dc1f5e0a3fc2682f26a51e693ac51fe",
+        "issue": "ISSUES/ISSUE-20260923T013206Z-pipeline-blocked-exit.md",
+        "paths": [
+          "PROJECT_SPEC.md",
+          "ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md",
+          "scripts/run_pipeline.py",
+          "tests/test_run_pipeline.py"
+        ],
+        "recorded_by": "agent:ClaudeCode-discovery-fix-3",
+        "recorded_utc": "2026-09-30T03:07:32Z",
+        "to": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+      },
+      {
+        "from": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+        "issue": "ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md",
+        "paths": [],
+        "recorded_by": "agent:ClaudeCode-discovery-fix-3",
+        "recorded_utc": "2026-09-30T03:07:32Z",
+        "to": "9f72d3de57085525a8ddf8a3b14bf1a3161e26e8"
+      }
+    ],
+    "state": {
+      "attempt": 3,
+      "authority_digest": "c2e02b5ba533a65cc362481a89744d4574bb27601cba7170f7e31bc5a5c4c96f",
+      "base_revision": "88fa8359ec3a62f200096d0d96bd04a88ebd118a",
+      "events": [
+        {
+          "actor": "human:MattSureham",
+          "from": null,
+          "reason": "Owner approved prompt-independent discovery requirements, four-layer architecture, Codex CLI plus Claude Code first slice, and discovery-first order through specification evolution.",
+          "sequence": 1,
+          "to": "AUTHORIZED",
+          "utc": "2026-09-18T06:45:10Z"
+        },
+        {
+          "actor": "agent:ClaudeCode-discovery",
+          "from": "AUTHORIZED",
+          "reason": "Validated transition AUTHORIZED to READY.",
+          "sequence": 2,
+          "to": "READY",
+          "utc": "2026-09-20T07:43:11Z"
+        },
+        {
+          "actor": "agent:ClaudeCode-discovery",
+          "from": "READY",
+          "reason": "Implementation attempt 1 began from immutable base d140634673439a0853dc6a931e5de1fa835a4f19.",
+          "sequence": 3,
+          "to": "IN_PROGRESS",
+          "utc": "2026-09-20T07:43:11Z"
+        },
+        {
+          "actor": "agent:ClaudeCode-discovery",
+          "from": "IN_PROGRESS",
+          "reason": "Immutable target 074678d080fc6c1d57d2912314ae21296b618612 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json.",
+          "sequence": 4,
+          "to": "AWAITING_PEER_REVIEW",
+          "utc": "2026-09-20T09:35:35Z"
+        },
+        {
+          "actor": "agent:Codex-discovery-review-20260921",
+          "from": "AWAITING_PEER_REVIEW",
+          "reason": "Independent review ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-21t013125z--agentcodex-discovery-review-20260921 recorded 3 open material finding(s); within-scope fixes are required.",
+          "sequence": 5,
+          "to": "CHANGES_REQUIRED",
+          "utc": "2026-09-21T01:38:51Z"
+        },
+        {
+          "actor": "agent:ClaudeCode-discovery-fix",
+          "from": "CHANGES_REQUIRED",
+          "reason": "Implementation attempt 2 began from immutable base bd3e00f2dc5c261b12653ddb3912eb834c92645c.",
+          "sequence": 6,
+          "to": "IN_PROGRESS",
+          "utc": "2026-09-21T09:06:56Z"
+        },
+        {
+          "actor": "agent:ClaudeCode-discovery-fix",
+          "from": "IN_PROGRESS",
+          "reason": "Immutable target cc7961187f067cbc7b337b8f80a64505693f7bc6 passed structural and accepted deterministic checks; evidence EVIDENCE/EVIDENCE-20260922T012257Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-2.json.",
+          "sequence": 7,
+          "to": "AWAITING_PEER_REVIEW",
+          "utc": "2026-09-22T01:22:57Z"
+        },
+        {
+          "actor": "agent:Codex-discovery-review-20260922",
+          "from": "AWAITING_PEER_REVIEW",
+          "reason": "Independent review ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-22t020117z--agentcodex-discovery-review-20260922 recorded 3 open material finding(s); within-scope fixes are required.",
+          "sequence": 8,
+          "to": "CHANGES_REQUIRED",
+          "utc": "2026-09-22T02:09:43Z"
+        },
+        {
+          "actor": "agent:ClaudeCode-discovery-fix-3",
+          "from": "CHANGES_REQUIRED",
+          "reason": "Implementation attempt 3 began from immutable base 88fa8359ec3a62f200096d0d96bd04a88ebd118a.",
+          "sequence": 9,
+          "to": "IN_PROGRESS",
+          "utc": "2026-09-22T02:35:41Z"
+        },
+        {
+          "actor": "agent:ClaudeCode-discovery-fix-3",
+          "from": "IN_PROGRESS",
+          "reason": "Human authority is required; linked blocker ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md defines the unblock condition.",
+          "sequence": 10,
+          "to": "BLOCKED_HUMAN_AUTHORITY",
+          "utc": "2026-09-22T07:51:33Z"
+        },
+        {
+          "actor": "agent:ClaudeCode-discovery-fix-3",
+          "from": "BLOCKED_HUMAN_AUTHORITY",
+          "reason": "Recorded owner decision in ISSUES/ISSUE-20260922T073608Z-codex-quota-authorization.md satisfies the human-authority blocker; implementation attempt 3 resumes.",
+          "sequence": 11,
+          "to": "IN_PROGRESS",
+          "utc": "2026-09-23T03:13:39Z"
+        }
+      ],
+      "implementor": "agent:ClaudeCode-discovery-fix-3",
+      "milestone_id": "MILESTONE-20260918T064510Z-prompt-independent-discovery-v1",
+      "review_references": [
+        "ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-21t013125z--agentcodex-discovery-review-20260921",
+        "ISSUES/ISSUE-20260918T064510Z-prompt-independent-discovery.md#2026-09-22t020117z--agentcodex-discovery-review-20260922"
+      ],
+      "schema": "aep-pipeline-state/v1",
+      "state": "IN_PROGRESS",
+      "target_revision": null,
+      "verification_evidence": [
+        "EVIDENCE/EVIDENCE-20260920T093535Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-1.json",
+        "EVIDENCE/EVIDENCE-20260922T012257Z-milestone-20260918t064510z-prompt-independent-discovery-v1-attempt-2.json"
+      ]
+    },
+    "unchanged_contract": true,
+    "unchanged_machine_state": true,
+    "uncovered": []
+  },
+  "round1_replays": [
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "positive_independent",
+      "details": {},
+      "exit": 0,
+      "expected": "ADVANCE",
+      "refusal_no_mutation": null,
+      "requirement_met": true,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "98fb97d283db799ede3b45a9777d7cb57bcc7391",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "edf8b3001e885461de4bdb283d383f91e7f53714"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "505823338aa9e939f1b8d7dd456a49eb9961323b",
+              "edf8b3001e885461de4bdb283d383f91e7f53714"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "98fb97d283db799ede3b45a9777d7cb57bcc7391",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "edf8b3001e885461de4bdb283d383f91e7f53714"
+              }
+            ],
+            "path": "OTHER/amendment.md",
+            "touching_commits": [
+              "505823338aa9e939f1b8d7dd456a49eb9961323b"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "positive_self",
+      "details": {},
+      "exit": 0,
+      "expected": "ADVANCE",
+      "refusal_no_mutation": null,
+      "requirement_met": true,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "dd0f40d8ae6eb9f217f2972adc9ff253d90bb989",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "SELF",
+                "to": "de8c4bd7eb8e3919df8a433cc473513824342c6c"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "de8c4bd7eb8e3919df8a433cc473513824342c6c"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "unapproved_review",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: intervening work is not independently APPROVED with zero open material findings\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "wrong_authority",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: intervening work lacks durably recorded human authority\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "identity_conflict",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: intervening review label equals the current implementor label\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "wrong_range",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030001Z-fixture-1.md: intervening range a2f2b258ef2b..ffe141e8c110 is not ancestor-ordered\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "partial_coverage",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE .git: target changes paths outside milestone scope: OTHER/amendment.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "self_substantive",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: self-reviewed intervening issue lacks a durable recorded owner decision\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "dirty_authority",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-GIT .git: working tree is not clean: ISSUES/ISSUE-20260814T030050Z-intervening-authority.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "unrecorded_file",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-GIT .git: working tree is not clean: unrecorded.txt\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "AGENTS_after_valid_range",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE .git: target changes paths outside milestone scope: AGENTS.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "merge_post_review",
+      "details": {
+        "final_substantive_content": "unreviewed substantive merge edit\n",
+        "first_parent_changed_paths": [
+          "EVIDENCE/side.md",
+          "OTHER/amendment.md"
+        ],
+        "implementation_commit_paths": [
+          "EVIDENCE/main.md",
+          "EVIDENCE/side.md",
+          "OTHER/amendment.md"
+        ],
+        "merge_commit": "9a7175b6c751e2af11adde8474a58c9e77a101a1",
+        "reviewed_target": "d6c21860775066b70b92307158f3a0beb9148ee1"
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: post-review commits in the intervening range touch non-record paths: OTHER/amendment.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "merge_hidden_attempt_touch",
+      "details": {
+        "full_history_touches": [
+          "f8ad6ab847b421cea056270ac4193a663f7b06dd",
+          "bc559f6f2c43b7d48898a4aab500024c70857310",
+          "8c0144c0ee7d1bb397db0f6494017c1bba05b433"
+        ],
+        "simplified_touches": [
+          "8c0144c0ee7d1bb397db0f6494017c1bba05b433"
+        ],
+        "unregistered_touch": "bc559f6f2c43b7d48898a4aab500024c70857310",
+        "unregistered_touch_in_range": false
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE .git: target changes paths outside milestone scope: ISSUES/ISSUE-20260814T030050Z-intervening-authority.md, OTHER/amendment.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "wide_range_attempt_AGENTS",
+      "details": {
+        "attempt_owned_commit": "40a8feec743ae21b0499ac6ac93e8b561fa9dd3f"
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030001Z-fixture-1.md: declared exclusion scope ['OTHER/amendment.md'] does not equal the range's Git-derived substantive work ['AGENTS.md', 'OTHER/amendment.md']\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "ambiguous_count",
+      "details": {},
+      "exit": 2,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-REVIEW ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: open material findings must be exactly one bare nonnegative integer\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "ambiguous_target",
+      "details": {},
+      "exit": 2,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-REVIEW ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: reviewed target must contain exactly one boundary-delimited full lowercase Git revision\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "self_awaiting_decision",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: self-reviewed intervening issue lacks a durable recorded owner decision\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "malformed_in_scope",
+      "details": {},
+      "exit": 2,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCHEMA ISSUES/ISSUE-20260814T030001Z-fixture-1.md: unsupported intervening-authority schema 'unsupported'\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "null_registry_in_scope",
+      "details": {},
+      "exit": 2,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCHEMA ISSUES/ISSUE-20260814T030001Z-fixture-1.md: intervening-authority registry must be a JSON object\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "same_issue_registry",
+      "details": {
+        "registry_issue_equals_milestone_issue": true
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030001Z-fixture-1.md: a milestone cannot register itself as intervening authority\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "blocked_independent",
+      "details": {},
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: intervening issue must record an unambiguous resolved status (one of CLOSED, IMPLEMENTING, INVESTIGATING, OPEN, REVIEW; missing, BLOCKED, or unrecognized values refuse)\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "overlapping_unrelated_ranges",
+      "details": {
+        "ranges_overlap": true,
+        "second_authority_expressly_excludes_first_work": true
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030001Z-fixture-1.md: declared exclusion scope ['OTHER/second.md'] does not equal the range's Git-derived substantive work ['OTHER/amendment.md', 'OTHER/second.md']\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    }
+  ],
+  "round2_replays": [
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "declared_AGENTS_widening",
+      "details": {
+        "attempt_owned_commit": "161751097a65688baeac46ebcf96d6ab601f522b",
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `70a411042ec99131595e175b8441ccff049776d2` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "60e096093d1be4402176cae2cc36ab5fed6cb3cd",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md",
+              "AGENTS.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "b130473b066143840f282cab29455b97bce2a24a"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: substantive range commit 161751097a65 predates the authority record's introduction 70a411042ec9\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "declared_prefix_widening",
+      "details": {
+        "attempt_owned_commit": "e2743ebda7515e2dd8fe7ca32827124646196a90",
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `a857ea0cd9722c578b50cfbb67b1273280d5683b` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "52a58a1d7d7cc187bb8b89381476d980adf987c6",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "abde1aa23e966e9d47ef03e0c51fb4687b71df77"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030001Z-fixture-1.md: declared intervening paths must be exact files, not directory prefixes\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "same_path_range_widening",
+      "details": {
+        "attempt_owned_commit": "c5da58816c57e7d5f9835b0e9054782ccf05d7cc",
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `263c54d1aa87126d0e3709421de9ea92b971c239` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "138cac8eef78b9817254a086e3a78de61d9bccec",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "3af546c3b1bacf81ea6131816ff0ad428ffa4134"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: substantive range commit c5da58816c57 predates the authority record's introduction 263c54d1aa87\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "foreign_substantive_control",
+      "details": {
+        "attempt_owned_commit": "d457fe00e465c392afee53dcd581601876db66a4",
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `51398303ce2b29bcc9b42351151be194bb80dd2a` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "af3d65b329c6e7ee79282584cf29c5b7823f2f45",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "ca78b4f941989a4e16ef3629a1af3daae00652b5"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030001Z-fixture-1.md: declared exclusion scope ['OTHER/amendment.md'] does not equal the range's Git-derived substantive work ['AGENTS.md', 'OTHER/amendment.md']\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "review_unknown_zero",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `560766e1b8c39bebaa74955962ab50bb04478470` (fixture intervening amendment).\n- **Open material findings:** UNKNOWN (lower bound 0); actual open count not established.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "96d43fb555224964721a1d996e50725df845ffe2",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "c0d871b0314167c685950522ae5688009e54fcd5"
+          }
+        ]
+      },
+      "exit": 2,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-REVIEW ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: open material findings must be exactly one bare nonnegative integer\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "review_negated_zero",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `560766e1b8c39bebaa74955962ab50bb04478470` (fixture intervening amendment).\n- **Open material findings:** NOT 0; material findings remain.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "96d43fb555224964721a1d996e50725df845ffe2",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "3494b9be6ecd563ad9bb63eb41d15f3fe89475d1"
+          }
+        ]
+      },
+      "exit": 2,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-REVIEW ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: open material findings must be exactly one bare nonnegative integer\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "review_41_hex_target",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `16e4f33ea4e9b4dc29ef90ea6351dd171627717e0`\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "7a6050648eaf2c783f00683fce34e92f456101b2",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "152baa7aac72705e107a5dbc88b5d2397c546657"
+          }
+        ]
+      },
+      "exit": 2,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-REVIEW ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: reviewed target must contain exactly one boundary-delimited full lowercase Git revision\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "review_duplicate_sections",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `00bb19c510bb29bde48495fa51bc2906ffe4fe0c` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n\n## Independent review rounds\n\n### 2026-08-14T03:26:00Z — agent:intervening-reviewer\n\n- **Reviewed immutable state:** `00bb19c510bb29bde48495fa51bc2906ffe4fe0c`\n- **Open material findings:** **1**.\n- **Disposition:** **CHANGES_REQUIRED**.\n",
+        "registry_entries": [
+          {
+            "from": "4569da07b80b74ffca35d9e6b86dc91a4f1b6be2",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "2f4980443d2b55c22d0f7f355fcdc39c009fff50"
+          }
+        ]
+      },
+      "exit": 2,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-REVIEW ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: exactly one unfenced Independent review rounds section is required (found 2)\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "review_missing_status",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `c3bd91b59c18695de185d67eb493d8b43905e0c7` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "64cfbe4676c763d6a39e1691a9ca7a63321c327f",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "f85007c0317c286bfc8ffec70ef2288e6e9a9027"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: intervening issue must record an unambiguous resolved status (one of CLOSED, IMPLEMENTING, INVESTIGATING, OPEN, REVIEW; missing, BLOCKED, or unrecognized values refuse)\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "review_unresolved_status",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `UNRESOLVED`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `6067f4cc326dc7a3052d867e95dbfedc8321ad80` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "fff5bcc92b7a2cf8fa6cd862a91b190919bb17b1",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "c26172644d385bf8692851ca7df78f52f333525c"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: intervening issue must record an unambiguous resolved status (one of CLOSED, IMPLEMENTING, INVESTIGATING, OPEN, REVIEW; missing, BLOCKED, or unrecognized values refuse)\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "self_pending_heading",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `SELF`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nOwner has NOT approved. Awaiting decision; no authorization exists.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `Awaiting owner approval; decision NOT RECORDED`\n",
+        "registry_entries": [
+          {
+            "from": "668cb5bed7d6c302780c2ee3c6f3180664d69218",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "dbf6095e7ffe7ac82318e0a745b106e3f0407007"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: recorded owner decision is not attributed to a human owner label\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "self_empty_heading",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `SELF`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\n\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "cea415963088f28aec5edaf541ee90697b79197c",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "329cfdd2e760025577d2beb1022f485fb15b7b8d"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: recorded owner decision has an empty body\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "self_fenced_heading",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `SELF`\n\n## Investigation and decision\n\nNo owner decision exists. The following is only an example:\n\n```markdown\n### Owner decision recorded 2026-08-14T03:10:00Z\n```\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "2ed62be8e7efba64c89da6913db775492a35a999",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "96a07b51d56edac834344df6076dd91428788c2a"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: self-reviewed intervening issue lacks a durable recorded owner decision\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "self_blocked_control",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `BLOCKED`\n- **Authority:** `HUMAN`\n- **Review:** `SELF`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves only this issue's records.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "84b45c9bc87006bdc4af7e0739bc432042944cad",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "a2cbf503bc3e8cc396e98948e955f83b9732734b"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: intervening issue must record an unambiguous resolved status (one of CLOSED, IMPLEMENTING, INVESTIGATING, OPEN, REVIEW; missing, BLOCKED, or unrecognized values refuse)\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "overlapping_scopes",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `6fa1d8d6e6c7a57204d69ccf2f6cb2a187b09bf2` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "d452d1c56ff6a6b283dabe6e2e81c168a7a92cb3",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "2d922b0b48d375d5b7d602a594a509f75fb06128"
+          },
+          {
+            "from": "d452d1c56ff6a6b283dabe6e2e81c168a7a92cb3",
+            "issue": "ISSUES/ISSUE-20260814T030051Z-other-authority.md",
+            "paths": [
+              "OTHER/"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "f9558284566798de223a3a220af780c5ad1b7ad0"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030001Z-fixture-1.md: declared intervening paths must be exact files, not directory prefixes\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "unused_declared_path",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `d588ac83f031e3ec15d73f48fe439adbcf78fb2e` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "registry_entries": [
+          {
+            "from": "70dd29573b1ef713498d76a064cad06fe697b9f9",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md",
+              "OTHER/never-touched.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "199385cd8fdcfc0cead8c7a3edf4490dd0ec8dd0"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030001Z-fixture-1.md: declared exclusion scope ['OTHER/amendment.md', 'OTHER/never-touched.md'] does not equal the range's Git-derived substantive work ['OTHER/amendment.md']\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "merge_parent_asymmetry",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `d588ac83f031e3ec15d73f48fe439adbcf78fb2e` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "explicit_parent_paths": [
+          "EVIDENCE/side.md",
+          "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "OTHER/amendment.md"
+        ],
+        "first_parent_paths": [
+          "EVIDENCE/side.md"
+        ],
+        "implementation_paths": [
+          "EVIDENCE/side.md",
+          "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+          "OTHER/amendment.md"
+        ],
+        "parents": [
+          "199385cd8fdcfc0cead8c7a3edf4490dd0ec8dd0",
+          "544fea85a448593da476f436393d6816341f084c"
+        ],
+        "registry_entries": [
+          {
+            "from": "70dd29573b1ef713498d76a064cad06fe697b9f9",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "715b7800c80d8f6a63728c3e7045687b36ac616e"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: post-review commits in the intervening range touch non-record paths: OTHER/amendment.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "octopus_record_only",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `19ce1d5725bb7ca79eb8b016f2513c090231ba12` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "explicit_parent_paths": [
+          "EVIDENCE/main.md",
+          "EVIDENCE/side-a.md",
+          "EVIDENCE/side-b.md"
+        ],
+        "first_parent_paths": [
+          "EVIDENCE/side-a.md",
+          "EVIDENCE/side-b.md"
+        ],
+        "implementation_paths": [
+          "EVIDENCE/main.md",
+          "EVIDENCE/side-a.md",
+          "EVIDENCE/side-b.md"
+        ],
+        "parents": [
+          "5715df1884ef300f154384b6d94529a5e5a0bd27",
+          "8b15b02e1776647876d679e3dc71c6492ec9350b",
+          "d1b62314ece4c4957e0d1bcc87a9313cb842f5ef"
+        ],
+        "registry_entries": [
+          {
+            "from": "2df9100b421487eb0f3163e592ddb2ad96ab2362",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "4fb90de6f844425f11c8e2d0dbbcabd7e1f1c23d"
+          }
+        ]
+      },
+      "exit": 0,
+      "expected": "ADVANCE",
+      "refusal_no_mutation": null,
+      "requirement_met": true,
+      "scope_exclusions": [
+        [
+          {
+            "covering": [
+              {
+                "from": "2df9100b421487eb0f3163e592ddb2ad96ab2362",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "4fb90de6f844425f11c8e2d0dbbcabd7e1f1c23d"
+              }
+            ],
+            "path": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "touching_commits": [
+              "19ce1d5725bb7ca79eb8b016f2513c090231ba12",
+              "3bbcd4d4575e9be29ea1eefa33c1fcf220401167"
+            ]
+          },
+          {
+            "covering": [
+              {
+                "from": "2df9100b421487eb0f3163e592ddb2ad96ab2362",
+                "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+                "review": "INDEPENDENT",
+                "to": "4fb90de6f844425f11c8e2d0dbbcabd7e1f1c23d"
+              }
+            ],
+            "path": "OTHER/amendment.md",
+            "touching_commits": [
+              "19ce1d5725bb7ca79eb8b016f2513c090231ba12"
+            ]
+          }
+        ]
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    },
+    {
+      "actual": "REFUSED",
+      "base_preserved": true,
+      "case": "octopus_substantive",
+      "details": {
+        "authority_and_review_record": "# Intervening authority record\n\n## Metadata\n\n- **ID:** `ISSUE-20260814T030050Z-intervening-authority`\n- **Status:** `OPEN`\n- **Authority:** `HUMAN`\n- **Review:** `INDEPENDENT`\n\n## Investigation and decision\n\n### Owner decision recorded 2026-08-14T03:10:00Z\n\nhuman:fixture-owner approves ONLY OTHER/amendment.md for the later separate intervention; AGENTS.md, OTHER/unapproved.md and all earlier current-attempt changes (including any to OTHER/amendment.md) are expressly NOT authorized or accepted here.\n\n## Independent review rounds\n\n- **Required:** `YES`\n\n\n### 2026-08-14T03:25:00Z — agent:intervening-reviewer\n\n- **Scope:** Only OTHER/amendment.md and this issue for the separate intervention; earlier attempt work is NOT reviewed.\n- **Reviewed immutable state:** `1cb995e087a5c8a7fadf00d2ab024f1a009e00b8` (fixture intervening amendment).\n- **Open material findings:** **0**.\n- **Disposition:** **APPROVED**.\n\n## Blocker\n\n- **Blocked from:** `NOT BLOCKED`\n- **Blocker:** `NONE`\n- **Unblock owner:** `human:fixture-owner`\n- **Unblock condition:** `SATISFIED - owner decision recorded in this issue`\n",
+        "explicit_parent_paths": [
+          "EVIDENCE/main.md",
+          "EVIDENCE/side-a.md",
+          "EVIDENCE/side-b.md",
+          "OTHER/amendment.md"
+        ],
+        "first_parent_paths": [
+          "EVIDENCE/side-a.md",
+          "EVIDENCE/side-b.md",
+          "OTHER/amendment.md"
+        ],
+        "implementation_paths": [
+          "EVIDENCE/main.md",
+          "EVIDENCE/side-a.md",
+          "EVIDENCE/side-b.md",
+          "OTHER/amendment.md"
+        ],
+        "parents": [
+          "a2e014fc65c1adfca144c60114fc6bcbc96f43ca",
+          "c29088d1ab55e8068d0c90117d5c23f5427a57bf",
+          "34f1d39ffed89db3dcfcbc26c9878594ae2d88db"
+        ],
+        "registry_entries": [
+          {
+            "from": "52cf86d6ce7b0e787e09d30713fc59445d43e93c",
+            "issue": "ISSUES/ISSUE-20260814T030050Z-intervening-authority.md",
+            "paths": [
+              "OTHER/amendment.md"
+            ],
+            "recorded_by": "agent:review-fixture-recorder",
+            "recorded_utc": "2026-09-30T01:51:59Z",
+            "to": "d78f88c1e55a4c23ce4c030c1687a306e26de4ff"
+          }
+        ]
+      },
+      "exit": 1,
+      "expected": "REFUSE",
+      "refusal_no_mutation": true,
+      "requirement_met": true,
+      "scope_exclusions": [],
+      "state": "IN_PROGRESS",
+      "stderr": "ERROR AEP-PIPE-SCOPE ISSUES/ISSUE-20260814T030050Z-intervening-authority.md: post-review commits in the intervening range touch non-record paths: OTHER/amendment.md\nSUMMARY advanced=0 errors=1",
+      "stdout": ""
+    },
+    {
+      "actual": "ADVANCED",
+      "base_preserved": true,
+      "case": "absent_registry_control",
+      "details": {},
+      "exit": 0,
+      "expected": "ADVANCE",
+      "refusal_no_mutation": null,
+      "requirement_met": true,
+      "scope_exclusions": [
+        []
+      ],
+      "state": "AWAITING_PEER_REVIEW",
+      "stderr": "",
+      "stdout": "PASS MILESTONE-20260814T030001Z-fixture-1 IN_PROGRESS -> AWAITING_PEER_REVIEW issue=ISSUES/ISSUE-20260814T030001Z-fixture-1.md"
+    }
+  ],
+  "summary": {
+    "hostile_variants": {
+      "all_bases_preserved": true,
+      "all_refusals_preserve_files_and_state": true,
+      "cases": 15,
+      "requirement_violations": [
+        "post_introduction_foreign",
+        "draft_introduction",
+        "deleted_readded_authority",
+        "mixed_authority_merge",
+        "review_long_fence_example",
+        "review_malformed_latest",
+        "self_contracted_negation",
+        "self_satisfied_pending",
+        "self_duplicate_unblock"
+      ]
+    },
+    "round1_replays": {
+      "all_bases_preserved": true,
+      "all_refusals_preserve_files_and_state": true,
+      "cases": 22,
+      "requirement_violations": []
+    },
+    "round2_replays": {
+      "all_bases_preserved": true,
+      "all_refusals_preserve_files_and_state": true,
+      "cases": 20,
+      "requirement_violations": []
+    }
+  },
+  "target": "4dda31e9945000b51e950f4ac01ec7f82ffb15bf"
+}

@@ -2,6 +2,15 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Reviewer update — 2026-10-09T01:54:25Z
+
+Prepared by `agent:Codex-scope-review-20261009`, independently reviewing only amendment rework `4dda31e9945000b51e950f4ac01ec7f82ffb15bf`. Prior authored sections are retained as history.
+
+- **CHANGES_REQUIRED — three material findings remain:** R2 HIGH: issue-file introduction and Git-derived paths do not bind effective separate authority; post-introduction foreign work, unauthoritative drafts, delete/re-add and mixed-merge cases still advance. R3 HIGH: example-only approval and a malformed latest BLOCKED round still lead to approval. R5 MEDIUM: contracted negation and contradictory/duplicated SATISFIED conditions still pass SELF authority. [Owning round](ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md) and [full evidence](EVIDENCE/EVIDENCE-20261009T015211Z-scope-attribution-review-round-3.md) specify required follow-up.
+- **Verified improvements:** 49 pipeline / 194 full target tests and validator pass; all original 42 reviewer scenarios conform, R1/R4 show no regression in bounded checks, honest A/B still cover the six historical paths. But nine of 15 new variants falsely advance, so these successes cannot establish general safety.
+- **Boundary:** amendment stays IMPLEMENTING for bounded rework and fresh review. Discovery remains IN_PROGRESS attempt 3, target null, original digest/base/events, two entries; no amendment machine state exists and no transition applies. No implementation fix, live session, discovery submission, registry addition, acceptance/closure, recorder/coordinator or push performed.
+- **Owner decision requested now: NONE for repairs that satisfy the already accepted invariants.** Any new architecture/trust/scope decision must be escalated; this review adopts none. Reviewer stops after durable disposition and governance validation.
+
 ## Implementer update — 2026-10-08T03:08:54Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after reworking the scope-attribution amendment per your directive to resolve the still-open round-2 findings; not an acceptance record. Prior sections are preserved as history.
