@@ -29,11 +29,17 @@ STATE_BEGIN = "<!-- AEP-PIPELINE-STATE-V1:BEGIN -->"
 STATE_END = "<!-- AEP-PIPELINE-STATE-V1:END -->"
 INTERVENING_BEGIN = "<!-- AEP-INTERVENING-AUTHORITY-V1:BEGIN -->"
 INTERVENING_END = "<!-- AEP-INTERVENING-AUTHORITY-V1:END -->"
+DECISION_BLOCK_BEGIN = "<!-- AEP-AUTHORITY-DECISION-V1:BEGIN -->"
+DECISION_BLOCK_END = "<!-- AEP-AUTHORITY-DECISION-V1:END -->"
+REVIEW_BLOCK_BEGIN = "<!-- AEP-REVIEW-ROUND-V1:BEGIN -->"
+REVIEW_BLOCK_END = "<!-- AEP-REVIEW-ROUND-V1:END -->"
 CONTRACT_SCHEMA = "aep-authorized-milestones/v1"
 STATE_SCHEMA = "aep-pipeline-state/v1"
 STATUS_SCHEMA = "aep-pipeline-status/v1"
 EVIDENCE_SCHEMA = "aep-pipeline-verification/v1"
 INTERVENING_SCHEMA = "aep-intervening-authority/v2"
+DECISION_BLOCK_SCHEMA = "aep-authority-decision/v1"
+REVIEW_BLOCK_SCHEMA = "aep-review-round/v1"
 
 CONTRACT_KEYS = {"schema", "milestones"}
 MILESTONE_KEYS = {
@@ -49,6 +55,15 @@ STATE_KEYS = {
 EVENT_KEYS = {"sequence", "utc", "actor", "from", "to", "reason"}
 INTERVENING_KEYS = {"schema", "entries"}
 INTERVENING_ENTRY_KEYS = {"issue", "from", "to", "paths", "recorded_utc", "recorded_by"}
+DECISION_BLOCK_KEYS = {
+    "schema", "decision_id", "authority", "state", "scope", "unblock",
+    "decided_utc", "decided_by", "recorded_commit",
+}
+REVIEW_BLOCK_KEYS = {
+    "schema", "round_id", "round_utc", "reviewer", "target", "disposition",
+    "open_material_findings", "scope", "recorded_commit",
+}
+DECISION_STATES = {"EFFECTIVE", "SUPERSEDED", "PENDING", "REJECTED"}
 RECORD_KEEPING_PATHS = {"HANDOFF.md", "HUMAN_CHECKPOINT.md", "ROTATION_LOG.jsonl"}
 
 STATES = {
@@ -79,6 +94,8 @@ UTC_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 ACTOR_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9:._/@+-]{0,127}$")
 METADATA_RE = re.compile(r"^- \*\*(?P<key>[^*]+):\*\*\s+`?(?P<value>[^`\n]+)`?\s*$", re.MULTILINE)
 REVIEW_HEADING_RE = re.compile(r"^### (?P<utc>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z) — (?P<reviewer>\S.*?)\s*$", re.MULTILINE)
+# Referenced by the frozen reviewer harnesses under EVIDENCE/scope-attribution-review-round-*/;
+# this module's own checks use DECISION_HEADING_RE/DECISION_HEADING_ANY_RE instead.
 OWNER_DECISION_RE = re.compile(r"^### Owner decision recorded (?P<utc>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)[ \t]*$", re.MULTILINE)
 FULL_REVISION_FIND_RE = re.compile(r"[0-9a-f]{40}")
 DIGIT_RUN_RE = re.compile(r"\d+")
@@ -99,6 +116,19 @@ DECISION_PENDING_RE = re.compile(
     r"|\bwithout\s+(?:authorization|authorisation|approval)\b",
     re.IGNORECASE,
 )
+DECISION_CONTRACTION_RE = re.compile(
+    r"\b(?:hasn|haven|hadn|isn|wasn|aren|weren|didn|doesn|don|wouldn|couldn|shouldn|won|can)['’]t\b",
+    re.IGNORECASE,
+)
+DECISION_HEADING_ANY_RE = re.compile(r"^### Owner decision recorded(?:[ \t]|$)", re.MULTILINE)
+DECISION_HEADING_RE = re.compile(
+    r"^### Owner decision recorded (?P<utc>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)(?=[ \t]|$)",
+    re.MULTILINE,
+)
+UNBLOCK_FIELD_RE = re.compile(r"^- \*\*Unblock condition:\*\*\s+`?(?P<value>[^`\n]+)`?\s*$", re.MULTILINE)
+UNBLOCK_SATISFIED_RE = re.compile(r"^SATISFIED\b", re.IGNORECASE)
+UNBLOCK_NEGATION_RE = re.compile(r"\b(?:false|unresolved|unmet|outstanding|never)\b", re.IGNORECASE)
+BLOCK_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9:._-]{0,127}$")
 
 
 class PipelineError(Exception):
@@ -716,20 +746,75 @@ def _parse_intervening_registry(text: str, path: str) -> List[Mapping[str, Any]]
     return entries
 
 
-def _strip_fenced_blocks(text: str) -> str:
-    """Remove fenced code blocks so examples/templates cannot spoof records."""
-    kept: List[str] = []
+def _fence_line_states(text: str) -> List[Tuple[int, str, bool]]:
+    """Classify each line as fenced content/delimiter with CommonMark fence rules.
+
+    A closing fence must use the same marker character, run at least as long
+    as the opening run, and carry no info string; a shorter or info-bearing
+    line stays inside the block, so a fenced example cannot expose its
+    contents as live records. Yields ``(offset, line, fenced)`` triples.
+    """
+    states: List[Tuple[int, str, bool]] = []
     fence_char: Optional[str] = None
+    fence_len = 0
+    offset = 0
     for line in text.splitlines(keepends=True):
         match = FENCE_RE.match(line)
         if fence_char is None:
             if match is not None:
                 fence_char = match.group(1)[0]
-                continue
-            kept.append(line)
-        elif match is not None and match.group(1)[0] == fence_char:
-            fence_char = None
-    return "".join(kept)
+                fence_len = len(match.group(1))
+                states.append((offset, line, True))
+            else:
+                states.append((offset, line, False))
+        else:
+            states.append((offset, line, True))
+            if (
+                match is not None and match.group(1)[0] == fence_char
+                and len(match.group(1)) >= fence_len and not line[match.end():].strip()
+            ):
+                fence_char = None
+        offset += len(line)
+    return states
+
+
+def _strip_fenced_blocks(text: str) -> str:
+    """Remove fenced code blocks so examples/templates cannot spoof records."""
+    return "".join(line for _offset, line, fenced in _fence_line_states(text) if not fenced)
+
+
+def _structured_block_region(text: str, begin: str, end: str) -> Tuple[List[int], List[int]]:
+    """Offsets of block markers appearing outside fenced code blocks."""
+    begins: List[int] = []
+    ends: List[int] = []
+    for offset, line, fenced in _fence_line_states(text):
+        if fenced:
+            continue
+        if begin in line:
+            begins.append(offset + line.index(begin))
+        if end in line:
+            ends.append(offset + line.index(end))
+    return begins, ends
+
+
+def _extract_structured_block(text: str, begin: str, end: str, path: str, label: str) -> Any:
+    """Extract the single fence-depth-0 marker-delimited JSON block of one kind."""
+    begins, ends = _structured_block_region(text, begin, end)
+    if len(begins) != 1 or len(ends) != 1:
+        raise PipelineError(
+            "AEP-PIPE-SCHEMA", path,
+            "expected exactly one {} block; found begin={} end={}".format(label, len(begins), len(ends)),
+            2,
+        )
+    start = begins[0] + len(begin)
+    finish = ends[0]
+    if finish <= start:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "{} marker order is invalid".format(label), 2)
+    body = text[start:finish]
+    match = re.fullmatch(r"\s*```json\n(?P<json>.*)\n```\s*", body, re.DOTALL)
+    if match is None:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "{} content must be one fenced json block".format(label), 2)
+    return _json_load(match.group("json"), path)
 
 
 def _tolerant_latest_review(text: str, path: str) -> ReviewRound:
@@ -755,6 +840,13 @@ def _tolerant_latest_review(text: str, path: str) -> ReviewRound:
     section_start = sections[0].start()
     section_end = stripped.find("\n## ", sections[0].end())
     section = stripped[section_start:] if section_end < 0 else stripped[section_start:section_end]
+    for line in section.splitlines():
+        if line.startswith("### ") and REVIEW_HEADING_RE.match(line) is None:
+            raise PipelineError(
+                "AEP-PIPE-REVIEW", path,
+                "review section contains a malformed round heading: {!r}".format(line.strip()),
+                2,
+            )
     headings = list(REVIEW_HEADING_RE.finditer(section))
     if not headings:
         raise PipelineError("AEP-PIPE-REVIEW", path, "no durable independent review round is recorded", 2)
@@ -837,32 +929,309 @@ def _issue_introduction(root: Path, issue: str, registry_path: str) -> str:
     return added[0]
 
 
-def _verify_owner_decision(text: str, issue: str) -> None:
-    """Every recorded owner-decision heading must hold a real positive decision.
+def _require_scope_files(value: Any, path: str, label: str) -> List[str]:
+    items = _require_string_list(value, path, label)
+    for item in items:
+        _safe_relative(item, path, label + " item")
+        if item.endswith("/"):
+            raise PipelineError("AEP-PIPE-SCHEMA", path, "{} must name exact files, not directories".format(label), 2)
+    return items
 
-    A heading alone proves nothing: the body up to the next heading must be
-    nonempty, attribute the decision to a human owner label, contain a positive
-    decision verb, and carry no negated, pending, or awaiting language. Fenced
-    examples and templates are stripped before any matching, and every recorded
-    decision heading is validated so a contradictory record cannot hide behind
-    a later positive one.
+
+def _optional_revision(value: Any, path: str, label: str) -> Optional[str]:
+    if value is None:
+        return None
+    if not isinstance(value, str) or FULL_REVISION_RE.fullmatch(value) is None:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "{} must be null or a full lowercase Git revision".format(label), 2)
+    return value
+
+
+def _parse_authority_decision(text: str, path: str) -> Mapping[str, Any]:
+    """The single machine-readable owner-decision record of an authority issue.
+
+    This block — not the prose narrative — carries the machine-critical
+    decision facts. Absence refuses at the authority layer; malformed,
+    duplicated, or fenced-example blocks refuse at the schema layer.
+    """
+    begins, ends = _structured_block_region(text, DECISION_BLOCK_BEGIN, DECISION_BLOCK_END)
+    if not begins and not ends:
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", path,
+            "no durable machine-readable owner decision is recorded",
+        )
+    block = _require_keys(
+        _extract_structured_block(text, DECISION_BLOCK_BEGIN, DECISION_BLOCK_END, path, "authority-decision"),
+        DECISION_BLOCK_KEYS, path, "authority-decision block",
+    )
+    if block["schema"] != DECISION_BLOCK_SCHEMA:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "unsupported authority-decision schema {!r}".format(block["schema"]), 2)
+    if not isinstance(block["decision_id"], str) or BLOCK_ID_RE.fullmatch(block["decision_id"]) is None:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "authority-decision decision_id must be a bounded identifier", 2)
+    if block["authority"] != "HUMAN":
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "authority-decision authority must be HUMAN", 2)
+    if block["state"] not in DECISION_STATES:
+        raise PipelineError(
+            "AEP-PIPE-SCHEMA", path,
+            "authority-decision state must be one of {}".format(", ".join(sorted(DECISION_STATES))),
+            2,
+        )
+    if block["unblock"] != "SATISFIED":
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "authority-decision unblock must be the literal SATISFIED", 2)
+    if not isinstance(block["decided_utc"], str) or UTC_RE.fullmatch(block["decided_utc"]) is None:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "authority-decision decided_utc must be a UTC timestamp", 2)
+    if (
+        not isinstance(block["decided_by"], str)
+        or ACTOR_RE.fullmatch(block["decided_by"]) is None
+        or not block["decided_by"].startswith("human:")
+    ):
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "authority-decision decided_by must be a human: participant label", 2)
+    _require_scope_files(block["scope"], path, "authority-decision scope")
+    _optional_revision(block["recorded_commit"], path, "authority-decision recorded_commit")
+    return block
+
+
+def _parse_review_round_block(text: str, path: str) -> Mapping[str, Any]:
+    """The single machine-readable independent-review record of an authority issue."""
+    begins, ends = _structured_block_region(text, REVIEW_BLOCK_BEGIN, REVIEW_BLOCK_END)
+    if not begins and not ends:
+        raise PipelineError(
+            "AEP-PIPE-REVIEW", path,
+            "no durable machine-readable independent review round is recorded",
+            2,
+        )
+    block = _require_keys(
+        _extract_structured_block(text, REVIEW_BLOCK_BEGIN, REVIEW_BLOCK_END, path, "review-round"),
+        REVIEW_BLOCK_KEYS, path, "review-round block",
+    )
+    if block["schema"] != REVIEW_BLOCK_SCHEMA:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "unsupported review-round schema {!r}".format(block["schema"]), 2)
+    if not isinstance(block["round_id"], str) or BLOCK_ID_RE.fullmatch(block["round_id"]) is None:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "review-round round_id must be a bounded identifier", 2)
+    if not isinstance(block["round_utc"], str) or UTC_RE.fullmatch(block["round_utc"]) is None:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "review-round round_utc must be a UTC timestamp", 2)
+    if not isinstance(block["reviewer"], str) or ACTOR_RE.fullmatch(block["reviewer"]) is None:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "review-round reviewer must be a bounded participant label", 2)
+    if not isinstance(block["target"], str) or FULL_REVISION_RE.fullmatch(block["target"]) is None:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "review-round target must be a full lowercase Git revision", 2)
+    if block["disposition"] not in DISPOSITIONS:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "review-round disposition must be one of {}".format(", ".join(sorted(DISPOSITIONS))), 2)
+    findings = block["open_material_findings"]
+    if isinstance(findings, bool) or not isinstance(findings, int) or findings < 0:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "review-round open_material_findings must be a nonnegative integer", 2)
+    _require_scope_files(block["scope"], path, "review-round scope")
+    _optional_revision(block["recorded_commit"], path, "review-round recorded_commit")
+    return block
+
+
+def _decision_identity(block: Mapping[str, Any]) -> Tuple[Any, ...]:
+    return (
+        block["decision_id"], block["authority"], block["state"], tuple(block["scope"]),
+        block["unblock"], block["decided_utc"], block["decided_by"],
+    )
+
+
+def _review_identity(block: Mapping[str, Any]) -> Tuple[Any, ...]:
+    return (
+        block["round_id"], block["round_utc"], block["reviewer"], block["target"],
+        block["disposition"], block["open_material_findings"], tuple(block["scope"]),
+    )
+
+
+def _block_anchor(root: Path, issue: str, identifier: str, recorded: Optional[str], label: str) -> str:
+    """Commit durably recording a machine block: explicit, else first pickaxe hit."""
+    if recorded is not None:
+        result = _git(root, ["cat-file", "-e", recorded + "^{commit}"], check=False)
+        if result.returncode != 0:
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "{} recorded_commit does not resolve to a local commit".format(label))
+        return recorded
+    hits = _git(root, ["log", "--reverse", "--format=%H", "-S" + identifier, "--", issue]).stdout.splitlines()
+    if not hits:
+        raise PipelineError("AEP-PIPE-SCOPE", issue, "no durable commit records the {} identifier".format(label))
+    return hits[0]
+
+
+def _decision_prose_body(stripped: str, heading: "re.Match[str]") -> str:
+    rest = stripped[heading.end():]
+    following = ANY_HEADING_RE.search(rest)
+    return rest[: following.start()] if following is not None else rest
+
+
+def _decision_attributed(body: str, decided_by: str, metadata: Mapping[str, str]) -> bool:
+    if DECISION_ATTRIBUTION_RE.search(body) is None:
+        return False
+    return decided_by in body or metadata.get("Owner") == decided_by
+
+
+def _verify_anchor_content(
+    root: Path,
+    issue: str,
+    anchor: str,
+    block: Mapping[str, Any],
+    kind: str,
+) -> None:
+    """The anchor commit must durably record exactly this authority fact.
+
+    When the block itself exists at the anchor, its identity fields must be
+    unchanged since — later edits re-anchor or refuse. When it does not (an
+    explicit migration of a historical record), the anchor must instead carry
+    the matching human-readable record, so the block is attributable to a
+    durable decision or review rather than asserting new authority.
+    """
+    result = _git(root, ["show", "{}:{}".format(anchor, issue)], check=False)
+    if result.returncode != 0:
+        raise PipelineError("AEP-PIPE-SCOPE", issue, "authority record is absent at its {} anchor commit".format(kind))
+    text_at = result.stdout
+    metadata_at = _metadata(text_at, issue)
+    if metadata_at.get("Authority") != "HUMAN":
+        raise PipelineError("AEP-PIPE-SCOPE", issue, "{} anchor does not record human authority".format(kind))
+    stripped = _strip_fenced_blocks(text_at)
+    if kind == "decision":
+        begins, _ends = _structured_block_region(text_at, DECISION_BLOCK_BEGIN, DECISION_BLOCK_END)
+        if begins:
+            other = _parse_authority_decision(text_at, issue)
+            if _decision_identity(other) != _decision_identity(block):
+                raise PipelineError(
+                    "AEP-PIPE-SCOPE", issue,
+                    "authority-decision block fields changed after its anchor commit; re-anchor the changed record",
+                )
+            return
+        headings = [
+            match for match in DECISION_HEADING_RE.finditer(stripped)
+            if match.group("utc") == block["decided_utc"]
+        ]
+        if len(headings) != 1:
+            raise PipelineError(
+                "AEP-PIPE-SCOPE", issue,
+                "anchor commit records no matching owner decision for the claimed decided_utc",
+            )
+        if not _decision_attributed(_decision_prose_body(stripped, headings[0]), block["decided_by"], metadata_at):
+            raise PipelineError(
+                "AEP-PIPE-SCOPE", issue,
+                "anchor commit's owner decision is not attributed to the claimed decider",
+            )
+        return
+    begins, _ends = _structured_block_region(text_at, REVIEW_BLOCK_BEGIN, REVIEW_BLOCK_END)
+    if begins:
+        other = _parse_review_round_block(text_at, issue)
+        if _review_identity(other) != _review_identity(block):
+            raise PipelineError(
+                "AEP-PIPE-SCOPE", issue,
+                "review-round block fields changed after its anchor commit; re-anchor the changed record",
+            )
+        return
+    heading_re = re.compile(
+        r"^### {} — {}".format(re.escape(block["round_utc"]), re.escape(block["reviewer"])) + r"[ \t]*$",
+        re.MULTILINE,
+    )
+    headings = list(heading_re.finditer(stripped))
+    if len(headings) != 1:
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "anchor commit records no matching independent review round",
+        )
+    rest = stripped[headings[0].end():]
+    following = ANY_HEADING_RE.search(rest)
+    body = rest[: following.start()] if following is not None else rest
+    if block["target"] not in body or block["disposition"] not in body:
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "anchor commit's review round does not record the claimed target and disposition",
+        )
+
+
+def _verify_decision_prose(
+    text: str,
+    issue: str,
+    decision: Mapping[str, Any],
+    metadata: Mapping[str, str],
+    strict_negation: bool,
+) -> None:
+    """The human-readable owner decision must uniquely corroborate the block.
+
+    The block is the machine source; this cross-check makes contradictory,
+    duplicated, example-only, or forged narrative refuse instead of drifting
+    from the machine record. For self-reviewed records (whose only guard is
+    this issue) the decision body must additionally be free of negated,
+    pending, or contracted-negation language.
     """
     stripped = _strip_fenced_blocks(text)
-    headings = list(OWNER_DECISION_RE.finditer(stripped))
-    if not headings:
-        raise PipelineError("AEP-PIPE-SCOPE", issue, "self-reviewed intervening issue lacks a durable recorded owner decision")
-    for heading in headings:
-        rest = stripped[heading.end():]
-        next_heading = ANY_HEADING_RE.search(rest)
-        body = rest[: next_heading.start()] if next_heading is not None else rest
-        if not body.strip():
-            raise PipelineError("AEP-PIPE-SCOPE", issue, "recorded owner decision has an empty body")
-        if DECISION_ATTRIBUTION_RE.search(body) is None:
-            raise PipelineError("AEP-PIPE-SCOPE", issue, "recorded owner decision is not attributed to a human owner label")
-        if DECISION_POSITIVE_RE.search(body) is None:
-            raise PipelineError("AEP-PIPE-SCOPE", issue, "recorded owner decision contains no positive decision verb")
-        if DECISION_NEGATION_RE.search(body) is not None or DECISION_PENDING_RE.search(body) is not None:
-            raise PipelineError("AEP-PIPE-SCOPE", issue, "recorded owner decision is negated, pending, or otherwise not effective")
+    headings = list(DECISION_HEADING_ANY_RE.finditer(stripped))
+    if len(headings) != 1:
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "exactly one recorded owner decision is required (found {})".format(len(headings)),
+        )
+    heading = DECISION_HEADING_RE.match(stripped, headings[0].start())
+    if heading is None or heading.group("utc") != decision["decided_utc"]:
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "recorded owner decision does not match the durable decision block's decided_utc",
+        )
+    body = _decision_prose_body(stripped, heading)
+    if not body.strip():
+        raise PipelineError("AEP-PIPE-SCOPE", issue, "recorded owner decision has an empty body")
+    if not _decision_attributed(body, decision["decided_by"], metadata):
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "recorded owner decision is not attributed to the decision block's decider",
+        )
+    if DECISION_POSITIVE_RE.search(body) is None:
+        raise PipelineError("AEP-PIPE-SCOPE", issue, "recorded owner decision contains no positive decision verb")
+    if strict_negation and (
+        DECISION_NEGATION_RE.search(body) is not None
+        or DECISION_PENDING_RE.search(body) is not None
+        or DECISION_CONTRACTION_RE.search(body) is not None
+    ):
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "recorded owner decision is negated, pending, or otherwise not effective",
+        )
+
+
+def _verify_unblock_condition(text: str, issue: str) -> None:
+    """Exactly one unblock record, recording satisfaction without contradiction."""
+    stripped = _strip_fenced_blocks(text)
+    matches = list(UNBLOCK_FIELD_RE.finditer(stripped))
+    if len(matches) != 1:
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "exactly one Unblock condition record is required (found {})".format(len(matches)),
+        )
+    value = matches[0].group("value").strip()
+    if UNBLOCK_SATISFIED_RE.match(value) is None:
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "intervening human-authority issue needs an Unblock condition recording satisfaction (it must begin with SATISFIED)",
+        )
+    remainder = value[len("SATISFIED"):]
+    if (
+        DECISION_NEGATION_RE.search(remainder) is not None
+        or DECISION_PENDING_RE.search(remainder) is not None
+        or DECISION_CONTRACTION_RE.search(remainder) is not None
+        or UNBLOCK_NEGATION_RE.search(remainder) is not None
+    ):
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "Unblock condition records satisfaction but also negated, pending, or unresolved language",
+        )
+
+
+def _verify_review_prose(text: str, issue: str, block: Mapping[str, Any]) -> ReviewRound:
+    """The human-readable latest review round must equal the machine record."""
+    review = _tolerant_latest_review(text, issue)
+    if (
+        review.utc != block["round_utc"]
+        or review.reviewer != block["reviewer"]
+        or review.target != block["target"]
+        or review.material_findings != block["open_material_findings"]
+        or review.disposition != block["disposition"]
+    ):
+        raise PipelineError(
+            "AEP-PIPE-REVIEW", issue,
+            "prose review round does not match the durable machine-readable review record",
+            2,
+        )
+    return review
 
 
 def _verify_intervening_entry(
@@ -877,10 +1246,13 @@ def _verify_intervening_entry(
 
     An entry is usable only when its owning issue is a distinct issue with
     durably recorded HUMAN authority and a resolved (non-BLOCKED) status, its
-    declared exclusion scope is bound to verifiable acceptance of the range,
-    and every substantive path touched inside the range is either declared,
-    record-keeping, or already inside the milestone's own scope. Anything
-    ambiguous — provenance, review records, ownership, or coverage — refuses.
+    exclusion scope is bound to a durable, effective, machine-readable owner
+    decision and — for independently reviewed records — a durable
+    machine-readable APPROVED review round, each anchored to a commit whose
+    content records exactly that fact, and every substantive path touched
+    inside the range is declared, covered by both durable scopes, and committed
+    no earlier than the decision anchor. Anything ambiguous — provenance,
+    review records, ownership, or coverage — refuses.
     """
     issue = entry["issue"]
     _safe_relative(issue, registry_path, "intervening-authority issue")
@@ -913,14 +1285,39 @@ def _verify_intervening_entry(
     commit_paths = {commit: set(_commit_paths(context.root, commit)) for commit in commits}
     declared = list(entry["paths"])
 
+    # The machine-readable owner decision — not the prose — carries the
+    # authority facts. It must be EFFECTIVE and anchored to a durable commit
+    # whose content records exactly this decision.
+    decision = _parse_authority_decision(text, issue)
+    if decision["state"] != "EFFECTIVE":
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "recorded owner decision is not EFFECTIVE (state {})".format(decision["state"]),
+        )
+    decision_anchor = _block_anchor(context.root, issue, decision["decision_id"], decision["recorded_commit"], "authority-decision")
+    if not _is_ancestor(context.root, decision_anchor, tip):
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "the owner decision's anchor commit is not an ancestor of the registered range tip",
+        )
+    _verify_anchor_content(context.root, issue, decision_anchor, decision, "decision")
+    _verify_decision_prose(text, issue, decision, metadata, strict_negation=review_class == "SELF")
+
     if review_class == "INDEPENDENT":
         if not declared:
             raise PipelineError("AEP-PIPE-SCOPE", registry_path, "independent intervening entry must declare its exclusion scope")
-        review = _tolerant_latest_review(text, issue)
-        if review.disposition != "APPROVED" or review.material_findings != 0:
+        review_block = _parse_review_round_block(text, issue)
+        if review_block["disposition"] != "APPROVED" or review_block["open_material_findings"] != 0:
             raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening work is not independently APPROVED with zero open material findings")
-        if review.reviewer == implementor:
+        if review_block["reviewer"] == implementor:
             raise PipelineError("AEP-PIPE-SCOPE", issue, "intervening review label equals the current implementor label")
+        review_anchor = _block_anchor(context.root, issue, review_block["round_id"], review_block["recorded_commit"], "review-round")
+        if not _is_ancestor(context.root, review_block["target"], review_anchor):
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "the review record's anchor predates its reviewed target")
+        if not _is_ancestor(context.root, review_anchor, tip):
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "the review record's anchor is not an ancestor of the registered range tip")
+        _verify_anchor_content(context.root, issue, review_anchor, review_block, "review")
+        review = _verify_review_prose(text, issue, review_block)
         if not _is_ancestor(context.root, base, review.target) or not _is_ancestor(context.root, review.target, tip):
             raise PipelineError("AEP-PIPE-SCOPE", issue, "reviewed target is not within the intervening range")
         for commit in _git(context.root, ["rev-list", "{}..{}".format(review.target, tip)]).stdout.splitlines():
@@ -958,10 +1355,22 @@ def _verify_intervening_entry(
                     sorted(declared), derived
                 ),
             )
-        # The durable authority signal is the owning issue's introduction
-        # commit: substantive work inside the range must not predate the
-        # record that authorizes it, so a widened range cannot absorb
-        # attempt-owned commits made before the authority existed.
+        # Git equality proves only what the range touched. The declared scope
+        # must additionally be covered by the durable authority itself: the
+        # effective owner decision's scope and the independent review's scope.
+        if not set(declared) <= set(decision["scope"]):
+            raise PipelineError(
+                "AEP-PIPE-SCOPE", issue,
+                "declared exclusion scope exceeds the owner-authorized scope of the durable decision record",
+            )
+        if not set(declared) <= set(review_block["scope"]):
+            raise PipelineError(
+                "AEP-PIPE-SCOPE", issue,
+                "declared exclusion scope exceeds the independently reviewed scope of the durable review record",
+            )
+        # Substantive work inside the range must not predate the durable
+        # authority that covers it: every touching commit descends from both
+        # the authority record's introduction and the decision's anchor.
         introduction = _issue_introduction(context.root, issue, registry_path)
         if not _is_ancestor(context.root, introduction, tip):
             raise PipelineError(
@@ -976,21 +1385,20 @@ def _verify_intervening_entry(
                         commit[:12], introduction[:12]
                     ),
                 )
+            if not _is_ancestor(context.root, decision_anchor, commit):
+                raise PipelineError(
+                    "AEP-PIPE-SCOPE", issue,
+                    "substantive range commit {} predates the effective owner decision's anchor {}".format(
+                        commit[:12], decision_anchor[:12]
+                    ),
+                )
         excludable = declared + [issue]
     else:
         if declared:
             raise PipelineError("AEP-PIPE-SCOPE", registry_path, "self-reviewed authority records may not declare substantive exclusion paths")
-        _verify_owner_decision(text, issue)
-        match = re.search(
-            r"^- \*\*Unblock condition:\*\*\s+`?(?P<value>[^`\n]+)`?\s*$",
-            _strip_fenced_blocks(text),
-            re.MULTILINE,
-        )
-        if match is None or not match.group("value").strip().upper().startswith("SATISFIED"):
-            raise PipelineError(
-                "AEP-PIPE-SCOPE", issue,
-                "intervening human-authority issue needs an Unblock condition recording satisfaction (it must begin with SATISFIED)",
-            )
+        if decision["scope"]:
+            raise PipelineError("AEP-PIPE-SCOPE", issue, "self-reviewed authority records may not authorize substantive paths")
+        _verify_unblock_condition(text, issue)
         # A self-reviewed authority record owns no substantive repository paths:
         # only its own issue file may be excluded through it.
         excludable = [issue]

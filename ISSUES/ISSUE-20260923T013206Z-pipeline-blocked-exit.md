@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `INDEPENDENT`
 - **Created UTC:** `2026-09-23T01:32:06Z`
-- **Updated UTC:** `2026-09-24T01:19:04Z`
+- **Updated UTC:** `2026-10-10T09:13:00Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) `PIPELINE-003`, `ROTATE-004`
 - **ADRs:** [ADR-20260814T015817Z](../ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md) decision 5
 - **Evidence:** [ISSUE-20260922T073608Z-codex-quota-authorization](ISSUE-20260922T073608Z-codex-quota-authorization.md) (owner decision recorded 2026-09-23T01:32:06Z); [independent review round 1](../EVIDENCE/EVIDENCE-20260924T011904Z-blocked-exit-review-round-1.md)
@@ -52,6 +52,29 @@ Human technical owner `MattSureham` **approved** the proposed amendment with exp
 - `tests/test_run_pipeline.py`: deterministic coverage for resume success (attempt preserved, decision cited, blocker section cleared), unresolved-blocker refusal without mutation, missing/mismatched blocker refusal, dirty-tree refusal, `--blocker-issue` rejection on ordinary `IN_PROGRESS`, and refusal of all other target states from `BLOCKED_HUMAN_AUTHORITY`.
 
 **Review status:** per this issue's `Review: INDEPENDENT`, independent review round 1 by `agent:ClaudeCode-blocked-exit-review-20260924` on immutable target `9e8f6b285b8e9f47022c7c3fb4ba67d5341601b3` returned **APPROVED** with 0 open material findings ([evidence](../EVIDENCE/EVIDENCE-20260924T011904Z-blocked-exit-review-round-1.md)); details in the review-rounds section below.
+
+The following machine-readable record (added 2026-10-10 under the PIPELINE-010 round-3 rework migration) formalizes the owner decision recorded above without altering it: `recorded_commit` names the commit whose content carries that decision, and `scope` restates the amendment's four substantive files exactly as reviewed.
+
+<!-- AEP-AUTHORITY-DECISION-V1:BEGIN -->
+```json
+{
+  "schema": "aep-authority-decision/v1",
+  "decision_id": "DECISION-20260923T013206Z-blocked-exit-approval",
+  "authority": "HUMAN",
+  "state": "EFFECTIVE",
+  "scope": [
+    "ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md",
+    "PROJECT_SPEC.md",
+    "scripts/run_pipeline.py",
+    "tests/test_run_pipeline.py"
+  ],
+  "unblock": "SATISFIED",
+  "decided_utc": "2026-09-23T01:32:06Z",
+  "decided_by": "human:MattSureham",
+  "recorded_commit": "47a0cb40684ad8edc1d574eba28ded610ea2ba93"
+}
+```
+<!-- AEP-AUTHORITY-DECISION-V1:END -->
 
 ### Original proposal (superseded by the recorded approval above)
 
@@ -108,6 +131,29 @@ NOT APPLICABLE.
 - **Open material findings:** **0**.
 - **Disposition:** **APPROVED**.
 
+The following machine-readable record (added 2026-10-10 under the PIPELINE-010 round-3 rework migration) formalizes the review round above without altering it: `recorded_commit` names the commit whose content carries that round, and `scope` restates the reviewed substantive files.
+
+<!-- AEP-REVIEW-ROUND-V1:BEGIN -->
+```json
+{
+  "schema": "aep-review-round/v1",
+  "round_id": "ROUND-20260924T011904Z-blocked-exit-review-1",
+  "round_utc": "2026-09-24T01:19:04Z",
+  "reviewer": "agent:ClaudeCode-blocked-exit-review-20260924",
+  "target": "9e8f6b285b8e9f47022c7c3fb4ba67d5341601b3",
+  "disposition": "APPROVED",
+  "open_material_findings": 0,
+  "scope": [
+    "ADR/ADR-20260814T015817Z-authorized-milestone-pipeline.md",
+    "PROJECT_SPEC.md",
+    "scripts/run_pipeline.py",
+    "tests/test_run_pipeline.py"
+  ],
+  "recorded_commit": "79063cb2201517567c3a8fe9702fd59ca41e9e5d"
+}
+```
+<!-- AEP-REVIEW-ROUND-V1:END -->
+
 ## Blocker
 
 - **Blocked from:** `RESOLVED` — the owner approved the amendment and it is implemented and tested; the discovery milestone's resume transition is executable.
@@ -127,6 +173,7 @@ NOT APPLICABLE.
 | `2026-09-23T01:32:06Z` | `agent:ClaudeCode-discovery-fix-3` | `NONE` | `BLOCKED` | Recorded the contract gap discovered while persisting the owner's bounded Codex authorization: no machine exit from `BLOCKED_HUMAN_AUTHORITY` exists, and the 2026-09-22 entry misapplied `ROTATE-004`. Proposed a minimal exit-edge amendment; awaiting owner decision. No state block was hand-edited and no Codex session was launched. |
 | `2026-09-23` | `human:MattSureham` (recorded by `agent:ClaudeCode-discovery-fix-3`) | `BLOCKED` | `OPEN` | Owner approved the amendment with explicit bounds (exit only to `IN_PROGRESS`; recorded-decision gates; no side-effect authorization; ROTATE-004 reaffirmed; no new states). Implemented the amendment in `run_pipeline.py`, PROJECT_SPEC (PIPELINE-003 reference + new PIPELINE-009 + change record), and ADR-20260814T015817Z decision 5, with four new deterministic tests (27 pipeline tests OK). Independent review of the amendment remains outstanding. No Codex session launched. |
 | `2026-09-24T01:19:04Z` | `agent:ClaudeCode-blocked-exit-review-20260924` | `OPEN` | `OPEN` | Independent review round 1 on immutable target `9e8f6b285b8e9f47022c7c3fb4ba67d5341601b3`: APPROVED, 0 open material findings; three non-material observations recorded. Independently re-ran 167 tests OK and validator PASS. No implementation change, no Codex launch, no milestone acceptance. Issue remains OPEN pending ordinary closure. |
+| `2026-10-10T09:13:00Z` | `agent:ClaudeCode-discovery-fix-3` | `OPEN` | `OPEN` | PIPELINE-010 round-3 rework migration: appended the machine-readable authority-decision and review-round records formalizing the 2026-09-23 owner decision and the 2026-09-24 APPROVED round, anchored to the commits whose content already carries them (`47a0cb4`, `79063cb`). No historical text was rewritten; scope fields restate the four substantive files exactly as decided and reviewed. |
 
 ## Closure checklist
 

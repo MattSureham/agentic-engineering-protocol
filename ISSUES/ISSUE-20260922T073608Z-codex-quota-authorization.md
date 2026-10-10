@@ -10,7 +10,7 @@
 - **Authority:** `HUMAN`
 - **Review:** `SELF`
 - **Created UTC:** `2026-09-22T07:36:08Z`
-- **Updated UTC:** `2026-09-29T01:31:00Z`
+- **Updated UTC:** `2026-10-10T09:13:00Z`
 - **Requirements:** Root [`PROJECT_SPEC.md`](../PROJECT_SPEC.md) `DISCOVERY-001`–`DISCOVERY-006`, discovery acceptance criteria 4–5
 - **ADRs:** [ADR-20260918T064510Z](../ADR/ADR-20260918T064510Z-protocol-discovery-boundary.md)
 - **Evidence:** [attempt-3 live conformance](../EVIDENCE/EVIDENCE-20260922T073608Z-discovery-live-conformance-attempt-3.md), [`attempt-3-quota-aborted/`](../EVIDENCE/discovery-conformance/attempt-3-quota-aborted/NOTE.md)
@@ -52,6 +52,24 @@ Human technical owner `MattSureham` **authorized** the minimal run set with stri
 - This decision does not change the two-harness requirement, acceptance criteria, support boundary, or any accepted specification.
 
 **Second gate:** the owner explicitly deferred execution — no Codex live runs until the owner issues a distinct "execute the authorized Codex supplementary verification now" instruction. The budget above is armed, not consumed.
+
+The following machine-readable record (added 2026-10-10 under the PIPELINE-010 round-3 rework migration) formalizes the owner decision recorded above without altering it: `recorded_commit` names the commit whose content carries that decision, and the empty `scope` reflects that this record authorizes no substantive repository paths.
+
+<!-- AEP-AUTHORITY-DECISION-V1:BEGIN -->
+```json
+{
+  "schema": "aep-authority-decision/v1",
+  "decision_id": "DECISION-20260923T013206Z-codex-bounded-authorization",
+  "authority": "HUMAN",
+  "state": "EFFECTIVE",
+  "scope": [],
+  "unblock": "SATISFIED",
+  "decided_utc": "2026-09-23T01:32:06Z",
+  "decided_by": "human:MattSureham",
+  "recorded_commit": "610c672082a44e591a13822ffc12a9aa58babadb"
+}
+```
+<!-- AEP-AUTHORITY-DECISION-V1:END -->
 
 ### Contract gap discovered at unblock (2026-09-23T01:32:06Z, agent:ClaudeCode-discovery-fix-3)
 
@@ -131,6 +149,7 @@ NOT APPLICABLE.
 | `2026-09-28T01:28:45Z` | `agent:ClaudeCode-discovery-fix-3` | `OPEN` | `OPEN` | Owner issued the explicit execution instruction; the bounded batch ran and the authorization is fully consumed (6/6 sessions): `codex negative_collision` run 4 evaluated PASS (case stopped), `codex adapter_removed_manual` runs 4–8 all UNVERIFIED with the single verification-read gap. No budget expansion, no discarded record, no wakeup/relaunch. Acceptance criterion 5 still prevents milestone review submission; the disposition of the exhausted budget is a new owner decision. |
 | `2026-09-28T02:02:06Z` | `agent:ClaudeCode-discovery-fix-3` | `OPEN` | `OPEN` | Owner's new single-session authorization (exactly one `codex adapter_removed_manual` run on the updated delivered bytes, frozen oracle, stop on any outcome) executed and fully consumed (1/1): run 9 UNVERIFIED, zero defects — verification read fused into the mutating shell event, an oracle attribution boundary. No retry, no oracle change, no review submission; the disposition is a new owner decision. |
 | `2026-09-29T01:31:00Z` | `agent:ClaudeCode-discovery-fix-3` | `OPEN` | `OPEN` | Owner's final single-session authorization executed and fully consumed (1/1, no retry): run 10 on revision `a834108` evaluated **PASS** (separate standalone post-change verification read, zero defects/gaps). No oracle change or reclassification; `adapter_removed_manual` coverage complete; acceptance criteria 1–5 established; milestone submitted for independent review. No further Codex session authorized. |
+| `2026-10-10T09:13:00Z` | `agent:ClaudeCode-discovery-fix-3` | `OPEN` | `OPEN` | PIPELINE-010 round-3 rework migration: appended the machine-readable authority-decision record formalizing the 2026-09-23T01:32:06Z owner decision, anchored to `610c672` whose content already carries it. No historical text was rewritten; the empty scope reflects that this record authorizes no substantive repository paths. |
 
 ## Closure checklist
 

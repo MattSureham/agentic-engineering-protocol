@@ -318,14 +318,43 @@ No independent review round has been recorded.
         status: str = "OPEN",
         unblock: str = "SATISFIED - owner decision recorded in this issue",
         decision: bool = True,
+        decision_state: str = "EFFECTIVE",
+        decision_scope: Any = None,
+        decision_id: str = "DECISION-20260814T031000Z-fixture-intervening",
+        decided_utc: str = "2026-08-14T03:10:00Z",
+        decision_recorded: Any = None,
     ) -> None:
+        if decision_scope is None:
+            decision_scope = [] if review == "SELF" else ["OTHER/amendment.md", "OTHER/renamed.md"]
+        decision_block = {
+            "schema": pipeline.DECISION_BLOCK_SCHEMA,
+            "decision_id": decision_id,
+            "authority": "HUMAN",
+            "state": decision_state,
+            "scope": decision_scope,
+            "unblock": "SATISFIED",
+            "decided_utc": decided_utc,
+            "decided_by": "human:fixture-owner",
+            "recorded_commit": decision_recorded,
+        }
         decision_section = """
 ## Investigation and decision
 
-### Owner decision recorded 2026-08-14T03:10:00Z
+### Owner decision recorded {utc}
 
 human:fixture-owner approved this separate authority record.
-""" if decision else ""
+
+{begin}
+```json
+{block}
+```
+{end}
+""".format(
+            utc=decided_utc,
+            begin=pipeline.DECISION_BLOCK_BEGIN,
+            block=json.dumps(decision_block, indent=2),
+            end=pipeline.DECISION_BLOCK_END,
+        ) if decision else ""
         text = """# Intervening authority record
 
 ## Metadata
@@ -356,9 +385,34 @@ human:fixture-owner approved this separate authority record.
         reviewer: str = "agent:intervening-reviewer",
         utc: str = "2026-08-14T03:25:00Z",
         path: str = INTERVENING_ISSUE,
+        scope: Any = None,
+        round_id: Any = None,
+        recorded: Any = None,
     ) -> None:
+        if scope is None:
+            scope = ["OTHER/amendment.md", "OTHER/renamed.md"]
+        if round_id is None:
+            round_id = "ROUND-{}-{}".format(utc.replace(":", "").replace("-", ""), reviewer)
         issue_path = self.root / path
         text = issue_path.read_text(encoding="utf-8")
+        # The machine-readable block always reflects the latest round; prose
+        # retains earlier rounds as history.
+        begins, _ends = pipeline._structured_block_region(text, pipeline.REVIEW_BLOCK_BEGIN, pipeline.REVIEW_BLOCK_END)
+        if begins:
+            start = max(text.rfind("\n", 0, begins[0]), 0)
+            finish = text.index(pipeline.REVIEW_BLOCK_END, begins[0]) + len(pipeline.REVIEW_BLOCK_END)
+            text = text[:start] + text[finish:]
+        review_block = {
+            "schema": pipeline.REVIEW_BLOCK_SCHEMA,
+            "round_id": round_id,
+            "round_utc": utc,
+            "reviewer": reviewer,
+            "target": target,
+            "disposition": disposition,
+            "open_material_findings": material,
+            "scope": scope,
+            "recorded_commit": recorded,
+        }
         round_text = """
 ### {utc} — {reviewer}
 
@@ -366,7 +420,17 @@ human:fixture-owner approved this separate authority record.
 - **Open material findings:** **{material}**.
 - **Disposition:** **{disposition}**.
 
-""".format(utc=utc, reviewer=reviewer, target=target, material=material, disposition=disposition)
+{begin}
+```json
+{block}
+```
+{end}
+
+""".format(
+            utc=utc, reviewer=reviewer, target=target, material=material, disposition=disposition,
+            begin=pipeline.REVIEW_BLOCK_BEGIN, block=json.dumps(review_block, indent=2),
+            end=pipeline.REVIEW_BLOCK_END,
+        )
         text = text.replace("\n## Blocker", "\n" + round_text + "## Blocker", 1)
         issue_path.write_text(text, encoding="utf-8")
 
@@ -1207,6 +1271,524 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
         result = fixture.submit(target)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(fixture.state()["state"], "AWAITING_PEER_REVIEW")
+
+    def test_intervening_authority_scope_must_be_bound_to_durable_decision(self) -> None:
+        # Round-3 R2 variants: file introduction and Git touch sets alone do
+        # not establish authority. Declared scope must be covered by the
+        # durable owner-decision and review scopes, and every substantive
+        # commit must postdate the effective decision's anchor.
+        shared = "OTHER/amendment.md"
+
+        def base_fixture() -> Tuple[PipelineRepository, str]:
+            fixture = self.fixture()
+            fixture.begin()
+            return fixture, fixture.git("rev-parse", "HEAD")
+
+        def amendment_and_review(fixture: PipelineRepository) -> str:
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+            reviewed = fixture.commit("separately scoped substantive amendment")
+            fixture.add_intervening_review(reviewed)
+            return fixture.commit("persist scoped review provenance")
+
+        def post_introduction_foreign() -> Tuple[PipelineRepository, str, str, Sequence[str]]:
+            fixture, base = base_fixture()
+            fixture.write_intervening_issue()
+            fixture.commit("introduce separate issue record")
+            (fixture.root / "AGENTS.md").write_text("unauthorized current-attempt work\n", encoding="utf-8")
+            fixture.commit("attempt-owned foreign substantive work")
+            tip = amendment_and_review(fixture)
+            return fixture, base, tip, [shared, "AGENTS.md"]
+
+        def draft_introduction() -> Tuple[PipelineRepository, str, str, Sequence[str]]:
+            fixture, base = base_fixture()
+            fixture.write_intervening_issue(authority="AGENT")
+            issue = fixture.root / INTERVENING_ISSUE
+            issue.write_text(issue.read_text(encoding="utf-8").replace(
+                "human:fixture-owner approved this separate authority record.",
+                "Proposal only. No owner authority exists yet.",
+            ), encoding="utf-8")
+            fixture.commit("introduce unauthoritative draft record")
+            (fixture.root / "AGENTS.md").write_text("unauthorized current-attempt work\n", encoding="utf-8")
+            fixture.commit("attempt-owned foreign substantive work")
+            fixture.write_intervening_issue()
+            tip = amendment_and_review(fixture)
+            return fixture, base, tip, [shared, "AGENTS.md"]
+
+        def deleted_readded_authority() -> Tuple[PipelineRepository, str, str, Sequence[str]]:
+            fixture, base = base_fixture()
+            fixture.write_intervening_issue(authority="AGENT")
+            fixture.commit("introduce unauthoritative draft record")
+            fixture.git("rm", INTERVENING_ISSUE)
+            fixture.commit("delete unauthoritative draft record")
+            (fixture.root / "AGENTS.md").write_text("unauthorized current-attempt work\n", encoding="utf-8")
+            fixture.commit("attempt-owned foreign substantive work")
+            fixture.write_intervening_issue()
+            tip = amendment_and_review(fixture)
+            return fixture, base, tip, [shared, "AGENTS.md"]
+
+        def mixed_authority_merge() -> Tuple[PipelineRepository, str, str, Sequence[str]]:
+            fixture, base = base_fixture()
+            fixture.write_intervening_issue()
+            fixture.commit("introduce separate issue record")
+            fixture.git("switch", "-c", "foreign-side")
+            (fixture.root / "AGENTS.md").write_text("foreign work outside separate authority\n", encoding="utf-8")
+            fixture.commit("foreign branch work after issue introduction")
+            fixture.git("switch", "main")
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+            fixture.commit("separately scoped substantive amendment")
+            fixture.git("merge", "--no-ff", "foreign-side", "-m", "merge foreign work before narrowly scoped review")
+            reviewed = fixture.git("rev-parse", "HEAD")
+            fixture.add_intervening_review(reviewed)
+            tip = fixture.commit("persist scoped review provenance")
+            return fixture, base, tip, [shared, "AGENTS.md"]
+
+        def side_work_before_introduction() -> Tuple[PipelineRepository, str, str, Sequence[str]]:
+            fixture, base = base_fixture()
+            fixture.git("switch", "-c", "foreign-side")
+            (fixture.root / "AGENTS.md").write_text("unauthorized work predating separate authority\n", encoding="utf-8")
+            fixture.commit("foreign side attempt work")
+            fixture.git("switch", "main")
+            fixture.write_intervening_issue()
+            fixture.commit("introduce separate issue record")
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+            fixture.commit("separately scoped substantive amendment")
+            fixture.git("merge", "--no-ff", "foreign-side", "-m", "merge foreign side work")
+            reviewed = fixture.git("rev-parse", "HEAD")
+            fixture.add_intervening_review(reviewed)
+            tip = fixture.commit("persist scoped review provenance")
+            return fixture, base, tip, [shared, "AGENTS.md"]
+
+        def pre_authority_work_under_wide_scope() -> Tuple[PipelineRepository, str, str, Sequence[str]]:
+            # Even when the durable scopes name the path, work that predates
+            # the effective authority record refuses on anchor ancestry.
+            fixture, base = base_fixture()
+            (fixture.root / "AGENTS.md").write_text("unauthorized work predating separate authority\n", encoding="utf-8")
+            fixture.commit("attempt-owned work before the authority record")
+            fixture.write_intervening_issue(decision_scope=[shared, "AGENTS.md"])
+            fixture.commit("introduce separate issue record")
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+            reviewed = fixture.commit("separately scoped substantive amendment")
+            fixture.add_intervening_review(reviewed, scope=[shared, "AGENTS.md"])
+            tip = fixture.commit("persist scoped review provenance")
+            return fixture, base, tip, [shared, "AGENTS.md"]
+
+        def delete_readd_post_review() -> Tuple[PipelineRepository, str, str, Sequence[str]]:
+            fixture, base = base_fixture()
+            fixture.write_intervening_issue()
+            fixture.commit("introduce separate issue record")
+            tip = amendment_and_review(fixture)
+            fixture.git("rm", shared)
+            fixture.commit("unreviewed deletion")
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+            tip = fixture.commit("unreviewed readdition of identical final bytes")
+            return fixture, base, tip, [shared]
+
+        cases = (
+            ("post_introduction_foreign", post_introduction_foreign),
+            ("draft_introduction", draft_introduction),
+            ("deleted_readded_authority", deleted_readded_authority),
+            ("mixed_authority_merge", mixed_authority_merge),
+            ("side_work_before_introduction", side_work_before_introduction),
+            ("pre_authority_work_under_wide_scope", pre_authority_work_under_wide_scope),
+            ("delete_readd_post_review", delete_readd_post_review),
+        )
+        for name, build in cases:
+            with self.subTest(case=name):
+                fixture, base, tip, paths = build()
+                fixture.add_registry([self.registry_entry(base, tip, paths=paths)])
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, 1, result.stderr)
+                self.assertIn("AEP-PIPE-SCOPE", result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
+    def test_intervening_authorized_rename_and_merged_introduction_advance(self) -> None:
+        # Round-3 R2 positive controls: an authorized exact-file rename and a
+        # legitimate merged authority-record introduction remain valid.
+        def merged_introduction() -> Tuple[PipelineRepository, str, str, Sequence[str]]:
+            fixture = self.fixture()
+            fixture.begin()
+            base = fixture.git("rev-parse", "HEAD")
+            fixture.git("switch", "-c", "authority-side")
+            fixture.write_intervening_issue()
+            fixture.commit("introduce separate issue record")
+            fixture.git("switch", "main")
+            (fixture.root / "EVIDENCE").mkdir(exist_ok=True)
+            (fixture.root / "EVIDENCE" / "main.md").write_text("main record\n", encoding="utf-8")
+            fixture.commit("record concurrent main history")
+            fixture.git("merge", "--no-ff", "authority-side", "-m", "merge authority record before work")
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+            reviewed = fixture.commit("separately scoped substantive amendment")
+            fixture.add_intervening_review(reviewed)
+            tip = fixture.commit("persist scoped review provenance")
+            return fixture, base, tip, ["OTHER/amendment.md"]
+
+        def authorized_rename() -> Tuple[PipelineRepository, str, str, Sequence[str]]:
+            fixture = self.fixture()
+            fixture.begin()
+            base = fixture.git("rev-parse", "HEAD")
+            fixture.write_intervening_issue()
+            fixture.commit("introduce separate issue record")
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+            fixture.commit("separately scoped substantive amendment")
+            fixture.git("mv", "OTHER/amendment.md", "OTHER/renamed.md")
+            reviewed = fixture.commit("authorized exact-file rename")
+            fixture.add_intervening_review(reviewed)
+            tip = fixture.commit("persist scoped review provenance")
+            return fixture, base, tip, ["OTHER/amendment.md", "OTHER/renamed.md"]
+
+        for name, build in (("merge_introduction_positive", merged_introduction), ("rename_positive", authorized_rename)):
+            with self.subTest(case=name):
+                fixture, base, tip, paths = build()
+                fixture.add_registry([self.registry_entry(base, tip, paths=paths)])
+                target = fixture.make_target()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(fixture.state()["state"], "AWAITING_PEER_REVIEW")
+
+    def test_intervening_review_rounds_must_be_machine_bound_and_unambiguous(self) -> None:
+        # Round-3 R3 variants: example-fenced, malformed, duplicated, or
+        # prose-conflicting review records must refuse; only the durable
+        # machine record and its matching prose round count.
+        def long_fence_example(text: str, reviewed: str) -> str:
+            begin = text.index("## Independent review rounds")
+            end = text.index("\n## Blocker", begin)
+            return (
+                text[:begin]
+                + "## Example only; no actual review exists\n\n````markdown\n```example\n"
+                + text[begin:end]
+                + "\n````\n"
+                + text[end:]
+            )
+
+        def malformed_latest(text: str, reviewed: str) -> str:
+            return text.replace(
+                "\n## Blocker",
+                "\n### 2026-08-14T03:26:00Z - agent:latest-reviewer\n\n"
+                "Latest review is BLOCKED; required authority is unresolved. "
+                "Do not use the earlier approval.\n\n## Blocker",
+            )
+
+        def duplicate_timestamp(text: str, reviewed: str) -> str:
+            return text.replace(
+                "\n## Blocker",
+                "\n### 2026-08-14T03:25:00Z — agent:other-reviewer\n\n"
+                "- **Reviewed immutable state:** `{}`\n"
+                "- **Open material findings:** **0**.\n"
+                "- **Disposition:** **APPROVED**.\n\n## Blocker".format(reviewed),
+            )
+
+        def prose_block_mismatch(text: str, reviewed: str) -> str:
+            return text.replace("- **Disposition:** **APPROVED**.", "- **Disposition:** **CHANGES_REQUIRED**.")
+
+        cases = (
+            ("review_long_fence_example", long_fence_example),
+            ("review_malformed_latest", malformed_latest),
+            ("review_duplicate_timestamp", duplicate_timestamp),
+            ("review_prose_contradicts_block", prose_block_mismatch),
+        )
+        for name, mutate in cases:
+            with self.subTest(case=name):
+                fixture, base, reviewed, _tip = self.intervening_fixture()
+                issue_path = fixture.root / INTERVENING_ISSUE
+                mutated = mutate(issue_path.read_text(encoding="utf-8"), reviewed)
+                self.assertNotEqual(mutated, issue_path.read_text(encoding="utf-8"))
+                issue_path.write_text(mutated, encoding="utf-8")
+                new_tip = fixture.commit("mutated review record")
+                fixture.add_registry([self.registry_entry(base, new_tip)])
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertIn("AEP-PIPE-REVIEW", result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
+    def test_intervening_self_records_must_be_uniquely_effective(self) -> None:
+        # Round-3 R5 variants: contracted negation, a satisfied-looking but
+        # contradictory unblock record, or duplicate unblock fields must
+        # refuse; only an unambiguous effective decision anchors a SELF entry.
+        def contracted_negation(text: str) -> str:
+            return text.replace(
+                "human:fixture-owner approved this separate authority record.",
+                "human:fixture-owner hasn't approved this authority record.",
+            )
+
+        def satisfied_but_pending(text: str) -> str:
+            return text.replace(
+                "SATISFIED - owner decision recorded in this issue",
+                "SATISFIED is false; awaiting owner authorization",
+            )
+
+        def duplicate_unblock(text: str) -> str:
+            return text + "\n- **Unblock condition:** `PENDING - owner authorization is unresolved`\n"
+
+        cases = (
+            ("self_contracted_negation", contracted_negation),
+            ("self_satisfied_pending", satisfied_but_pending),
+            ("self_duplicate_unblock", duplicate_unblock),
+        )
+        for name, mutate in cases:
+            with self.subTest(case=name):
+                fixture, base, tip = self.self_fixture()
+                issue_path = fixture.root / INTERVENING_ISSUE
+                mutated = mutate(issue_path.read_text(encoding="utf-8"))
+                self.assertNotEqual(mutated, issue_path.read_text(encoding="utf-8"))
+                issue_path.write_text(mutated, encoding="utf-8")
+                tip = fixture.commit("mutated self authority record")
+                fixture.add_registry([self.registry_entry(base, tip, paths=[])])
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, 1, result.stderr)
+                self.assertIn("AEP-PIPE-SCOPE", result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
+    def test_intervening_machine_records_fail_closed_on_schema_and_anchor_defects(self) -> None:
+        # Schema-level adversarial coverage: duplicated, malformed, drifted,
+        # superseded, scope-mismatched, fenced-example, or narrative-forged
+        # machine records must refuse (or, for inert prose, be ignored).
+
+        def decision_block_text(**overrides: Any) -> str:
+            block = {
+                "schema": pipeline.DECISION_BLOCK_SCHEMA,
+                "decision_id": "DECISION-20260814T031000Z-fixture-intervening",
+                "authority": "HUMAN",
+                "state": "EFFECTIVE",
+                "scope": ["OTHER/amendment.md", "OTHER/renamed.md"],
+                "unblock": "SATISFIED",
+                "decided_utc": "2026-08-14T03:10:00Z",
+                "decided_by": "human:fixture-owner",
+                "recorded_commit": None,
+            }
+            block.update(overrides)
+            return (
+                pipeline.DECISION_BLOCK_BEGIN + "\n```json\n" + json.dumps(block, indent=2)
+                + "\n```\n" + pipeline.DECISION_BLOCK_END
+            )
+
+        def duplicate_decision_blocks(fixture: PipelineRepository, base: str, tip: str) -> Tuple[int, str]:
+            issue = fixture.root / INTERVENING_ISSUE
+            issue.write_text(
+                issue.read_text(encoding="utf-8")
+                + "\n" + decision_block_text(decision_id="DECISION-20260814T031100Z-second") + "\n",
+                encoding="utf-8",
+            )
+            return fixture.commit("duplicate machine decision records"), 2, "AEP-PIPE-SCHEMA"
+
+        def malformed_block_json(fixture: PipelineRepository, base: str, tip: str) -> Tuple[int, str]:
+            issue = fixture.root / INTERVENING_ISSUE
+            text = issue.read_text(encoding="utf-8")
+            issue.write_text(text.replace('"unblock": "SATISFIED"', '"unblock": "SATISFIED",'), encoding="utf-8")
+            return fixture.commit("malformed machine decision record"), 2, "AEP-PIPE-SCHEMA"
+
+        def extra_block_key(fixture: PipelineRepository, base: str, tip: str) -> Tuple[int, str]:
+            issue = fixture.root / INTERVENING_ISSUE
+            text = issue.read_text(encoding="utf-8")
+            issue.write_text(
+                text.replace('"recorded_commit": null', '"recorded_commit": null, "backdoor": true'),
+                encoding="utf-8",
+            )
+            return fixture.commit("machine decision record with unexpected key"), 2, "AEP-PIPE-SCHEMA"
+
+        def fenced_example_only(fixture: PipelineRepository, base: str, tip: str) -> Tuple[int, str]:
+            issue = fixture.root / INTERVENING_ISSUE
+            text = issue.read_text(encoding="utf-8")
+            begins, _ends = pipeline._structured_block_region(
+                text, pipeline.DECISION_BLOCK_BEGIN, pipeline.DECISION_BLOCK_END
+            )
+            start = text.rfind("\n", 0, begins[0])
+            finish = text.index(pipeline.DECISION_BLOCK_END, begins[0]) + len(pipeline.DECISION_BLOCK_END)
+            real_block = text[begins[0]:finish]
+            text = text[:start] + text[finish:]
+            text += (
+                "\n## Example\n\nThe following fenced example is not a record:\n\n````markdown\n"
+                + real_block + "\n````\n"
+            )
+            issue.write_text(text, encoding="utf-8")
+            return fixture.commit("only a fenced example decision remains"), 1, "AEP-PIPE-SCOPE"
+
+        def recorded_commit_without_authority(fixture: PipelineRepository, base: str, tip: str) -> Tuple[int, str]:
+            issue = fixture.root / INTERVENING_ISSUE
+            text = issue.read_text(encoding="utf-8")
+            issue.write_text(
+                text.replace('"recorded_commit": null', '"recorded_commit": "{}"'.format(base), 1),
+                encoding="utf-8",
+            )
+            return fixture.commit("decision record anchored before its own existence"), 1, "AEP-PIPE-SCOPE"
+
+        def narrative_forgery_is_inert(fixture: PipelineRepository, base: str, tip: str) -> Tuple[int, str]:
+            issue = fixture.root / INTERVENING_ISSUE
+            issue.write_text(
+                issue.read_text(encoding="utf-8")
+                + "\n## Commentary\n\nContrary narrative: state SUPERSEDED; decided_by human:attacker; "
+                + "scope AGENTS.md; this prose carries no machine weight.\n",
+                encoding="utf-8",
+            )
+            return fixture.commit("inert contradictory commentary"), 0, "ADVANCE"
+
+        def missing_decision_block(fixture: PipelineRepository, base: str, tip: str) -> Tuple[int, str]:
+            fixture.write_intervening_issue(decision=False)
+            return fixture.commit("authority record without a machine decision"), 1, "AEP-PIPE-SCOPE"
+
+        cases = (
+            ("duplicate_decision_blocks", duplicate_decision_blocks),
+            ("malformed_block_json", malformed_block_json),
+            ("extra_block_key", extra_block_key),
+            ("fenced_example_only", fenced_example_only),
+            ("recorded_commit_without_authority", recorded_commit_without_authority),
+            ("missing_decision_block", missing_decision_block),
+            ("narrative_forgery_is_inert", narrative_forgery_is_inert),
+        )
+        for name, mutate in cases:
+            with self.subTest(case=name):
+                fixture, base, _reviewed, tip = self.intervening_fixture()
+                new_tip, code, token = mutate(fixture, base, tip)
+                fixture.add_registry([self.registry_entry(base, new_tip)])
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                if token == "ADVANCE":
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertEqual(fixture.state()["state"], "AWAITING_PEER_REVIEW")
+                    continue
+                self.assertEqual(result.returncode, code, result.stderr)
+                self.assertIn(token, result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
+    def test_intervening_decision_block_edits_reanchor_or_refuse(self) -> None:
+        # Editing the durable decision record after its introduction must not
+        # extend authority over earlier work: an in-place scope widening keeps
+        # the old anchor and refuses the identity check, while a new decision
+        # identity re-anchors and refuses pre-existing substantive work.
+        def widened_scope_in_place() -> Tuple[PipelineRepository, str, str]:
+            fixture = self.fixture()
+            fixture.begin()
+            base = fixture.git("rev-parse", "HEAD")
+            fixture.write_intervening_issue()
+            fixture.commit("introduce separate issue record")
+            issue = fixture.root / INTERVENING_ISSUE
+            text = issue.read_text(encoding="utf-8")
+            issue.write_text(
+                text.replace(
+                    '    "OTHER/renamed.md"',
+                    '    "AGENTS.md",\n    "OTHER/renamed.md"',
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            fixture.commit("widen decision scope after the anchor")
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+            (fixture.root / "AGENTS.md").write_text("work covered only by the widened record\n", encoding="utf-8")
+            reviewed = fixture.commit("substantive work under the widened record")
+            fixture.add_intervening_review(reviewed, scope=["AGENTS.md", "OTHER/amendment.md"])
+            tip = fixture.commit("persist scoped review provenance")
+            return fixture, base, tip
+
+        def rekeyed_decision() -> Tuple[PipelineRepository, str, str]:
+            fixture = self.fixture()
+            fixture.begin()
+            base = fixture.git("rev-parse", "HEAD")
+            fixture.write_intervening_issue()
+            fixture.commit("introduce separate issue record")
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+            fixture.commit("substantive work under the original record")
+            fixture.write_intervening_issue(decision_id="DECISION-20260814T031200Z-replacement")
+            fixture.commit("replacement decision record")
+            reviewed = fixture.git("rev-parse", "HEAD")
+            fixture.add_intervening_review(reviewed)
+            tip = fixture.commit("persist scoped review provenance")
+            return fixture, base, tip
+
+        for name, build in (("widened_scope_in_place", widened_scope_in_place), ("rekeyed_decision", rekeyed_decision)):
+            with self.subTest(case=name):
+                fixture, base, tip = build()
+                paths = ["AGENTS.md", "OTHER/amendment.md"] if name == "widened_scope_in_place" else ["OTHER/amendment.md"]
+                fixture.add_registry([self.registry_entry(base, tip, paths=paths)])
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, 1, result.stderr)
+                self.assertIn("AEP-PIPE-SCOPE", result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
+    def test_intervening_superseded_decision_and_scope_mismatch_refuse(self) -> None:
+        # A superseded decision never authorizes; declared scope beyond either
+        # durable scope refuses even when Git derivation agrees.
+        def superseded() -> Tuple[PipelineRepository, str, str]:
+            fixture = self.fixture()
+            fixture.begin()
+            base = fixture.git("rev-parse", "HEAD")
+            fixture.write_intervening_issue(decision_state="SUPERSEDED")
+            fixture.commit("introduce superseded decision record")
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("separately authorized\n", encoding="utf-8")
+            reviewed = fixture.commit("separately scoped substantive amendment")
+            fixture.add_intervening_review(reviewed)
+            tip = fixture.commit("persist scoped review provenance")
+            return fixture, base, tip
+
+        def decision_scope_gap() -> Tuple[PipelineRepository, str, str]:
+            fixture = self.fixture()
+            fixture.begin()
+            base = fixture.git("rev-parse", "HEAD")
+            fixture.write_intervening_issue(decision_scope=["OTHER/renamed.md"])
+            fixture.commit("introduce narrowly authorized record")
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("outside the decision scope\n", encoding="utf-8")
+            reviewed = fixture.commit("separately scoped substantive amendment")
+            fixture.add_intervening_review(reviewed)
+            tip = fixture.commit("persist scoped review provenance")
+            return fixture, base, tip
+
+        def review_scope_gap() -> Tuple[PipelineRepository, str, str]:
+            fixture = self.fixture()
+            fixture.begin()
+            base = fixture.git("rev-parse", "HEAD")
+            fixture.write_intervening_issue()
+            fixture.commit("introduce separate issue record")
+            (fixture.root / "OTHER").mkdir(exist_ok=True)
+            (fixture.root / "OTHER" / "amendment.md").write_text("outside the review scope\n", encoding="utf-8")
+            reviewed = fixture.commit("separately scoped substantive amendment")
+            fixture.add_intervening_review(reviewed, scope=["OTHER/renamed.md"])
+            tip = fixture.commit("persist narrowly scoped review")
+            return fixture, base, tip
+
+        for name, build in (
+            ("superseded_decision", superseded),
+            ("decision_scope_gap", decision_scope_gap),
+            ("review_scope_gap", review_scope_gap),
+        ):
+            with self.subTest(case=name):
+                fixture, base, tip = build()
+                fixture.add_registry([self.registry_entry(base, tip)])
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                self.assertEqual(result.returncode, 1, result.stderr)
+                self.assertIn("AEP-PIPE-SCOPE", result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
 
     def test_malformed_intervening_registry_fails_closed(self) -> None:
         def bad_schema(fixture: PipelineRepository, base: str, tip: str) -> None:
