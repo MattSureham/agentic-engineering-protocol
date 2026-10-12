@@ -2,6 +2,15 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Reviewer update — 2026-10-12T01:57:58Z
+
+Prepared by `agent:Codex-scope-review-20261012`, independently reviewing only amendment rework `d9bd6d806e0f1160df4b6893154017e9d287cc4e`. Prior authored sections remain historical.
+
+- **CHANGES_REQUIRED — three material findings remain:** R2 HIGH: historical authority scope/effect is not proven by the migration anchor, and explicit current decision/unblock contradictions can pass. R3 HIGH: later review projection can replace historical unreviewed scope, nonzero findings or NOT APPROVED with approval. R5 MEDIUM: SELF pending/denied decisions still pass. Native structured binding improves, but the general invariant is unmet. [Owning round](ISSUES/ISSUE-20260929T020157Z-pipeline-scope-intervening-authority.md) and [exact evidence/follow-up](EVIDENCE/EVIDENCE-20261012T015542Z-scope-attribution-review-round-4.md).
+- **Verified:** 56 pipeline / 201 full target tests and validator pass; all 57 migrated/current prior scenarios conform. The old positive without a required block correctly refuses. New 50 cases expose 13 material false advances and two non-material parser gaps, alongside four positive controls and 31 no-mutation refusals. No R1/R4 regression observed. Actual A/B migration has historical support, preserves prose and does not observably expand scope; this does not prove general migration safety.
+- **Boundary:** amendment remains IMPLEMENTING; discovery unchanged IN_PROGRESS attempt 3, target null, original digest/base/events, two entries. No amendment machine state/transition. No implementation fix, live probe, discovery submission, third registry, acceptance/closure, recorder/coordinator or push.
+- **Owner decision requested now: NONE for repairs within accepted invariants.** Any new migration/trust/architecture representation must be escalated before adoption; this review authorizes none. Reviewer stops after durable disposition and governance checks.
+
 ## Implementer update — 2026-10-10T09:20:43Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after reworking the scope-attribution amendment per your directive to resolve the still-open round-3 findings at their root cause; not an acceptance record. Prior sections are preserved as history.
