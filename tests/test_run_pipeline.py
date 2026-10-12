@@ -1790,6 +1790,202 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
                 self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
                 self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
 
+    def test_intervening_migration_cannot_manufacture_authority_or_acceptance(self) -> None:
+        # Round-4 review variants: a later machine migration may only project
+        # facts the historical anchor itself durably records — decision effect,
+        # authorized scope, reviewed scope, disposition, and finding count —
+        # and the current narrative must never expressly contradict the machine
+        # record's claimed scope or satisfaction, for either review class.
+        shared = "OTHER/amendment.md"
+        body = "human:fixture-owner approved this separate authority record."
+
+        def bounds(kind: str) -> Tuple[str, str]:
+            if kind == "decision":
+                return pipeline.DECISION_BLOCK_BEGIN, pipeline.DECISION_BLOCK_END
+            return pipeline.REVIEW_BLOCK_BEGIN, pipeline.REVIEW_BLOCK_END
+
+        def extract_block(text: str, kind: str) -> Tuple[Dict[str, Any], str]:
+            begin, end = bounds(kind)
+            start = text.index(begin)
+            finish = text.index(end, start) + len(end)
+            chunk = text[start:finish]
+            return json.loads(chunk.split("```json\n", 1)[1].split("\n```", 1)[0]), chunk
+
+        def replace_block(text: str, kind: str, block: Dict[str, Any]) -> str:
+            _old, chunk = extract_block(text, kind)
+            begin, end = bounds(kind)
+            encoded = begin + "\n```json\n" + json.dumps(block, indent=2) + "\n```\n" + end
+            return text.replace(chunk, encoded, 1)
+
+        def remove_block(text: str, kind: str) -> str:
+            _block, chunk = extract_block(text, kind)
+            return text.replace(chunk, "", 1)
+
+        def run_case(case: str) -> Tuple[PipelineRepository, str, str, List[str]]:
+            fixture = self.fixture()
+            own = case in {
+                "self_positive", "self_decision_declined", "self_unblock_denied", "legacy_self_pending_anchor",
+            }
+            legacy = case.startswith("legacy_")
+            paths = [] if own else [shared]
+            outside_anchor = None
+            if case == "native_anchor_outside_range":
+                fixture.write_intervening_issue(decision_scope=[shared])
+                outside_anchor = fixture.commit("authority predates current attempt and range")
+            fixture.begin()
+            base = fixture.git("rev-parse", "HEAD")
+            issue = fixture.root / INTERVENING_ISSUE
+            scope = [] if own else [shared]
+            if case in {"legacy_scope_widening", "legacy_review_scope_widening"}:
+                paths.append("AGENTS.md")
+                if case == "legacy_review_scope_widening":
+                    scope.append("AGENTS.md")
+            fixture.write_intervening_issue(review="SELF" if own else "INDEPENDENT", decision_scope=scope)
+            text = issue.read_text(encoding="utf-8")
+            replacements = {
+                "legacy_scope_widening":
+                    "human:fixture-owner approved ONLY OTHER/amendment.md. AGENTS.md is expressly NOT authorized.",
+                "legacy_pending_authority":
+                    "human:fixture-owner has NOT approved this request; authorization is pending.",
+                "legacy_self_pending_anchor":
+                    "human:fixture-owner has NOT approved this request; authorization is pending.",
+                "native_decision_prose_scope_conflict":
+                    "human:fixture-owner approved only this record. OTHER/amendment.md is expressly NOT authorized.",
+                "native_independent_pending":
+                    "human:fixture-owner has NOT approved; substantive authorization is pending.",
+                "self_decision_declined":
+                    "human:fixture-owner declined the request to mark this record approved.",
+            }
+            if case in replacements:
+                text = text.replace(body, replacements[case])
+            if case == "native_independent_unblock_pending":
+                text = text.replace(
+                    "SATISFIED - owner decision recorded in this issue", "PENDING - owner decision is unresolved"
+                )
+            if case == "self_unblock_denied":
+                text = text.replace(
+                    "SATISFIED - owner decision recorded in this issue", "SATISFIED - approval was denied"
+                )
+            if case == "native_independent_unblock_duplicate":
+                text += "\n- **Unblock condition:** `PENDING - authority unresolved`\n"
+            decision, _chunk = extract_block(text, "decision")
+            if case == "invalid_utc":
+                decision["decided_utc"] = "2026-99-99T99:99:99Z"
+                text = text.replace("2026-08-14T03:10:00Z", decision["decided_utc"])
+                text = replace_block(text, "decision", decision)
+            if legacy:
+                text = remove_block(text, "decision")
+            issue.write_text(text, encoding="utf-8")
+            anchor = outside_anchor or fixture.commit("separate owner record before substantive work")
+            if not own:
+                for name in paths:
+                    target_path = fixture.root / name
+                    target_path.parent.mkdir(parents=True, exist_ok=True)
+                    target_path.write_text("substantive bytes for " + name + "\n", encoding="utf-8")
+                reviewed = fixture.commit("substantive change after claimed authority")
+                fixture.add_intervening_review(reviewed, scope=paths)
+                text = issue.read_text(encoding="utf-8")
+                if case in {"legacy_scope_widening", "legacy_review_scope_widening"}:
+                    text = text.replace(
+                        "- **Reviewed immutable state:**",
+                        "- **Scope:** ONLY OTHER/amendment.md. AGENTS.md is NOT reviewed.\n- **Reviewed immutable state:**",
+                    )
+                if case == "native_review_prose_scope_conflict":
+                    text = text.replace(
+                        "- **Reviewed immutable state:**",
+                        "- **Scope:** Record-only review; OTHER/amendment.md is expressly NOT reviewed.\n"
+                        "- **Reviewed immutable state:**",
+                    )
+                if case == "legacy_review_open_findings":
+                    text = text.replace("**0**.", "**1**.")
+                if case == "legacy_review_negated_approval":
+                    text = text.replace("**APPROVED**.", "**CHANGES_REQUIRED**. NOT APPROVED.")
+                if legacy:
+                    text = remove_block(text, "review")
+                issue.write_text(text, encoding="utf-8")
+                review_anchor = fixture.commit("record separate review")
+                tip = review_anchor
+            else:
+                reviewed = anchor
+                review_anchor = None
+                tip = anchor
+            if legacy:
+                # Recreate the machine projection only; no historical commit is
+                # edited. Adverse cases intentionally assert facts absent at
+                # the claimed historical anchors. The gate must detect it.
+                original_text = issue.read_text(encoding="utf-8")
+                fixture.write_intervening_issue(
+                    review="SELF" if own else "INDEPENDENT", decision_scope=paths, decision_recorded=anchor
+                )
+                _decision, decision_chunk = extract_block(issue.read_text(encoding="utf-8"), "decision")
+                review_chunk = ""
+                if not own:
+                    fixture.add_intervening_review(reviewed, scope=paths, recorded=review_anchor)
+                    _review, review_chunk = extract_block(issue.read_text(encoding="utf-8"), "review")
+                text = original_text.replace(
+                    "\n## Independent review rounds", "\n" + decision_chunk + "\n\n## Independent review rounds", 1
+                )
+                if not own:
+                    text = text.replace("\n## Blocker", "\n" + review_chunk + "\n\n## Blocker", 1)
+                if case in {"legacy_pending_authority", "legacy_self_pending_anchor"}:
+                    text = text.replace(
+                        "human:fixture-owner has NOT approved this request; authorization is pending.", body
+                    )
+                if case == "legacy_review_open_findings":
+                    text = text.replace("**1**.", "**0**.")
+                if case == "legacy_review_negated_approval":
+                    text = text.replace("**CHANGES_REQUIRED**. NOT APPROVED.", "**APPROVED**.")
+                issue.write_text(text, encoding="utf-8")
+                tip = fixture.commit("later machine migration claiming historical authority and acceptance")
+            else:
+                text = issue.read_text(encoding="utf-8")
+                if case == "duplicate_end_marker":
+                    text = text.replace(
+                        pipeline.DECISION_BLOCK_END, pipeline.DECISION_BLOCK_END + " " + pipeline.DECISION_BLOCK_END
+                    )
+                if text != issue.read_text(encoding="utf-8"):
+                    issue.write_text(text, encoding="utf-8")
+                    tip = fixture.commit("reviewer adversarial record variant")
+            return fixture, base, tip, paths
+
+        expectations = {
+            "native_positive": (0, ""),
+            "legacy_positive": (0, ""),
+            "self_positive": (0, ""),
+            "native_anchor_outside_range": (0, ""),
+            "legacy_scope_widening": (1, "AEP-PIPE-SCOPE"),
+            "legacy_pending_authority": (1, "AEP-PIPE-SCOPE"),
+            "native_decision_prose_scope_conflict": (1, "AEP-PIPE-SCOPE"),
+            "native_independent_pending": (1, "AEP-PIPE-SCOPE"),
+            "native_independent_unblock_pending": (1, "AEP-PIPE-SCOPE"),
+            "native_independent_unblock_duplicate": (1, "AEP-PIPE-SCOPE"),
+            "legacy_review_scope_widening": (1, "AEP-PIPE-SCOPE"),
+            "legacy_review_open_findings": (1, "AEP-PIPE-SCOPE"),
+            "legacy_review_negated_approval": (2, "AEP-PIPE-REVIEW"),
+            "native_review_prose_scope_conflict": (1, "AEP-PIPE-SCOPE"),
+            "legacy_self_pending_anchor": (1, "AEP-PIPE-SCOPE"),
+            "self_decision_declined": (1, "AEP-PIPE-SCOPE"),
+            "self_unblock_denied": (1, "AEP-PIPE-SCOPE"),
+            "duplicate_end_marker": (2, "AEP-PIPE-SCHEMA"),
+            "invalid_utc": (2, "AEP-PIPE-SCHEMA"),
+        }
+        for case, (code, token) in expectations.items():
+            with self.subTest(case=case):
+                fixture, base, tip, paths = run_case(case)
+                fixture.add_registry([self.registry_entry(base, tip, paths=paths)])
+                target = fixture.make_target()
+                before = fixture.issue_path().read_bytes()
+                result = fixture.submit(target)
+                if code == 0:
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertEqual(fixture.state()["state"], "AWAITING_PEER_REVIEW")
+                    continue
+                self.assertEqual(result.returncode, code, result.stderr)
+                self.assertIn(token, result.stderr)
+                self.assertEqual(before, fixture.issue_path().read_bytes())
+                self.assertEqual(fixture.state()["state"], "IN_PROGRESS")
+                self.assertEqual(list((fixture.root / "EVIDENCE").iterdir()), [])
+
     def test_malformed_intervening_registry_fails_closed(self) -> None:
         def bad_schema(fixture: PipelineRepository, base: str, tip: str) -> None:
             fixture.add_registry([self.registry_entry(base, tip)], schema="aep-intervening-authority/v1")

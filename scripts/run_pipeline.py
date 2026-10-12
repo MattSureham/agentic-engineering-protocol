@@ -120,14 +120,22 @@ DECISION_CONTRACTION_RE = re.compile(
     r"\b(?:hasn|haven|hadn|isn|wasn|aren|weren|didn|doesn|don|wouldn|couldn|shouldn|won|can)['’]t\b",
     re.IGNORECASE,
 )
+DECISION_DECLINE_RE = re.compile(r"\bdeclin\w*|\bdeni(?:ed|es)\b|\bdeny\b", re.IGNORECASE)
 DECISION_HEADING_ANY_RE = re.compile(r"^### Owner decision recorded(?:[ \t]|$)", re.MULTILINE)
 DECISION_HEADING_RE = re.compile(
     r"^### Owner decision recorded (?P<utc>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)(?=[ \t]|$)",
     re.MULTILINE,
 )
-UNBLOCK_FIELD_RE = re.compile(r"^- \*\*Unblock condition:\*\*\s+`?(?P<value>[^`\n]+)`?\s*$", re.MULTILINE)
+UNBLOCK_FIELD_RE = re.compile(r"^- \*\*Unblock condition:\*\*\s+(?P<value>\S[^\n]*?)\s*$", re.MULTILINE)
 UNBLOCK_SATISFIED_RE = re.compile(r"^SATISFIED\b", re.IGNORECASE)
-UNBLOCK_NEGATION_RE = re.compile(r"\b(?:false|unresolved|unmet|outstanding|never)\b", re.IGNORECASE)
+UNBLOCK_NEGATION_RE = re.compile(r"\b(?:false|unresolved|unmet|outstanding|never|denied|denies|deny)\b", re.IGNORECASE)
+# Contradiction cross-checks between a machine scope claim and the narrative
+# that supposedly records it: a sentence naming a claimed path together with
+# explicit exclusion language is a contrary record and must refuse. These are
+# not authority sources — only the structured blocks are — they reject prose
+# that contradicts the machine record it accompanies.
+SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
+SCOPE_NEGATED_MENTION_RE = re.compile(r"\b(?:not|never)\b|\bexclud\w*|\bunauthoriz\w*|\bunapprov\w*", re.IGNORECASE)
 BLOCK_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9:._-]{0,127}$")
 
 
@@ -790,10 +798,14 @@ def _structured_block_region(text: str, begin: str, end: str) -> Tuple[List[int]
     for offset, line, fenced in _fence_line_states(text):
         if fenced:
             continue
-        if begin in line:
-            begins.append(offset + line.index(begin))
-        if end in line:
-            ends.append(offset + line.index(end))
+        index = line.find(begin)
+        while index >= 0:
+            begins.append(offset + index)
+            index = line.find(begin, index + 1)
+        index = line.find(end)
+        while index >= 0:
+            ends.append(offset + index)
+            index = line.find(end, index + 1)
     return begins, ends
 
 
@@ -817,18 +829,43 @@ def _extract_structured_block(text: str, begin: str, end: str, path: str, label:
     return _json_load(match.group("json"), path)
 
 
-def _tolerant_latest_review(text: str, path: str) -> ReviewRound:
-    """Latest review round of a non-milestone issue, accepting prose field styles.
+def _review_field(body: str, path: str, *names: str) -> str:
+    found: List[str] = []
+    for name in names:
+        pattern = re.compile(r"^- \*\*" + re.escape(name) + r":\*\*\s*(?P<value>.+?)\s*$", re.MULTILINE)
+        found.extend(match.group("value") for match in pattern.finditer(body))
+    if len(found) != 1:
+        raise PipelineError("AEP-PIPE-REVIEW", path, "latest review must contain exactly one of {}".format(names), 2)
+    value = found[0].strip().strip("`").strip()
+    if value.startswith("**") and value.endswith("**."):
+        value = value[2:-3].strip()
+    return value.rstrip(".").strip().strip("`").strip()
 
-    Milestone review parsing (``_parse_latest_review``) requires the strict
-    machine format; independently reviewed contract amendments recorded their
-    rounds in prose (``**APPROVED**.`` / ``Reviewed immutable state``). This
-    parser accepts both but enforces the same substance: exactly one unfenced
-    review-rounds section; a uniquely latest round; exactly one
-    boundary-delimited full revision; a finding count that is exactly one bare
-    nonnegative integer; and a known disposition. Unknown, negated,
-    conflicting, malformed, or example-only records refuse rather than guess.
-    """
+
+def _parse_review_fields(body: str, path: str) -> Tuple[str, int, str]:
+    """The reviewed target, finding count, and disposition of one round body."""
+    target = _review_field(body, path, "Reviewed target", "Reviewed immutable state")
+    target_matches = BOUNDED_REVISION_FIND_RE.findall(target)
+    if len(target_matches) != 1:
+        raise PipelineError(
+            "AEP-PIPE-REVIEW", path,
+            "reviewed target must contain exactly one boundary-delimited full lowercase Git revision",
+            2,
+        )
+    material_text = _review_field(body, path, "Open material findings")
+    if COUNT_FULL_RE.fullmatch(material_text) is None:
+        raise PipelineError(
+            "AEP-PIPE-REVIEW", path,
+            "open material findings must be exactly one bare nonnegative integer",
+            2,
+        )
+    disposition = _review_field(body, path, "Disposition")
+    if disposition not in DISPOSITIONS:
+        raise PipelineError("AEP-PIPE-REVIEW", path, "unsupported disposition {!r}".format(disposition), 2)
+    return target_matches[0], int(material_text), disposition
+
+
+def _latest_review(text: str, path: str) -> Tuple[ReviewRound, str]:
     stripped = _strip_fenced_blocks(text)
     sections = list(REVIEW_SECTION_RE.finditer(stripped))
     if len(sections) != 1:
@@ -858,42 +895,29 @@ def _tolerant_latest_review(text: str, path: str) -> ReviewRound:
             2,
         )
     body = section[heading.end():]
-
-    def field(*names: str) -> str:
-        found: List[str] = []
-        for name in names:
-            pattern = re.compile(r"^- \*\*" + re.escape(name) + r":\*\*\s*(?P<value>.+?)\s*$", re.MULTILINE)
-            found.extend(match.group("value") for match in pattern.finditer(body))
-        if len(found) != 1:
-            raise PipelineError("AEP-PIPE-REVIEW", path, "latest review must contain exactly one of {}".format(names), 2)
-        value = found[0].strip().strip("`").strip()
-        if value.startswith("**") and value.endswith("**."):
-            value = value[2:-3].strip()
-        return value.rstrip(".").strip().strip("`").strip()
-
-    target = field("Reviewed target", "Reviewed immutable state")
-    target_matches = BOUNDED_REVISION_FIND_RE.findall(target)
-    if len(target_matches) != 1:
-        raise PipelineError(
-            "AEP-PIPE-REVIEW", path,
-            "reviewed target must contain exactly one boundary-delimited full lowercase Git revision",
-            2,
-        )
-    material_text = field("Open material findings")
-    if COUNT_FULL_RE.fullmatch(material_text) is None:
-        raise PipelineError(
-            "AEP-PIPE-REVIEW", path,
-            "open material findings must be exactly one bare nonnegative integer",
-            2,
-        )
-    disposition = field("Disposition")
-    if disposition not in DISPOSITIONS:
-        raise PipelineError("AEP-PIPE-REVIEW", path, "unsupported disposition {!r}".format(disposition), 2)
-    return ReviewRound(
-        utc=heading.group("utc"), reviewer=heading.group("reviewer").strip(),
-        target=target_matches[0], material_findings=int(material_text),
-        disposition=disposition,
+    target, material, disposition = _parse_review_fields(body, path)
+    return (
+        ReviewRound(
+            utc=heading.group("utc"), reviewer=heading.group("reviewer").strip(),
+            target=target, material_findings=material, disposition=disposition,
+        ),
+        body,
     )
+
+
+def _tolerant_latest_review(text: str, path: str) -> ReviewRound:
+    """Latest review round of a non-milestone issue, accepting prose field styles.
+
+    Milestone review parsing (``_parse_latest_review``) requires the strict
+    machine format; independently reviewed contract amendments recorded their
+    rounds in prose (``**APPROVED**.`` / ``Reviewed immutable state``). This
+    parser accepts both but enforces the same substance: exactly one unfenced
+    review-rounds section; a uniquely latest round; exactly one
+    boundary-delimited full revision; a finding count that is exactly one bare
+    nonnegative integer; and a known disposition. Unknown, negated,
+    conflicting, malformed, or example-only records refuse rather than guess.
+    """
+    return _latest_review(text, path)[0]
 
 
 def _commit_paths(root: Path, commit: str) -> List[str]:
@@ -946,6 +970,15 @@ def _optional_revision(value: Any, path: str, label: str) -> Optional[str]:
     return value
 
 
+def _require_real_utc(value: Any, path: str, label: str) -> None:
+    if not isinstance(value, str) or UTC_RE.fullmatch(value) is None:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "{} must be a UTC timestamp".format(label), 2)
+    try:
+        dt.datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError:
+        raise PipelineError("AEP-PIPE-SCHEMA", path, "{} must be a valid UTC datetime".format(label), 2)
+
+
 def _parse_authority_decision(text: str, path: str) -> Mapping[str, Any]:
     """The single machine-readable owner-decision record of an authority issue.
 
@@ -977,8 +1010,7 @@ def _parse_authority_decision(text: str, path: str) -> Mapping[str, Any]:
         )
     if block["unblock"] != "SATISFIED":
         raise PipelineError("AEP-PIPE-SCHEMA", path, "authority-decision unblock must be the literal SATISFIED", 2)
-    if not isinstance(block["decided_utc"], str) or UTC_RE.fullmatch(block["decided_utc"]) is None:
-        raise PipelineError("AEP-PIPE-SCHEMA", path, "authority-decision decided_utc must be a UTC timestamp", 2)
+    _require_real_utc(block["decided_utc"], path, "authority-decision decided_utc")
     if (
         not isinstance(block["decided_by"], str)
         or ACTOR_RE.fullmatch(block["decided_by"]) is None
@@ -1007,10 +1039,9 @@ def _parse_review_round_block(text: str, path: str) -> Mapping[str, Any]:
         raise PipelineError("AEP-PIPE-SCHEMA", path, "unsupported review-round schema {!r}".format(block["schema"]), 2)
     if not isinstance(block["round_id"], str) or BLOCK_ID_RE.fullmatch(block["round_id"]) is None:
         raise PipelineError("AEP-PIPE-SCHEMA", path, "review-round round_id must be a bounded identifier", 2)
-    if not isinstance(block["round_utc"], str) or UTC_RE.fullmatch(block["round_utc"]) is None:
-        raise PipelineError("AEP-PIPE-SCHEMA", path, "review-round round_utc must be a UTC timestamp", 2)
     if not isinstance(block["reviewer"], str) or ACTOR_RE.fullmatch(block["reviewer"]) is None:
         raise PipelineError("AEP-PIPE-SCHEMA", path, "review-round reviewer must be a bounded participant label", 2)
+    _require_real_utc(block["round_utc"], path, "review-round round_utc")
     if not isinstance(block["target"], str) or FULL_REVISION_RE.fullmatch(block["target"]) is None:
         raise PipelineError("AEP-PIPE-SCHEMA", path, "review-round target must be a full lowercase Git revision", 2)
     if block["disposition"] not in DISPOSITIONS:
@@ -1062,6 +1093,50 @@ def _decision_attributed(body: str, decided_by: str, metadata: Mapping[str, str]
     return decided_by in body or metadata.get("Owner") == decided_by
 
 
+def _verify_decision_effect(body: str, issue: str, label: str) -> None:
+    """A decision narrative must record an effective positive decision.
+
+    Applies to the current record and to the historical content at a migration
+    anchor alike: a pending, negated, declined, or denied decision can never
+    substantiate an EFFECTIVE machine record, regardless of review class.
+    """
+    if DECISION_POSITIVE_RE.search(body) is None:
+        raise PipelineError("AEP-PIPE-SCOPE", issue, "{} contains no positive decision verb".format(label))
+    if (
+        DECISION_NEGATION_RE.search(body) is not None
+        or DECISION_PENDING_RE.search(body) is not None
+        or DECISION_CONTRACTION_RE.search(body) is not None
+        or DECISION_DECLINE_RE.search(body) is not None
+    ):
+        raise PipelineError(
+            "AEP-PIPE-SCOPE", issue,
+            "{} is negated, pending, declined, or otherwise not effective".format(label),
+        )
+
+
+def _verify_scope_consistent_prose(body: str, scope: Sequence[str], issue: str, label: str) -> None:
+    """The narrative must not expressly contradict the claimed machine scope.
+
+    The structured block is the machine source of the authorized or reviewed
+    scope; this cross-check refuses when the accompanying narrative — current
+    prose or the historical content at a migration anchor — names a claimed
+    path in a sentence that expressly excludes it (for example "AGENTS.md is
+    expressly NOT authorized"), so a later projection cannot widen the scope
+    beyond what the durable record actually granted.
+    """
+    if not scope:
+        return
+    claimed = sorted(set(scope))
+    for line in body.splitlines():
+        for sentence in SENTENCE_SPLIT_RE.split(line):
+            excluded = [name for name in claimed if name in sentence]
+            if excluded and SCOPE_NEGATED_MENTION_RE.search(sentence) is not None:
+                raise PipelineError(
+                    "AEP-PIPE-SCOPE", issue,
+                    "{} expressly excludes claimed scope path(s): {}".format(label, ", ".join(excluded)),
+                )
+
+
 def _verify_anchor_content(
     root: Path,
     issue: str,
@@ -1104,11 +1179,17 @@ def _verify_anchor_content(
                 "AEP-PIPE-SCOPE", issue,
                 "anchor commit records no matching owner decision for the claimed decided_utc",
             )
-        if not _decision_attributed(_decision_prose_body(stripped, headings[0]), block["decided_by"], metadata_at):
+        body = _decision_prose_body(stripped, headings[0])
+        if not _decision_attributed(body, block["decided_by"], metadata_at):
             raise PipelineError(
                 "AEP-PIPE-SCOPE", issue,
                 "anchor commit's owner decision is not attributed to the claimed decider",
             )
+        # A migration cites a historical decision; it cannot manufacture one.
+        # The anchor's own narrative must record the effective positive
+        # decision and must not expressly exclude the claimed authorized scope.
+        _verify_decision_effect(body, issue, "anchor commit's owner decision")
+        _verify_scope_consistent_prose(body, block["scope"], issue, "anchor commit's owner decision")
         return
     begins, _ends = _structured_block_region(text_at, REVIEW_BLOCK_BEGIN, REVIEW_BLOCK_END)
     if begins:
@@ -1132,11 +1213,21 @@ def _verify_anchor_content(
     rest = stripped[headings[0].end():]
     following = ANY_HEADING_RE.search(rest)
     body = rest[: following.start()] if following is not None else rest
-    if block["target"] not in body or block["disposition"] not in body:
+    # A migration cites a historical round; it cannot manufacture acceptance.
+    # The anchor's round must itself record the claimed target, disposition,
+    # and finding count, and must not expressly exclude the claimed reviewed
+    # scope — substring presence of APPROVED is never credited.
+    target, material, disposition = _parse_review_fields(body, issue)
+    if (
+        target != block["target"]
+        or material != block["open_material_findings"]
+        or disposition != block["disposition"]
+    ):
         raise PipelineError(
             "AEP-PIPE-SCOPE", issue,
-            "anchor commit's review round does not record the claimed target and disposition",
+            "anchor commit's review round does not record the claimed target, disposition, and finding count",
         )
+    _verify_scope_consistent_prose(body, block["scope"], issue, "anchor commit's review round")
 
 
 def _verify_decision_prose(
@@ -1144,15 +1235,14 @@ def _verify_decision_prose(
     issue: str,
     decision: Mapping[str, Any],
     metadata: Mapping[str, str],
-    strict_negation: bool,
 ) -> None:
     """The human-readable owner decision must uniquely corroborate the block.
 
     The block is the machine source; this cross-check makes contradictory,
     duplicated, example-only, or forged narrative refuse instead of drifting
-    from the machine record. For self-reviewed records (whose only guard is
-    this issue) the decision body must additionally be free of negated,
-    pending, or contracted-negation language.
+    from the machine record. For every review class the decision body must be
+    free of negated, pending, declined, or contracted-negation language and
+    must not expressly exclude the paths the block claims to authorize.
     """
     stripped = _strip_fenced_blocks(text)
     headings = list(DECISION_HEADING_ANY_RE.finditer(stripped))
@@ -1175,17 +1265,8 @@ def _verify_decision_prose(
             "AEP-PIPE-SCOPE", issue,
             "recorded owner decision is not attributed to the decision block's decider",
         )
-    if DECISION_POSITIVE_RE.search(body) is None:
-        raise PipelineError("AEP-PIPE-SCOPE", issue, "recorded owner decision contains no positive decision verb")
-    if strict_negation and (
-        DECISION_NEGATION_RE.search(body) is not None
-        or DECISION_PENDING_RE.search(body) is not None
-        or DECISION_CONTRACTION_RE.search(body) is not None
-    ):
-        raise PipelineError(
-            "AEP-PIPE-SCOPE", issue,
-            "recorded owner decision is negated, pending, or otherwise not effective",
-        )
+    _verify_decision_effect(body, issue, "recorded owner decision")
+    _verify_scope_consistent_prose(body, decision["scope"], issue, "recorded owner decision")
 
 
 def _verify_unblock_condition(text: str, issue: str) -> None:
@@ -1198,6 +1279,8 @@ def _verify_unblock_condition(text: str, issue: str) -> None:
             "exactly one Unblock condition record is required (found {})".format(len(matches)),
         )
     value = matches[0].group("value").strip()
+    if len(value) > 1 and value.startswith("`") and value.endswith("`"):
+        value = value[1:-1].strip()
     if UNBLOCK_SATISFIED_RE.match(value) is None:
         raise PipelineError(
             "AEP-PIPE-SCOPE", issue,
@@ -1218,7 +1301,7 @@ def _verify_unblock_condition(text: str, issue: str) -> None:
 
 def _verify_review_prose(text: str, issue: str, block: Mapping[str, Any]) -> ReviewRound:
     """The human-readable latest review round must equal the machine record."""
-    review = _tolerant_latest_review(text, issue)
+    review, body = _latest_review(text, issue)
     if (
         review.utc != block["round_utc"]
         or review.reviewer != block["reviewer"]
@@ -1231,6 +1314,7 @@ def _verify_review_prose(text: str, issue: str, block: Mapping[str, Any]) -> Rev
             "prose review round does not match the durable machine-readable review record",
             2,
         )
+    _verify_scope_consistent_prose(body, block["scope"], issue, "recorded review round")
     return review
 
 
@@ -1301,7 +1385,8 @@ def _verify_intervening_entry(
             "the owner decision's anchor commit is not an ancestor of the registered range tip",
         )
     _verify_anchor_content(context.root, issue, decision_anchor, decision, "decision")
-    _verify_decision_prose(text, issue, decision, metadata, strict_negation=review_class == "SELF")
+    _verify_decision_prose(text, issue, decision, metadata)
+    _verify_unblock_condition(text, issue)
 
     if review_class == "INDEPENDENT":
         if not declared:
@@ -1398,7 +1483,6 @@ def _verify_intervening_entry(
             raise PipelineError("AEP-PIPE-SCOPE", registry_path, "self-reviewed authority records may not declare substantive exclusion paths")
         if decision["scope"]:
             raise PipelineError("AEP-PIPE-SCOPE", issue, "self-reviewed authority records may not authorize substantive paths")
-        _verify_unblock_condition(text, issue)
         # A self-reviewed authority record owns no substantive repository paths:
         # only its own issue file may be excluded through it.
         excludable = [issue]
