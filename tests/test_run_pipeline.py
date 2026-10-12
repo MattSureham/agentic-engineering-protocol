@@ -1855,6 +1855,9 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
                     "human:fixture-owner has NOT approved; substantive authorization is pending.",
                 "self_decision_declined":
                     "human:fixture-owner declined the request to mark this record approved.",
+                "native_bounded_exclusion_positive":
+                    "human:fixture-owner approved ONLY OTHER/amendment.md and this issue; "
+                    "AGENTS.md and all current-attempt-owned work are expressly NOT authorized here.",
             }
             if case in replacements:
                 text = text.replace(body, replacements[case])
@@ -1895,6 +1898,12 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
                         "- **Reviewed immutable state:**",
                         "- **Scope:** Record-only review; OTHER/amendment.md is expressly NOT reviewed.\n"
                         "- **Reviewed immutable state:**",
+                    )
+                if case == "native_bounded_exclusion_positive":
+                    text = text.replace(
+                        "- **Reviewed immutable state:**",
+                        "- **Scope:** Only OTHER/amendment.md and this issue; "
+                        "AGENTS.md and other attempt changes are NOT reviewed.\n- **Reviewed immutable state:**",
                     )
                 if case == "legacy_review_open_findings":
                     text = text.replace("**0**.", "**1**.")
@@ -1953,6 +1962,7 @@ class AuthorizedMilestonePipelineTests(unittest.TestCase):
             "legacy_positive": (0, ""),
             "self_positive": (0, ""),
             "native_anchor_outside_range": (0, ""),
+            "native_bounded_exclusion_positive": (0, ""),
             "legacy_scope_widening": (1, "AEP-PIPE-SCOPE"),
             "legacy_pending_authority": (1, "AEP-PIPE-SCOPE"),
             "native_decision_prose_scope_conflict": (1, "AEP-PIPE-SCOPE"),

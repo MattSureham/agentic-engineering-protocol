@@ -130,12 +130,26 @@ UNBLOCK_FIELD_RE = re.compile(r"^- \*\*Unblock condition:\*\*\s+(?P<value>\S[^\n
 UNBLOCK_SATISFIED_RE = re.compile(r"^SATISFIED\b", re.IGNORECASE)
 UNBLOCK_NEGATION_RE = re.compile(r"\b(?:false|unresolved|unmet|outstanding|never|denied|denies|deny)\b", re.IGNORECASE)
 # Contradiction cross-checks between a machine scope claim and the narrative
-# that supposedly records it: a sentence naming a claimed path together with
-# explicit exclusion language is a contrary record and must refuse. These are
-# not authority sources — only the structured blocks are — they reject prose
-# that contradicts the machine record it accompanies.
-SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
+# that supposedly records it: a clause naming a claimed path together with
+# explicit exclusion language is a contrary record and must refuse, while a
+# bounded decision that positively authorizes its claimed scope and excludes
+# only other work in a separate clause remains legitimate. These are not
+# authority sources — only the structured blocks are — they reject prose that
+# contradicts the machine record it accompanies.
+CLAUSE_SPLIT_RE = re.compile(r"(?<=[.!?;])\s+")
 SCOPE_NEGATED_MENTION_RE = re.compile(r"\b(?:not|never)\b|\bexclud\w*|\bunauthoriz\w*|\bunapprov\w*", re.IGNORECASE)
+# Decision-level ineffectiveness markers: the decision act itself is negated,
+# unresolved, or declined. Scope-level exclusions ("X is NOT authorized")
+# are judged against the claimed scope per clause instead, so a bounded
+# authorization that excludes only non-claimed work is not refused.
+DECISION_EFFECT_BLOCK_RE = re.compile(
+    r"\bnot\s+(?:approved|accepted|confirmed|granted|ratified)\b"
+    r"|\b(?:has|have)\s+not\b"
+    r"|\bawaiting\b|\bpending\b"
+    r"|\bno\s+(?:authorization|authorisation|approval|decision)\b"
+    r"|\bwithout\s+(?:authorization|authorisation|approval)\b",
+    re.IGNORECASE,
+)
 BLOCK_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9:._-]{0,127}$")
 
 
@@ -1099,12 +1113,15 @@ def _verify_decision_effect(body: str, issue: str, label: str) -> None:
     Applies to the current record and to the historical content at a migration
     anchor alike: a pending, negated, declined, or denied decision can never
     substantiate an EFFECTIVE machine record, regardless of review class.
+    Decision-level markers refuse anywhere in the body; exclusions of
+    particular paths are judged against the claimed scope per clause by
+    _verify_scope_consistent_prose, so a bounded authorization that excludes
+    only non-claimed work remains effective.
     """
     if DECISION_POSITIVE_RE.search(body) is None:
         raise PipelineError("AEP-PIPE-SCOPE", issue, "{} contains no positive decision verb".format(label))
     if (
-        DECISION_NEGATION_RE.search(body) is not None
-        or DECISION_PENDING_RE.search(body) is not None
+        DECISION_EFFECT_BLOCK_RE.search(body) is not None
         or DECISION_CONTRACTION_RE.search(body) is not None
         or DECISION_DECLINE_RE.search(body) is not None
     ):
@@ -1120,17 +1137,19 @@ def _verify_scope_consistent_prose(body: str, scope: Sequence[str], issue: str, 
     The structured block is the machine source of the authorized or reviewed
     scope; this cross-check refuses when the accompanying narrative — current
     prose or the historical content at a migration anchor — names a claimed
-    path in a sentence that expressly excludes it (for example "AGENTS.md is
+    path in a clause that expressly excludes it (for example "AGENTS.md is
     expressly NOT authorized"), so a later projection cannot widen the scope
-    beyond what the durable record actually granted.
+    beyond what the durable record actually granted. Exclusion clauses that
+    name only non-claimed work (a bounded decision's ordinary boundary) do
+    not contradict the block.
     """
     if not scope:
         return
     claimed = sorted(set(scope))
     for line in body.splitlines():
-        for sentence in SENTENCE_SPLIT_RE.split(line):
-            excluded = [name for name in claimed if name in sentence]
-            if excluded and SCOPE_NEGATED_MENTION_RE.search(sentence) is not None:
+        for clause in CLAUSE_SPLIT_RE.split(line):
+            excluded = [name for name in claimed if name in clause]
+            if excluded and SCOPE_NEGATED_MENTION_RE.search(clause) is not None:
                 raise PipelineError(
                     "AEP-PIPE-SCOPE", issue,
                     "{} expressly excludes claimed scope path(s): {}".format(label, ", ".join(excluded)),
