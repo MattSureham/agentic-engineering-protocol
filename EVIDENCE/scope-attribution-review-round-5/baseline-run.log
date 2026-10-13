@@ -1,0 +1,3 @@
+completed: -m unittest discover -s tests -p test_run_pipeline.py -v; exit=0
+completed: -m unittest discover -s tests -v; exit=0
+completed: scripts/validate_protocol.py; exit=0

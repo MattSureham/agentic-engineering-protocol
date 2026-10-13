@@ -2,6 +2,15 @@
 
 This is an owner synchronization summary, not project truth. Read [BOOTSTRAP](BOOTSTRAP.md); requirements live in [PROJECT_SPEC](PROJECT_SPEC.md), architecture in accepted ADRs.
 
+## Reviewer update — 2026-10-13T01:28:02Z
+
+Prepared by `agent:Codex-scope-review-20261013`, independently reviewing only immutable amendment `5bf73a0ab33bc851678c6adee30c45780d2bdb03`; prior authored sections remain historical.
+
+- **CHANGES_REQUIRED — R2 HIGH, R3 HIGH, R5 MEDIUM remain open.** Historical ONLY-one-file scope can be widened; native anchor decision/review conflicts and an intervening rejection can be erased operationally by later current-record edits; historical pending unblock can be projected as SATISFIED. New 16 cases expose 11 actual unsafe submissions. [Findings and resolution conditions](EVIDENCE/EVIDENCE-20261013T012716Z-scope-attribution-review-round-5.md).
+- **Verified independently:** 57 pipeline / 202 full tests and validator pass; all 50 Round-4 and 15 Round-3 scenarios conform; earlier regressions and two legacy-fixture compatibility artifacts are explicitly recorded, calibrated record-only octopus passes. R1/R4 no observed regression, O5/O6 now refuse. Honest A/B still cover six historical paths. These results do not close the generic findings.
+- **Authority and boundary:** five rework files remain within the recorded PIPELINE-010 directive; no separate scope/architecture expansion found. The implementer statement that binding avoids prose heuristics is not supported by the clause/keyword checker and new counterexamples; its authored text below is preserved. Amendment remains IMPLEMENTING; discovery state/base/digest/events/two entries unchanged. No repair/live/submission/transition/registry addition/acceptance/recorder/publication work.
+- **Owner decision requested now: NONE for repairs within accepted invariants.** Any new trust/migration/architecture representation must be escalated before adoption. Reviewer stops after durable disposition and governance checks.
+
 ## Implementer update — 2026-10-12T04:03:20Z
 
 Prepared by `agent:ClaudeCode-discovery-fix-3` after reworking the scope-attribution amendment per your directive to resolve the still-open round-4 findings (R2/R3/R5: binding of structured machine records to authority scope, decision effect, review approval, finding count, and historical anchors); not an acceptance record. Prior sections are preserved as history.
